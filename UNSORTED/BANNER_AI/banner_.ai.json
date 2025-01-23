@@ -1,0 +1,7 @@
+{
+  "system_instructions": {
+    "1": "system_instruction_asterisk",
+    "2": "system_instruction_tilde",
+    "3": "system_instruction_hash"
+  } 
+}
