@@ -1,0 +1,32 @@
+flowchart TD
+    Start([Начало игры]) --> Welcome{Добро пожаловать в Acey Ducey!}
+    Welcome --> Initialize[Инициализация: создание колоды, баланс = $100]
+    Initialize --> GameLoop{Игровой цикл}
+
+    GameLoop --> CheckBalance{Проверка баланса > 0 и колоды >= 3}
+    CheckBalance -- Да --> DisplayBalance[Показать текущий баланс]
+    DisplayBalance --> DealCards[Выложить две карты]
+    DealCards --> CheckSameCards{Карты одинаковые?}
+    CheckSameCards -- Да --> RedrawCards[Перемешать и выложить новые карты]
+    RedrawCards --> DealCards
+    CheckSameCards -- Нет --> DisplayCards[Показать выложенные карты]
+    DisplayCards --> MakeBet{Сделать ставку или пропустить ход}
+    MakeBet --> ValidateBet{Ставка корректна?}
+    ValidateBet -- Нет --> MakeBet
+    ValidateBet -- Да --> CheckPass{Ставка = 0?}
+    CheckPass -- Да --> SkipTurn[Пропустить ход]
+    SkipTurn --> GameLoop
+    CheckPass -- Нет --> DrawNextCard[Вытянуть следующую карту]
+    DrawNextCard --> CheckResult{Проверка результата}
+
+    CheckResult -- Следующая карта между двумя картами --> Win[Вы выиграли]
+    CheckResult -- Следующая карта равна одной из карт или Туз --> Lose[Вы проиграли]
+    Win --> UpdateBalanceWin[Обновить баланс: +ставка]
+    Lose --> UpdateBalanceLose[Обновить баланс: -ставка]
+
+    UpdateBalanceWin --> GameLoop
+    UpdateBalanceLose --> GameLoop
+
+    CheckBalance -- Нет --> EndGame{Игра окончена}
+    EndGame --> DisplayFinalBalance[Показать итоговый баланс]
+    DisplayFinalBalance --> Finish([Конец игры])
