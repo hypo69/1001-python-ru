@@ -32,6 +32,7 @@ pip install -U langchain langchain-openai langchain-community browser-use python
 
 ### SERPAPI_API_KEY: Для чего нужен и как получить?
 1. Для чего используется SERPAPI_API_KEY?
+
 SERPAPI — это сервис, который предоставляет API для парсинга результатов поисковых систем (Google, Bing, Yahoo и других). Ключ SERPAPI_API_KEY требуется для:
 
 
