@@ -89,5 +89,5 @@ def run_scheduler():
 
 scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
 scheduler_thread.start()
-
+```
 **Удачи!**
