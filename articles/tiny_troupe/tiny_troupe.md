@@ -31,6 +31,7 @@ python -m venv venv
 venv\Scripts\activate
 pip install git+https://github.com/microsoft/TinyTroupe.git@main
 ```
+Переименыйте файл .env.example в .env и добавьте в него свой ключ OpenAI API
 
 
 ## Примеры использования
