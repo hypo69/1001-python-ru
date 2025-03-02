@@ -39,6 +39,8 @@ pip install git+https://github.com/microsoft/TinyTroupe.git@main
 
 **6. Создание TinyPerson**
 
+Внутри директории проекта создайте файл `my_person.py` и добавьте следующий код: 
+
 ```python
 import os
 from dotenv import load_dotenv
