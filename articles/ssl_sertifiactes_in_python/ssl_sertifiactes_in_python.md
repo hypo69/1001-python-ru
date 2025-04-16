@@ -62,7 +62,7 @@ Install Certificates.command
 Или для Windows:
 
 ```
-install_certificates.bat
+C:\Users\<имя_пользователя>\AppData\Local\Programs\Python\Python312\install_certificates.bat
 ```
 
 Запустите его — и Python будет использовать актуальные корневые сертификаты.
