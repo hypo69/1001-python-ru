@@ -17,6 +17,7 @@ SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify fa
 Я пытался выполнить вот такой код:
 
 ```python
+# ошибка SSL
 import requests
 
 url = "https://rosstat.gov.ru/storage/mediabank/tab5_v01.xlsx"
@@ -32,6 +33,7 @@ response = requests.get(url)
 ## Быстрое решение: отключаем проверку SSL (но осторожно)
 
 ```python
+# Быстрое решение: отключаем проверку SSL (но осторожно)
 import requests
 
 url = "https://rosstat.gov.ru/storage/mediabank/tab5_v01.xlsx"
@@ -68,6 +70,7 @@ install_certificates.bat
 ## Альтернатива: использовать certifi напрямую
 
 ```python
+# использовать certifi напрямую
 import requests
 import certifi
 
