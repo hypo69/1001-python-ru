@@ -245,7 +245,7 @@ notepad $PROFILE
 
 #### ✏️ Шаг 3. Вставьте функцию
 
-Скопируйте всю функцию `Update-Fork` [github 👉 ] (https://github.com/hypo69/1001-python-ru/blob/master/cheatsheets/git/update-fork-howto.md#-%D1%84%D0%B8%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B8) и вставьте в открывшийся Блокнот.
+Скопируйте всю функцию `Update-Fork` [github 👉 ](https://github.com/hypo69/1001-python-ru/blob/master/cheatsheets/git/update-fork-howto.md#-%D1%84%D0%B8%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B8) и вставьте в открывшийся Блокнот.
 
 Например, так:
 
