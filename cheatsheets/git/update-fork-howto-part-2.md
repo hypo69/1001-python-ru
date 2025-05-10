@@ -178,6 +178,7 @@ $form.ShowDialog()
 ---
 
 В следующей части можно оформить приложение в `.exe`, добавить выбор токенов через GUI, интеграцию с Windows Task Scheduler или автозагрузку.
+
 import shutil
 import os
 import subprocess
