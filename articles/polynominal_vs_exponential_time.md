@@ -110,37 +110,39 @@
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
+import math # Import the standard math module
 
-# Диапазон значений n
+# Range of n values
 n = np.linspace(1, 20, 100)
 
-# Полиномиальные функции
+# Polynomial functions
 linear = n
 quadratic = n**2
 cubic = n**3
 logarithmic = np.log(n)
 nlogn = n * np.log(n)
 
-# Экспоненциальные функции
+# Exponential functions
 exponential = 2**n
-factorial = [np.math.factorial(int(i)) for i in n]  # Факториал определён только для целых чисел
+# Use math.factorial from the imported math module
+factorial = [math.factorial(int(i)) for i in n]  # Factorial is defined only for integers
 
-# Построение графиков
+# Plotting the graphs
 plt.figure(figsize=(10, 6))
 
-# Полиномиальные функции
+# Polynomial functions
 plt.plot(n, linear, label='Linear: $f(n) = n$')
 plt.plot(n, quadratic, label='Quadratic: $f(n) = n^2$')
 plt.plot(n, cubic, label='Cubic: $f(n) = n^3$')
 plt.plot(n, logarithmic, label='Logarithmic: $f(n) = \log n$')
 plt.plot(n, nlogn, label='Linearithmic: $f(n) = n \log n$')
 
-# Экспоненциальные функции
+# Exponential functions
 plt.plot(n, exponential, label='Exponential: $f(n) = 2^n$')
 plt.plot(n, factorial, label='Factorial: $f(n) = n!$')
 
-# Настройка графика
-plt.yscale('log')  # Логарифмическая шкала для удобства
+# Graph settings
+plt.yscale('log')  # Logarithmic scale for convenience
 plt.xlabel('Input size (n)')
 plt.ylabel('Time complexity')
 plt.title('Comparison of Polynomial and Exponential Time Complexity')
@@ -150,6 +152,7 @@ plt.show()
 ```
 
 ---
+![Exponetialy](../assets/exponetialy.png)
 
 ### **Что покажет график?**
 - **Полиномиальные функции** растут медленно и остаются внизу графика.
