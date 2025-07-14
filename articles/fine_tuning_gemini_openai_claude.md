@@ -60,7 +60,7 @@
 ### 5. Модели и платформы
 
 
-#### 5.1. OpenAI (GPT-3.5 Turbo)
+#### 5.1. OpenAI
 
 OpenAI предоставляет довольно простой и интуитивно понятный API для тонкой настройки. 
 
@@ -143,7 +143,7 @@ except openai.APIStatusError as e:
 # #         print(f"Ошибка при использовании модели: {e.status_code} - {e.response}")
 ```
 
-#### 5.2. Anthropic (Claude 3)
+#### 5.2. Anthropic
 
 Anthropic **не предоставляет публичного API для тонкой настройки своих моделей Claude 3 (Opus, Sonnet, Haiku) в том же смысле, как это делает OpenAI или Google.**
 
