@@ -229,7 +229,7 @@ Gemini CLI использует инструмент `WriteFile` для сохр
 ```bash
 mkdir -p .gemini && touch .gemini/settings.json
 ```
-Inside the file, add the following code:
+Заполните файл этим кодом:
 ```json
 {  
   "mcpServers": {  
@@ -241,8 +241,9 @@ Inside the file, add the following code:
   }  
 }
 ```
-
+[инструкция как получить токен](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
 После этого введите `/quit` в Gemini CLI, чтобы выйти, а затем снова откройте его.
-
-Напишите команду `/mcp`, и вы увидите список инструментов GitHub.
+Вы увидите, что MCP-сервер GitHub запущен и готов к использованию.
 ![MCP](../assets/gemini_cli/mcp.png)
+Напишите команду `/mcp`, и вы увидите список инструментов GitHub.
+![Mcp Commands](../assets/gemini_cli/mcp_commands.png)
