@@ -120,43 +120,7 @@ chromium_downloader.download_chromium()
 
 ---
 
-## 💡 Использование `pyppeteer` напрямую (вместо `requests-html`)
 
-Можно использовать `pyppeteer` работы напрямую с headless-браузером,:
-
-```bash
-pip install pyppeteer
-```
-
-```python
-import asyncio
-from pyppeteer import launch
-
-async def main():
-    browser = await launch(headless=True)
-    page = await browser.newPage()
-    await page.goto('https://example.com')
-    content = await page.content()
-    print(content[:500])
-    await browser.close()
-
-asyncio.run(main())
-```
-
-### Полезные параметры:
-
-```python
-browser = await launch(
-    headless=True,
-    args=[
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage'
-    ]
-)
-```
-
----
 
 ## 🧱 Использование Chromium вручную (если установлен отдельно)
 
@@ -265,6 +229,20 @@ asyncio.run(main())
 ---
 
 
+### Полезные параметры:
+
+```python
+browser = await launch(
+    headless=True,
+    args=[
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage'
+    ]
+)
+```
+
+---
 
 
 ## Альтернативы `requests-html`
