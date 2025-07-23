@@ -137,7 +137,8 @@ gemini cli по очереди применяет релевантную ком�
 ###   Шаг 4: Поиск больших файлов
 
 ![14](assets/14.png)
-
+Ответ Gemini:
+```text
 Команда `find` не сработала, потому что в Windows нужно использовать `dir`. Gemini сама исправит ошибку и предложит правильную команду.
 
 Далее gemini cli рассуждает о следующих действиях:
@@ -153,13 +154,47 @@ gemini cli по очереди применяет релевантную ком�
 
   Let's combine these into a single PowerShell command.Похоже, что find и head не доступны в вашей среде Windows. Я использую PowerShell,
   чтобы выполнить ту же задачу.
-
+```
 ![15](assets/15.png)
 
 Снова неудача
 
+gemini cli продолжает рассуждать о том, что делать дальше:
+Ответ Gemini:
+```text
+ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+✦ THINK: The user wants to find the 5 largest files.
+  The PowerShell command is still not executing correctly. It seems that the pipe | and special characters are being misinterpreted by the
+  shell when passed as a single command string.
 
+  I will try to execute the command by first saving the script to a file and then executing the file with PowerShell.
 
+   1. Create a PowerShell script file (find_large_files.ps1).
+   2. The content of the script will be: Get-ChildItem -Recurse -File | Where-Object { $_.FullName -notlike "*\.git\*" } | Sort-Object
+      -Property Length -Descending | Select-Object -First 5 | Format-Table Length, FullName -AutoSize
+   3. Execute the script using powershell -File find_large_files.ps1.
+   4. Delete the script file.Похоже, что передача сложных команд в PowerShell напрямую вызывает проблемы. Я создам временный файл сценария
+      PowerShell, выполню его, а затем удалю.
+
+```
+![16](assets/16.png)
+
+На этот раз все получилось!
+
+### Шаг 5: Итог
+gemini cli подводит итог:
+```text
+ Состояние репозитория:
+
+   * Локальный репозиторий: Инициализирован, и все файлы в корневой папке C:\Users\user\Documents\repos были добавлены в первый коммит.
+   * Удаленный репозиторий: Не настроен. Нет удаленного origin, поэтому невозможно получить обновления или сравнить ветки.
+   * Большие файлы: Обнаружено несколько очень больших файлов, в основном в подкаталогах venv и public_repositories. Самые большие из них —
+     библиотеки .lib и архивы .zip. Рекомендуется добавить пути, содержащие большие бинарные файлы (например, venv, *.zip), в файл .gitignore,
+     чтобы избежать их попадания в репозиторий.
+
+  Аудит завершен.
+```
+![17](assets/17.png)
 ---
 
 ### Сценарий: "Очистка Docker-окружения"
