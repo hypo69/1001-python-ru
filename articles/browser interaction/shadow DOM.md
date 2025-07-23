@@ -58,7 +58,9 @@ shadow.appendChild(span);
 ##### Декларативно с помощью HTML
 
 Для приложений, где важен рендеринг на стороне сервера, можно определить теневой DOM декларативно, используя элемент `<template>` с атрибутом `shadowrootmode`.
-![File](../../assets/shadow dom/file.png)
+
+![DOM](../../assets/shadow_dom/file.png)
+
 ```html
 <div id="host">
   <template shadowrootmode="open">
