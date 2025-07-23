@@ -54,6 +54,8 @@
 Gemini CLI будет самостоятельно исправлять ошибки во время создания репозитория, например, если вы забыли инициализировать его, то он предложит сделать это, 
 а также текущие ошибки во время исполненения сценария
 
+## Шаг 1: Проверка статуса
+
 ![2](assets/2.png)
 
 Ответ Gemini:
@@ -77,7 +79,6 @@ Gemini CLI будет самостоятельно исправлять ошиб
 ```text
 ✦ Отлично, Git-репозиторий создан. Теперь я могу продолжить аудит.
 
-  Шаг 1: Проверка статуса
 
   Выполняю git status, чтобы проверить наличие неотслеживаемых файлов.
 ```
@@ -106,6 +107,57 @@ error: pathspec 'commit"' did not match any file(s) known to git
 ```
 
 ![9](assets/9.png)
+![10](assets/10.png)
+На этот раз получилось!
+
+Ответ Gemini:
+```text
+✦ Отлично, первый коммит успешно создан. Теперь я удалю временный файл с сообщением коммита.
+```
+Теперь gemini удалит временный файл с сообщением коммита.
+
+gemini cli по очереди применяет релевантную команду ('rm','del')
+
+![11](assets/11.png)
+
+
+
+
+### Шаг 2: Запрос обновлений
+Поскольку удаленный репозиторий не существует, gemini cli получит ошибку. 
+Обратите внимание, что она сама ожидает ошибку
+
+![12](assets/12.png)
+
+### Шаг 3: Сравнение веток
+
+Здесь также будет ошибка, поскольку ветка `main` не существует.
+![13](assets/13.png)
+
+###   Шаг 4: Поиск больших файлов
+
+![14](assets/14.png)
+
+Команда `find` не сработала, потому что в Windows нужно использовать `dir`. Gemini сама исправит ошибку и предложит правильную команду.
+
+Далее gemini cli рассуждает о следующих действиях:
+✦ THINK: The user wants me to find the 5 largest files in the project.
+  The previous command find . -type f -not -path \"./.git/*\" -printf \"%s %p\\n\" | sort -rn | head -n 5 failed because find, sort, and head
+  are not native Windows commands. I need to use a PowerShell equivalent.
+
+   1. Get all files: Get-ChildItem -Recurse -File
+   2. Exclude .git directory: Where-Object { $_.FullName -notlike "*\.git\*" }
+   3. Sort by size (descending): Sort-Object -Property Length -Descending
+   4. Select the top 5: Select-Object -First 5
+   5. Format the output: ForEach-Object { "{0} {1}" -f $_.Length, $_.FullName }
+
+  Let's combine these into a single PowerShell command.Похоже, что find и head не доступны в вашей среде Windows. Я использую PowerShell,
+  чтобы выполнить ту же задачу.
+
+![15](assets/15.png)
+
+Снова неудача
+
 
 
 ---
