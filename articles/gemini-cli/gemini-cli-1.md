@@ -58,7 +58,7 @@ gemini
 
 #### Шаг 2.2: Аутентификация
 Вы можете использовать ваш личный аккаунт Google для аутентификации. Это предоставит вам до 60 запросов в минуту и 1000 запросов в день при использовании Gemini.
-![First Run](../assets/gemini_cli/auth.png)
+![First Run](/assets/gemini_cli_1/auth.png)
 В этом руководстве я использовал **Вход через Google**, но вы также можете использовать **API-ключ** (установленный как переменная окружения или в файле `.env`) или аутентификацию через **Vertex AI**.
 
 Чтобы сгенерировать новый API-ключ, войдите в **AI Studio** с вашим аккаунтом Google и нажмите "Создать API-ключ".
@@ -74,7 +74,7 @@ GEMINI_API_KEY="Your_API_Key"
 ---
 
 ### Шаг 3: Настройка проекта в Gemini CLI
-![Start](../assets/gemini_cli/start.png)
+![Start](assets/gemini_cli_1/start.png)
 Когда CLI запущен, мы можем начать взаимодействовать с Gemini из терминала. Есть два способа работы с проектом.
 
 #### 1. Начать новый проект
@@ -85,9 +85,9 @@ gemini
 ```
 Внутри CLI используйте промпт для решения интересующей вас проблемы, например:
 > Напиши код кодировщика для трансформера с нуля.
-![Example 1](../assets/gemini_cli/example_1.png)
+![Example 1](assets/gemini_cli/example_1.png)
 Дайте разрешение на запись файлов:
-![File](../assets/gemini_cli/file.png)
+![File](assets/gemini_cli/file.png)
 
 #### 2. Работать с существующим проектом
 Если у вас уже есть кодовая база, вы можете работать с ней, выполнив следующие команды:
@@ -166,7 +166,7 @@ Gemini CLI использует инструмент `WriteFile` для сохр
 
 ### Доступные инструменты Gemini CLI
 Вызов команды `/tools` в Gemini CLI, покажет список доступных инструментов, которые можно использовать для выполнения различных задач, таких как редактирование кода, генерация тестов, создание документации и многое другое.
-![Tools](../assets/gemini_cli/tools.png)
+![Tools](assets/gemini_cli_1/tools.png)
 
 **ReadFolder (ls)**
 Перечисляет файлы и папки в директории — аналог команды `ls` в командной строке.
@@ -241,6 +241,6 @@ mkdir -p .gemini && touch .gemini/settings.json
 [инструкция как получить токен](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
 После этого введите `/quit` в Gemini CLI, чтобы выйти, а затем снова откройте его.
 Вы увидите, что MCP-сервер GitHub запущен и готов к использованию.
-![MCP](../assets/gemini_cli/mcp.png)
+![MCP](assets/gemini_cli_1/mcp.png)
 Введите команду `/mcp`, и вы увидите список инструментов GitHub.
-![Mcp Commands](../assets/gemini_cli/mcp_commands.png)
+![Mcp Commands](assets/gemini_cli_1/mcp_commands.png)

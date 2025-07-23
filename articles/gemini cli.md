@@ -1,3 +1,9 @@
 ## Gemini CLI: Знакомство и первые шаги. (Часть 1)
 
-Статья перенесена сюда: [gemini-cli/gemini-cli.md](gemini-cli/gemini-cli.md)
+Статья перенесена:
+Первая часть:
+[Знакомство и первые шаги.](gemini-cli/gemini-cli-1.md)
+Вторая часть: 
+[Продвинутые возможности.](gemini-cli/gemini-cli-2.md)
+Третья часть:
+[Интеграция с другими инструментами.](gemini-cli/gemini-cli-3.md)
