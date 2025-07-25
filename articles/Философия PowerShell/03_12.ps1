@@ -1,0 +1,1 @@
+Remove-Item -Path C:\Temp\MyNewFolder -Recurse -Force -WhatIf

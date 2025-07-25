@@ -1,0 +1,1 @@
+Get-Process | Sort-Object -Property ProcessName -Unique | Select-Object -Property ProcessName
