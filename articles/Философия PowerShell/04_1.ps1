@@ -1,1 +1,0 @@
-Get-Service | Where-Object { ($_.Name -like "Win*") -and ($_.Status -eq "Stopped") }

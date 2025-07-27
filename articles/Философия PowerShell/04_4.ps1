@@ -1,1 +1,0 @@
-Get-ChildItem -File | Sort-Object -Property Extension, @{Expression="Length"; Descending=$true}

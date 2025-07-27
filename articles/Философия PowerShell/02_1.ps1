@@ -1,1 +1,0 @@
-Get-Process | Where-Object { $_.UserName -like '*SYSTEM*' } | Measure-Object

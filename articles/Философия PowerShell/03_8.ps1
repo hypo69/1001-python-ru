@@ -1,1 +1,0 @@
-# Получаем объект файла и передаем его по конвейеру на копированиеGet-ChildItem -Path "MyNewFile.txt" | Copy-Item -Destination "..\AnotherFolder\"
