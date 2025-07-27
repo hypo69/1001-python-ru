@@ -1,1 +1,0 @@
-.\MyFirstScript.ps1

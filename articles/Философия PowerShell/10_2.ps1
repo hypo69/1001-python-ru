@@ -1,2 +1,0 @@
-# Выполните эту команду в папке C:\Scripts\Modules\MyLogUtils\
-New-ModuleManifest -Path .\MyLogUtils.psd1 -RootModule .\MyLogUtils.psm1 -Author "Your Name" -Description "Простой модуль для логирования." -PowerShellVersion "5.1"

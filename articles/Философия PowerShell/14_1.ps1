@@ -1,1 +1,0 @@
-Get-Counter -Counter "\Processor(_Total)\% Processor Time"
