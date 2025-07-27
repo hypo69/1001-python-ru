@@ -365,3 +365,4 @@ FodyWeavers.xsd
 .env
 .venv
 venv
+_tmp
