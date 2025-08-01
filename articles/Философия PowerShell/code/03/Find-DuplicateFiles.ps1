@@ -8,8 +8,7 @@ function Find-DuplicateFiles {
         Group-Object Name, Length | 
         Where-Object { $_.Count -gt 1 } | 
         ForEach-Object {
-            # ЭТО ИСПРАВЛЕННАЯ СТРОКА:
-            # Внутри оператора $() переменные не экранируются.
+
             Write-Host "Найдены дубликаты: $($_.Name)" -ForegroundColor Yellow
             $_.Group | Select-Object FullName, Length, LastWriteTime
         }
