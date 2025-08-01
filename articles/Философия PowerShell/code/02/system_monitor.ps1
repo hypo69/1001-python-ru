@@ -16,9 +16,6 @@ param(
     [string]$OutputPath = "C:\Temp"
 )
 
-# ===================================================================
-# ОПРЕДЕЛЕНИЕ ФУНКЦИЙ - ВСЕГДА В НАЧАЛЕ СКРИПТА, ПЕРЕД ИСПОЛЬЗОВАНИЕМ
-# ===================================================================
 
 function Export-Results {
     param(
@@ -49,7 +46,7 @@ function Export-Results {
 
 
 # ===================================================================
-# ОСНОВНОЙ БЛОК СКРИПТА - ТЕПЕРЬ ОН ВЫЗЫВАЕТ УЖЕ ИЗВЕСТНУЮ ФУНКЦИЮ
+#               ОСНОВНОЙ БЛОК СКРИПТА
 # ===================================================================
 
 # --- Блок 1: Подготовка ---
@@ -61,12 +58,9 @@ if (!(Test-Path $OutputPath)) {
 # --- Блок 2: Сбор данных ---
 Write-Host "Сбор информации..." -ForegroundColor Green
 $processes = Get-Process | Sort-Object CPU -Descending
-
-# ---> ИСПРАВЛЕНИЕ №1: Добавляем -ErrorAction SilentlyContinue
 $services = Get-Service -ErrorAction SilentlyContinue | Group-Object Status | Select-Object Name, Count
 
 # --- Блок 3: Вызов функции для экспорта ---
-# ---> ИСПРАВЛЕНИЕ №2: Этот вызов теперь корректен, так как функция определена выше
 Export-Results -Processes $processes -Services $services -OutputPath $OutputPath
 
 Write-Host "Отчеты успешно сохранены в папке $OutputPath" -ForegroundColor Magenta
