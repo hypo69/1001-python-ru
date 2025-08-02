@@ -1,0 +1,11 @@
+https://medium.com/@datajournal/web-scraping-with-pydoll-a02613ca4d93
+https://medium.com/@datajournal/javascript-vs-python-for-web-scraping-dee9102e56cf
+https://medium.com/@datajournal/web-scraping-with-python-lxml-e9662136cbf5
+https://medium.com/@datajournal/scraping-web-data-to-excel-d487c912b8fa
+https://medium.com/@datajournal/web-scraping-with-python-guide-e54d87166c29
+https://medium.com/@datajournal/scraping-amazon-best-sellers-2781b1399bc9
+https://medium.com/@datajournal/web-scraping-with-google-sheets-46e67230f711
+https://medium.com/@datajournal/how-to-bypass-cloudflare-53fa697fe45f
+https://medium.com/@datajournal/how-to-throttle-requests-c1f9dcd8508f
+https://scrapingsolution.com/2025/04/08/pydoll-is-this-the-end-of-webdrivers-in-python-browser-automation/
+https://brightdata.com/blog/web-data/web-scraping-with-pydoll
