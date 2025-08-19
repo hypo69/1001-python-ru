@@ -1,0 +1,13 @@
+---
+config:
+  layout: fixed
+  look: classic
+---
+flowchart TD
+    Start([Начало]) --> DisplayWelcome["<p>Вывод на экран:</p><p> 'Привет! Добро пожаловать в игру Hello!'</p>"]
+    DisplayWelcome --> AskName["<p>Вывод на экран:</p><p> 'Как тебя зовут?'</p>"]
+    AskName --> GetUserName[/"Получение имени пользователя"/]
+    GetUserName --> StoreName["Сохранение имени в переменную 'name'"]
+    StoreName --> DisplayGreeting["<p>Вывод на экран:</p><p> 'Привет, {name}! Приятно познакомиться!'"]
+    DisplayGreeting --> DisplayThanks["<p>Вывод на экран:</p><p> 'Спасибо за использование программы Hello!'"]
+    DisplayThanks --> End([Конец])

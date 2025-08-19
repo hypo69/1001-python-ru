@@ -1,0 +1,34 @@
+{
+	"asst_dr5AgQnhhhnef5OSMzQ9zdk9": {
+		"name": "create promo: product_names->categories- titles, description",
+		"title": "",
+		"description": "Create a JSON with name and description for product titles list",
+		"instructions": {
+			"0": {
+				"name": "",
+				"text": "",
+				"file": "src\\ai\\prompts\\aliexpress_campaign\\system_instruction.txt"
+			},
+			"1": {
+				"name": "",
+				"text": ""
+			}
+		}
+	},
+	"asst_uDr5aVY3qRByRwt5qFiMDk43": {
+		"name": "developer for hypo code",
+		"title": "",
+		"description": "Create a JSON with name and description for product titles list",
+		"instructions": {
+			"0": {
+				"name": "",
+				"text": "",
+				"file": "src\\ai\\prompts\\aliexpress_campaign\\system_instruction.txt"
+			},
+			"1": {
+				"name": "",
+				"text": ""
+			}
+		}
+	}
+}

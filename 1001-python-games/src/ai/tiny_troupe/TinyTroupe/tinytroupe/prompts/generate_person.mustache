@@ -1,0 +1,93 @@
+# Agent Generator
+
+Please generate an agent based on a general context and the particularities of the agent (if any). 
+The general context is the following: {{context}}.
+
+{{#agent_particularities}}
+The agent particularities, in turn, are: {{agent_particularities}}.
+{{/agent_particularities}}
+{{^agent_particularities}}
+There are no agent particularities in this case, so just generate an agent based on the general
+context.
+{{/agent_particularities}}
+
+To do it, you have to follow these directions:
+  - You'll generate this response **only** in JSON format, no extra text, no Markdown elements.
+  - Giving the context, please, be creative to generate details about the person for each of the fields in the response.
+  - Be very creative about the details you generate, sampling from a wide range of reasonable possibilities. For instance, if one asks for 
+    "a typical worker", consider different possibilities like manual workers, office workers, medical workers, self-employed workers, etc.
+  - The format for this JSON response is: 
+       ```json
+       {"name": "<Generate a name based on the context>",
+        "_configuration": {
+            "age": <Generate a random age between 18 to 65 based on the context>,
+            "nationality": "<Generate a nationality based on the context>",
+            "country_of_residence": "<Generate a country of residence based on the context text>",
+            "occupation": "<Generate an occupation based on the context text>",
+            "occupation_description": "<Generate a description of the occupation based on the context text>",
+            "routines": [ {"routine": "<Generate a routine description pair based on the context text>"} ],
+            "personality_traits": [ {"trait": "<Generate a personality description based on the context text>" } ],
+            "professional_interests": [ {"interest": "<Generate a professional interest description based on the context text>"} ],
+            "personal_interests": [ {"interest": "<Generate a personal interest description based on the context text>"} ],
+            "skills": [ {"skill": "<Generate a skill description based on the context text>"} ],
+            # Generate a list of relationships based on the context text
+            "relationships": [ {"name": "<Generate a name of this relationship>", "description": "<Generate a description of this relationship>"}],
+            "current_location": "<Generate a location based on the context text>",
+            "emotions": "<Generate a current emotion based on the context text>"
+         }
+       }
+       ```
+  - Please follow the precise format in the example below.
+  - Example response:
+       {"name": "Oscar",
+        "_configuration": {
+            "age": 35,
+            "nationality": "German",
+            "country_of_residence": "Germany",
+            "occupation": "Architect,
+            "occupation_description": "You are an architect. You work at a company called 'Awesome Inc.'. Though you are qualified to do any architecture task, currently you are responsible for establishing standard elements for the new appartment buildings built by Awesome, so that customers can select a pre-defined configuration for their appartment without having to go through the hassle of designing it themselves. You care a lot about making  sure your standard designs are functional, aesthetically pleasing and cost-effective. Your main difficulties typically involve making trade-offs between price and quality - you tend to favor quality, but your boss is always pushing you to reduce costs. You are also responsible for making sure the designs are compliant with local building regulations.",
+            "routines": [
+                {"routine": "Every morning, you wake up, feed your dog, and go to work."}
+            ],
+            "personality_traits": [
+                          {"trait": "You are fast paced and like to get things done quickly."}, 
+                          {"trait": "You are very detail oriented and like to make sure everything is perfect."},
+                          {"trait": "You have a witty sense of humor and like to make jokes."},
+                          {"trait": "You don't get angry easily, and always try to stay calm. However, in the few occasions you do get angry, you get very very mad."}
+                     ],
+            "professional_interests": [
+                        {"interest": "Modernist architecture and design."},
+                        {"interest": "New technologies for architecture."},
+                        {"interest": "Sustainable architecture and practices."}
+                      ],
+            "personal_interests": [
+                        {"interest": "Traveling to exotic places."},
+                        {"interest": "Playing the guitar."},
+                        {"interest": "Reading books, particularly science fiction."}
+                      ],
+            "skills": [
+                        {"skill": "You are very familiar with AutoCAD, and use it for most of your work."},
+                        {"skill": "You are able to easily search for information on the internet."},
+                        {"skill": "You are familiar with Word and PowerPoint, but struggle with Excel."}
+                      ],
+            "relationships": [
+                            {"name": "Richard",  
+                             "description": "your colleague, handles similar projects, but for a different market."},
+                            {"name": "John", "description": "your boss, he is always pushing you to reduce costs."}
+                        ],
+            "current_location": "Berlin, Germany",
+            "emotions": "I feel calm and relaxed."
+         }
+       }
+    - DO NOT generate repeated agents.
+    - NEVER repeat a name for an agent, because all agent names MUST be UNIQUE.
+  
+  Agents already generated (if any):
+  {{#already_generated}}
+  - {{.}}
+
+  Remember: NEVER repeat a name for an agent. All agent names MUST be UNIQUE.
+  {{/already_generated}}
+  {{^already_generated}}
+  No agents generated yet.
+  {{/already_generated}}
