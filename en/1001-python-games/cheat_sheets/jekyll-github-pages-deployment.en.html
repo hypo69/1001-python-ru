@@ -1,0 +1,152 @@
+<h2>Automatic Jekyll Site Deployment to GitHub Pages</h2>
+<p>To automate the deployment process, we will use GitHub Actions, which allow you to perform various tasks, including building and publishing websites, directly in your repository.</p>
+<h3>1: Workflow File Overview</h3>
+<p>First, let's look at the main workflow file that controls the build and deployment process. This file is written in YAML and is usually located in the <code>.github/workflows</code> directory. Here's its content:</p>
+<pre class="line-numbers"><code class="language-yaml"># Sample workflow for building and deploying a Jekyll site to GitHub Pages
+name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./docs/gemini/consultant/ru/src
+          destination: ./_site
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+</code></pre>
+<h3>2: Workflow Structure Breakdown</h3>
+<p>Now let's break down each section of this file:</p>
+<h4>2.1. General Information</h4>
+<ul>
+<li><code>name: Deploy Jekyll with GitHub Pages dependencies preinstalled</code>: The name of the workflow that you will see in the Actions list in the repository.</li>
+<li><code>on</code>: Describes when the workflow should run:
+<ul>
+<li><code>push</code>: The workflow runs on every push to the <code>master</code> branch.</li>
+<li><code>workflow_dispatch</code>: Allows you to manually run the workflow through the GitHub interface.</li>
+</ul>
+</li>
+<li><code>permissions</code>: Configures permissions for the workflow:
+<ul>
+<li><code>contents: read</code>: Permission to read code from the repository.</li>
+<li><code>pages: write</code>: Permission to publish to GitHub Pages.</li>
+<li><code>id-token: write</code>: Permission to get an authentication token (required for GitHub Actions).</li>
+</ul>
+</li>
+<li><code>concurrency</code>: Configures parallel workflow execution:
+<ul>
+<li><code>group: "pages"</code>: Ensures that only one workflow for GitHub Pages runs at a time.</li>
+<li><code>cancel-in-progress: false</code>: Prevents cancellation of the current workflow execution when a new one starts.</li>
+</ul>
+</li>
+</ul>
+<h4>2.2. <code>jobs</code> Section</h4>
+<p>This section describes which tasks should be performed. We have two jobs: <code>build</code> and <code>deploy</code>.</p>
+<h5>2.2.1. <code>build</code>: Site Build</h5>
+<ul>
+<li><code>runs-on: ubuntu-latest</code>: Specifies that the job runs on an Ubuntu server.</li>
+<li><code>steps</code>: Lists the steps that are executed during the build:
+<ul>
+<li><code>name: Checkout</code>: Checks out the repository source code.</li>
+<li><code>uses: actions/checkout@v4</code>: Uses a pre-built action to check out the code.</li>
+<li><code>name: Setup Pages</code>: Configures the environment for working with GitHub Pages.</li>
+<li><code>uses: actions/configure-pages@v5</code>: Uses a pre-built action for configuration.</li>
+<li><code>name: Build with Jekyll</code>: Starts the Jekyll site build.</li>
+<li><code>uses: actions/jekyll-build-pages@v1</code>: Uses a pre-built action for building.</li>
+<li><code>with:</code>: Configures action parameters:
+<ul>
+<li><code>source: ./docs/gemini/consultant/ru/src</code>: Specifies where your site's source files are located. <strong>Note</strong>: the path to your files <code>docs/gemini/consultant/ru/src</code>.</li>
+<li><code>destination: ./_site</code>: Specifies where to put the built files.</li>
+</ul>
+</li>
+<li><code>name: Upload artifact</code>: Uploads the built files to pass them to the next job.</li>
+<li><code>uses: actions/upload-pages-artifact@v3</code>: Uses a pre-built action for uploading artifacts.</li>
+</ul>
+</li>
+</ul>
+<h5>2.2.2. <code>deploy</code>: Site Publication</h5>
+<ul>
+<li><code>environment</code>: Configures the environment for publication.
+<ul>
+<li><code>name: github-pages</code>: Environment name.</li>
+<li><code>url: ${{ steps.deployment.outputs.page_url }}</code>: Gets the URL of the published site.</li>
+</ul>
+</li>
+<li><code>runs-on: ubuntu-latest</code>: Specifies that the job runs on an Ubuntu server.</li>
+<li><code>needs: build</code>: Specifies that the <code>deploy</code> job must run after the <code>build</code> job has successfully completed.</li>
+<li><code>steps</code>: Lists the steps that are executed during publication:
+<ul>
+<li><code>name: Deploy to GitHub Pages</code>: Performs the publication of the site to GitHub Pages.</li>
+<li><code>id: deployment</code>: Sets the ID for the action.</li>
+<li><code>uses: actions/deploy-pages@v4</code>: Uses a pre-built action for deployment.</li>
+</ul>
+</li>
+</ul>
+<h3>3: What do Markdown files do?</h3>
+<p>Files with the <code>.md</code> (Markdown) extension are the basis for a Jekyll site. Markdown is a simple markup language that allows you to format text.
+Jekyll automatically processes <code>.md</code> files, turning them into HTML pages. Your files should be located in the folder specified in the workflow <code>docs/gemini/consultant/ru/src</code>.</p>
+<h3>4: Flowchart</h3>
+<pre class="line-numbers"><code class="language-mermaid">graph TD
+    A[Start: Push or manual trigger] --> B(Repository check);
+    B --> C[Build site to _site folder];
+    C --> D[Upload artifact];
+    D --> E[Publish to GitHub Pages];
+    E --> F[End: Site published];
+    
+    style A fill:#D46A6A,stroke:#333,stroke-width:2px
+    style B fill:#D46A6A,stroke:#333,stroke-width:2px
+    style C fill:#D46A6A,stroke:#333,stroke-width:2px
+    style D fill:#D46A6A,stroke:#333,stroke-width:2px
+    style E fill:#D46A6A,stroke:#333,stroke-width:2px
+    style F fill:#D46A6A,stroke:#333,stroke-width:2px
+    
+    linkStyle 0,1,2,3,4 stroke:#333,stroke-width:2px
+</code></pre>
+<h3>5: How it works</h3>
+<ol>
+<li><strong>Code change:</strong> You make changes to your <code>.md</code> or <code>.html</code> files, which are located in the <code>docs/gemini/consultant/ru/src</code> folder.</li>
+<li><strong>Push:</strong> You push your changes to the <code>master</code> branch of your GitHub repository.</li>
+<li><strong>Workflow Run:</strong> GitHub Actions automatically runs the workflow described in the YAML file.</li>
+<li><strong>Build:</strong> The workflow first downloads the code from the repository, then builds the Jekyll site from your source files into the <code>_site</code> folder.</li>
+<li><strong>Publish:</strong> The built site is published to GitHub Pages.</li>
+<li><strong>Site ready:</strong> After that, your site is accessible at the URL specified in the GitHub Pages settings.</li>
+</ol>

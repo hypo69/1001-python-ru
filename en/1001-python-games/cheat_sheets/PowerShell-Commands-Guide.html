@@ -1,0 +1,322 @@
+<p><strong>PowerShell Commands Guide</strong></p>
+<p><strong>1. Basic Navigation and File/Directory Operations</strong></p>
+<ul>
+<li><strong><code>Get-ChildItem</code> (or <code>gci</code>, <code>ls</code>, <code>dir</code>)</strong>: Gets a list of files and subdirectories in the specified location.
+<ul>
+<li><strong>Syntax</strong>: <code>Get-ChildItem [path] [parameters]</code></li>
+<li><strong>Key parameters:</strong>
+<ul>
+<li><code>-Path</code>: Specifies the path to the directory.</li>
+<li><code>-Include</code>: Filters by file name (with wildcards <code>*</code> and <code>?</code>).</li>
+<li><code>-Exclude</code>: Excludes files by name.</li>
+<li><code>-Recurse</code>: Shows files and folders in all subdirectories.</li>
+<li><code>-Force</code>: Show hidden files.</li>
+<li><code>-File</code>: Show only files.</li>
+<li><code>-Directory</code>: Show only folders.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Get-ChildItem</code>: List of files and folders in the current directory.</li>
+<li><code>Get-ChildItem -Path C:\Users\User\Documents</code>: List of files and folders in <code>C:\Users\User\Documents</code>.</li>
+<li><code>Get-ChildItem -Include *.txt</code>: List only text files in the current directory.</li>
+<li><code>Get-ChildItem -Path C:\ -Recurse -Directory</code>: Show all directories on drive C.</li>
+<li><code>Get-ChildItem -Force</code>: Show all files, including hidden ones.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Set-Location</code> (or <code>sl</code>, <code>cd</code>)</strong>: Changes the current directory.
+<ul>
+<li><strong>Syntax</strong>: <code>Set-Location [path]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Set-Location C:\Windows</code>: Go to the <code>C:\Windows</code> directory.</li>
+<li><code>Set-Location ..</code>: Go to the parent directory.</li>
+<li><code>Set-Location /</code> - Go to the root of the drive.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>New-Item</code></strong>: Creates a new file or directory.
+<ul>
+<li><strong>Syntax</strong>: <code>New-Item -Path [path] -ItemType [type] -Name [name]</code></li>
+<li><strong>Key parameters:</strong>
+<ul>
+<li><code>-ItemType</code>: <code>file</code> or <code>directory</code>.</li>
+<li><code>-Name</code>: Name of the new item.</li>
+<li><code>-Value</code>: Content of the file.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>New-Item -ItemType directory -Name NewFolder</code>: Create a folder <code>NewFolder</code>.</li>
+<li><code>New-Item -ItemType file -Name myfile.txt</code>: Create an empty file <code>myfile.txt</code>.</li>
+<li><code>New-Item -ItemType file -Name myfile.txt -Value "Hello, world!"</code>: Create <code>myfile.txt</code> with content.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Remove-Item</code> (or <code>rm</code>, <code>del</code>, <code>erase</code>)</strong>: Deletes files and directories.
+<ul>
+<li><strong>Syntax:</strong> <code>Remove-Item [path] [parameters]</code></li>
+<li><strong>Key parameters:</strong>
+<ul>
+<li><code>-Recurse</code>: Delete all subdirectories.</li>
+<li><code>-Force</code>: Force deletion (including read-only files and directories).</li>
+<li><code>-Confirm</code> - Prompt for confirmation for each deletion.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Remove-Item myfile.txt</code>: Delete <code>myfile.txt</code>.</li>
+<li><code>Remove-Item -Path C:\Temp -Recurse -Force</code>: Delete folder <code>C:\Temp</code> with all nested folders and files.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Copy-Item</code></strong>: Copies files and directories.
+<ul>
+<li><strong>Syntax</strong>: <code>Copy-Item [source_path] [destination_path] [parameters]</code></li>
+<li><strong>Key parameters:</strong>
+<ul>
+<li><code>-Recurse</code>: Copy all subdirectories.</li>
+<li><code>-Force</code>: Overwrite existing files without prompting.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Copy-Item -Path myfile.txt -Destination mycopy.txt</code>: Copy <code>myfile.txt</code> to <code>mycopy.txt</code>.</li>
+<li><code>Copy-Item -Path C:\Source -Destination D:\Backup -Recurse</code>: Copy folder <code>C:\Source</code> to all subdirectories in <code>D:\Backup</code> folder.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Move-Item</code></strong>: Moves files and directories.
+<ul>
+<li><strong>Syntax</strong>: <code>Move-Item [source_path] [destination_path] [parameters]</code></li>
+<li><code>-Force</code> - Force move and overwrite.</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Move-Item -Path myfile.txt -Destination D:\Documents</code>: Move <code>myfile.txt</code> to <code>D:\Documents</code> folder.</li>
+<li><code>Move-Item -Path "C:\MyFolder" -Destination "D:\" -Force</code>: Move folder C:\MyFolder to D:\ forcibly, even if a folder with that name already exists there.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Rename-Item</code></strong>: Renames a file or directory.
+<ul>
+<li><strong>Syntax</strong>: <code>Rename-Item -Path [path] -NewName [new_name]</code></li>
+<li><strong>Example:</strong>
+<ul>
+<li><code>Rename-Item -Path myfile.txt -NewName newfile.txt</code>: Rename <code>myfile.txt</code> to <code>newfile.txt</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Get-Content</code> (or <code>gc</code>)</strong>: Displays or gets the content of a file.
+<ul>
+<li><strong>Syntax</strong>: <code>Get-Content [path]</code></li>
+<li><strong>Example:</strong>
+<ul>
+<li><code>Get-Content myfile.txt</code>: Show content of <code>myfile.txt</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Set-Content</code></strong>: Replaces or creates the content of a file.
+<ul>
+<li><strong>Syntax:</strong> <code>Set-Content [path] [parameters]</code></li>
+<li><code>-value</code> - text to write.</li>
+<li><strong>Example:</strong> <code>Set-Content myfile.txt "New text"</code> - Replace content of <code>myfile.txt</code>.</li>
+</ul>
+</li>
+<li><strong><code>Add-Content</code></strong>: Appends content to the end of a file.
+<ul>
+<li><strong>Syntax:</strong> <code>Add-Content [path] [parameters]</code></li>
+<li><code>-value</code> - text to append.</li>
+<li><strong>Example:</strong> <code>Add-Content myfile_file.txt "More text"</code> - Append text to the end of <code>myfile.txt</code>.</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. Process Management:</strong></p>
+<ul>
+<li><strong><code>Get-Process</code> (or <code>gps</code>)</strong>: Gets a list of running processes.
+<ul>
+<li><strong>Syntax</strong>: <code>Get-Process [parameters]</code></li>
+<li><strong>Key parameters:</strong>
+<ul>
+<li><code>-Name</code>: Filter by process name.</li>
+<li><code>-Id</code>: Filter by process ID.</li>
+<li><code>-IncludeUserName</code>: Display the user who started the process.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Get-Process</code>: List all running processes.</li>
+<li><code>Get-Process -Name notepad</code>: List processes with name <code>notepad</code>.</li>
+<li><code>Get-Process -IncludeUserName</code>: List all running processes with users.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Stop-Process</code></strong>: Terminates a process.
+<ul>
+<li><strong>Syntax</strong>: <code>Stop-Process [parameters]</code></li>
+<li><code>-Id</code> - Specify process ID.</li>
+<li><code>-Name</code> - Specify process name.</li>
+<li><code>-Force</code> - Force terminate process.</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Stop-Process -Name notepad</code>: Terminate all <code>notepad</code> processes.</li>
+<li><code>Stop-Process -Id 1234</code> : Terminate process with ID 1234.</li>
+<li><code>Stop-Process -Name chrome -Force</code> : Force terminate all <code>chrome</code> processes.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. Service Management:</strong></p>
+<ul>
+<li><strong><code>Get-Service</code></strong>: Gets a list of services.
+<ul>
+<li><strong>Syntax</strong>: <code>Get-Service [parameters]</code></li>
+<li><code>-Name</code>: Display only services with the specified name.</li>
+<li><code>-DisplayName</code>: Display only services with the specified display name.</li>
+<li><code>-Status</code>: Filter by status (Running, Stopped).</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Get-Service</code>: List all services.</li>
+<li><code>Get-Service -Name Spooler</code>: Display Spooler service.</li>
+<li><code>Get-Service -Status Running</code>: Show running services.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Start-Service</code></strong>: Starts a service.
+<ul>
+<li><strong>Syntax</strong>: <code>Start-Service [service_name]</code></li>
+<li><strong>Example:</strong> <code>Start-Service Spooler</code> - Start Spooler service.</li>
+</ul>
+</li>
+<li><strong><code>Stop-Service</code></strong>: Stops a service.
+<ul>
+<li><strong>Syntax</strong>: <code>Stop-Service [service_name]</code></li>
+<li><code>-Force</code> - Force stop service.</li>
+<li><strong>Example:</strong> <code>Stop-Service Spooler</code>: Stop Spooler service.</li>
+<li><code>Stop-Service Spooler -Force</code> - Force stop Spooler service.</li>
+</ul>
+</li>
+<li><strong><code>Restart-Service</code></strong>: Restarts a service.
+<ul>
+<li><strong>Syntax:</strong> <code>Restart-Service [service_name]</code></li>
+<li><strong>Example:</strong> <code>Restart-Service Spooler</code> - Restart Spooler service.</li>
+</ul>
+</li>
+</ul>
+<p><strong>4. Networking</strong></p>
+<ul>
+<li><strong><code>Test-NetConnection</code></strong>: Tests network connection.
+<ul>
+<li><strong>Syntax</strong>: <code>Test-NetConnection [hostname_or_ip_address] [parameters]</code></li>
+<li><code>-Port</code> - Port number.</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Test-NetConnection google.com</code>: Test connection to <code>google.com</code>.</li>
+<li><code>Test-NetConnection google.com -Port 80</code>: Test connection to google.com on port 80.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Get-NetIPConfiguration</code></strong>: Gets network configuration.
+<ul>
+<li><strong>Syntax</strong>: <code>Get-NetIPConfiguration</code></li>
+<li><strong>Example:</strong>
+<ul>
+<li><code>Get-Net2IPConfiguration</code>: Display network configuration.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Resolve-DnsName</code></strong>: Queries DNS information.
+<ul>
+<li><strong>Syntax</strong>: <code>Resolve-DnsName [hostname]</code></li>
+<li><strong>Example:</strong> <code>Resolve-DnsName google.com</code>: Query DNS information for <code>google.com</code>.</li>
+</ul>
+</li>
+</ul>
+<p><strong>5. Registry Operations</strong></p>
+<ul>
+<li><strong><code>Get-ItemProperty</code></strong>: Gets a property value from the registry.
+<ul>
+<li><strong>Syntax</strong>: <code>Get-ItemProperty -Path [registry_path]</code></li>
+<li><strong>Example:</strong> <code>Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"</code></li>
+</ul>
+</li>
+<li><strong><code>Set-ItemProperty</code></strong>: Sets a property value in the registry.
+<ul>
+<li><strong>Syntax</strong>: <code>Set-ItemProperty -Path [registry_path] -Name [property_name] -Value [value]</code></li>
+<li><strong>Example:</strong> <code>Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -Value "C:\image.jpg"</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>6. Other</strong></p>
+<ul>
+<li><strong><code>Clear-Host</code></strong>: Clears the console screen.
+<ul>
+<li><strong>Syntax:</strong> <code>Clear-Host</code></li>
+</ul>
+</li>
+<li><strong><code>Get-Date</code></strong>: Gets the current date and time.
+<ul>
+<li><strong>Syntax:</strong> <code>Get-Date</code></li>
+</ul>
+</li>
+<li><strong><code>Start-Process</code></strong>: Launches a program or opens a file.
+<ul>
+<li><strong>Syntax:</strong> <code>Start-Process [program_or_file_name] [options]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>Start-Process notepad.exe</code>: Launch Notepad.</li>
+<li><code>Start-Process myfile.txt</code>: Open <code>myfile.txt</code> with default program.</li>
+<li><code>Start-Process -FilePath "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "https://www.google.com"</code> - Open website in Chrome.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Get-Help</code></strong>: Shows help for a command.
+<ul>
+<li><strong>Syntax</strong>: <code>Get-Help [command_name]</code></li>
+<li><strong>Example:</strong> <code>Get-Help Get-Process</code>: Show help for <code>Get-Process</code> command.</li>
+</ul>
+</li>
+<li><strong><code>Exit</code></strong>: Ends the PowerShell session.
+<ul>
+<li><strong>Syntax:</strong> <code>Exit</code></li>
+</ul>
+</li>
+<li><strong><code>Get-Variable</code></strong>: Shows current variables.
+<ul>
+<li><strong>Syntax</strong>: <code>Get-Variable</code></li>
+</ul>
+</li>
+<li><strong><code>Get-Alias</code></strong>: Shows command aliases.
+<ul>
+<li><strong>Syntax</strong>: <code>Get-Alias</code></li>
+</ul>
+</li>
+<li><strong><code>Set-Alias</code></strong>: Creates an alias for a command.
+<ul>
+<li><strong>Syntax</strong>: <code>Set-Alias [alias_name] [command_name]</code></li>
+<li><strong>Example</strong>: <code>Set-Alias gci Get-ChildItem</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>Notes:</strong></p>
+<ul>
+<li><code>PowerShell</code> commands (cmdlets) usually have the form <code>Verb-Noun</code> (e.g., <code>Get-Process</code>, <code>Set-Location</code>).</li>
+<li><code>PowerShell</code> is case-insensitive, so you can write commands as <code>Get-ChildItem</code> or <code>get-childitem</code>.</li>
+<li><code>PowerShell</code> works with objects, so you can use the <code>|</code> operator to pipe the output of one command to the input of another (e.g., <code>Get-Process | Sort-Object -Property CPU</code>).</li>
+<li>Many commands support the use of wildcards (*) for working with multiple files (e.g., <code>Get-ChildItem *.txt</code>).</li>
+<li>Some commands require administrator privileges.</li>
+</ul>

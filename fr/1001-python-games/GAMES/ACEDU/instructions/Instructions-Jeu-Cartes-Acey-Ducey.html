@@ -1,0 +1,59 @@
+<h3>Game Name: <strong>Acey-Ducey Card Game</strong></h3>
+<h4>Description</h4>
+<p>This is a simulation of the Acey-Ducey card game. The player places bets based on the probability that the next card will fall between the two already open cards.</p>
+<ul>
+<li><strong>Starting Capital:</strong> The player starts with 100 dollars.</li>
+<li><strong>Game Rules:</strong>
+<ol>
+<li>The computer deals two cards.</li>
+<li>The player can decide whether or not to place a bet.</li>
+<li>If a bet is placed, a third card is drawn.</li>
+<li>If the value of the third card falls between the first two cards, the player wins the bet. Otherwise, the bet is lost.</li>
+</ol>
+</li>
+<li>The game ends when the player loses all their capital or ends it manually.</li>
+</ul>
+<h4>Implementation</h4>
+<p><strong>Input Data:</strong>
+- User input for:
+  - Initial bet size.
+  - Decision to place a bet or pass.</p>
+<p><strong>Output Data:</strong>
+- Message about the player's current capital.
+- Information about the bet results (win/loss).
+- Card status at each turn.</p>
+<h4>Step-by-step instructions for implementation:</h4>
+<ol>
+<li><strong>Game Initialization</strong>:
+<ul>
+<li>Define the player's initial capital (100 dollars).</li>
+<li>Announce the game rules.</li>
+</ul>
+</li>
+<li><strong>Main game loop</strong>:
+<ul>
+<li>Generate two random cards (range 2–14, where 11 = Jack, 12 = Queen, 13 = King, 14 = Ace).</li>
+<li>Display the cards to the player.</li>
+<li>Ask for a bet (can pass the turn by betting 0).</li>
+<li>Check: the bet must not exceed the current capital.</li>
+</ul>
+</li>
+<li><strong>Round Result</strong>:
+<ul>
+<li>Generate a third card.</li>
+<li>Check if its value falls within the range between the first two cards.</li>
+<li>Modify the player's capital based on the result.</li>
+</ul>
+</li>
+<li><strong>End of Game</strong>:
+<ul>
+<li>If the player's capital is 0, the game ends with an appropriate message.</li>
+<li>Offer the player to start a new game or quit.</li>
+</ul>
+</li>
+</ol>
+<h4>Limitations</h4>
+<ul>
+<li>All cards are unique within the same round.</li>
+<li>Support for basic game functionalities without complex visual effects.</li>
+</ul>

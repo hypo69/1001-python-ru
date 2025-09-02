@@ -1,0 +1,157 @@
+<h1>Classes in <code>python</code></h1>
+<p>Classes are one of the main mechanisms of object-oriented programming (OOP) in Python. A class can be thought of as a "template" or "blueprint" for creating objects that have attributes (data) and methods (functions). Objects created based on a class are called instances of the class. Classes allow you to structure code, improve its reusability, and facilitate its maintenance.</p>
+<h3>Class Structure</h3>
+<pre class="line-numbers"><code class="language-python">class ClassName:
+    # Class attributes
+    def __init__(self, param1, param2):
+        # Constructor (initializer) of the class
+        self.param1 = param1
+        self.param2 = param2
+
+    # Class methods
+    def method(self):
+        return f'{self.param1} and {self.param2}'
+</code></pre>
+<ol>
+<li><strong>Constructor</strong> (<code>__init__</code>):
+The <code>__init__</code> constructor is a special method that is automatically called when a new object is created. It is used to initialize the object's attributes.</li>
+</ol>
+<ul>
+<li><code>self</code>: a parameter that is a reference to the current instance of the class. In Python, it must be passed as the first parameter in all class methods (it is not passed when calling the method).</li>
+<li>Attributes, such as <code>param1</code> and <code>param2</code>, are assigned to the object via <code>self</code>. These attributes can then be used by other class methods.</li>
+</ul>
+<ol start="2">
+<li><strong>Class attributes</strong>:
+Attributes are variables that belong to objects of this class. They are defined within the constructor (<code>__init__</code>) and can be accessed using an object reference.</li>
+<li><strong>Class methods</strong>:
+Methods are functions that can manipulate an object's attributes. Methods can use object data, modify it, or perform other operations.</li>
+</ol>
+<h3>Creating a class object</h3>
+<p>Once a class is defined, objects of that class can be created. Objects are instances of the class.</p>
+<pre class="line-numbers"><code class="language-python">class Car:
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+
+    def description(self):
+        return f'{self.year} {self.make} {self.model}'
+
+# Creating an object
+my_car = Car('Toyota', 'Corolla', 2020)
+print(my_car.description())  # Output: 2020 Toyota Corolla
+</code></pre>
+<ul>
+<li>In this example, we created a <code>my_car</code> object of the <code>Car</code> class. When creating the object, values for the <code>make</code>, <code>model</code>, and <code>year</code> attributes are passed, which are stored in the object.</li>
+<li>The <code>description()</code> method allows you to get a string representation of the car.</li>
+</ul>
+<h3>Types of methods</h3>
+<ol>
+<li><strong>Instance methods</strong>: These are regular methods that operate on instances of the class. They take a reference to the object as the first parameter (usually <code>self</code>).</li>
+</ol>
+<p>Example:
+<pre class="line-numbers"><code class="language-python">   def method(self):
+       pass
+</code></pre>
+</p>
+<ol start="2">
+<li><strong>Class methods</strong>: Methods that take the class itself as the first parameter. The <code>@classmethod</code> decorator is used to define such methods. They can change the state of the class itself, not its individual instances.</li>
+</ol>
+<p>Example:
+<pre class="line-numbers"><code class="language-python">   class MyClass:
+       @classmethod
+       def class_method(cls):
+           pass
+</code></pre>
+</p>
+<ol start="3">
+<li><strong>Static methods</strong>: These are methods that do not use <code>self</code> or <code>cls</code> (i.e., they do not have access to either the instance or the class). Static methods are declared using the <code>@staticmethod</code> decorator. They can be useful when a method does not depend on the state of the object or class, but is related to logic belonging to the class.</li>
+</ol>
+<p>Example:
+<pre class="line-numbers"><code class="language-python">   class MyClass:
+       @staticmethod
+       def static_method():
+           pass
+</code></pre>
+</p>
+<h3>Inheritance</h3>
+<p>One of the key principles of OOP is <strong>inheritance</strong>. A class can inherit the behavior of another class, extending or modifying its functionality. This allows code reuse, avoiding duplication.</p>
+<pre class="line-numbers"><code class="language-python">class Animal:
+    def speak(self):
+        return 'Animal voice'
+
+class Dog(Animal):  # The Dog class inherits from the Animal class
+    def speak(self):
+        return 'Woof'
+
+# Creating objects
+dog = Dog()
+print(dog.speak())  # Output: Woof
+</code></pre>
+<ul>
+<li>The <code>Dog</code> class inherits the <code>speak</code> method from the <code>Animal</code> class, but overrides it to return the string 'Woof'.</li>
+</ul>
+<h3>Polymorphism</h3>
+<p><strong>Polymorphism</strong> means the ability of objects of different classes to use the same methods with different implementations. In Python, this is possible due to inheritance and method overriding.</p>
+<pre class="line-numbers"><code class="language-python">class Cat(Animal):
+    def speak(self):
+        return 'Meow'
+
+# Creating objects
+cat = Cat()
+print(cat.speak())  # Output: Meow
+</code></pre>
+<p>Here, <code>Cat</code> also overrides the <code>speak</code> method, but returns a different value. This allows you to call the <code>speak</code> method regardless of the object type.</p>
+<h3>Encapsulation</h3>
+<p><strong>Encapsulation</strong> allows you to hide internal implementation details and provide access to data through public methods. This helps prevent improper data usage.</p>
+<pre class="line-numbers"><code class="language-python">class Car:
+    def __init__(self, make, model):
+        self._make = make  # Protected attribute
+        self._model = model
+
+    def get_make(self):
+        return self._make
+
+    def set_make(self, make):
+        self._make = make
+
+# Creating an object
+my_car = Car('Toyota', 'Corolla')
+print(my_car.get_make())  # Output: Toyota
+my_car.set_make('Honda')
+print(my_car.get_make())  # Output: Honda
+</code></pre>
+<p>Here, the <code>_make</code> and <code>_model</code> attributes are protected (usually in Python, an underscore means that these attributes should not be used directly outside the class), but they can be accessed and modified through the <code>get_make</code> and <code>set_make</code> methods.</p>
+<h3>Other class features</h3>
+<ol>
+<li><strong>Destructor</strong> (<code>__del__</code>):
+A special method that is called when an object is destroyed (e.g., when it goes out of scope). It can be used to clean up resources.</li>
+</ol>
+<p>Example:
+<pre class="line-numbers"><code class="language-python">   class MyClass:
+       def __del__(self):
+           print("Object destroyed")
+
+   obj = MyClass()
+   del obj  # The object will be destroyed and the __del__ method will be called
+</code></pre>
+</p>
+<ol start="2">
+<li><strong>Magic methods</strong>:
+These are special methods with two underscores (e.g., <code>__init__</code>, <code>__str__</code>, <code>__repr__</code>, <code>__eq__</code>). They allow you to override the standard behavior of operations such as object creation, comparison, string representation of objects, etc.</li>
+</ol>
+<p>Example:
+<pre class="line-numbers"><code class="language-python">   class Point:
+       def __init__(self, x, y):
+           self.x = x
+           self.y = y
+
+       def __repr__(self):
+           return f'Point({self.x}, {self.y})'
+
+   p = Point(3, 4)
+   print(p)  # Output: Point(3, 4)
+</code></pre>
+</p>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">To table of contents</a></p>

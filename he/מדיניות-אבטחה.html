@@ -1,0 +1,191 @@
+<table>
+<tr>
+<TD>
+<A HREF = 'https://github.com/hypo69/hypotez/blob/master/README.MD'>[שורש ↑]</A>
+</TD>
+<td>
+<a href='https://github.com/hypo69/hypotez/blob/master/src/README.MD'>קוד</a>
+</td>
+<td>
+<a href='https://github.com/hypo69/hypotez/blob/master/docs/gemini/out/README.MD'>תיעוד</a>
+</td>
+<td>
+<a href='https://github.com/hypo69/hypotez/blob/master/README.RU.MD'>Русский</a>
+</td>
+</tr>
+</table>
+
+<h2 dir="rtl">אחסון הגדרות יישום</h2>
+
+<h3 dir="rtl">1. אחסון סיסמאות ואישורים ב-<span dir="ltr">KeePass</span></h3>
+
+<p dir="rtl">כדי לאחסן באופן מאובטח אישורים כגון סיסמאות ומפתחות <span dir="ltr">API</span>, השתמש ב-<span dir="ltr">KeePass</span>. בצע את השלבים הבאים:</p>
+
+<ol dir="rtl">
+<li><p dir="rtl"><strong>צור מסד נתונים של <span dir="ltr">KeePass</span></strong>:</p>
+<ul>
+<li><p dir="rtl">פתח את <span dir="ltr">KeePass</span> וצור מסד נתונים חדש על ידי בחירה ב <strong>קובץ &gt; מסד נתונים חדש</strong>.</p></li>
+<li><p dir="rtl">הגדר סיסמת אב חזקה כדי להגן על מסד הנתונים.</p></li>
+<li><p dir="rtl"><strong>מיקום</strong>: שמור את קובץ מסד הנתונים של <span dir="ltr">KeePass</span> (<span dir="ltr"><code>credentials.kdbx</code></span>) בתיקיית <span dir="ltr"><code>secrets</code></span> של הפרויקט שלך:</p>
+<pre>
+        שורש
+        ├── נתונים
+        ├── secrets
+        │   └── credentials.kdbx  # &lt;-- KeePass database file
+        │   └── passowrd.txt
+        │   └── &lt;googke api josn kes&gt;.json
+        ├── src
+        └── ...
+
+        - לעולם אל תשתף את קובץ <span dir="ltr">`credentials.kdbx`</span> עם אחרים. ❗
+        - ודא שהקובץ מאוחסן במיקום מאובטח הנגיש רק לך. (תיקיית <span dir="ltr">`secrets`</span> בשורש הפרויקט אינה נכללת ב-<span dir="ltr">`git`</span>).
+        - עדכן באופן קבוע את מפתחות ה-<span dir="ltr">API</span> ואת סיסמאות מסד הנתונים שלך.
+</pre>
+</li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>צור קבוצות וערכים</strong>:</p>
+<ul>
+<li><p dir="rtl">מסד הנתונים שלך צריך להכיל קבוצות מרובות כדי לארגן אישורים. לדוגמה:</p>
+<ul>
+<li><p dir="rtl"><strong>ספקים</strong></p>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">aliexpress</span></strong></p>
+<ul>
+<li><p dir="rtl">ערך עבור <span dir="ltr">API</span> המכיל:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>api_key</code></span>: מפתח ה-<span dir="ltr">API</span> שלך ב-<span dir="ltr">Aliexpress</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>secret</code></span>: המפתח הסודי שלך ב-<span dir="ltr">Aliexpress</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>tracking_id</code></span>: מזהה מעקב.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>email</code></span>: כתובת הדוא&quot;ל שלך.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>password</code></span>: הסיסמה שלך ל-<span dir="ltr">Aliexpress</span>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p dir="rtl"><strong><span dir="ltr">openai</span></strong></p>
+<ul>
+<li><p dir="rtl">ערך עבור <span dir="ltr">API</span> של <span dir="ltr">OpenAI</span> המכיל:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>api_key</code></span>: מפתח ה-<span dir="ltr">API</span> שלך ב-<span dir="ltr">OpenAI</span>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p dir="rtl"><strong><span dir="ltr">discord</span></strong></p>
+<ul>
+<li><p dir="rtl">ערך עבור <span dir="ltr">API</span> של <span dir="ltr">Discord</span> המכיל:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>application_id</code></span>: מזהה יישום <span dir="ltr">Discord</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>public_key</code></span>: מפתח ציבורי.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>bot_token</code></span>: אסימון בוט.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p dir="rtl"><strong><span dir="ltr">prestashop</span></strong> ושירותים אחרים עם ערכים מתאימים.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>הוסף מאפיינים מותאמים אישית</strong>:</p>
+<ul>
+<li><p dir="rtl">בעת יצירת ערכים, הוסף מאפיינים מותאמים אישית לאחסון נתונים נוספים. לדוגמה, בערך <span dir="ltr">Aliexpress</span>, הוסף שדות עבור:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>tracking_id</code></span></p></li>
+<li><p dir="rtl"><span dir="ltr"><code>username</code></span></p></li>
+<li><p dir="rtl"><span dir="ltr"><code>email</code></span></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+<h3 dir="rtl">2. תצורת קובץ <span dir="ltr"><code>settings.json</code></span></h3>
+
+<p dir="rtl">קובץ <span dir="ltr"><code>settings.json</code></span> מאחסן את ההגדרות הראשיות של הפרויקט שלך. כך ניתן להגדיר אותו:</p>
+
+<ol dir="rtl">
+<li><p dir="rtl"><strong>צור את קובץ <span dir="ltr"><code>settings.json</code></span></strong>:</p>
+<ul>
+<li><p dir="rtl">צור קובץ בשם <span dir="ltr"><code>settings.json</code></span> בספריית <span dir="ltr"><code>/src</code></span> של הפרויקט שלך.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>דוגמה לתוכן קובץ <span dir="ltr"><code>settings.json</code></span></strong>:</p>
+<pre class="line-numbers"><code class="language-json">{
+      "google_drive": "H:\\My Drive\\hypo69",  // Path to the Google Drive folder used for data storage.
+      "mode": "debug",                          // Application mode: 'debug' for development or 'production' for live.
+      "git_user": "hypo69",                    // Username for Git repository access.
+      "git": "hypo"                             // Git repository name.
+    }
+</code></pre>
+</li>
+<li><p dir="rtl"><strong>תיאור השדות</strong>:</p>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">google_drive</span></strong>: הנתיב לספרייה ב-<span dir="ltr">Google Drive</span> שלך שבה יאוחסנו נתוני הפרויקט. ודא שנתיב זה נכון למערכת שלך.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">mode</span></strong>: ציין את מצב היישום שלך. השתמש ב-<span dir="ltr"><code>debug</code></span> לבדיקה וב-<span dir="ltr"><code>production</code></span> לפריסה.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">git_user</span></strong>: שם המשתמש שלך ב-<span dir="ltr">GitHub</span> או בפלטפורמה אחרת שבה המאגר שלך מתארח.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">git</span></strong>: שם המאגר שלך המשמש למעקב אחר שינויים בקוד.</p></li>
+</ul>
+</li>
+</ol>
+
+<h3 dir="rtl">3. הגנה על מידע רגיש</h3>
+
+<ul>
+<li><p dir="rtl"><strong>נתונים רגישים</strong>: הקובץ המכיל את מפתחות ה-<span dir="ltr">API</span> והסיסמאות שלך מאוחסן בתיקיית <span dir="ltr"><code>secrets</code></span>, ש<strong>אינה נכללת במאגר <span dir="ltr">Git</span></strong> כדי למנוע גישה לא מורשית. יש לטעון את כל הסיסמאות ומפתחות ה-<span dir="ltr">API</span> מ-<span dir="ltr">KeePass</span> בתחילת התוכנית, כמתואר בקוד.</p></li>
+<li><p dir="rtl"><strong>גיבוי</strong>: גבה באופן קבוע את מסד הנתונים של <span dir="ltr">KeePass</span> ואת קובץ <span dir="ltr"><code>settings.json</code></span> כדי למנוע אובדן נתונים.</p></li>
+</ul>
+
+<h2 dir="rtl">דיווח על פגיעות</h2>
+
+<p dir="rtl">אם אתה מוצא פגיעות אבטחה בפרויקט שלנו, אנא דווח עליה על ידי ביצוע השלבים הבאים:</p>
+
+<ol dir="rtl">
+<li><p dir="rtl"><strong>דוא&quot;ל</strong>: שלח דוא&quot;ל לכתובת <span dir="ltr">[security@example.com]</span> עם תיאור הפגיעות.</p></li>
+<li><p dir="rtl"><strong>מידע שיש לכלול</strong>:</p>
+<ul>
+<li><p dir="rtl">תיאור מפורט של הבעיה</p></li>
+<li><p dir="rtl">שלבים לשחזור הפגיעות</p></li>
+<li><p dir="rtl">גרסה(אות) מושפעת(ות)</p></li>
+<li><p dir="rtl">כל מידע רלוונטי אחר</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>זמן תגובה</strong>: אתה יכול לצפות לקבל אישור קבלה תוך 48 שעות. אנו שואפים לספק עדכונים על מצב הפגיעות המדווחת מדי שבוע עד לפתרונה.</p></li>
+<li><p dir="rtl"><strong>תוצאה</strong>: אם הפגיעות תאושר, נעבוד על תיקון ונודיע לך מתי הוא יהיה זמין. אם נקבע שהדיווח אינו פגיעות, נודיע לך על החלטתנו.</p></li>
+</ol>
+
+<h2 dir="rtl">גרסאות נתמכות</h2>
+
+<table dir="rtl">
+<thead>
+<tr>
+<th>גרסה</th>
+<th>נתמכת</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span dir="ltr">5.1.x</span></td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td><span dir="ltr">5.0.x</span></td>
+<td>:x:</td>
+</tr>
+<tr>
+<td><span dir="ltr">4.0.x</span></td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td><span dir="ltr">&lt; 4.0</span></td>
+<td>:x:</td>
+</tr>
+</tbody>
+</table>
+
+<p dir="rtl">תודה שעזרת לנו לשמור על אבטחת הפרויקט שלנו!</p>
+
+<hr>
+
+<p dir="rtl">ספר לי אם אתה צריך התאמות נוספות!</p>

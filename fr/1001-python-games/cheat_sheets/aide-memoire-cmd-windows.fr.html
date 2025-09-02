@@ -1,0 +1,678 @@
+<h2><strong>1. File and directory management:</strong></h2>
+<ul>
+<li>
+<p><strong><code>attrib</code></strong>: Displays or modifies the attributes of a file or directory (hidden, read-only, archive, etc.).</p>
+<ul>
+<li><strong>Syntax:</strong> <code>attrib [+r|-r] [+a|-a] [+s|-s] [+h|-h] [drive:][path]filename</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>+r</code>: Set the "read-only" attribute</li>
+<li><code>-r</code>: Clear the "read-only" attribute</li>
+<li><code>+a</code>: Set the "archive" attribute</li>
+<li><code>-a</code>: Clear the "archive" attribute</li>
+<li><code>+s</code>: Set the "system" attribute</li>
+<li><code>-s</code>: Clear the "system" attribute</li>
+<li><code>+h</code>: Set the "hidden" attribute</li>
+<li><code>-h</code>: Clear the "hidden" attribute</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>attrib +h myfile.txt</code>: Make <code>myfile.txt</code> hidden.</li>
+<li><code>attrib -r myfile.txt</code>: Remove the "read-only" attribute from <code>myfile.txt</code>.</li>
+<li><code>attrib *.*</code>: Display the attributes of all files in the current directory.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>cd</code> or <code>chdir</code></strong>: Changes the current directory.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>cd [path]</code> or <code>chdir [path]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>..</code>: Go to the parent directory.</li>
+<li><code>\</code>: Go to the root of the drive.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>cd Documents</code>: Go to the <code>Documents</code> folder in the current directory.</li>
+<li><code>cd C:\Users\User\Downloads</code>: Go to the <code>Downloads</code> folder on the C drive.</li>
+<li><code>cd ..</code>: Go to the parent directory.</li>
+<li><code>cd \</code>: Go to the root of the current drive.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>copy</code></strong>: Copies one or more files.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>copy [source_file] [destination_file]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/a</code> - Copy an ASCII file</li>
+<li><code>/b</code> - Copy a binary file</li>
+<li><code>/v</code> - Verify that the files were copied correctly</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>copy myfile.txt mycopy.txt</code>: Copy <code>myfile.txt</code> to <code>mycopy.txt</code>.</li>
+<li><code>copy *.txt C:\Backup</code>: Copy all files with the <code>.txt</code> extension to the <code>C:\Backup</code> folder.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>del</code> or <code>erase</code></strong>: Deletes one or more files.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>del [filename]</code> or <code>erase [filename]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/p</code>: Prompt for confirmation before deleting each file.</li>
+<li><code>/f</code>: Delete "read-only" files.</li>
+<li><code>/s</code>: Delete files from subdirectories.</li>
+<li><code>/q</code> - Delete files without confirmation.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>del myfile.txt</code>: Delete <code>myfile.txt</code>.</li>
+<li><code>del *.tmp</code>: Delete all files with the <code>.tmp</code> extension.</li>
+<li><code>del /f /s *.log</code> - Delete all files with the .log extension in the current directory and all subdirectories, without confirmation.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>dir</code></strong>: Displays a list of files and directories in the current directory.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>dir [path] [options]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/a</code>: Display all files (including hidden ones).</li>
+<li><code>/w</code>: Display the list in wide format.</li>
+<li><code>/p</code>: Display the list page by page.</li>
+<li><code>/s</code>: Also display files from subdirectories.</li>
+<li><code>/b</code> - Display only the file name.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>dir</code>: Display a list of files and directories in the current directory.</li>
+<li><code>dir C:\Users\User\Documents /a</code>: Display all files in the <code>Documents</code> directory.</li>
+<li><code>dir /w</code>: Display a list of files and directories in the current directory in wide format.</li>
+<li><code>dir /b /s *.txt</code>: Display all *.txt files with the full path.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>mkdir</code> or <code>md</code></strong>: Creates a new directory.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>mkdir [path]</code> or <code>md [path]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>mkdir NewFolder</code>: Create a new folder <code>NewFolder</code> in the current directory.</li>
+<li><code>mkdir C:\Backup</code>: Create a new folder <code>Backup</code> on the <code>C</code> drive.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>move</code></strong>: Moves one or more files or directories.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>move [source_file] [destination_file]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>move myfile.txt C:\Documents</code>: Move <code>myfile.txt</code> to the <code>C:\Documents</code> folder.</li>
+<li><code>move dir1 dir2</code> - Move the <code>dir1</code> folder to the <code>dir2</code> folder.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>rd</code> or <code>rmdir</code></strong>: Deletes a directory.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>rd [path]</code> or <code>rmdir [path]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/s</code>: Delete a directory with all its subdirectories.</li>
+<li><code>/q</code> - Delete a directory without confirmation.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>rd myfolder</code>: Delete an empty folder <code>myfolder</code>.</li>
+<li><code>rd /s /q myfolder</code> - Delete the <code>myfolder</code> folder with all its contents without confirmation.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>ren</code> or <code>rename</code></strong>: Renames a file or directory.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>ren [old_name] [new_name]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>ren myfile.txt newfile.txt</code>: Rename <code>myfile.txt</code> to <code>newfile.txt</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>type</code></strong>: Displays the contents of a text file.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>type [filename]</code></li>
+<li><strong>Example:</strong> <code>type myfile.txt</code>: Display the contents of <code>myfile.txt</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>xcopy</code></strong>: Copies files and directories (including subdirectories).</p>
+<ul>
+<li><strong>Syntax:</strong> <code>xcopy [source] [destination] [options]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/s</code>: Copy directories and subdirectories (except empty ones).</li>
+<li><code>/e</code>: Copy directories and subdirectories (including empty ones).</li>
+<li><code>/i</code>: If the destination does not exist, create it.</li>
+<li><code>/y</code>: Suppress the replacement confirmation prompt.</li>
+<li><code>/d</code> - Copy only new files.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>xcopy C:\Source D:\Destination /s</code>: Copy the <code>C:\Source</code> directory into all subdirectories of the <code>D:\Destination</code> folder.</li>
+<li><code>xcopy C:\Source D:\Destination /e /y</code>: Copy the <code>C:\Source</code> directory into all subdirectories of the <code>D:\Destination</code> folder, including empty ones and without replacement confirmation.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2><strong>2. Working with drives:</strong></h2>
+<ul>
+<li>
+<p><strong><code>diskpart</code></strong>: Launches a disk management utility (partitions, volumes).</p>
+<ul>
+<li><strong>Syntax:</strong> <code>diskpart</code></li>
+<li><strong>Notes:</strong>
+<ul>
+<li><code>diskpart</code> is an interactive utility that has its own set of commands.</li>
+<li>Administrator rights are required to use it.</li>
+<li>You can learn more about using <code>diskpart</code> with the <code>help</code> command in this utility.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>format</code></strong>: Formats a drive.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>format [drive:] [options]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/q</code> - Quick format.</li>
+<li><code>/fs:file-system</code> - Select the type of file system (e.g., NTFS, FAT32).</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>format D: /q</code>: Quick format of drive D:.</li>
+<li><code>format E: /fs:NTFS</code>: Format drive E: to the NTFS file system.</li>
+</ul>
+</li>
+<li><strong>Warning:</strong> Formatting a drive deletes all data on it!</li>
+</ul>
+</li>
+<li>
+<p><strong><code>label</code></strong>: Sets or modifies a drive label.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>label [drive:][label]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>label D: NewLabel</code> - Set the label of drive D as NewLabel.</li>
+<li><code>label D:</code> - Clear the label of drive D.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2><strong>3. System management:</strong></h2>
+<ul>
+<li>
+<p><strong><code>cls</code></strong>: Clears the command prompt screen.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>cls</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>date</code></strong>: Displays or modifies the current date.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>date [new_date]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>date</code>: Display the current date.</li>
+<li><code>date 12-25-2024</code>: Change the date to December 25, 2024.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>exit</code></strong>: Exits the command prompt.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>exit</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>shutdown</code></strong>: Shuts down or restarts the computer.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>shutdown [options]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/s</code>: Shut down the computer.</li>
+<li><code>/r</code>: Restart the computer.</li>
+<li><code>/a</code>: Cancel the shutdown or restart.</li>
+<li><code>/t xxx</code> - Delay in seconds before shutdown or restart.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>shutdown /s /t 60</code>: Shut down the computer in 60 seconds.</li>
+<li><code>shutdown /r</code>: Restart the computer.</li>
+<li><code>shutdown /a</code>: Cancel the scheduled shutdown or restart.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>tasklist</code></strong>: Displays a list of running processes.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>tasklist [options]</code></li>
+<li><code>/v</code> - More information.</li>
+<li><code>/fo csv</code> - Display in CSV format.</li>
+<li><code>/fi "imagename eq notepad.exe"</code> - Find all Notepad processes.</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>tasklist</code>: Display a list of running processes.</li>
+<li><code>tasklist /v</code>: Display a list of running processes with detailed information.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>taskkill</code></strong>: Terminates a process.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>taskkill [options]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/im imagename</code> - Terminate the process by its name.</li>
+<li><code>/pid pid</code> - Terminate the process by its ID.</li>
+<li><code>/f</code> - Force termination of the process.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>taskkill /im notepad.exe</code>: Terminate all processes named <code>notepad.exe</code>.</li>
+<li><code>taskkill /pid 1234</code>: Terminate the process with ID 1234.</li>
+<li><code>taskkill /im notepad.exe /f</code> - Force termination of all <code>notepad.exe</code> processes.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>time</code></strong>: Displays or modifies the current time.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>time [new_time]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>time</code>: Display the current time.</li>
+<li><code>time 15:30</code>: Set the time to 15:30.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>ver</code></strong>: Displays the operating system version.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>ver</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>systeminfo</code></strong>: Displays detailed system information.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>systeminfo</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>taskmgr</code></strong>: Launches the Task Manager.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>taskmgr</code></li>
+</ul>
+</li>
+</ul>
+<h2><strong>4. Network:</strong></h2>
+<ul>
+<li>
+<p><strong><code>ipconfig</code></strong>: Displays the network configuration.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>ipconfig [options]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/all</code>: Display all information about network adapters.</li>
+<li><code>/release</code>: Release the IP address.</li>
+<li><code>/renew</code>: Request a new IP address.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>ipconfig</code>: Display the basic network configuration.</li>
+<li><code>ipconfig /all</code>: Display all information about all network adapters.</li>
+<li><code>ipconfig /release</code> - Release the IP address.</li>
+<li><code>ipconfig /renew</code> - Request a new IP address.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>ping</code></strong>: Sends an echo request to another computer on the network.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>ping [hostname_or_ip_address] [options]</code></li>
+<li><code>-n xxx</code> - Number of requests.</li>
+<li><code>-t</code> - Ping indefinitely.</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>ping google.com</code>: Ping the <code>google.com</code> server.</li>
+<li><code>ping 192.168.1.100</code>: Ping a computer with the IP address <code>192.168.1.100</code>.</li>
+<li><code>ping google.com -n 10</code> - Perform 10 pings.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>tracert</code></strong>: Displays the path of packets to another computer on the network.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>tracert [hostname_or_ip_address]</code></li>
+<li><strong>Example:</strong> <code>tracert google.com</code>: Display the path of packets to <code>google.com</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>netstat</code></strong>: Displays network connections.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>netstat [options]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>-a</code>: Displays all connections.</li>
+<li><code>-b</code>: Displays the applications that created connections.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>netstat</code> - Display all active connections.</li>
+<li><code>netstat -a -b</code> - Display all connections and the running applications that opened them.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>nslookup</code></strong>: Queries DNS information.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>nslookup [hostname]</code></li>
+<li><strong>Example:</strong> <code>nslookup google.com</code>: Query DNS information for <code>google.com</code>.</li>
+</ul>
+</li>
+</ul>
+<h2><strong>5. Other commands:</strong></h2>
+<ul>
+<li>
+<p><strong><code>assoc</code></strong>: Displays or modifies file associations.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>assoc [.extension]=[file_type]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>assoc .txt</code>: Display the file type for the <code>.txt</code> extension.</li>
+<li><code>assoc .txt=txtfile</code>: Set the file type for the <code>.txt</code> extension as <code>txtfile</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>call</code></strong>: Calls a batch file from another.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>call [batch_file_name]</code></li>
+<li><strong>Example:</strong> <code>call mybatch.bat</code>: Call the <code>mybatch.bat</code> batch file.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>chcp</code></strong>: Changes the console code page.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>chcp [code_page_number]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>chcp 1251</code>: Set the code page for Cyrillic.</li>
+<li><code>chcp</code>: Display the current code page.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>choice</code></strong>: Allows the user to choose from a list of options.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>choice [/c [options]] [/n] [/t [seconds]] [/d [option]] [text]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/c</code>: Specifies the available options.</li>
+<li><code>/n</code>: Hides the list of available options.</li>
+<li><code>/t</code>: Sets the timeout (in seconds).</li>
+<li><code>/d</code>: Sets the default option.</li>
+</ul>
+</li>
+<li><strong>Example:</strong> <code>choice /c yn /t 10 /d n "Do you really want to quit?"</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>find</code></strong>: Searches for a text string in a file.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>find "string" [filename]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>find "Hello" myfile.txt</code> - searches for the string "Hello" in the file myfile.txt.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>findstr</code></strong>: Searches for text strings in files (more powerful than <code>find</code>).</p>
+<ul>
+<li><strong>Syntax:</strong> <code>findstr [options] "string" [filename]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/i</code> - Case-insensitive search.</li>
+<li><code>/n</code> - Display line numbers.</li>
+<li><code>/s</code> - Search in all subdirectories.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>findstr /i "error" myfile.log</code>: Search for the string "error" (case-insensitive) in <code>myfile.log</code>.</li>
+<li><code>findstr /n "error" *.log</code> - searches for the string "error" in all .log files, and displays the line numbers.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>gpupdate</code></strong>: Updates group policies.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>gpupdate [options]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/force</code> - Force update.</li>
+</ul>
+</li>
+<li><strong>Example:</strong> <code>gpupdate /force</code> - Force update of group policies.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>help</code> or <code>/?</code></strong>: Displays help for a command.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>help [command_name]</code> or <code>[command_name] /?</code></li>
+<li><strong>Example:</strong> <code>help dir</code> or <code>dir /?</code>: Display help for the <code>dir</code> command.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>pause</code></strong>: Pauses the execution of a batch file and waits for a key press.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>pause</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>path</code></strong>: Displays or modifies the PATH environment variables.</p>
+<ul>
+<li><strong>Syntax</strong>: <code>path [path]</code></li>
+<li><strong>Examples</strong>:
+<ul>
+<li><code>path</code>: Display the current value of the PATH variable.</li>
+<li><code>path C:\bin</code> - Add the C:\bin folder to the PATH variable.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>prompt</code></strong>: Configures the command prompt string.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>prompt [text]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>prompt $p$g</code>: Set the prompt string for the current path.</li>
+<li><code>prompt MyPrompt&gt;</code>: Set the prompt string <code>MyPrompt&gt;</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>set</code></strong>: Displays, sets, or removes environment variables.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>set [name=[value]]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>set</code>: Display all environment variables.</li>
+<li><code>set myvar=myvalue</code>: Set the environment variable <code>myvar</code> to <code>myvalue</code>.</li>
+<li><code>set myvar=</code>: Delete the environment variable <code>myvar</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>start</code></strong>: Launches a program or opens a file.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>start [program_or_file_name] [options]</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>start notepad.exe</code>: Launch Notepad.</li>
+<li><code>start myfile.txt</code>: Open the file <code>myfile.txt</code> with the default program.</li>
+<li><code>start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" "https://www.google.com"</code> - Open a website in Chrome.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>tree</code></strong>: Displays the graphical structure of directories.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>tree [drive:][path] [options]</code></li>
+<li><strong>Options:</strong>
+<ul>
+<li><code>/f</code>: Also display file names.</li>
+<li><code>/a</code> - Use ASCII characters.</li>
+</ul>
+</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>tree</code> - Display the structure of the current directory.</li>
+<li><code>tree /f</code> - Display the structure of the current directory with files.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>where</code></strong>: Finds the location of a file.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>where [filename]</code></li>
+<li><strong>Example:</strong> <code>where notepad.exe</code></li>
+</ul>
+</li>
+</ul>
+<h2><strong>6. Commands for working with batch files:</strong></h2>
+<ul>
+<li>
+<p><strong><code>echo</code></strong>: Displays text on the screen.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>echo [text]</code></li>
+<li><code>echo on</code> - Enable the display of commands when executing a batch file.</li>
+<li><code>echo off</code> - Disable the display of commands when executing a batch file.</li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>echo Hello, world!</code>: Display "Hello, world!".</li>
+<li><code>echo off</code> - Disable the output of commands.</li>
+<li><code>echo on</code> - Enable the output of commands.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>rem</code></strong>: Adds a comment to a batch file.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>rem [comment]</code></li>
+<li><strong>Example:</strong> <code>rem This is a comment</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>goto</code></strong>: Jumps to a label.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>goto [label]</code></li>
+<li><strong>Example:</strong>
+<pre class="line-numbers"><code class="language-batch">
+:start
+echo Hello
+goto end
+echo This will not be displayed
+:end
+echo Goodbye
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>if</code></strong>: Executes conditional logic.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>if [not] condition (command1) else (command2)</code></li>
+<li><strong>Examples:</strong>
+<ul>
+<li><code>if exist file.txt echo the file exists</code> - Check for the existence of a file.</li>
+<li><code>if %var%== "text" echo the variable has a value</code> - Check the value of a variable.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>for</code></strong>: Executes an action in a loop.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>for %%variable in (set) do [command]</code></li>
+<li><strong>Example:</strong>
+<pre class="line-numbers"><code class="language-batch">
+for %%a in (*.txt) do (
+ echo %%a
+ type %%a
+ echo -------------
+)
+</code></pre>
+<ul>
+<li>Display the name of each <code>.txt</code> file and its contents.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Warning:</strong></p>
+<ul>
+<li>Be careful when using commands that can modify the system, especially when used with administrator privileges.</li>
+<li>Before running the <code>format</code> command, make sure you have selected the correct drive.</li>
+</ul>

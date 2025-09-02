@@ -1,0 +1,72 @@
+# Importación de módulos en Python
+
+La importación de bibliotecas en Python le permite usar módulos y funciones externos o propios, definidos en otros archivos o bibliotecas. Esto ayuda a organizar el código, mejorar su legibilidad y evitar la duplicación.
+
+<h3>¿Qué son los módulos?</h3>
+<p>Un módulo en Python es simplemente un archivo con la extensión <code>.py</code> que contiene código (funciones, clases, variables, etc.). Cuando desea usar código de otro módulo, debe importarlo al archivo actual.</p>
+<h3>Módulos externos e internos</h3>
+<ol>
+<li><strong>Módulos externos</strong> — son módulos que no forman parte de la biblioteca estándar de Python y que deben instalarse por separado. Por ejemplo, módulos para trabajar con servidores web, procesamiento de datos o aprendizaje automático, como <code>numpy</code>, <code>requests</code> y otros.</li>
+<li><strong>Módulos internos</strong> — son módulos que ya están incluidos en la biblioteca estándar de Python. Por ejemplo, módulos para trabajar con archivos, tiempo, operaciones matemáticas: <code>os</code>, <code>math</code>, <code>datetime</code>.</li>
+</ol>
+<h3>Instalación de módulos externos con pip</h3>
+<p>Para instalar un módulo externo, use el comando <code>pip</code> — es una herramienta para administrar paquetes de Python. Por ejemplo, para instalar la biblioteca <code>requests</code>, debe ejecutar el siguiente comando en la terminal:</p>
+<pre class="line-numbers"><code class="language-bash">
+pip install requests
+</code></pre>
+<p>Este comando descargará e instalará la biblioteca en su proyecto.</p>
+<h3>Importación de módulos</h3>
+<p>Cuando desee usar un módulo en Python, debe importarlo:</p>
+<ol>
+<li><strong>Importar el módulo completo</strong>:
+<pre class="line-numbers"><code class="language-python">
+   import os
+</code></pre>
+<p>Después de esto, puede usar todas las funciones y variables del módulo, por ejemplo:</p>
+<pre class="line-numbers"><code class="language-python">
+   os.listdir()  # lists files in the directory
+</code></pre>
+</li>
+<li><strong>Importar elementos específicos de un módulo</strong>:
+<pre class="line-numbers"><code class="language-python">
+   from math import sqrt
+</code></pre>
+<p>Ahora puede usar la función <code>sqrt</code> sin necesidad de referirse al módulo <code>math</code>.</p>
+</li>
+<li><strong>Importar con un alias</strong>:
+<pre class="line-numbers"><code class="language-python">
+   import pandas as pd
+</code></pre>
+<p>En este caso, para usar las funciones de la biblioteca <code>pandas</code>, escribirá <code>pd</code> en lugar del nombre completo <code>pandas</code>.</p>
+</li>
+</ol>
+<h3>Importación de sus propios módulos</h3>
+<p>Si está escribiendo varios archivos en un proyecto, puede crear sus propios módulos. Por ejemplo, si tiene un archivo <code>utils.py</code> con funciones útiles, puede importarlo a otros archivos así:</p>
+<pre class="line-numbers"><code class="language-python">
+import utils
+</code></pre>
+<p>O importar una función específica:</p>
+<pre class="line-numbers"><code class="language-python">
+from utils import my_function
+</code></pre>
+
+<h3>¿Por qué crear un módulo e importarlo en otras partes del proyecto?</h3>
+<ol>
+<li><strong>Organización del código</strong>: La separación de la lógica en diferentes módulos ayuda a evitar el desorden en un proyecto grande. Por ejemplo, puede crear un módulo para el manejo de datos, otro para el procesamiento de solicitudes y un tercero para la interfaz.</li>
+<li><strong>Reutilización del código</strong>: Cuando la lógica se separa en módulos, se puede usar en diferentes partes del proyecto. Esto reduce la duplicación de código y facilita el mantenimiento.</li>
+<li><strong>Legibilidad y mantenibilidad</strong>: Cuando el código se separa en módulos, otros desarrolladores (o usted mismo en el futuro) podrán comprender y mantener el proyecto más fácilmente.</li>
+</ol>
+<p>Ejemplo:</p>
+<pre class="line-numbers"><code class="language-python">
+# utils.py
+def greet(name):
+    return f"Hola, {name}!"
+    
+# main.py
+from utils import greet
+
+print(greet("Alice"))
+</code></pre>
+<p>En este ejemplo, la función <code>greet</code> se define en un módulo (<code>utils.py</code>), pero se usa en otro (<code>main.py</code>), lo que mejora la estructura y hace que el código sea más modular y fácil de modificar.</p>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">Al índice</a></p>

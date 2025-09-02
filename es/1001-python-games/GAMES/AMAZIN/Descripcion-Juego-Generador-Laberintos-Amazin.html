@@ -1,0 +1,77 @@
+# **Amazin** (Generador de laberintos)
+
+<h4>Descripción</h4>
+<p>El juego es un generador de laberintos que crea un laberinto único con un solo camino correcto cada vez. El jugador establece las dimensiones del laberinto, y el programa lo construye de acuerdo con los parámetros especificados.</p>
+<ul>
+<li><strong>Características:</strong>
+<ul>
+<li>El jugador ingresa el ancho y la altura del laberinto.</li>
+<li>El programa garantiza un solo camino a través del laberinto.</li>
+<li>El laberinto se muestra en la pantalla.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>Instrucciones paso a paso para la implementación:</h3>
+<h4>1. **Inicialización del juego**</h4>
+<ul>
+<li>Solicitar al jugador que ingrese las dimensiones del laberinto (ancho y alto).</li>
+<li>Verificar que las dimensiones ingresadas sean válidas (por ejemplo, mayores que uno).</li>
+</ul>
+<h4>2. **Lógica principal de generación del laberinto**</h4>
+<ul>
+<li>Crear una matriz del tamaño especificado, que represente una cuadrícula de celdas.</li>
+<li>Usar un algoritmo de generación de laberintos, por ejemplo, el <em>algoritmo de búsqueda en profundidad recursiva (DFS)</em>:
+<ul>
+<li>Comenzar desde una celda inicial aleatoria.</li>
+<li>Moverse a celdas adyacentes, eliminando paredes entre la celda actual y la siguiente.</li>
+<li>Si todos los vecinos han sido visitados, retroceder a la celda anterior y continuar.</li>
+<li>Completar el proceso cuando todas las celdas hayan sido visitadas.</li>
+</ul>
+</li>
+<li>Garantizar un solo camino a través del laberinto.</li>
+</ul>
+<h4>3. **Visualización del laberinto**</h4>
+<ul>
+<li>Usar símbolos para la visualización:
+<ul>
+<li><code>+</code>, <code>-</code>, <code>|</code> para las paredes.</li>
+<li>Espacios para los pasajes.</li>
+</ul>
+</li>
+<li>Mostrar el laberinto generado en formato de texto.</li>
+</ul>
+<h4>4. **Funciones adicionales**</h4>
+<ul>
+<li>Posibilidad de establecer un tamaño preestablecido (por ejemplo, 10x10) si el usuario ingresó datos no válidos.</li>
+<li>Advertencia sobre tamaños de laberinto excesivamente grandes para evitar la sobrecarga de memoria.</li>
+</ul>
+<hr>
+<h3>Ejemplo de ejecución del programa</h3>
+<ol>
+<li><strong>Inicio</strong>:
+<pre class="line-numbers"><code class="language-text">
+   Ingrese el ancho y la altura del laberinto:
+   > 10 8
+</code></pre>
+</li>
+<li><strong>Salida del laberinto</strong>:
+<pre class="line-numbers"><code class="language-text">
+   +--+--+--+--+--+--+--+--+--+--+
+   |        |        |           |
+   +  +--+  +  +--+  +  +--+--+  +
+   |     |     |     |        |  |
+   +--+  +  +--+  +  +  +--+  +  +
+   |     |        |     |     |  |
+   +--+--+--+--+--+--+--+--+--+--+
+</code></pre>
+</li>
+<li><strong>Salir del programa</strong>:
+<pre class="line-numbers"><code class="language-text">
+   ¿Generar un nuevo laberinto? (sí/no):
+   > no
+   ¡Adiós!
+</code></pre>
+</li>
+</ol>
+<hr>

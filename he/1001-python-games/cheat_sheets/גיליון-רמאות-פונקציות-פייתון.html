@@ -1,0 +1,126 @@
+<h2 dir="rtl">פונקציות בפייתון</h2>
+<p dir="rtl">פונקציות בשפת פייתון הן בלוקים של קוד בעלי שם, המבצעים משימה ספציפית. הן מאפשרות לארגן את הקוד, להפוך אותו למובנה יותר ונוח לשימוש חוזר.</p>
+<h2 dir="rtl">תוכן עניינים</h2>
+<ol>
+<li dir="rtl"><a href="#הצהרת-פונקציה">הצהרת פונקציה</a></li>
+<li dir="rtl"><a href="#פרמטרים-של-פונקציה">פרמטרים של פונקציה</a>
+<ul>
+<li dir="rtl"><a href="#סוגי-פרמטרים">סוגי פרמטרים</a></li>
+</ul>
+</li>
+<li dir="rtl"><a href="#החזרת-ערך">החזרת ערך</a></li>
+<li dir="rtl"><a href="#משתנים-מקומיים-וגלובליים">משתנים מקומיים וגלובליים</a></li>
+<li dir="rtl"><a href="#פונקציות-מקוננות">פונקציות מקוננות</a></li>
+<li dir="rtl"><a href="#רקרוסיה">רקרוסיה</a></li>
+<li dir="rtl"><a href="#טיפול-בחריגים-עם-try-ו-except">טיפול בחריגים עם <code dir="ltr">try</code> ו-<code dir="ltr">except</code></a></li>
+<li dir="rtl"><a href="#דוגמה-לשימוש-בפונקציות">דוגמה לשימוש בפונקציות</a></li>
+</ol>
+<h2 dir="rtl">הצהרת פונקציה</h2>
+<p dir="rtl">פונקציה מוצהרת באמצעות מילת המפתח <code dir="ltr">def</code>, ואחריה שם הפונקציה, רשימת פרמטרים בסוגריים עגולים ונקודתיים. גוף הפונקציה נכתב עם הזחה.</p>
+<pre class="line-numbers"><code class="language-python">def שם_פונקציה(פרמטרים):
+    # פעולות
+    return תוצאה
+</code></pre>
+<h3 dir="rtl">דוגמה:</h3>
+<pre class="line-numbers"><code class="language-python">def חיבור(a: int, b: int) -> int:
+    """מחזירה את סכום שני מספרים."""
+    return a + b
+</code></pre>
+<p dir="rtl">כאן:
+- <code dir="ltr">a: int</code> ו-<code dir="ltr">b: int</code> — פרמטרים של פונקציה עם הערות סוג.
+- <code dir="ltr">-> int</code> — הערת סוג של ערך מוחזר.</p>
+<h2 dir="rtl">פרמטרים של פונקציה</h2>
+<p dir="rtl">פונקציות יכולות לקבל פרמטרים, המהווים נתוני קלט. הם מצוינים בסוגריים לאחר שם הפונקציה.</p>
+<p dir="rtl">דוגמה עם פרמטר אחד:</p>
+<pre class="line-numbers"><code class="language-python">def ברכה(שם: str) -> str:
+    """מברכת את המשתמש בשמו."""
+    return f"שלום, {שם}!"
+</code></pre>
+<h3 dir="rtl">סוגי פרמטרים:</h3>
+<ol>
+<li dir="rtl"><strong>פרמטרים חובה</strong> — חייבים להיות מועברים בעת קריאה לפונקציה.</li>
+<li dir="rtl"><strong>פרמטרים אופציונליים</strong> — יכולים להיות בעלי ערכי ברירת מחדל.
+<pre class="line-numbers"><code class="language-python">def ברכה(שם: str, גיל: int = 18) -> str:
+    return f"שלום, {שם}! אתה בן {גיל} שנים."
+</code></pre>
+</li>
+</ol>
+<h2 dir="rtl">החזרת ערך</h2>
+<p dir="rtl">פונקציה יכולה להחזיר ערך באמצעות מילת המפתח <code dir="ltr">return</code>. אם <code dir="ltr">return</code> אינו בשימוש, הפונקציה מחזירה <code dir="ltr">None</code> כברירת מחדל.</p>
+<p dir="rtl">דוגמה:</p>
+<pre class="line-numbers"><code class="language-python">def כפל(a: int, b: int) -> int:
+    """מחזירה את מכפלת שני מספרים."""
+    return a * b
+</code></pre>
+<h2 dir="rtl">משתנים מקומיים וגלובליים</h2>
+<ul>
+<li dir="rtl"><strong>משתנה מקומי</strong> — זהו משתנה הקיים רק בתוך פונקציה. הוא נוצר ונהרס בכל קריאה לפונקציה.</li>
+<li dir="rtl"><strong>משתנה גלובלי</strong> — זהו משתנה הנגיש בכל הקוד, כולל פונקציות.</li>
+</ul>
+<p dir="rtl">דוגמה לשימוש במשתנה גלובלי:</p>
+<pre class="line-numbers"><code class="language-python">x = 10  # משתנה גלובלי
+
+def הצג_x() -> int:
+    return x  # גישה למשתנה גלובלי
+</code></pre>
+<p dir="rtl">אם בתוך פונקציה צריך לשנות משתנה גלובלי, יש להשתמש במילת המפתח <code dir="ltr">global</code>:</p>
+<pre class="line-numbers"><code class="language-python">x = 10  # משתנה גלובלי
+
+def שנה_x() -> None:
+    global x
+    x = 20
+</code></pre>
+<h2 dir="rtl">פונקציות מקוננות</h2>
+<p dir="rtl">בפייתון, פונקציות יכולות להיות מקוננות, כלומר פונקציה אחת יכולה להיות מוגדרת בתוך אחרת. פונקציה מקוננת יכולה לגשת למשתנים של הפונקציה החיצונית.</p>
+<p dir="rtl">דוגמה:</p>
+<pre class="line-numbers"><code class="language-python">def חיצונית(a: int, b: int) -> int:
+    """פונקציה המשתמשת בפונקציה מקוננת לחישוב ההפרש."""
+    
+    def מקוננת(x: int, y: int) -> int:
+        """פונקציה מקוננת המחזירה את ההפרש."""
+        return x - y
+    
+    return מקוננת(a, b)
+</code></pre>
+<h2 dir="rtl">רקרוסיה</h2>
+<p dir="rtl">רקרוסיה — זה כאשר פונקציה קוראת לעצמה. זה שימושי למשימות שניתן לפרק למשימות קטנות יותר דומות (לדוגמה, עצרת).</p>
+<p dir="rtl">דוגמה לרקורסיה:</p>
+<pre class="line-numbers"><code class="language-python">def עצרת(n: int) -> int:
+    """מחשבת את עצרת המספר באמצעות רקורסיה."""
+    if n == 0:
+        return 1  # מקרה בסיס
+    return n * עצרת(n - 1)  # קריאה רקורסיבית
+</code></pre>
+<h2 dir="rtl">טיפול בחריגים עם <code dir="ltr">try</code> ו-<code dir="ltr">except</code></h2>
+<p dir="rtl">פייתון מספקת מנגנון טיפול בשגיאות באמצעות בלוקים <code dir="ltr">try</code> ו-<code dir="ltr">except</code>. קוד שעלול לגרום לשגיאה ממוקם בבלוק <code dir="ltr">try</code>, והשגיאות מטופלות בבלוק <code dir="ltr">except</code>.</p>
+<p dir="rtl">דוגמה לטיפול בשגיאות:</p>
+<pre class="line-numbers"><code class="language-python">def חלוקה(a: int, b: int) -> float:
+    """מחלקת מספר אחד באחר, תוך טיפול בשגיאות אפשריות."""
+    try:
+        result = a / b
+    except ZeroDivisionError:
+        return "שגיאה: חלוקה באפס"
+    except Exception as e:
+        return f"אירעה שגיאה: {e}"
+    return result
+</code></pre>
+<p dir="rtl">כאן:
+- בלוק <code dir="ltr">try</code> מנסה לבצע את פעולת החלוקה.
+- בלוק <code dir="ltr">except ZeroDivisionError</code> לוכד את שגיאת החלוקה באפס.
+- בלוק <code dir="ltr">except Exception as e</code> לוכד חריגים אחרים ומציג הודעת שגיאה.</p>
+<h2 dir="rtl">דוגמה לשימוש בפונקציות</h2>
+<pre class="line-numbers"><code class="language-python"># חיבור שני מספרים
+print(חיבור(5, 3))  # 8
+
+# פונקציה מקוננת
+print(חיצונית(10, 4))  # 6
+
+# רקורסיה לחישוב עצרת
+print(עצרת(5))  # 120
+
+# טיפול בחריגים בחלוקה
+print(חלוקה(10, 2))  # 5.0
+print(חלוקה(10, 0))  # שגיאה: חלוקה באפס
+</code></pre>
+<hr>
+<p dir="rtl"><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">לתוכן העניינים</a></p>

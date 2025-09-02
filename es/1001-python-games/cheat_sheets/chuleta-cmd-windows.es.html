@@ -1,0 +1,625 @@
+<h2><strong>1. Gestión de archivos y directorios:</strong></h2>
+<ul>
+<li><strong><code>attrib</code></strong>: Muestra o cambia los atributos de un archivo o directorio (oculto, solo lectura, archivo, etc.).
+<ul>
+<li><strong>Sintaxis:</strong> <code>attrib [+r|-r] [+a|-a] [+s|-s] [+h|-h] [unidad:][ruta]nombre_archivo</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>+r</code>: Establecer el atributo "solo lectura"</li>
+<li><code>-r</code>: Quitar el atributo "solo lectura"</li>
+<li><code>+a</code>: Establecer el atributo "archivo"</li>
+<li><code>-a</code>: Quitar el atributo "archivo"</li>
+<li><code>+s</code>: Establecer el atributo "sistema"</li>
+<li><code>-s</code>: Quitar el atributo "sistema"</li>
+<li><code>+h</code>: Establecer el atributo "oculto"</li>
+<li><code>-h</code>: Quitar el atributo "oculto"</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>attrib +h myfile.txt</code>: Hacer <code>myfile.txt</code> oculto.</li>
+<li><code>attrib -r myfile.txt</code>: Quitar el atributo "solo lectura" de <code>myfile.txt</code>.</li>
+<li><code>attrib *.*</code>: Mostrar los atributos de todos los archivos en el directorio actual.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>cd</code> o <code>chdir</code></strong>: Cambia el directorio actual.
+<ul>
+<li><strong>Sintaxis:</strong> <code>cd [ruta]</code> o <code>chdir [ruta]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>..</code>: Ir al directorio padre.</li>
+<li><code>\</code>: Ir a la raíz de la unidad.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>cd Documents</code>: Ir a la carpeta <code>Documents</code> en el directorio actual.</li>
+<li><code>cd C:\Users\User\Downloads</code>: Ir a la carpeta <code>Downloads</code> en la unidad C.</li>
+<li><code>cd ..</code>: Ir al directorio padre.</li>
+<li><code>cd \</code>: Ir a la raíz de la unidad actual.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>copy</code></strong>: Copia uno o más archivos.
+<ul>
+<li><strong>Sintaxis:</strong> <code>copy [archivo_origen] [archivo_destino]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/a</code> - Copiar archivo ASCII</li>
+<li><code>/b</code> - Copiar archivo binario</li>
+<li><code>/v</code> - Verificar que los archivos se copiaron correctamente</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>copy myfile.txt mycopy.txt</code>: Copiar <code>myfile.txt</code> a <code>mycopy.txt</code>.</li>
+<li><code>copy *.txt C:\Backup</code>: Copiar todos los archivos con la extensión <code>.txt</code> a la carpeta <code>C:\Backup</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>del</code> o <code>erase</code></strong>: Elimina uno o más archivos.
+<ul>
+<li><strong>Sintaxis:</strong> <code>del [nombre_archivo]</code> o <code>erase [nombre_archivo]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/p</code>: Solicitar confirmación antes de eliminar cada archivo.</li>
+<li><code>/f</code>: Eliminar archivos "solo lectura".</li>
+<li><code>/s</code>: Eliminar archivos de subdirectorios.</li>
+<li><code>/q</code> - Eliminar archivos sin preguntar.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>del myfile.txt</code>: Eliminar <code>myfile.txt</code>.</li>
+<li><code>del *.tmp</code>: Eliminar todos los archivos con la extensión <code>.tmp</code>.</li>
+<li><code>del /f /s *.log</code> - Eliminar todos los archivos con la extensión .log en el directorio actual y todos los subdirectorios, sin confirmación.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>dir</code></strong>: Muestra una lista de archivos y directorios en el directorio actual.
+<ul>
+<li><strong>Sintaxis:</strong> <code>dir [ruta] [opciones]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/a</code>: Mostrar todos los archivos (incluidos los ocultos).</li>
+<li><code>/w</code>: Mostrar la lista en formato ancho.</li>
+<li><code>/p</code>: Mostrar la lista página por página.</li>
+<li><code>/s</code>: Mostrar archivos también de subdirectorios.</li>
+<li><code>/b</code> - Mostrar solo el nombre del archivo.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>dir</code>: Mostrar una lista de archivos y directorios en el directorio actual.</li>
+<li><code>dir C:\Users\User\Documents /a</code>: Mostrar todos los archivos en el directorio <code>Documents</code>.</li>
+<li><code>dir /w</code>: Mostrar una lista de archivos y directorios en el directorio actual en formato ancho.</li>
+<li><code>dir /b /s *.txt</code>: Mostrar todos los archivos *.txt con la ruta completa.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>mkdir</code> o <code>md</code></strong>: Crea un nuevo directorio.
+<ul>
+<li><strong>Sintaxis:</strong> <code>mkdir [ruta]</code> o <code>md [ruta]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>mkdir NewFolder</code>: Crear una nueva carpeta <code>NewFolder</code> en el directorio actual.</li>
+<li><code>mkdir C:\Backup</code>: Crear una nueva carpeta <code>Backup</code> en la unidad <code>C</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>move</code></strong>: Mueve uno o más archivos o directorios.
+<ul>
+<li><strong>Sintaxis:</strong> <code>move [archivo_origen] [archivo_destino]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>move myfile.txt C:\Documents</code>: Mover <code>myfile.txt</code> a la carpeta <code>C:\Documents</code>.</li>
+<li><code>move dir1 dir2</code> - Mover la carpeta <code>dir1</code> a la carpeta <code>dir2</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>rd</code> o <code>rmdir</code></strong>: Elimina un directorio.
+<ul>
+<li><strong>Sintaxis:</strong> <code>rd [ruta]</code> o <code>rmdir [ruta]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/s</code>: Eliminar un directorio con todos sus subdirectorios.</li>
+<li><code>/q</code> - Eliminar un directorio sin preguntar.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>rd myfolder</code>: Eliminar una carpeta vacía <code>myfolder</code>.</li>
+<li><code>rd /s /q myfolder</code> - Eliminar la carpeta <code>myfolder</code> con todo su contenido sin preguntar.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>ren</code> o <code>rename</code></strong>: Renombra un archivo o directorio.
+<ul>
+<li><strong>Sintaxis:</strong> <code>ren [nombre_antiguo] [nombre_nuevo]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>ren myfile.txt newfile.txt</code>: Renombrar <code>myfile.txt</code> a <code>newfile.txt</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>type</code></strong>: Muestra el contenido de un archivo de texto.
+<ul>
+<li><strong>Sintaxis:</strong> <code>type [nombre_archivo]</code></li>
+<li><strong>Ejemplo:</strong> <code>type myfile.txt</code>: Mostrar el contenido de <code>myfile.txt</code>.</li>
+</ul>
+</li>
+<li><strong><code>xcopy</code></strong>: Copia archivos y directorios (incluidos subdirectorios).
+<ul>
+<li><strong>Sintaxis:</strong> <code>xcopy [origen] [destino] [opciones]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/s</code>: Copiar directorios y subdirectorios (excepto los vacíos).</li>
+<li><code>/e</code>: Copiar directorios y subdirectorios (incluidos los vacíos).</li>
+<li><code>/i</code>: Si el destino no existe, crearlo.</li>
+<li><code>/y</code>: Suprimir la solicitud de confirmación de sobrescritura.</li>
+<li><code>/d</code> - Copiar solo los archivos nuevos.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>xcopy C:\Source D:\Destination /s</code>: Copiar el directorio <code>C:\Source</code> a todos los subdirectorios en la carpeta <code>D:\Destination</code>.</li>
+<li><code>xcopy C:\Source D:\Destination /e /y</code>: Copiar el directorio <code>C:\Source</code> a todos los subdirectorios en la carpeta <code>D:\Destination</code>, incluidos los vacíos y sin solicitar sobrescritura.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>2. Trabajar con unidades:</h2>
+<ul>
+<li><strong><code>diskpart</code></strong>: Inicia una utilidad para administrar discos (particiones, volúmenes).
+<ul>
+<li><strong>Sintaxis:</strong> <code>diskpart</code></li>
+<li><strong>Notas:</strong>
+<ul>
+<li><code>diskpart</code> es una utilidad interactiva que tiene su propio conjunto de comandos.</li>
+<li>Se requieren privilegios de administrador para usarla.</li>
+<li>Puede obtener más información sobre el uso de <code>diskpart</code> con el comando <code>help</code> dentro de esta utilidad.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>format</code></strong>: Formatea una unidad.
+<ul>
+<li><strong>Sintaxis:</strong> <code>format [unidad:] [opciones]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/q</code> - Formato rápido.</li>
+<li><code>/fs:file-system</code> - Seleccionar tipo de sistema de archivos (por ejemplo, NTFS, FAT32).</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>format D: /q</code>: Formato rápido de la unidad D:.</li>
+<li><code>format E: /fs:NTFS</code>: Formato de la unidad E: al sistema de archivos NTFS.</li>
+</ul>
+</li>
+<li><strong>Advertencia:</strong> ¡Formatear una unidad elimina todos los datos en ella!</li>
+</ul>
+</li>
+<li><strong><code>label</code></strong>: Establece o cambia una etiqueta de unidad.
+<ul>
+<li><strong>Sintaxis:</strong> <code>label [unidad:][etiqueta]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>label D: NewLabel</code> - Establecer la etiqueta en la unidad D como NewLabel.</li>
+<li><code>label D:</code> - Borrar la etiqueta de la unidad D.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>3. Gestión del sistema:</h2>
+<ul>
+<li><strong><code>cls</code></strong>: Borra la pantalla del símbolo del sistema.
+<ul>
+<li><strong>Sintaxis:</strong> <code>cls</code></li>
+</ul>
+</li>
+<li><strong><code>date</code></strong>: Muestra o cambia la fecha actual.
+<ul>
+<li><strong>Sintaxis:</strong> <code>date [nueva_fecha]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>date</code>: Mostrar la fecha actual.</li>
+<li><code>date 12-25-2024</code>: Cambiar la fecha al 25 de diciembre de 2024.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>exit</code></strong>: Sale del símbolo del sistema.
+<ul>
+<li><strong>Sintaxis:</strong> <code>exit</code></li>
+</ul>
+</li>
+<li><strong><code>shutdown</code></strong>: Apaga o reinicia el equipo.
+<ul>
+<li><strong>Sintaxis:</strong> <code>shutdown [opciones]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/s</code>: Apagar el equipo.</li>
+<li><code>/r</code>: Reiniciar el equipo.</li>
+<li><code>/a</code>: Cancelar el apagado o reinicio.</li>
+<li><code>/t xxx</code> - Retraso en segundos antes del apagado o reinicio.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>shutdown /s /t 60</code>: Apagar el equipo en 60 segundos.</li>
+<li><code>shutdown /r</code>: Reiniciar el equipo.</li>
+<li><code>shutdown /a</code>: Cancelar el apagado o reinicio programado.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>tasklist</code></strong>: Muestra una lista de procesos en ejecución.
+<ul>
+<li><strong>Sintaxis:</strong> <code>tasklist [opciones]</code></li>
+<li><code>/v</code> - Más información.</li>
+<li><code>/fo csv</code> - Salida en formato CSV.</li>
+<li><code>/fi "nombre_imagen eq notepad.exe"</code> - Encontrar todos los procesos del Bloc de notas.</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>tasklist</code>: Mostrar una lista de procesos en ejecución.</li>
+<li><code>tasklist /v</code>: Mostrar una lista de procesos en ejecución con información detallada.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>taskkill</code></strong>: Termina un proceso.
+<ul>
+<li><strong>Sintaxis:</strong> <code>taskkill [opciones]</code></li>
+<li><code>/im nombre_imagen</code> - Terminar el proceso por nombre.</li>
+<li><code>/pid pid</code> - Terminar el proceso por ID.</li>
+<li><code>/f</code> - Forzar la terminación del proceso.</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>taskkill /im notepad.exe</code>: Terminar todos los procesos con el nombre <code>notepad.exe</code>.</li>
+<li><code>taskkill /pid 1234</code>: Terminar el proceso con el ID 1234.</li>
+<li><code>taskkill /im notepad.exe /f</code> - Forzar la terminación de todos los procesos <code>notepad.exe</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>time</code></strong>: Muestra o cambia la hora actual.
+<ul>
+<li><strong>Sintaxis:</strong> <code>time [nueva_hora]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>time</code>: Mostrar la hora actual.</li>
+<li><code>time 15:30</code>: Establecer la hora a las 15:30.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>ver</code></strong>: Muestra la versión del sistema operativo.
+<ul>
+<li><strong>Sintaxis:</strong> <code>ver</code></li>
+</ul>
+</li>
+<li><strong><code>systeminfo</code></strong>: Muestra información detallada del sistema.
+<ul>
+<li><strong>Sintaxis:</strong> <code>systeminfo</code></li>
+</ul>
+</li>
+<li><strong><code>taskmgr</code></strong>: Inicia el Administrador de tareas.
+<ul>
+<li><strong>Sintaxis:</strong> <code>taskmgr</code></li>
+</ul>
+</li>
+</ul>
+<h2>4. Red:</h2>
+<ul>
+<li><strong><code>ipconfig</code></strong>: Muestra la configuración de red.
+<ul>
+<li><strong>Sintaxis:</strong> <code>ipconfig [opciones]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/all</code>: Mostrar información completa sobre los adaptadores de red.</li>
+<li><code>/release</code>: Liberar la dirección IP.</li>
+<li><code>/renew</code>: Solicitar una nueva dirección IP.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>ipconfig</code>: Mostrar la configuración básica de red.</li>
+<li><code>ipconfig /all</code>: Mostrar información completa sobre todos los adaptadores de red.</li>
+<li><code>ipconfig /release</code> - Liberar la dirección IP.</li>
+<li><code>ipconfig /renew</code> - Solicitar una nueva dirección IP.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>ping</code></strong>: Envía una solicitud de eco a otro equipo de la red.
+<ul>
+<li><strong>Sintaxis:</strong> <code>ping [nombre_host_o_dirección_ip] [opciones]</code></li>
+<li><code>-n xxx</code> - Número de solicitudes.</li>
+<li><code>-t</code> - Hacer ping indefinidamente.</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>ping google.com</code>: Hacer ping al servidor <code>google.com</code>.</li>
+<li><code>ping 192.168.1.100</code>: Hacer ping a un equipo con la dirección IP <code>192.168.1.100</code>.</li>
+<li><code>ping google.com -n 10</code> - Realizar 10 pings.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>tracert</code></strong>: Muestra la ruta de los paquetes a otro equipo de la red.
+<ul>
+<li><strong>Sintaxis:</strong> <code>tracert [nombre_host_o_dirección_ip]</code></li>
+<li><strong>Ejemplo:</strong> <code>tracert google.com</code>: Mostrar la ruta de los paquetes a <code>google.com</code>.</li>
+</ul>
+</li>
+<li><strong><code>netstat</code></strong>: Muestra las conexiones de red.
+<ul>
+<li><strong>Sintaxis:</strong> <code>netstat [opciones]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>-a</code>: Muestra todas las conexiones.</li>
+<li><code>-b</code>: Muestra las aplicaciones que crearon las conexiones.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>netstat</code> - Mostrar todas las conexiones activas.</li>
+<li><code>netstat -a -b</code> - Mostrar todas las conexiones y las aplicaciones en ejecución que las abrieron.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>nslookup</code></strong>: Consulta información de DNS.
+<ul>
+<li><strong>Sintaxis:</strong> <code>nslookup [nombre_host]</code></li>
+<li><strong>Ejemplo:</strong> <code>nslookup google.com</code>: Consultar información DNS para <code>google.com</code>.</li>
+</ul>
+</li>
+</ul>
+<h2>5. Otros comandos:</h2>
+<ul>
+<li><strong><code>assoc</code></strong>: Muestra o cambia las asociaciones de archivos.
+<ul>
+<li><strong>Sintaxis:</strong> <code>assoc [.extensión]=[tipo_archivo]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>assoc .txt</code>: Mostrar el tipo de archivo para la extensión <code>.txt</code>.</li>
+<li><code>assoc .txt=txtfile</code>: Establecer el tipo de archivo para la extensión <code>.txt</code> como <code>txtfile</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>call</code></strong>: Llama a un archivo por lotes desde otro.
+<ul>
+<li><strong>Sintaxis:</strong> <code>call [nombre_archivo_por_lotes]</code></li>
+<li><strong>Ejemplo:</strong> <code>call mybatch.bat</code>: Llamar al archivo por lotes <code>mybatch.bat</code>.</li>
+</ul>
+</li>
+<li><strong><code>chcp</code></strong>: Cambia la página de códigos de la consola.
+<ul>
+<li><strong>Sintaxis:</strong> <code>chcp [número_página_de_códigos]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>chcp 1251</code>: Establecer la página de códigos para cirílico.</li>
+<li><code>chcp</code>: Mostrar la página de códigos actual.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>choice</code></strong>: Permite al usuario elegir de una lista de opciones.
+<ul>
+<li><strong>Sintaxis:</strong> <code>choice [/c [opciones]] [/n] [/t [segundos]] [/d [opción]] [texto]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/c</code>: Especifica las opciones disponibles.</li>
+<li><code>/n</code>: Oculta la lista de opciones disponibles.</li>
+<li><code>/t</code>: Establece el tiempo de espera (en segundos).</li>
+<li><code>/d</code>: Establece la opción predeterminada.</li>
+</ul>
+</li>
+<li><strong>Ejemplo:</strong> <code>choice /c yn /t 10 /d n "¿Realmente quieres salir?"</code></li>
+</ul>
+</li>
+<li><strong><code>find</code></strong>: Busca una cadena de texto en un archivo.
+<ul>
+<li><strong>Sintaxis:</strong> <code>find "cadena" [nombre_archivo]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>find "Hello" myfile.txt</code> - busca la cadena "Hello" en el archivo myfile.txt.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>findstr</code></strong>: Busca cadenas de texto en archivos (más potente que <code>find</code>).
+<ul>
+<li><strong>Sintaxis:</strong> <code>findstr [opciones] "cadena" [nombre_archivo]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/i</code> - Búsqueda sin distinción entre mayúsculas y minúsculas.</li>
+<li><code>/n</code> - Mostrar números de línea.</li>
+<li><code>/s</code> - Buscar en todos los subdirectorios.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>findstr /i "error" myfile.log</code>: Busca la cadena "error" (sin distinción entre mayúsculas y minúsculas) en <code>myfile.log</code>.</li>
+<li><code>findstr /n "error" *.log</code> - busca la cadena "error" en todos los archivos .log, y muestra los números de línea.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>gpupdate</code></strong>: Actualiza las políticas de grupo.
+<ul>
+<li><strong>Sintaxis:</strong> <code>gpupdate [opciones]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/force</code> - Forzar actualización.</li>
+</ul>
+</li>
+<li><strong>Ejemplo:</strong> <code>gpupdate /force</code> - Forzar la actualización de las políticas de grupo.</li>
+</ul>
+</li>
+<li><strong><code>help</code> o <code>/?</code></strong>: Muestra la ayuda para un comando.
+<ul>
+<li><strong>Sintaxis:</strong> <code>help [nombre_comando]</code> o <code>[nombre_comando] /?</code></li>
+<li><strong>Ejemplo:</strong> <code>help dir</code> o <code>dir /?</code>: Mostrar la ayuda para el comando <code>dir</code>.</li>
+</ul>
+</li>
+<li><strong><code>pause</code></strong>: Pausa la ejecución de un archivo por lotes y espera a que se pulse una tecla.
+<ul>
+<li><strong>Sintaxis:</strong> <code>pause</code></li>
+</ul>
+</li>
+<li><strong><code>path</code></strong>: Muestra o cambia las variables de entorno PATH.
+<ul>
+<li><strong>Sintaxis</strong>: <code>path [ruta]</code></li>
+<li><strong>Ejemplos</strong>:
+<ul>
+<li><code>path</code>: Mostrar el valor actual de la variable PATH.</li>
+<li><code>path C:\bin</code> - Añadir la carpeta C:\bin a la variable PATH.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>prompt</code></strong>: Configura la cadena de comandos.
+<ul>
+<li><strong>Sintaxis:</strong> <code>prompt [texto]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>prompt $p$g</code>: Establecer la cadena de comandos para la ruta actual.</li>
+<li><code>prompt MyPrompt></code>: Establecer la cadena de comandos <code>MyPrompt></code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>set</code></strong>: Muestra, establece o elimina variables de entorno.
+<ul>
+<li><strong>Sintaxis:</strong> <code>set [nombre=[valor]]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>set</code>: Mostrar todas las variables de entorno.</li>
+<li><code>set myvar=myvalue</code>: Establecer la variable de entorno <code>myvar</code> a <code>myvalue</code>.</li>
+<li><code>set myvar=</code>: Eliminar la variable de entorno <code>myvar</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>start</code></strong>: Inicia un programa o abre un archivo.
+<ul>
+<li><strong>Sintaxis:</strong> <code>start [nombre_programa_o_archivo] [opciones]</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>start notepad.exe</code>: Iniciar el Bloc de notas.</li>
+<li><code>start myfile.txt</code>: Abrir <code>myfile.txt</code> con el programa predeterminado.</li>
+<li><code>start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" "https://www.google.com"</code> - Abrir un sitio web en Chrome.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>tree</code></strong>: Muestra la estructura gráfica de directorios.
+<ul>
+<li><strong>Sintaxis:</strong> <code>tree [unidad:][ruta] [opciones]</code></li>
+<li><strong>Opciones:</strong>
+<ul>
+<li><code>/f</code>: Mostrar también los nombres de los archivos.</li>
+<li><code>/a</code> - Usar caracteres ASCII.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>tree</code> - Mostrar la estructura del directorio actual.</li>
+<li><code>tree /f</code> - Mostrar la estructura del directorio actual con archivos.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>where</code></strong>: Encuentra la ubicación de un archivo.
+<ul>
+<li><strong>Sintaxis:</strong> <code>where [nombre_archivo]</code></li>
+<li><strong>Ejemplo:</strong> <code>where notepad.exe</code></li>
+</ul>
+</li>
+</ul>
+<h2>6. Comandos para trabajar con archivos por lotes:</h2>
+<ul>
+<li><strong><code>echo</code></strong>: Muestra texto en la pantalla.
+<ul>
+<li><strong>Sintaxis:</strong> <code>echo [texto]</code></li>
+<li><code>echo on</code> - activar la visualización de comandos al ejecutar un archivo por lotes.</li>
+<li><code>echo off</code> - desactivar la visualización de comandos al ejecutar un archivo por lotes.</li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>echo Hello, world!</code>: Mostrar "Hello, world!".</li>
+<li><code>echo off</code> - desactivar la salida de comandos.</li>
+<li><code>echo on</code> - activar la salida de comandos.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>rem</code></strong>: Añade un comentario a un archivo por lotes.
+<ul>
+<li><strong>Sintaxis:</strong> <code>rem [comentario]</code></li>
+<li><strong>Ejemplo:</strong> <code>rem Esto es un comentario</code></li>
+</ul>
+</li>
+<li><strong><code>goto</code></strong>: Salta a una etiqueta.
+<ul>
+<li><strong>Sintaxis:</strong> <code>goto [etiqueta]</code></li>
+<li><strong>Ejemplo:</strong>
+<pre class="line-numbers"><code class="language-batch">
+:start
+echo Hello
+goto end
+echo This will not be displayed
+:end
+echo Adiós
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong><code>if</code></strong>: Ejecuta lógica condicional.
+<ul>
+<li><strong>Sintaxis:</strong> <code>if [not] condición (comando1) else (comando2)</code></li>
+<li><strong>Ejemplos:</strong>
+<ul>
+<li><code>if exist file.txt echo el archivo existe</code> - comprobar la existencia de un archivo.</li>
+<li><code>if %var%== "text" echo la variable tiene valor</code> - comprobar el valor de una variable.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>for</code></strong>: Ejecuta una acción cíclica.
+<ul>
+<li><strong>Sintaxis:</strong> <code>for %%variable in (conjunto) do [comando]</code></li>
+<li><strong>Ejemplo:</strong>
+<pre class="line-numbers"><code class="language-batch">
+for %%a in (*.txt) do (
+ echo %%a
+ type %%a
+ echo -------------
+)
+</code></pre>
+<ul>
+<li>Display the name of each .txt file and its content.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Advertencia:</strong></p>
+<ul>
+<li>Ten cuidado al usar comandos que puedan modificar el sistema, especialmente cuando se usan con derechos de administrador.</li>
+<li>Antes de ejecutar el comando <code>format</code>, asegúrate de haber seleccionado la unidad correcta.</li>
+</ul>

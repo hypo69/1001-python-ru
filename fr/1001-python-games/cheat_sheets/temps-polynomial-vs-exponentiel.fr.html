@@ -1,0 +1,176 @@
+<h3><strong>Polynomial Time</strong></h3>
+<p><strong>Polynomial time</strong> is a term used in computational complexity theory to describe the execution time of an algorithm that grows as a polynomial of the input data size. If the execution time of an algorithm can be expressed as \(O(n^k)\), where \(n\) is the input data size and \(k\) is a constant, then such an algorithm runs in polynomial time.</p>
+<h4><strong>Examples:</strong></h4>
+<ol>
+<li><strong>List sorting</strong>: Algorithms, such as merge sort or quicksort, run in \(O(n \log n)\), which is polynomial time.</li>
+<li><strong>Shortest path finding in a graph</strong>: Dijkstra's algorithm runs in \(O(n^2)\) or \(O(n \log n)\) depending on the implementation, which is also polynomial.</li>
+</ol>
+<h4><strong>Characteristics:</strong></h4>
+<ul>
+<li>Algorithms that run in polynomial time are considered **efficient** and **practically applicable**.</li>
+<li>Problems that can be solved in polynomial time belong to class **P**.</li>
+</ul>
+<hr>
+<h3><strong>Exponential Time</strong></h3>
+<p><strong>Exponential time</strong> is the execution time of an algorithm that grows exponentially with the input data size. If the execution time can be expressed as \(O(k^n)\), where \(n\) is the input data size and \(k\) is a constant, then such an algorithm runs in exponential time.</p>
+<h4><strong>Examples:</strong></h4>
+<ol>
+<li><strong>Traveling Salesperson Problem</strong>: Solving by exhaustive enumeration of all possible routes requires \(O(n!)\) time, which is worse than exponential time.</li>
+<li><strong>Enumerating all subsets</strong>: An algorithm that checks all possible subsets of a set of \(n\) elements runs in \(O(2^n)\).</li>
+</ol>
+<h4><strong>Characteristics:</strong></h4>
+<ul>
+<li>Algorithms that run in exponential time are considered **inefficient** for large input data, because the execution time becomes too large even for relatively small \(n\).</li>
+<li>Problems that can only be solved in exponential time often belong to **NP-hard** or **NP-complete** classes.</li>
+</ul>
+<hr>
+<h3><strong>Comparison of Polynomial and Exponential Time</strong></h3>
+<table>
+<thead>
+<tr>
+<th><strong>Characteristic</strong></th>
+<th><strong>Polynomial Time</strong></th>
+<th><strong>Exponential Time</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Execution time growth</strong></td>
+<td>Slow (e.g., \(n^2\), \(n^3\))</td>
+<td>Fast (e.g., \(2^n\), \(3^n\))</td>
+</tr>
+<tr>
+<td><strong>Problem examples</strong></td>
+<td>Sorting, shortest path finding</td>
+<td>Traveling Salesperson Problem, subset enumeration</td>
+</tr>
+<tr>
+<td><strong>Practical applicability</strong></td>
+<td>Efficient for large data</td>
+<td>Inapplicable for large data</td>
+</tr>
+<tr>
+<td><strong>Complexity class</strong></td>
+<td>P</td>
+<td>NP-hard, NP-complete</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3><strong>Why is this important?</strong></h3>
+<ol>
+<li><strong>Polynomial time</strong>:
+<ul>
+<li>Algorithms that run in polynomial time are considered **practically applicable**, because they can process large amounts of data in a reasonable time.</li>
+<li>Problems in class **P** (solvable in polynomial time) are the basis of many applications in computer science, such as data processing, networks, cryptography, and artificial intelligence.</li>
+</ul>
+</li>
+<li><strong>Exponential time</strong>:
+<ul>
+<li>Algorithms that run in exponential time become **impractical** even for relatively small inputs. For example, for \(n = 100\), \(2^n\) already exceeds the number of atoms in the observable Universe.</li>
+<li>Problems that can only be solved in exponential time often require the use of **approximate methods**, **heuristics**, or **parallel computing**.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3><strong>Example for understanding</strong></h3>
+<p>Imagine you have a problem, and you want to solve it for \(n = 10\) and \(n = 100\):</p>
+<ul>
+<li><strong>Polynomial time (\(n^2\))</strong>:
+<ul>
+<li>For \(n = 10\): \(10^2 = 100\) operations.</li>
+<li>For \(n = 100\): \(100^2 = 10\,000\) operations.</li>
+</ul>
+</li>
+<li><strong>Exponential time (\(2^n\))</strong>:
+<ul>
+<li>For \(n = 10\): \(2^{10} = 1,024\) operations.</li>
+<li>For \(n = 100\): \(2^{100} \approx 1.26 \times 10^{30}\) operations.</li>
+</ul>
+</li>
+</ul>
+<p>As you can see, for \(n = 100\), a polynomial algorithm will perform 10,000 operations, which is quite feasible, while an exponential algorithm will require \(1.26 \times 10^{30}\) operations, which is practically impossible.</p>
+<p>To plot graphs illustrating the difference between polynomial and exponential time, various mathematical functions can be used. Here are examples of functions that can be used for visualization:</p>
+<hr>
+<h3><strong>Polynomial functions</strong></h3>
+<ol>
+<li><strong>Linear function</strong>:
+\( f(n) = n \)
+Example: execution time of an algorithm that processes each element once.</li>
+<li><strong>Quadratic function</strong>:
+\( f(n) = n^2 \)
+Example: execution time of an algorithm with nested loops, such as bubble sort.</li>
+<li><strong>Cubic function</strong>:
+\( f(n) = n^3 \)
+Example: execution time of an algorithm that processes three-dimensional data.</li>
+<li><strong>Logarithmic function</strong>:
+\( f(n) = \log n \)
+Example: execution time of binary search.</li>
+<li><strong>Linear-logarithmic function</strong>:
+\( f(n) = n \log n \)
+Example: execution time of quicksort or merge sort.</li>
+</ol>
+<hr>
+<h3><strong>Exponential functions</strong></h3>
+<ol>
+<li><strong>Exponential function</strong>:
+\( f(n) = 2^n \)
+Example: execution time of an algorithm that enumerates all subsets of a set.</li>
+<li><strong>Factorial function</strong>:
+\( f(n) = n! \)
+Example: execution time of an algorithm that enumerates all permutations (e.g., the traveling salesperson problem).</li>
+<li><strong>Exponential function with a different base</strong>:
+\( f(n) = 3^n \)
+Example: execution time of an algorithm that explores all possible combinations.</li>
+</ol>
+<hr>
+<h3><strong>Code example for plotting (Python, Matplotlib)</strong></h3>
+<pre class="line-numbers"><code class="language-python">
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Range of n values
+n = np.linspace(1, 20, 100)
+
+# Polynomial functions
+linear = n
+quadratic = n**2
+cubic = n**3
+logarithmic = np.log(n)
+nlogn = n * np.log(n)
+
+# Exponential functions
+exponential = 2**n
+factorial = [np.math.factorial(int(i)) for i in n]  # Factorial is only defined for integers
+
+# Plotting
+plt.figure(figsize=(10, 6))
+
+# Polynomial functions
+plt.plot(n, linear, label='Linear: $f(n) = n$')
+plt.plot(n, quadratic, label='Quadratic: $f(n) = n^2$')
+plt.plot(n, cubic, label='Cubic: $f(n) = n^3$')
+plt.plot(n, logarithmic, label='Logarithmic: $f(n) = \log n$')
+plt.plot(n, nlogn, label='Linearithmic: $f(n) = n \log n$')
+
+# Exponential functions
+plt.plot(n, exponential, label='Exponential: $f(n) = 2^n$')
+plt.plot(n, factorial, label='Factorial: $f(n) = n!$')
+
+# Graph parameters
+plt.yscale('log')  # Logarithmic scale for convenience
+plt.xlabel('Input size (n)')
+plt.ylabel('Time complexity')
+plt.title('Comparison of polynomial and exponential time complexity')
+plt.legend()
+plt.grid(True)
+plt.show()
+</code></pre>
+<hr>
+<h3><strong>What will the graph show?</strong></h3>
+<ul>
+<li><strong>Polynomial functions</strong> grow slowly and remain at the bottom of the graph.</li>
+<li><strong>Exponential functions</strong> grow very rapidly and skyrocket even for small values of \(n\).</li>
+<li>Using a **logarithmic scale** (on the Y-axis) helps visualize the difference between polynomial and exponential functions, as their values differ by several orders of magnitude.</li>
+</ul>
+<hr>

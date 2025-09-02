@@ -1,0 +1,53 @@
+<h2 dir="rtl">הפונקציה <code dir="ltr">input()</code></h2>
+<p dir="rtl">הפונקציה <code dir="ltr">input()</code> בפייתון משמשת לקבלת נתונים מהמשתמש באמצעות קלט טקסט. היא משהה את ביצוע התוכנית עד שהמשתמש יזין נתונים וילחץ <code dir="ltr">Enter</code>. לאחר מכן היא מחזירה את הערך שהוזן כמחרוזת.</p>
+<h3 dir="rtl">תחביר</h3>
+<pre class="line-numbers"><code class="language-python">input([prompt])
+</code></pre>
+<ul>
+<li dir="rtl"><code dir="ltr">prompt</code> (אופציונלי): מחרוזת המוצגת למשתמש לפני הקלט. זו יכולה להיות הודעה עם הוראות, לדוגמה: <code dir="ltr">"הכנס את שמך: "</code>.</li>
+</ul>
+<h3 dir="rtl">דוגמה לשימוש</h3>
+<pre class="line-numbers"><code class="language-python"># בקשת שם מהמשתמש
+name = input('הכנס את שמך: ')
+print(f'שלום, {name}!')
+</code></pre>
+<p dir="rtl"><strong>תוצאת ביצוע:</strong></p>
+<pre class="line-numbers"><code class="language-text">הכנס את שמך: אלכס
+שלום, אלכס!
+</code></pre>
+<h3 dir="rtl">מאפיינים</h3>
+<ol>
+<li dir="rtl"><strong>מחזירה מחרוזת</strong>
+כל הנתונים שהוזנו באמצעות <code dir="ltr">input()</code> מפורשים כמחרוזות. אם נדרש מספר, יש להמיר אותו:
+<pre class="line-numbers"><code class="language-python">age = int(input('הכנס את גילך: '))
+print(f'גילך: {age}')
+</code></pre>
+</li>
+<li dir="rtl"><strong>טיפול בשגיאות</strong>
+כדי למנוע שגיאות במהלך ההמרה (לדוגמה, אם המשתמש הזין טקסט במקום מספר), ניתן להשתמש בבלוק <code dir="ltr">try-except</code>:
+<pre class="line-numbers"><code class="language-python">try:
+    number = int(input('הכנס מספר: '))
+    print(f'הכנסת את המספר {number}')
+except ValueError:
+    print('שגיאה: יש להזין מספר.')
+</code></pre>
+</li>
+<li dir="rtl"><strong>שימוש בלולאות</strong>
+לעתים קרובות <code dir="ltr">input()</code> משמש בלולאות לבקשת נתונים חוזרת:
+<pre class="line-numbers"><code class="language-python">while True:
+    text = input('הכנס משהו (או "יציאה" לסיום): ')
+    if text.lower() == 'יציאה':
+        print('סיום התוכנית.')
+        break
+    print(f'הכנסת: {text}')
+</code></pre>
+</li>
+</ol>
+<h3 dir="rtl">טיפים למתחילים</h3>
+<ul>
+<li dir="rtl">ודא שסוג הנתונים תואם את הציפיות שלך (לדוגמה, המר קלט למספר אם נדרש).</li>
+<li dir="rtl">תמיד בדוק נתונים כדי למנוע שגיאות קלט.</li>
+<li dir="rtl">השתמש בהודעות <code dir="ltr">prompt</code> ברורות ותמציתיות כדי שהמשתמש יבין מה נדרש ממנו.</li>
+</ul>
+<hr>
+<p dir="rtl"><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">לתוכן העניינים</a></p>

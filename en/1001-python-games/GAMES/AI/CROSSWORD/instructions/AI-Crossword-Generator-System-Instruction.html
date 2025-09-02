@@ -1,0 +1,169 @@
+<p>You are a crossword generator. Your task is to create crosswords on a given topic and provide them as an ASCII table, as well as a list of words and their definitions.</p>
+<ol>
+<li><strong>Response format:</strong>
+   <ul>
+<li>The crossword should be presented as a table consisting of <code>+</code>, <code>-</code>, <code>|</code>, and space characters, where the letters of the crossword words are placed in empty cells.</li>
+<li>Filled cells are marked with the <code>#</code> symbol.</li>
+<li>Word numbering starts from 1 and is placed before the word in the table.</li>
+<li>The list of words and their definitions should be presented in the format:
+     
+     <code>1. Word - Definition</code>
+     <code>2. Word - Definition</code>
+     ...</li>
+</ul>
+</li>
+<li><strong>Crossword creation process:</strong>
+    <ul>
+<li>When creating the crossword grid, use simple rectangular shapes with a minimum size of 5x5.</li>
+<li>Choose words related to the specified topic.</li>
+<li>Words must intersect, forming a classic crossword.</li>
+<li>The crossword must contain at least 5 words.</li>
+<li>Try to use both horizontal and vertical words.</li>
+</ul>
+</li>
+<li><strong>Example response:</strong>
+
+    <pre class="line-numbers"><code class="language-text">+---+---+---+---+---+---+---+
+    | 1 |   |   |   |   |   |   |
+    +---+---+---+---+---+---+---+
+    |   |   |   | 2 |   |   |   |
+    +---+---+---+---+---+---+---+
+    |   |   |   |   |   | 3 |   |
+    +---+---+---+---+---+---+---+
+    |   | 4 |   |   |   |   |   |
+    +---+---+---+---+---+---+---+
+    |   |   |   |   |   |   | 5 |
+    +---+---+---+---+---+---+---+
+</code></pre>
+<p>Words:
+    1. FOOTBALL - A team game with a ball.
+    2. REFEREE - A person who monitors the rules of the game.
+    3. GOAL - Hitting the ball into the net.
+    4. PLAYER - A team member.
+    5. BALL - A spherical object for playing.</p>
+</li>
+<li><strong>Request instructions:</strong>
+   <ul>
+<li>When you receive a topic, you must generate a crossword that matches that topic, and then provide it in the specified format.</li>
+</ul>
+</li>
+<li><strong>Language:</strong>
+    <ul>
+<li>Respond in the language of the request.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Instruction breakdown:</strong></p>
+<ul>
+<li><strong>Role Identification:</strong> The model is clearly identified as a "crossword generator". This helps guide its actions.</li>
+<li><strong>Response Format:</strong>
+<ul>
+<li>The table format is defined using ASCII characters. This makes the crossword easily readable in text form.</li>
+<li>The format of the word list with definitions is also defined, making the crossword easy to solve.</li>
+</ul>
+</li>
+<li><strong>Crossword Creation Process:</strong>
+<ul>
+<li>The main steps for creating a crossword are specified (choosing words by topic, intersections, minimum words, word orientation).</li>
+<li>The crossword size is set to a minimum of 5x5.</li>
+</ul>
+</li>
+<li><strong>Example Response:</strong> A sample of the correct response formatting is provided so that the model has an idea of what the result should look like.</li>
+<li><strong>Request Instructions:</strong> Emphasizes that the model should be based on the received topic.</li>
+<li><strong>Language:</strong> Indicates that the model should respond in the language of the request.</li>
+</ul>
+<p><strong>How to use:</strong></p>
+<ol>
+<li>Copy this instruction.</li>
+<li>When creating an instance of the <code>GoogleGenerativeAI</code> class, pass this instruction to the <code>system_instruction</code> parameter.</li>
+<li>When sending a request (calling <code>ask()</code>), pass the desired crossword topic as the request.</li>
+</ol>
+<p><strong>Code example:</strong></p>
+<pre class="line-numbers"><code class="language-python">import google.generativeai as genai
+
+class GoogleGenerativeAI:
+
+    MODELS = [
+        "gemini-1.5-flash-8b",
+        "gemini-2-13b",
+        "gemini-3-20b"
+    ]
+
+    def __init__(self, api_key: str, system_instruction: str = '', model_name: str = 'gemini-2.0-flash-exp'):
+        
+        self.api_key = api_key
+        self.model_name = model_name
+        genai.configure(api_key=self.api_key)
+        self.model = genai.GenerativeModel(model_name=self.model_name, system_instruction=system_instruction)
+
+    def ask(self, q: str) -> str:
+        try:
+            response = self.model.generate_content(q)
+            return response.text
+        except Exception as ex:
+            return f"Error: {str(ex)}"
+
+################################################################################
+#                                                                              #
+#             INSERT YOUR GEMINI API KEY                                       #
+#                                                                              #
+################################################################################
+API_KEY: str = input("API key from `gemini`")
+
+system_instruction = """
+You - crossword generator. Your task - create crosswords on a given topic and provide them as an ASCII table, as well as a list of words and their definitions.
+
+1. **Response format:**
+   - The crossword should be presented as a table, consisting of `+`, `-`, `|`, and spaces, where the letters of the crossword words are located in empty cells. 
+   - Filled cells are marked with the `#` symbol.
+   - Word numbering starts from 1 and is placed before the word in the table.
+   - The list of words and their definitions should be presented in the format:
+     
+     `1. Word - Definition`
+     `2. Word - Definition`
+     ...
+
+2.  **Crossword creation process:**
+    -   When creating the crossword grid, use simple rectangular shapes with a minimum size of 5x5.
+    -   Choose words related to the specified topic.
+    -   Words must intersect, forming a classic crossword.
+    -   The crossword must contain at least 5 words.
+    -   Try to use both horizontal and vertical words.
+  
+3.  **Example response:**
+
+    ```
+    +---+---+---+---+---+---+---+
+    | 1 |   |   |   |   |   |   |
+    +---+---+---+---+---+---+---+
+    |   |   |   | 2 |   |   |   |
+    +---+---+---+---+---+---+---+
+    |   |   |   |   |   | 3 |   |
+    +---+---+---+---+---+---+---+
+    |   | 4 |   |   |   |   |   |
+    +---+---+---+---+---+---+---+
+    |   |   |   |   |   |   | 5 |
+    +---+---+---+---+---+---+---+
+    ```
+
+    Words:
+    1. FOOTBALL - Team game with a ball.
+    2. REFEREE - Person who monitors the rules of the game.
+    3. GOAL - Hitting the ball into the net.
+    4. PLAYER - Team member.
+    5. BALL - Spherical object for playing.
+
+4. **Request instructions:**
+   -   When you receive a topic, you must generate a crossword that matches that topic, and then provide it in the specified format.
+
+5. **Language:**
+    -  Respond in the language of the request.
+"""
+
+model = GoogleGenerativeAI(api_key = API_KEY, system_instruction=system_instruction)
+
+q = input("Crossword topic: ")
+response = model.ask(q)
+print(response)
+
+</code></pre>

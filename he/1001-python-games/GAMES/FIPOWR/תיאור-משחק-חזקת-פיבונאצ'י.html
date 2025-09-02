@@ -1,0 +1,154 @@
+<h2 dir="rtl"><span dir="ltr">FIPOWR</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">6</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;פיבונאצ'י בחזקה&quot; - זהו משחק מתמטי, שבו המחשב בוחר מספר אקראי בטווח של <span dir="ltr">1</span> עד <span dir="ltr">100</span>, והשחקן מזין מספר. המחשב מעלה את המספר שנבחר באקראי בחזקת מספר פיבונאצ'י, התואם למספר הניסיון, ומשווה אותו למספר המשתמש. המשחק נמשך עד שהמספרים שווים.</p>
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">המחשב בוחר מספר שלם אקראי מ-<span dir="ltr">1</span> עד <span dir="ltr">100</span>.</p></li>
+<li><p dir="rtl">השחקן מזין את מספרו.</p></li>
+<li><p dir="rtl">המחשב מחשב את מספר פיבונאצ'י, התואם למספר הניסיון, ומעלה את המספר האקראי בחזקה זו.</p></li>
+<li><p dir="rtl">משווה את התוצאה שהתקבלה למספר השחקן.</p></li>
+<li><p dir="rtl">המשחק נמשך עד שהמספרים שווים.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">הגדר את מונה הניסיונות ל-<span dir="ltr">0</span>.</p></li>
+<li><p dir="rtl">צור מספר אקראי בטווח של <span dir="ltr">1</span> עד <span dir="ltr">100</span>.</p></li>
+<li><p dir="rtl">התחל לולאה &quot;כל עוד מספר השחקן אינו שווה למספר שהועלה בחזקת פיבונאצ'י&quot;:</p>
+<ol>
+<li><p dir="rtl">הגדל את מונה הניסיונות ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">חשב את מספר פיבונאצ'י, התואם למספר הניסיון.</p></li>
+<li><p dir="rtl">העלה את המספר האקראי בחזקת מספר פיבונאצ'י.</p></li>
+<li><p dir="rtl">בקש מהשחקן להזין מספר.</p></li>
+<li><p dir="rtl">אם מספר השחקן שווה למספר המחושב, עבור לשלב <span dir="ltr">4</span>.</p></li>
+<li><p dir="rtl">אם מספר השחקן אינו שווה למספר המחושב, הצג הודעה על המצב הנוכחי.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">הצג הודעה &quot;ניחשת ב- {מספר ניסיונות} ניסיונות!&quot;</p></li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeVariables["<p align='left'>Initialize variables:
+    <code><b>
+    numberOfGuesses = 0
+    targetNumber = random(1, 100)
+    </b></code></p>"]
+    InitializeVariables --> LoopStart{"Start loop: as long as not guessed"}
+    LoopStart -- Yes --> IncreaseGuesses["<code><b>numberOfGuesses = numberOfGuesses + 1</b></code>"]
+    IncreaseGuesses --> CalculateFibonacci["<code><b>fibonacciNumber = fibonacci(numberOfGuesses)</b></code>"]
+     CalculateFibonacci --> CalculatePower["<code><b>poweredNumber = targetNumber ** fibonacciNumber</b></code>"]
+    CalculatePower --> InputGuess["User enters number: <code><b>userGuess</b></code>"]
+    InputGuess --> CheckGuess{"Check: <code><b>userGuess == poweredNumber?</b></code>"}
+    CheckGuess -- Yes --> OutputWin["Display message: <b>Guessed in <code>{numberOfGuesses}</code> attempts!</b>"]
+    OutputWin --> End["End"]
+    CheckGuess -- No --> OutputTryAgain["Display message: <b>Try again!</b>"]
+    OutputTryAgain --> LoopStart
+    LoopStart -- No --> End
+</code></pre>
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeVariables</span> - אתחול משתנים: <span dir="ltr">numberOfGuesses</span> (מונה ניסיונות) מוגדר ל-<span dir="ltr">0</span>, ו-<span dir="ltr">targetNumber</span> (מספר נסתר) נוצר באופן אקראי מ-<span dir="ltr">1</span> עד <span dir="ltr">100</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת הלולאה, הנמשכת עד שהמספר נוחש.</p></li>
+<li><p dir="rtl"><span dir="ltr">IncreaseGuesses</span> - הגדלת מונה הניסיונות ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CalculateFibonacci</span> - חישוב מספר פיבונאצ'י התואם לניסיון הנוכחי.</p></li>
+<li><p dir="rtl"><span dir="ltr">CalculatePower</span> - העלאת המספר הנסתר בחזקת מספר פיבונאצ'י.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputGuess</span> - בקשת המשתמש להזין מספר ושמירתו במשתנה <span dir="ltr">userGuess</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckGuess</span> - בדיקה האם המספר שהוזן <span dir="ltr">userGuess</span> שווה למספר המחושב <span dir="ltr">poweredNumber</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWin</span> - הצגת הודעת ניצחון אם המספרים שווים, עם ציון מספר הניסיונות.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputTryAgain</span> - הצגת הודעה &quot;נסה שוב!&quot; אם המספר שהוזן אינו שווה למספר המחושב.</p></li>
+</ul>
+
+<pre class="line-numbers"><code class="language-python">import random
+
+# Function to calculate Fibonacci number
+def fibonacci(n):
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, a + b
+        return b
+
+# Initialize guess counter
+numberOfGuesses = 0
+# Generate a random number from 1 to 100
+targetNumber = random.randint(1, 100)
+
+# Main game loop
+while True:
+    # Increment guess counter
+    numberOfGuesses += 1
+    # Calculate Fibonacci number for current attempt
+    fibonacciNumber = fibonacci(numberOfGuesses)
+    # Raise the hidden number to the power of the Fibonacci number
+    poweredNumber = targetNumber ** fibonacciNumber
+
+    # Request number input from user
+    try:
+        userGuess = int(input(f"ניסיון {numberOfGuesses}: הכנס מספר: "))
+    except ValueError:
+         print("אנא הכנס מספר שלם.")
+         continue
+
+    # Check if number is guessed
+    if userGuess == poweredNumber:
+        print(f"מזל טוב! ניחשת את המספר ב- {numberOfGuesses} ניסיונות!")
+        break  # End loop if number is guessed
+    else:
+         print("Try again!") # Display message to try again
+
+
+</code></pre>
+
+<h3 dir="rtl">הסבר קוד:</h3>
+<ol>
+<li><p dir="rtl"><strong>ייבוא מודול <span dir="ltr"><code>random</code></span></strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>import random</code></span>: מייבא את מודול <span dir="ltr"><code>random</code></span>, המשמש ליצירת מספר אקראי.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>פונקציה <span dir="ltr"><code>fibonacci(n)</code></span></strong>:</p>
+<ul>
+<li><p dir="rtl">מגדירה את הפונקציה <span dir="ltr"><code>fibonacci(n)</code></span>, המחשבת את המספר ה-<span dir="ltr">n</span> בסדרת פיבונאצ'י.</p></li>
+<li><p dir="rtl">משתמשת בגישה איטרטיבית לחישוב מספרי פיבונאצ'י.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>אתחול משתנים</strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>numberOfGuesses = 0</code></span>: מאתחל את המשתנה <span dir="ltr"><code>numberOfGuesses</code></span> לספירת ניסיונות השחקן.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>targetNumber = random.randint(1, 100)</code></span>: יוצר מספר שלם אקראי בטווח של <span dir="ltr">1</span> עד <span dir="ltr">100</span> ושומר אותו ב-<span dir="ltr"><code>targetNumber</code></span>.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>לולאה ראשית <span dir="ltr"><code>while True:</code></span></strong>:</p>
+<ul>
+<li><p dir="rtl">לולאה אינסופית הנמשכת עד שהשחקן מנחש את המספר (פקודת <span dir="ltr"><code>break</code></span> תבוצע).</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>numberOfGuesses += 1</code></span>: מגדיל את מונה הניסיונות ב-<span dir="ltr">1</span> בכל איטרציה חדשה של הלולאה.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>fibonacciNumber = fibonacci(numberOfGuesses)</code></span>: קורא לפונקציה <span dir="ltr"><code>fibonacci</code></span> כדי לקבל את מספר פיבונאצ'י התואם לניסיון הנוכחי.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>poweredNumber = targetNumber ** fibonacciNumber</code></span>: מחשב את המספר הנסתר בחזקת מספר פיבונאצ'י.</p></li>
+<li><p dir="rtl"><strong>קלט</strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>try...except ValueError</code></span>: בלוק <span dir="ltr"><code>try-except</code></span> מטפל בשגיאות קלט אפשריות. אם המשתמש יזין קלט שאינו מספר שלם, תוצג הודעת שגיאה.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>userGuess = int(input(f"ניסיון {numberOfGuesses}: הכנס מספר: "))</code></span>: מבקש מהמשתמש מספר וממיר אותו למספר שלם, שומר את התוצאה ב-<span dir="ltr"><code>userGuess</code></span>.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>תנאי ניצחון</strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>if userGuess == poweredNumber:</code></span>: בודק אם המספר שהוזן שווה לערך המחושב.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>print(f"מזל טוב! ניחשת את המספר ב- {numberOfGuesses} ניסיונות!")</code></span>: מציג הודעת ניצחון ומספר ניסיונות.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>break</code></span>: מסיים את הלולאה (ואת המשחק) אם המספר נוחש.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>רמז</strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>else:</code></span>: אם המספר לא נוחש, מוצגת ההודעה &quot;נסה שוב!&quot;.</p></li>
+</ul>
+</li>
+</ol>

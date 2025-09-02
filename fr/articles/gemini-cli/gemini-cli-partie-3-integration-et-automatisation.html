@@ -1,0 +1,222 @@
+<h3><strong>Scenario for Gemini CLI: Game of Life</strong></h3>
+<h4><strong>Step 1: Creating a <code>GEMINI.MD</code> system instruction</strong></h4>
+<p>In the working directory, create a <code>GEMINI.md</code> file and insert the system instruction into it. Example instruction:</p>
+<pre class="line-numbers"><code class="language-markdown">
+## 📘 Instruction for Python code generation
+
+### 1. General rules
+
+*   Use **Python 3.10+**.
+*   Adhere to a **clear, readable, and unambiguous coding style**.
+*   **Every function, method, and class** must have:
+
+    *   Type hints
+    *   Complete and correct documentation in `docstring` format (see section 3)
+    *   Internal comments (`#`), if necessary
+
+---
+
+### 2. Comments
+
+*   Comments must be **precise** and describe **what the code does**, not "what we do".
+*   **Forbidden** to use pronouns: `we do`, `we return`, `we send`, `we go`, etc.
+*   **Allowed** only the terms: `extraction`, `execution`, `call`, `replacement`, `verification`, `sending`, `The function executes`, `The function modifies the value`, etc.
+
+#### ❌ Incorrect comment example:
+
+```python
+# Get the parameter value
+```
+
+#### ✅ Correct comment example:
+
+```python
+# The function extracts the parameter value
+```
+
+---
+
+### 3. Docstring (documentation format)
+
+Each function/method/class must contain a `docstring` in the following format:
+
+```python
+def function(param: str, param1: Optional[str | dict | str] = None) -> dict | None:
+    """
+    Args:
+        param (str): Description of the `param` parameter.
+        param1 (Optional[str | dict | str], optional): Description of the `param1` parameter. Defaults to `None`.
+
+    Returns:
+        dict | None: Description of the return value. Returns a dictionary or `None`.
+
+    Raises:
+        SomeError: Description of the situation in which the `SomeError` exception occurs.
+
+    Example:
+        >>> function('param', 'param1')
+        {'param': 'param1'}
+    """
+```
+
+*   **All parameters and return values must be described.**
+*   The wording must be **concise, precise, and unambiguous**.
+*   It is not allowed to omit the description of parameters/return values/exceptions.
+
+---
+
+### 4. Type Annotation
+
+*   **All variables, parameters, and return values** must be annotated.
+*   Use Python 3.10+ syntax: `list[int]`, `dict[str, Any]`, `str | None`, etc.
+*   Examples of correct annotations:
+
+#### ✅ Simple types:
+
+```python
+name: str = "John"
+count: int = 42
+flag: bool = True
+```
+
+#### ✅ Collections and complex types:
+
+```python
+from typing import Any, Optional, Callable, TypeAlias
+
+coordinates: tuple[float, float] = (55.75, 37.61)
+metadata: dict[str, Any] = {"debug": True}
+UserId: TypeAlias = int
+```
+
+#### ✅ Functions and methods:
+
+```python
+def get_user_name(user_id: int) -> str:
+    """Returns the user's name by their ID."""
+    ...
+```
+
+#### ✅ Asynchronous functions:
+
+```python
+async def fetch_users() -> AsyncIterator[dict[str, int | str]]:
+    ...
+```
+
+#### ✅ Generic types:
+
+```python
+from typing import TypeVar, Generic
+
+T = TypeVar("T")
+
+class Container(Generic[T]):
+    def __init__(self, value: T) -> None:
+        self.value = value
+
+    def get(self) -> T:
+        return self.value
+```
+
+---
+
+### 5. Other
+
+*   Use `default_factory` in `dataclass` for mutable values (`list`, `dict`).
+*   For `Optional` values, specify `T | None` (Python 3.10+) or `Optional[T]`.
+*   For complex structures, use `TypeAlias`.
+
+---
+
+📌 **Tip**: When generating code, always include type annotations, `docstrings`, and avoid subjective wording in comments. The goal is a code structure that is as precise, reproducible, and formalized as possible.
+</code></pre>
+<p>This file will be used to configure Gemini CLI.</p>
+<p>For convenience, let's create a <code>game</code> directory, which will store the project files, and a <code>scenarios</code> directory, which will store the scenarios for Gemini CLI.</p>
+<p>The <code>scenarios/life-create-code.md</code> file will contain the instructions for creating the "Game of Life" code,
+the <code>scenarios/life-create-test.md</code> file will contain the instructions for creating tests,
+the <code>scenarios/life-create-doc.md</code> file will contain the instructions for creating documentation.</p>
+<p>life-create-code.md:</p>
+<pre class="line-numbers"><code class="language-markdown">
+In the `game` directory, create a `life.py` file.
+Inside, write the implementation of Conway's "Game of Life" in Python, using an object-oriented approach.
+Use the libraries: `numpy`, `pygame` (for graphics).
+
+
+Requirements:
+1.  Create a `Game` class.
+2.  In `__init__`, the class must accept the grid dimensions (width, height) and create a random initial field.
+3.  Create a `step()` method that updates the game state by one step according to the rules:
+    - A living cell with < 2 living neighbors dies (loneliness).
+    - A living cell with 2 or 3 living neighbors survives.
+    - A living cell with > 3 living neighbors dies (overpopulation).
+    - A dead cell with exactly 3 living neighbors becomes alive (birth).
+4.  Create a `display()` method or override `__str__` to display the field in the console. Use characters, for example '■' for a living cell and ' ' for a dead cell.
+5.  Use the `numpy` library for efficient operations on the grid.
+6.  In the `if __name__ == '__main__':` block, add an example that creates a game and runs the simulation in a loop with a small delay between steps.
+7. For game visualization, use pygame or another graphics library, if possible.
+</code></pre>
+<hr>
+<p>life-create-test.md:</p>
+<pre class="line-numbers"><code class="language-markdown">
+In the `game` directory, using the context of the @life.py file, create a file with tests `test_life.py`. Use the pytest framework.
+
+The test must verify the correct evolution of a simple "Blinker" oscillator (three cells in a row).
+
+Test scenario:
+1.  Import the `Game` class from `life`.
+2.  Create a test function, for example `test_blinker_oscillation`.
+3.  In the test, create a `Game` instance with a fixed size (e.g., 5x5).
+4.  Manually set the initial state of the field so that there is a horizontal line of three living cells (Blinker) in the center.
+5.  Call the `game.step()` method.
+6.  Using `assert` and `numpy.array_equal`, verify that the field has changed to a vertical line of three cells.
+7.  Call the `game.step()` method again.
+8.  Verify that the field has returned to its original horizontal state.
+</code></pre>
+<hr>
+<p>life-create-doc.md:</p>
+<pre class="line-numbers"><code class="language-markdown">
+Analyze the @life.py and @test_life.py files in the `game` directory and create a `doc.md` documentation file based on them.
+
+The documentation structure should be as follows:
+-   **Title:** # "Game of Life" Project
+-   **Brief description:** Explanation of what this project is (implementation of Conway's cellular automaton).
+-   **File structure:** Brief description of the purpose of the `life.py` and `test_life.py` files.
+-   **How to run the simulation:** Section with the command to run the main file (`python life.py`).
+-   **How to run the tests:** Section with the command to run the tests (`pip install pytest numpy`, then `pytest`).
+</code></pre>
+<p>The directory structure will look like this:</p>
+<p><img src="assets/gemini_cli_3/1.png" alt="1"></p>
+<h4><strong>Step 2: Creating the "Game of Life" code</strong></h4>
+<p>Launch gemini-cli in the terminal:</p>
+<p><img src="assets/gemini_cli_3/2.png" alt="2"></p>
+<p>Important! Make sure you are in the directory where the <code>GEMINI.md</code> file is located.</p>
+<p><img src="assets/gemini_cli_3/3.png" alt="3"></p>
+<p><img src="assets/gemini_cli_3/4.png" alt="4"></p>
+<p>Give permission to create the file:
+<img src="assets/gemini_cli_3/5.png" alt="5"></p>
+<p>After that, gemini-cli will generate the <code>life.py</code> file in the <code>game</code> directory:
+<img src="assets/gemini_cli_3/6.png" alt="6"></p>
+<p>Continue:</p>
+<pre class="line-numbers"><code class="language-bash">
+Create a venv virtual environment, install the necessary dependencies, and run the game code.
+</code></pre>
+<p><img src="assets/gemini_cli_3/7.png" alt="7"></p>
+<p>Give the necessary permissions to run the scripts
+<img src="assets/gemini_cli_3/8.png" alt="8"></p>
+<p>pip
+<img src="assets/gemini_cli_3/9.png" alt="9"></p>
+<p>and finally gemini-cli starts the game:
+<img src="assets/gemini_cli_3/10.png" alt="10"></p>
+<p>Step 3: Creating the tests</p>
+<p><img src="assets/gemini_cli_3/12.png" alt="12">
+<img src="assets/gemini_cli_3/11.png" alt="11"></p>
+<p>Error
+<img src="assets/gemini_cli_3/13.png" alt="13"></p>
+<p>gemini-cli tries to solve the problem
+<img src="assets/gemini_cli_3/14.png" alt="14"></p>
+<p><img src="assets/gemini_cli_3/15.png" alt="15"></p>
+<p>Final step — creating the documentation
+<img src="assets/gemini_cli_3/16.png" alt="16"></p>
+<p>Voila! Documentation created:
+<img src="assets/gemini_cli_3/17.png" alt="17"></p>

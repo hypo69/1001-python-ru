@@ -1,0 +1,152 @@
+<h2 dir="rtl">פריסת <span dir="ltr">Jekyll</span> אוטומטית ל-<span dir="ltr">GitHub Pages</span></h2>
+<p dir="rtl">כדי להפוך את תהליך הפריסה לאוטומטי, נשתמש ב-<span dir="ltr">GitHub Actions</span>, המאפשרים לבצע משימות שונות, כולל בנייה ופרסום אתרים, ישירות במאגר שלך.</p>
+<h3 dir="rtl">1: סקירת קובץ <span dir="ltr">Workflow</span></h3>
+<p dir="rtl">ראשית, בואו נסתכל על קובץ ה-<span dir="ltr">workflow</span> הראשי השולט בתהליך הבנייה והפריסה. קובץ זה כתוב ב-<span dir="ltr">YAML</span> ונמצא בדרך כלל בספריית <code dir="ltr">.github/workflows</code>. הנה תוכנו:</p>
+<pre class="line-numbers"><code class="language-yaml"># Sample workflow for building and deploying a Jekyll site to GitHub Pages
+name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./docs/gemini/consultant/ru/src
+          destination: ./_site
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+</code></pre>
+<h3 dir="rtl">2: פירוק מבנה <span dir="ltr">Workflow</span></h3>
+<p dir="rtl">כעת נפרק כל חלק בקובץ זה:</p>
+<h4 dir="rtl">2.1. מידע כללי</h4>
+<ul>
+<li dir="rtl"><code dir="ltr">name: Deploy Jekyll with GitHub Pages dependencies preinstalled</code>: שם ה-<span dir="ltr">workflow</span> שתראה ברשימת <span dir="ltr">Actions</span> במאגר.</li>
+<li dir="rtl"><code dir="ltr">on</code>: מתאר מתי ה-<span dir="ltr">workflow</span> אמור לרוץ:
+<ul>
+<li dir="rtl"><code dir="ltr">push</code>: ה-<span dir="ltr">workflow</span> רץ בכל <span dir="ltr">push</span> לענף <code dir="ltr">master</code>.</li>
+<li dir="rtl"><code dir="ltr">workflow_dispatch</code>: מאפשר לך להריץ את ה-<span dir="ltr">workflow</span> ידנית דרך ממשק <span dir="ltr">GitHub</span>.</li>
+</ul>
+</li>
+<li dir="rtl"><code dir="ltr">permissions</code>: מגדיר הרשאות להפעלת ה-<span dir="ltr">workflow</span>:
+<ul>
+<li dir="rtl"><code dir="ltr">contents: read</code>: הרשאה לקרוא קוד מהמאגר.</li>
+<li dir="rtl"><code dir="ltr">pages: write</code>: הרשאה לפרסם ב-<span dir="ltr">GitHub Pages</span>.</li>
+<li dir="rtl"><code dir="ltr">id-token: write</code>: הרשאה לקבל אסימון אימות (נדרש עבור <span dir="ltr">GitHub Actions</span>).</li>
+</ul>
+</li>
+<li dir="rtl"><code dir="ltr">concurrency</code>: מגדיר ביצוע מקביל של <span dir="ltr">workflow</span>:
+<ul>
+<li dir="rtl"><code dir="ltr">group: "pages"</code>: מבטיח שרק <span dir="ltr">workflow</span> אחד עבור <span dir="ltr">GitHub Pages</span> ירוץ בכל פעם.</li>
+<li dir="rtl"><code dir="ltr">cancel-in-progress: false</code>: מונע ביטול של הרצת <span dir="ltr">workflow</span> נוכחית כאשר מופעלת חדשה.</li>
+</ul>
+</li>
+</ul>
+<h4 dir="rtl">2.2. סעיף <code dir="ltr">jobs</code></h4>
+<p dir="rtl">סעיף זה מתאר אילו משימות יש לבצע. יש לנו שתי משימות: <code dir="ltr">build</code> ו-<code dir="ltr">deploy</code>.</p>
+<h5 dir="rtl">2.2.1. <code dir="ltr">build</code>: בניית אתר</h5>
+<ul>
+<li dir="rtl"><code dir="ltr">runs-on: ubuntu-latest</code>: מציין שהמשימה רצה על שרת עם אובונטו.</li>
+<li dir="rtl"><code dir="ltr">steps</code>: מפרט את השלבים המבוצעים במהלך הבנייה:
+<ul>
+<li dir="rtl"><code dir="ltr">name: Checkout</code>: מוציא את קוד המקור של המאגר.</li>
+<li dir="rtl"><code dir="ltr">uses: actions/checkout@v4</code>: משתמש בפעולה מוכנה להוצאת קוד.</li>
+<li dir="rtl"><code dir="ltr">name: Setup Pages</code>: מגדיר את הסביבה לעבודה עם <span dir="ltr">GitHub Pages</span>.</li>
+<li dir="rtl"><code dir="ltr">uses: actions/configure-pages@v5</code>: משתמש בפעולה מוכנה להגדרה.</li>
+<li dir="rtl"><code dir="ltr">name: Build with Jekyll</code>: מתחיל לבנות אתר <span dir="ltr">Jekyll</span>.</li>
+<li dir="rtl"><code dir="ltr">uses: actions/jekyll-build-pages@v1</code>: משתמש בפעולה מוכנה לבנייה.</li>
+<li dir="rtl"><code dir="ltr">with:</code>: מגדיר פרמטרים לפעולה:
+<ul>
+<li dir="rtl"><code dir="ltr">source: ./docs/gemini/consultant/ru/src</code>: מציין היכן נמצאים קבצי המקור של האתר שלך. <strong>שים לב</strong>: הנתיב לקבצים שלך <code dir="ltr">docs/gemini/consultant/ru/src</code>.</li>
+<li dir="rtl"><code dir="ltr">destination: ./_site</code>: מציין היכן למקם את הקבצים הבנויים.</li>
+</ul>
+</li>
+<li dir="rtl"><code dir="ltr">name: Upload artifact</code>: מעלה את הקבצים הבנויים כדי להעביר אותם למשימה הבאה.</li>
+<li dir="rtl"><code dir="ltr">uses: actions/upload-pages-artifact@v3</code>: משתמש בפעולה מוכנה להעלאת ארטיפקטים.</li>
+</ul>
+</li>
+</ul>
+<h5 dir="rtl">2.2.2. <code dir="ltr">deploy</code>: פרסום אתר</h5>
+<ul>
+<li dir="rtl"><code dir="ltr">environment</code>: מגדיר את סביבת הפרסום.
+<ul>
+<li dir="rtl"><code dir="ltr">name: github-pages</code>: שם הסביבה.</li>
+<li dir="rtl"><code dir="ltr">url: ${{ steps.deployment.outputs.page_url }}</code>: מקבל את כתובת ה-<span dir="ltr">URL</span> של האתר שפורסם.</li>
+</ul>
+</li>
+<li dir="rtl"><code dir="ltr">runs-on: ubuntu-latest</code>: מציין שהמשימה רצה על שרת עם אובונטו.</li>
+<li dir="rtl"><code dir="ltr">needs: build</code>: מציין שהמשימה <code dir="ltr">deploy</code> צריכה לרוץ לאחר השלמה מוצלחת של המשימה <code dir="ltr">build</code>.</li>
+<li dir="rtl"><code dir="ltr">steps</code>: מפרט את השלבים המבוצעים במהלך הפרסום:
+<ul>
+<li dir="rtl"><code dir="ltr">name: Deploy to GitHub Pages</code>: מפרסם את האתר ל-<span dir="ltr">GitHub Pages</span>.</li>
+<li dir="rtl"><code dir="ltr">id: deployment</code>: מגדיר מזהה לפעולה.</li>
+<li dir="rtl"><code dir="ltr">uses: actions/deploy-pages@v4</code>: משתמש בפעולה מוכנה לפריסה.</li>
+</ul>
+</li>
+</ul>
+<h3 dir="rtl">3: מה עושים קבצי <span dir="ltr">Markdown</span>?</h3>
+<p dir="rtl">קבצי <code dir="ltr">.md</code> (<span dir="ltr">Markdown</span>) הם הבסיס לאתר <span dir="ltr">Jekyll</span>. <span dir="ltr">Markdown</span> היא שפת סימון פשוטה המאפשרת לך לעצב טקסט.
+<span dir="ltr">Jekyll</span> מעבד אוטומטית קבצי <code dir="ltr">.md</code>, והופך אותם לדפי <span dir="ltr">HTML</span>. הקבצים שלך צריכים להיות ממוקמים בתיקייה <code dir="ltr">docs/gemini/consultant/ru/src</code> המצוינת ב-<span dir="ltr">workflow</span>.</p>
+<h3 dir="rtl">4: תרשים זרימה</h3>
+<pre class="line-numbers"><code class="language-mermaid">graph TD
+    A[התחלה: Push או הפעלה ידנית] --> B(בדיקת מאגר);
+    B --> C[בניית אתר לתיקיית _site];
+    C --> D[העלאת ארטיפקט];
+    D --> E[פרסום ל-GitHub Pages];
+    E --> F[סיום: אתר פורסם];
+    
+    style A fill:#D46A6A,stroke:#333,stroke-width:2px
+    style B fill:#D46A6A,stroke:#333,stroke-width:2px
+    style C fill:#D46A6A,stroke:#333,stroke-width:2px
+    style D fill:#D46A6A,stroke:#333,stroke-width:2px
+    style E fill:#D46A6A,stroke:#333,stroke-width:2px
+    style F fill:#D46A6A,stroke:#333,stroke-width:2px
+    
+    linkStyle 0,1,2,3,4 stroke:#333,stroke-width:2px
+</code></pre>
+<h3 dir="rtl">5: איך זה עובד</h3>
+<ol>
+<li dir="rtl"><strong>שינוי קוד:</strong> אתה מבצע שינויים בקבצי <code dir="ltr">.md</code> או <code dir="ltr">.html</code> שלך הממוקמים בתיקייה <code dir="ltr">docs/gemini/consultant/ru/src</code>.</li>
+<li dir="rtl"><strong><span dir="ltr">Push</span>:</strong> אתה שולח (<span dir="ltr">push</span>) את השינויים לענף <code dir="ltr">master</code> של מאגר <span dir="ltr">GitHub</span> שלך.</li>
+<li dir="rtl"><strong>הפעלת <span dir="ltr">Workflow</span>:</strong> <span dir="ltr">GitHub Actions</span> מפעיל אוטומטית את ה-<span dir="ltr">workflow</span> המתואר בקובץ <span dir="ltr">YAML</span>.</li>
+<li dir="rtl"><strong>בנייה:</strong> ה-<span dir="ltr">workflow</span> מוריד תחילה את הקוד מהמאגר, ולאחר מכן בונה אתר <span dir="ltr">Jekyll</span> מקבצי המקור שלך לתיקייה <code dir="ltr">_site</code>.</li>
+<li dir="rtl"><strong>פרסום:</strong> האתר הבנוי מפורסם ל-<span dir="ltr">GitHub Pages</span>.</li>
+<li dir="rtl"><strong>האתר מוכן:</strong> האתר שלך זמין בכתובת ה-<span dir="ltr">URL</span> המצוינת בהגדרות <span dir="ltr">GitHub Pages</span> שלך.</li>
+</ol>

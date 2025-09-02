@@ -1,0 +1,220 @@
+<h2 dir="rtl"><span dir="ltr">BANNER AI</span></h2>
+<p dir="rtl">מודל <span dir="ltr">Gemini</span> מחזיר את התשובה כבאנר <span dir="ltr">ASCII</span> בהתאם להוראה שניתנה לו.</p>
+
+<p dir="rtl">התוכנית מקיימת אינטראקציה עם מודל <span dir="ltr">Google Generative AI</span> ליצירת באנרים טקסטואליים. המשתמש יכול לבחור את סגנון עיצוב הבאנר ולשלוח טקסט למודל לעיבוד.</p>
+
+<h3 dir="rtl">התקנת תלויות</h3>
+<p dir="rtl">כדי להריץ את הקוד במחשב מקומי, תידרש התקנת ספריות גוגל.</p>
+
+<pre class="line-numbers"><code class="language-python">pip install google
+pip install google-generativeai
+</code></pre>
+
+<p dir="rtl">אני ממליץ בחום לבצע את כל הניסויים בסביבה וירטואלית.</p>
+
+
+<h3 dir="rtl">תכונות קוד בתוכנית זו</h3>
+<ol>
+<li><p dir="rtl">הוראות נשמרות בקבצים שונים ונטענות לפי הצורך.</p></li>
+<li><p dir="rtl">החל מדוגמה זו, אני שומר את מפתח המודל במשתנה סביבה, מה שחוסך לי את הצורך להזין את המפתח שוב ושוב.</p></li>
+<li><p dir="rtl">אני משתמש בנתיבים מוחלטים לקבצים.</p>
+<p dir="rtl">כדי לקבוע את ספריית השורש של הפרויקט, אני מחפש באופן רקורסיבי כלפי מעלה קבצי סמן (<span dir="ltr">'pyproject.toml'</span>, <span dir="ltr">'requirements.txt'</span>, <span dir="ltr">'.git'</span>).</p>
+<p dir="rtl">את הספרייה שנמצאה אני שומר במשתנה <span dir="ltr"><code>__root__</code></span>. ממנה, אני בונה את הנתיב להוראות המערכת:</p>
+<pre class="line-numbers"><code class="language-python">relative_path: Path = Path('GAMES', 'AI', 'BANNER_AI')  # Relative path to the library
+base_path: Path = __root__ / relative_path  # Absolute path to the library using __root__
+</code></pre>
+</li>
+</ol>
+
+
+<h4 dir="rtl">1. <strong>ייבוא ספריות נחוצות</strong></h4>
+<pre class="line-numbers"><code class="language-python">import google.generativeai as genai  # Import library for working with Gemini
+import re  # Import library for working with regular expressions
+from pathlib import Path  # Import for working with file system paths
+from header import __root__  # Import __root__ object, which contains the absolute path to the project root
+from dotenv import load_dotenv, set_key  # Import functions for working with environment variables
+import os  # Import for working with environment variables
+</code></pre>
+
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr"><code>google.generativeai</code></span></strong>: משמש לאינטראקציה עם ה-<span dir="ltr">API</span> של <span dir="ltr">Google Generative AI</span>.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>re</code></span></strong>: ספרייה לעבודה עם ביטויים רגולריים (לא בשימוש בקוד זה, אך עשויה להיות שימושית בעתיד).</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>Path</code></span></strong>: מאפשר עבודה עם נתיבי מערכת קבצים.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>__root__</code></span></strong>: אובייקט המכיל את הנתיב המוחלט לשורש הפרויקט.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>dotenv</code></span></strong>: מאפשר טעינת משתני סביבה מקובץ <span dir="ltr"><code>.env</code></span> ושמירתם.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>os</code></span></strong>: משמש לעבודה עם משתני סביבה.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl">2. <strong>טעינת משתני סביבה</strong></h4>
+<pre class="line-numbers"><code class="language-python">load_dotenv()
+</code></pre>
+<ul>
+<li><p dir="rtl">הפונקציה <span dir="ltr"><code>load_dotenv()</code></span> loads environment variables from a <span dir="ltr"><code>.env</code></span> file, if it exists.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl">3. <strong>מחלקה <span dir="ltr"><code>GoogleGenerativeAI</code></span></strong></h4>
+<p dir="rtl">המחלקה מיועדת לאינטראקציה עם מודל <span dir="ltr">Google Generative AI</span>.</p>
+
+<h5 dir="rtl">3.1. <strong>תכונות מחלקה</strong></h5>
+<pre class="line-numbers"><code class="language-python">MODELS = [
+    'gemini-1.5-flash-8b',
+    'gemini-2-13b',
+    'gemini-3-20b'
+]
+</code></pre>
+<ul>
+<li><p dir="rtl">רשימת מודלי <span dir="ltr">Google Generative AI</span> זמינים.</p></li>
+</ul>
+
+<h5 dir="rtl">3.2. <strong>שיטת <span dir="ltr"><code>__init__</code></span></strong></h5>
+<pre class="line-numbers"><code class="language-python">def __init__(self, api_key: str, system_instruction: str, model_name: str = 'gemini-2.0-flash-exp'):
+    """
+    Initializes the GoogleGenerativeAI model.
+
+    :param api_key: API key for accessing Gemini.
+    :type api_key: str
+    :param system_instruction: Instruction for the model (system prompt).
+    :type system_instruction: str
+    :param model_name: Name of the Gemini model to use. Default 'gemini-2.0-flash-exp'.
+    :type model_name: str
+    """
+    self.api_key = api_key
+    self.model_name = model_name
+    genai.configure(api_key=self.api_key)  # Configuring the library with the API key
+    self.model = genai.GenerativeModel(model_name=self.model_name, system_instruction=system_instruction)  # Initializing the model with the instruction
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr"><code>api_key</code></span></strong>: מפתח <span dir="ltr">API</span> לגישה ל-<span dir="ltr">Google Generative AI</span>.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>system_instruction</code></span></strong>: הוראה למודל (לדוגמה, סגנון עיצוב טקסט).</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>model_name</code></span></strong>: שם המודל, ברירת המחדל היא <span dir="ltr"><code>'gemini-2.0-flash-exp'</code></span>.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>genai.configure(api_key=self.api_key)</code></span></strong>: Configuring the library with the API key.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>genai.GenerativeModel(...)</code></span></strong>: Initializing the model with the specified parameters.</p></li>
+</ul>
+
+<h5 dir="rtl">3.3. <strong>שיטת <span dir="ltr"><code>ask</code></span></strong></h5>
+<pre class="line-numbers"><code class="language-python">def ask(self, q: str) -> str:
+    """
+    Sends a request to the model and receives a response.
+
+    :param q: Request text.
+    :type q: str
+    :return: Model response or error message.
+    :rtype: str
+    """
+    try:
+        response = self.model.generate_content(q)  # Sending request to the model
+        return response.text  # Receiving text response
+    except Exception as ex:
+        return f'Error: {str(ex)}'  # Handling and receiving error
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr"><code>q</code></span></strong>: טקסט הבקשה הנשלח למודל.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>self.model.generate_content(q)</code></span></strong>: שליחת הבקשה למודל.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>response.text</code></span></strong>: קבלת תשובת הטקסט מהמודל.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>except Exception as ex</code></span></strong>: טיפול בשגיאות והחזרת הודעת שגיאה.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl">4. <strong>החלק העיקרי של התוכנית</strong></h4>
+<pre class="line-numbers"><code class="language-python">if __name__ == '__main__':
+</code></pre>
+<ul>
+<li><p dir="rtl">Check that the program is run as a standalone script.</p></li>
+</ul>
+
+<h5 dir="rtl">4.1. <strong>הגדרת נתיבים</strong></h5>
+<pre class="line-numbers"><code class="language-python">relative_path: Path = Path('GAMES', 'AI', 'BANNER_AI')  # Relative path to the library
+base_path: Path = __root__ / relative_path  # Absolute path to the library using __root__
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr"><code>relative_path</code></span></strong>: נתיב יחסי לספרייה בתוך הפרויקט.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>base_path</code></span></strong>: נתיב מוחלט, המתקבל על ידי שילוב <span dir="ltr"><code>__root__</code></span> ו-<span dir="ltr"><code>relative_path</code></span>.</p></li>
+</ul>
+
+<h5 dir="rtl">4.2. <strong>קריאת מפתח <span dir="ltr">API</span></strong></h5>
+<pre class="line-numbers"><code class="language-python">API_KEY: str = os.getenv('API_KEY')
+if not API_KEY:
+    API_KEY = input('מפתח API לא נמצא. הכנס מפתח API מ-`gemini`: ')  # Requesting API key from the user
+    set_key('.env', 'API_KEY', API_KEY)  # Saving key to .env file
+</code></pre>
+<ul>
+<li><p dir="rtl">Tries to get the API key from environment variables.</p></li>
+<li><p dir="rtl">אם המפתח לא נמצא, הוא מבקש אותו מהמשתמש באמצעות <span dir="ltr"><code>input</code></span>.</p></li>
+<li><p dir="rtl">Saving key to .env file.</p></li>
+</ul>
+
+<h5 dir="rtl">4.3. <strong>הוראות למודל</strong></h5>
+<pre class="line-numbers"><code class="language-python">instructions: dict = {
+    '1': 'system_instruction_asterisk',
+    '2': 'system_instruction_tilde',
+    '3': 'system_instruction_hash',
+}
+</code></pre>
+<ul>
+<li><p dir="rtl">Dictionary containing file names with instructions for the model.</p></li>
+</ul>
+
+<h5 dir="rtl">4.4. <strong>ברכת המשתמש</strong></h5>
+<pre class="line-numbers"><code class="language-python">print('ברוך הבא למשחק באנר!')
+print('הכנס טקסט, ואני אצור עבורך באנר טקסטואלי.')
+</code></pre>
+<ul>
+<li><p dir="rtl">Greets the user and explains the program's functionality.</p></li>
+</ul>
+
+<h5 dir="rtl">4.5. <strong>לולאה לבחירת סגנון באנר</strong></h5>
+<pre class="line-numbers"><code class="language-python">while True:
+    print('בחר סגנון עיצוב באנר:')
+    print('1. סימן '*'')
+    print('2. סימן '~'')
+    print('3. סימן '#'')
+    choice = input('הכנס מספר סגנון (1, 2 או 3): ')
+</code></pre>
+<ul>
+<li><p dir="rtl">The user chooses the banner design style.</p></li>
+</ul>
+
+<h5 dir="rtl">4.6. <strong>קריאת הוראות למודל</strong></h5>
+<pre class="line-numbers"><code class="language-python">if choice in ('1', '2', '3'):
+    system_instruction: str = Path(base_path, 'instructions', f'{instructions[choice]}.md').read_text(encoding='UTF-8')  # Reading instruction from file
+else:
+    print('בחירה לא חוקית. נעשה שימוש בסגנון ברירת מחדל '*'')
+    system_instruction: str = Path(base_path, 'instructions', 'system_instruction_asterisk.md').read_text(encoding='UTF-8')  # Reading default instruction
+</code></pre>
+<ul>
+<li><p dir="rtl">אם הבחירה תקינה, קוראים את ההוראה המתאימה מהקובץ.</p></li>
+<li><p dir="rtl">אם הבחירה לא תקינה, משתמשים בהוראת ברירת המחדל.</p></li>
+</ul>
+
+<h5 dir="rtl">4.7. <strong>יצירת מופע מחלקה</strong></h5>
+<pre class="line-numbers"><code class="language-python">model: GoogleGenerativeAI = GoogleGenerativeAI(api_key=API_KEY, system_instruction=system_instruction)
+</code></pre>
+<ul>
+<li><p dir="rtl">Creating an instance of the GoogleGenerativeAI class with the specified parameters.</p></li>
+</ul>
+
+<h5 dir="rtl">4.8. <strong>בקשת טקסט מהמשתמש</strong></h5>
+<pre class="line-numbers"><code class="language-python">user_text: str = input('מפתח API לא נמצא. הכנס מפתח API מ-`gemini`: ') # This line was corrected from the original prompt to match the context of the previous line
+</code></pre>
+<ul>
+<li><p dir="rtl">The user enters text for the banner.</p></li>
+</ul>
+
+<h5 dir="rtl">4.9. <strong>אימות טקסט</strong></h5>
+<pre class="line-numbers"><code class="language-python">if user_text.strip() == '':
+    print('לא הכנסת טקסט. נסה שוב.')
+else:
+    response = model.ask(user_text)
+    print('
+הבאנר שלך מוכן:')
+    print(response)
+</code></pre>
+<ul>
+<li><p dir="rtl">If the text is empty, an error message is displayed.</p></li>
+<li><p dir="rtl">If text is entered, it is sent to the model and the result is displayed.</p></li>
+</ul>

@@ -1,0 +1,273 @@
+<h2>Algorithm Complexity in Simple Terms and Python Examples</h2>
+<p>In programming, there are many ways to solve the same problem. However, not all solutions are equally effective. One of the key aspects to consider when developing algorithms is their complexity. Understanding the complexity of an algorithm allows you to estimate how quickly it will work and how many resources (e.g., memory) it will require for its execution, especially as the volume of input data increases. Understanding algorithm complexity is a fundamental skill that allows you to write more efficient code.</p>
+<h3>What is algorithm complexity?</h3>
+<p>Imagine you have a task: to find a specific name in a phone book.</p>
+<ul>
+<li><strong>The simple way (linear search):</strong> You take the book and start flipping through page by page until you find the name you need. If the name is at the very end of the book, you will have to flip through the entire book!</li>
+<li><strong>The smart way (binary search):</strong> You open the book in the middle. If the name you are looking for comes before the name on this page, you close the second half of the book and search in the first half. If the name comes later, you search in the second half. And so you repeat until you find the name you need. With each step, you discard half of the book!</li>
+</ul>
+<p><strong>Algorithm complexity</strong> is a way to describe how much "time" (or resources, such as memory) an algorithm will need to complete its task, depending on how "large" that task is.</p>
+<ul>
+<li><strong>Linear search:</strong> If there are 10 pages in the book, you may need to flip through 10 pages. If there are 100 pages in the book, you may need to flip through 100 pages. The amount of work grows <em>linearly</em> with the size of the task. This is called <strong>O(n)</strong>, where 'n' is the size of the task (the number of pages in the book).</li>
+<li><strong>Binary search:</strong> If there are 16 pages in the book, you will need a maximum of 4 steps to find the name. If there are 32 pages in the book, you will need a maximum of 5 steps. The amount of work grows much more slowly than the size of the task. This is called <strong>O(log n)</strong> (read "O of log n").</li>
+</ul>
+<ul>
+<li>An <strong>O(n)</strong> algorithm becomes slower <em>directly proportional</em> to the increase in the size of the task.</li>
+<li>An <strong>O(log n)</strong> algorithm becomes slower <em>much more slowly</em> than the size of the task grows.</li>
+</ul>
+<p>Imagine you are developing a search engine. If you use an O(n) algorithm to search the Internet (which contains billions of web pages), it will take an incredibly long time! And an O(log n) algorithm will handle this task much faster.</p>
+<h3>Main types of algorithm complexity</h3>
+<p>Here are some of the most common types of complexity:</p>
+<ul>
+<li><strong>O(1) – Constant complexity:</strong> The execution time is always the same, regardless of the size of the task. For example, taking the first element from a list.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def get_first_element(my_list):
+    """O(1) - Getting the first element of a list."""
+    return my_list[0]
+</code></pre>
+<ul>
+<li><strong>O(log n) – Logarithmic complexity:</strong> The execution time grows very slowly as the size of the task increases. A great example is binary search.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def binary_search(my_list, target):
+    """O(log n) - Binary search in a sorted list."""
+    low = 0
+    high = len(my_list) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+        if my_list[mid] == target:
+            return mid
+        elif my_list[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return -1  # Element not found
+</code></pre>
+<ul>
+<li><strong>O(n) – Linear complexity:</strong> The execution time grows directly proportional to the size of the task. For example, iterating through each element in a list.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def linear_search(my_list, target):
+    """O(n) - Linear search in a list."""
+    for i in range(len(my_list)):
+        if my_list[i] == target:
+            return i
+    return -1  # Element not found
+</code></pre>
+<ul>
+<li><strong>O(n log n) – Linear-logarithmic complexity:</strong>  Often found in efficient sorting algorithms, such as Merge Sort and Quick Sort.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def merge_sort(my_list):
+    """O(n log n) - Merge sort."""
+    if len(my_list) <= 1:
+        return my_list
+
+    mid = len(my_list) // 2
+    left = merge_sort(my_list[:mid])
+    right = merge_sort(my_list[mid:])
+
+    return merge(left, right)
+
+def merge(left, right):
+    """Helper function for merge_sort."""
+    merged = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            merged.append(left[i])
+            i += 1
+        else:
+            merged.append(right[j])
+            j += 1
+
+    merged.extend(left[i:])
+    merged.extend(right[j:])
+    return merged
+</code></pre>
+<ul>
+<li><strong>O(n^2) – Quadratic complexity:</strong> The execution time grows <em>quadratically</em> with the size of the task. For example, comparing each element in a list with every other element in the same list.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def bubble_sort(my_list):
+    """O(n^2) - Bubble sort."""
+    n = len(my_list)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if my_list[j] > my_list[j+1] :
+                my_list[j], my_list[j+1] = my_list[j+1], my_list[j]
+</code></pre>
+<ul>
+<li><strong>O(2^n) – Exponential complexity:</strong> The execution time grows very quickly as the size of the task increases.  Usually found in algorithms that use brute force.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def fibonacci_recursive(n):
+  """O(2^n) - Recursive calculation of the Fibonacci number."""
+  if n <= 1:
+      return n
+  return fibonacci_recursive(n-1) + fibonacci_recursive(n-2)
+</code></pre>
+<ul>
+<li><strong>O(n!) – Factorial complexity:</strong> The slowest type of complexity. Occurs when iterating through all possible permutations of elements.</li>
+</ul>
+<h3>Examples of problems and algorithms with different complexity</h3>
+<p>Let's look at a few examples of problems and different algorithms for solving them to see
+how complexity affects performance.</p>
+<p><strong>1. Sorting a list:</strong></p>
+<ul>
+<li><strong>Task:</strong> Sort a list of elements in a specific order (e.g., ascending).</li>
+<li><strong>Algorithms:</strong>
+<ul>
+<li><strong>Bubble Sort:</strong></li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def bubble_sort(my_list):
+    n = len(my_list)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if my_list[j] > my_list[j+1] :
+                my_list[j], my_list[j+1] = my_list[j+1], my_list[j]
+# Example of use
+my_list = [64, 34, 25, 12, 22, 11, 90]
+bubble_sort(my_list)
+print("Sorted array:", my_list) # Output: [11, 12, 22, 25, 34, 64, 90]
+</code></pre>
+<ul>
+<li><strong>Merge Sort:</strong></li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def merge_sort(my_list):
+    if len(my_list) <= 1:
+        return my_list
+
+    mid = len(my_list) // 2
+    left = merge_sort(my_list[:mid])
+    right = merge_sort(my_list[mid:])
+
+    return merge(left, right)
+
+def merge(left, right):
+    merged = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            merged.append(left[i])
+            i += 1
+        else:
+            merged.append(right[j])
+            j += 1
+
+    merged.extend(left[i:])
+    merged.extend(right[j:])
+    return merged
+
+# Example of use
+my_list = [64, 34, 25, 12, 22, 11, 90]
+sorted_list = merge_sort(my_list)
+print("Sorted array:", sorted_list) # Output: [11, 12, 22, 25, 34, 64, 90]
+</code></pre>
+<ul>
+<li><strong>Conclusion:</strong> For large lists of elements, algorithms with O(n log n) (Merge Sort) are preferable to algorithms with O(n^2) (Bubble Sort).</li>
+</ul>
+<p><strong>2. Finding the shortest path in a graph:</strong></p>
+<ul>
+<li><strong>Task:</strong> Find the shortest path between two vertices in a graph (e.g., between two cities on a map).</li>
+<li><strong>Algorithms:</strong>
+<ul>
+<li><strong>Dijkstra's Algorithm:</strong></li>
+</ul>
+<pre class="line-numbers"><code class="language-python">import heapq
+
+def dijkstra(graph, start):
+    """Dijkstra's algorithm for finding the shortest paths."""
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    priority_queue = [(0, start)]  # (distance, node)
+
+    while priority_queue:
+        distance, node = heapq.heappop(priority_queue)
+
+        if distance > distances[node]:
+            continue
+
+        for neighbor, weight in graph[node].items():
+            new_distance = distance + weight
+            if new_distance < distances[neighbor]:
+                distances[neighbor] = new_distance
+                heapq.heappush(priority_queue, (new_distance, neighbor))
+
+    return distances
+
+# Example of use
+graph = {
+    'A': {'B': 5, 'C': 1},
+    'B': {'A': 5, 'C': 2, 'D': 1},
+    'C': {'A': 1, 'B': 2, 'D': 4, 'E': 8},
+    'D': {'B': 1, 'C': 4, 'E': 3, 'F': 6},
+    'E': {'C': 8, 'D': 3},
+    'F': {'D': 6}
+}
+start_node = 'A'
+shortest_paths = dijkstra(graph, start_node)
+print(f"Shortest paths from {start_node}: {shortest_paths}")
+</code></pre>
+<ul>
+<li><strong>Conclusion:</strong> The choice of algorithm depends on the type of graph (weighted/unweighted, presence of negative weights) and the size of the graph. Dijkstra's algorithm is effective for graphs with non-negative weights.</li>
+</ul>
+<p><strong>3. Finding a substring in a string:</strong></p>
+<ul>
+<li><strong>Task:</strong> Find all occurrences of a specific substring in a larger string.</li>
+<li><strong>Algorithms:</strong>
+<ul>
+<li><strong>Naive String Search:</strong></li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def naive_string_search(text, pattern):
+    """Naive string search algorithm."""
+    occurrences = []
+    for i in range(len(text) - len(pattern) + 1):
+        if text[i:i+len(pattern)] == pattern:
+            occurrences.append(i)
+    return occurrences
+
+# Example of use
+text = "This is a simple example text."
+pattern = "example"
+occurrences = naive_string_search(text, pattern)
+print(f"Occurrences of '{pattern}' in the text: {occurrences}")  # Output: [17]
+</code></pre>
+<ul>
+<li><strong>Conclusion:</strong> For frequent substring searches in large strings, there are more efficient algorithms, such as KMP.</li>
+</ul>
+<p><strong>4. Knapsack Problem:</strong></p>
+<ul>
+<li><strong>Task:</strong> You have a knapsack of a certain capacity and a set of items with different weights and values. You need to choose items that maximize the total value without exceeding the knapsack's capacity.</li>
+<li><strong>Algorithms:</strong>
+<ul>
+<li><strong>Dynamic Programming:</strong></li>
+</ul>
+<pre class="line-numbers"><code class="language-python">def knapsack_dynamic_programming(capacity, weights, values, n):
+    """Solving the knapsack problem using dynamic programming."""
+    dp = [[0 for x in range(capacity + 1)] for x in range(n + 1)]
+
+    for i in range(n + 1):
+        for w in range(capacity + 1):
+            if i == 0 or w == 0:
+                dp[i][w] = 0
+            elif weights[i-1] <= w:
+                dp[i][w] = max(values[i-1] + dp[i-1][w-weights[i-1]],  dp[i-1][w])
+            else:
+                dp[i][w] = dp[i-1][w]
+
+    return dp[n][capacity]
+
+# Example of use
+capacity = 50
+weights = [10, 20, 30]
+values = [60, 100, 120]
+n = len(values)
+max_value = knapsack_dynamic_programming(capacity, weights, values, n)
+print(f"Maximum value: {max_value}")  # Output: 220
+</code></pre>
+<ul>
+<li><strong>The choice of algorithm depends on the size of the problem and the requirements for the accuracy of the solution.</strong></li>
+</ul>
+<h3>Big O notation: simplifying complexity</h3>
+<p>Usually, complexity is described using "Big O" (O-notation). It shows how quickly the execution time of an algorithm grows with the size of the task, <em>asymptotically</em>, that is, for very large values of <code>n</code>. Minor constants and implementation details are usually ignored. For example, an algorithm that performs <code>2n + 5</code> operations is still considered <em>O(n)</em>.</p>
+<h3>Worst case, average case, best case</h3>
+<p>The complexity of an algorithm can depend on the input data. We usually talk about <em>worst-case</em> complexity – this is the maximum amount of time or resources that an algorithm may require. Sometimes, the average-case and best-case complexity are also analyzed.</p>

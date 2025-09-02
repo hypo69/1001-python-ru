@@ -1,0 +1,233 @@
+El código representa una clase `FakeDataGenerator`, diseñada para generar datos falsos (aleatorios), como nombres, direcciones, números de teléfono, direcciones de correo electrónico y otros. Esta clase puede ser útil para pruebas, rellenar bases de datos, crear datos de demostración y otras tareas donde se requiera la generación de valores aleatorios.
+
+<hr>
+
+<h3><strong>Descripción del funcionamiento del código</strong></h3>
+
+<h4><strong>1. Importar bibliotecas</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+import random
+import string
+from typing import List, Optional
+</code></pre>
+<ul>
+<li><strong>random</strong> – se utiliza para generar números aleatorios, seleccionar elementos aleatorios de listas y otras operaciones aleatorias.</li>
+<li><strong>string</strong> – proporciona un conjunto de caracteres (por ejemplo, letras, dígitos) que se pueden utilizar para generar cadenas.</li>
+<li><strong>typing</strong> – se utiliza para anotaciones de tipo, para mejorar la legibilidad y el mantenimiento del código.</li>
+</ul>
+<hr>
+
+<h4><strong>2. Clase `FakeDataGenerator`</strong></h4>
+<p>La clase contiene un conjunto de métodos para generar varios tipos de datos.</p>
+
+<h5><strong>Atributos de clase</strong></h5>
+<pre class="line-numbers"><code class="language-python">
+first_names = ['John', 'Jane', 'Alice', 'Bob', 'Charlie', 'Diana']
+last_names = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia']
+cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix']
+streets = ['Main St', 'Elm St', '2nd Ave', 'Park Blvd', 'Oak Dr']
+domains = ['example.com', 'mail.com', 'test.org', 'website.net']
+</code></pre>
+<ul>
+<li>Estos atributos son listas con valores predefinidos que se utilizan para generar datos aleatorios.</li>
+</ul>
+<hr>
+
+<h5><strong>Métodos de clase</strong></h5>
+
+<h6><strong>1. `random_name()`</strong></h6>
+<pre class="line-numbers"><code class="language-python">
+def random_name(self) -> str:
+    """
+    Generates a random full name.
+
+    Returns:
+        str: Full name, consisting of a random first name and last name.
+    """
+    first_name = random.choice(self.first_names)
+    last_name = random.choice(self.last_names)
+    return f'{first_name} {last_name}'
+</code></pre>
+<ul>
+<li><strong>Descripción:</strong> Genera un nombre completo aleatorio, que consta de un nombre y un apellido aleatorios.</li>
+<li><strong>Cómo funciona:</strong>
+<ul>
+<li>Utiliza <code>random.choice()</code> para seleccionar un nombre aleatorio de la lista <code>first_names</code>.</li>
+<li>Utiliza <code>random.choice()</code> para seleccionar un apellido aleatorio de la lista <code>last_names</code>.</li>
+<li>Devuelve una cadena con el formato "Nombre Apellido".</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+<h6><strong>2. `random_email()`</strong></h6>
+<pre class="line-numbers"><code class="language-python">
+def random_email(self) -> str:
+    """
+    Generates a random email address.
+
+    Returns:
+        str: Email address in the format `first_name.last_name@domain`.
+    """
+    first_name = random.choice(self.first_names).lower()
+    last_name = random.choice(self.last_names).lower()
+    domain = random.choice(self.domains)
+    return f'{first_name}.{last_name}@{domain}'
+</code></pre>
+<ul>
+<li><strong>Descripción:</strong> Genera una dirección de correo electrónico aleatoria.</li>
+<li><strong>Cómo funciona:</strong>
+<ul>
+<li>Utiliza <code>random.choice()</code> para seleccionar un nombre y un apellido aleatorios.</li>
+<li>Convierte el nombre y el apellido seleccionados a minúsculas usando <code>.lower()</code>.</li>
+<li>Utiliza <code>random.choice()</code> para seleccionar un dominio aleatorio de la lista <code>domains</code>.</li>
+<li>Devuelve una cadena con el formato "nombre.apellido@dominio".</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+<h6><strong>3. `random_phone()`</strong></h6>
+<pre class="line-numbers"><code class="language-python">
+def random_phone(self) -> str:
+    """
+    Generates a random phone number in the format `+1-XXX-XXX-XXXX`.
+
+    Returns:
+        str: Phone number.
+    """
+    return f'+1-{random.randint(100, 999)}-{random.randint(100, 999)}-{random.randint(1000, 9999)}'
+</code></pre>
+<ul>
+<li><strong>Descripción:</strong> Genera un número de teléfono aleatorio con el formato "+1-XXX-XXX-XXXX".</li>
+<li><strong>Cómo funciona:</strong>
+<ul>
+<li>Utiliza <code>random.randint()</code> para generar números aleatorios en los rangos especificados.</li>
+<li>Formatea la cadena de acuerdo con el patrón especificado.</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+<h6><strong>4. `random_address()`</strong></h6>
+<pre class="line-numbers"><code class="language-python">
+def random_address(self) -> str:
+    """
+    Generates a random address.
+
+    Returns:
+        str: Address in the format `street, city`.
+    """
+    street = random.choice(self.streets)
+    city = random.choice(self.cities)
+    house_number = random.randint(1, 9999)
+    return f'{house_number} {street}, {city}'
+</code></pre>
+<ul>
+<li><strong>Descripción:</strong> Genera una dirección aleatoria.</li>
+<li><strong>Cómo funciona:</strong>
+<ul>
+<li>Utiliza <code>random.choice()</code> para seleccionar una calle y una ciudad aleatorias.</li>
+<li>Utiliza <code>random.randint()</code> para generar un número de casa aleatorio.</li>
+<li>Devuelve una cadena con el formato "número_casa calle, ciudad".</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+<h6><strong>5. `random_string()`</strong></h6>
+<pre class="line-numbers"><code class="language-python">
+def random_string(self, length: int = 10) -> str:
+    """
+    Generates a random string of a given length.
+
+    Args:
+        length (int, optional): Length of the string. Defaults to 10.
+
+    Returns:
+        str: Random string containing letters and digits.
+    """
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+</code></pre>
+<ul>
+<li><strong>Descripción:</strong> Genera una cadena aleatoria de una longitud dada, que consta de letras y dígitos.</li>
+<li><strong>Cómo funciona:</strong>
+<ul>
+<li>Utiliza <code>random.choices()</code> para seleccionar caracteres aleatorios de la cadena <code>string.ascii_letters + string.digits</code>.</li>
+<li>Une los caracteres seleccionados en una cadena usando <code>''.join()</code>.</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+<h6><strong>6. `random_int()`</strong></h6>
+<pre class="line-numbers"><code class="language-python">
+def random_int(self, min_value: int = 0, max_value: int = 100) -> int:
+    """
+    Generates a random integer within a given range.
+
+    Args:
+        min_value (int, optional): Minimum value. Defaults to 0.
+        max_value (int, optional): Maximum value. Defaults to 100.
+
+    Returns:
+        int: Random integer.
+    """
+    return random.randint(min_value, max_value)
+</code></pre>
+<ul>
+<li><strong>Descripción:</strong> Genera un número entero aleatorio dentro de un rango dado.</li>
+<li><strong>Cómo funciona:</strong>
+<ul>
+<li>Utiliza <code>random.randint()</code> para generar un número aleatorio dentro del rango especificado.</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+<h6><strong>7. `random_choice()`</strong></h6>
+<pre class="line-numbers"><code class="language-python">
+def random_choice(self, options: List[str]) -> str:
+    """
+    Selects a random element from a list.
+
+    Args:
+        options (List[str]): List of values to choose from.
+
+    Returns:
+        str: Random element from the list.
+    """
+    return random.choice(options)
+</code></pre>
+<ul>
+<li><strong>Descripción:</strong> Selecciona un elemento aleatorio de la lista pasada.</li>
+<li><strong>Cómo funciona:</strong>
+<ul>
+<li>Utiliza <code>random.choice()</code> para seleccionar un elemento aleatorio de la lista <code>options</code>.</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+<h4><strong>3. Ejemplo de uso</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+if __name__ == '__main__':
+    faker = FakeDataGenerator()
+
+    print(f'Nombre: {faker.random_name()}')
+    print(f'Correo electrónico: {faker.random_email()}')
+    print(f'Teléfono: {faker.random_phone()}')
+    print(f'Dirección: {faker.random_address()}')
+    print(f'Cadena aleatoria: {faker.random_string(12)}')
+    print(f'Entero aleatorio: {faker.random_int(50, 150)}')
+    print(f'Elección aleatoria: {faker.random_choice(["Opción1", "Opción2", "Opción3"])}')
+</code></pre>
+<ul>
+<li>Se crea una instancia de la clase <code>FakeDataGenerator</code>.</li>
+<li>Se llaman a los métodos de la clase para generar varios tipos de datos.</li>
+<li>Los resultados se imprimen en la pantalla.</li>
+</ul>
+<hr>
+
+<h3><strong>Resumen</strong></h3>
+<p>La clase <code>FakeDataGenerator</code> proporciona una interfaz conveniente para generar datos aleatorios, como nombres, direcciones de correo electrónico, números de teléfono, direcciones y otros. Esta clase se puede extender para generar tipos de datos adicionales o configurarse para su uso en proyectos específicos.</p>

@@ -1,0 +1,593 @@
+<h2>Trabajar con la biblioteca `subprocess` en Python</h2>
+
+
+<h3>1. **¿Qué es `subprocess` y para qué sirve?**</h3>
+
+<p>El módulo <code>subprocess</code> en Python proporciona una interfaz para crear nuevos procesos,
+conectarse a sus flujos de entrada/salida/error y obtener sus códigos de retorno.
+Permite que los scripts de Python ejecuten y administren otros programas,
+escritos en cualquier lenguaje, ya sean utilidades del sistema, scripts de shell u otros ejecutables.</p>
+
+<p><strong>Contexto histórico:</strong></p>
+
+<p>Antes de la llegada de <code>subprocess</code>, se usaban funciones del módulo <code>os</code>, como <code>os.system()</code>, <code>os.spawn*()</code>, así como el módulo <code>commands</code> (en Python 2) para ejecutar procesos externos. Estos enfoques tenían una serie de desventajas:</p>
+<ul>
+<li><code>os.system()</code>: Ejecuta un comando a través del shell del sistema, lo que no es seguro cuando se trabaja con entradas de usuario y es menos flexible en la gestión de flujos.</li>
+<li><code>os.spawn*()</code>: Más flexibles, pero difíciles de usar y dependientes de la plataforma.</li>
+<li>El módulo <code>popen2</code> (y sus variaciones): Proporcionaba acceso a los flujos, pero era complejo y tenía problemas de bloqueo.</li>
+</ul>
+<p>El módulo <code>subprocess</code> se introdujo en Python 2.4 (PEP 324) como una forma unificada y más segura de interactuar con los procesos secundarios. Encapsula la mejor funcionalidad de los módulos anteriores y proporciona una API más limpia.</p>
+
+<p><strong>Tareas principales que se resuelven con <code>subprocess</code>:</strong></p>
+
+<ul>
+<li>Ejecución de comandos del sistema operativo (por ejemplo, <code>ls</code>, <code>dir</code>, <code>ping</code>).</li>
+<li>Ejecución de utilidades externas para el procesamiento de datos (por ejemplo, <code>grep</code>, <code>awk</code>, <code>ffmpeg</code>, <code>ImageMagick</code>).</li>
+<li>Integración con sistemas de control de versiones (<code>git</code>, <code>svn</code>).</li>
+<li>Ejecución de compiladores o intérpretes de otros lenguajes.</li>
+<li>Automatización de la administración del sistema.</li>
+<li>Organización de la interacción entre diferentes programas.</li>
+</ul>
+<hr>
+
+<h3>2. Funciones y clases principales</h3>
+
+<p>El módulo <code>subprocess</code> ofrece varias formas de ejecutar procesos:</p>
+
+<ul>
+<li><strong><code>subprocess.run(args, ..., capture_output=False, text=False, check=False, timeout=None)</code></strong>
+<ul>
+<li>Esta es la API de alto nivel <strong>recomendada</strong>, que apareció en Python 3.5.</li>
+<li>Ejecuta un comando, espera a que se complete y devuelve un objeto <code>CompletedProcess</code>.</li>
+<li>Adecuado para la mayoría de los casos en los que solo necesita ejecutar un comando y obtener el resultado.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+# Simple execution
+result = subprocess.run(["ls", "-l"], capture_output=True, text=True, check=True)
+print("Stdout:", result.stdout)
+# If check=True and the command returned a non-zero value, CalledProcessError will be raised
+</code></pre>
+</li>
+<li><strong><code>subprocess.Popen(args, ..., stdin=None, stdout=None, stderr=None, shell=False, cwd=None, env=None)</code></strong>
+<ul>
+<li>Esta es la clase principal para crear y administrar procesos secundarios.</li>
+<li>Proporciona la máxima flexibilidad: ejecución no bloqueante, control detallado de los flujos de E/S, la capacidad de enviar señales al proceso.</li>
+<li>La función <code>run()</code> utiliza <code>Popen</code> internamente.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+process = subprocess.Popen(["sleep", "5"])
+print(f"Proceso iniciado con PID: {process.pid}")
+# ... other work can be done ...
+process.wait() # Wait for completion
+print(f"El proceso finalizó con el código: {process.returncode}")
+</code></pre>
+</li>
+<li><strong>Funciones obsoletas, pero que aún se encuentran (eran la API principal antes de Python 3.5):</strong>
+<ul>
+<li><code>subprocess.call(args, ...)</code>: Ejecuta un comando y espera a que se complete. Devuelve el código de retorno. Similar a <code>os.system()</code>, pero más seguro si <code>shell=False</code>.</li>
+<li><code>subprocess.check_call(args, ...)</code>: Como <code>call()</code>, pero lanza <code>CalledProcessError</code> si el código de retorno no es 0.</li>
+<li><code>subprocess.check_output(args, ...)</code>: Ejecuta un comando, espera a que se complete y devuelve su salida estándar (stdout) como una cadena de bytes. Lanza <code>CalledProcessError</code> si el código de retorno no es 0.</li>
+</ul>
+<p>Aunque estas funciones todavía funcionan, <code>subprocess.run()</code> proporciona una interfaz más conveniente y unificada para las mismas tareas.</p>
+</li>
+</ul>
+<hr>
+
+<h3>3. Argumentos clave de las funciones <code>run()</code> y <code>Popen()</code></h3>
+
+<p>Estos argumentos le permiten ajustar el inicio y la interacción con el proceso secundario:</p>
+
+<ul>
+<li><strong><code>args</code></strong>:
+<ul>
+<li>El primer argumento y obligatorio.</li>
+<li>Puede ser una lista de cadenas (recomendado) o una sola cadena (si <code>shell=True</code>).</li>
+<li>El primer elemento de la lista es el nombre del archivo ejecutable, el resto son sus argumentos.</li>
+<li>Ejemplo: <code>["python", "myscript.py", "--arg1", "value1"]</code></li>
+</ul>
+</li>
+<li><strong><code>stdin</code>, <code>stdout</code>, <code>stderr</code></strong>:
+<ul>
+<li>Definen cómo se manejarán la entrada estándar, la salida y el flujo de errores del proceso secundario.</li>
+<li>Valores posibles:
+<ul>
+<li><code>None</code> (predeterminado): Se heredan del proceso principal.</li>
+<li><code>subprocess.PIPE</code>: Se crea una tubería (pipe) a través de la cual se pueden intercambiar datos. <code>process.stdin</code>, <code>process.stdout</code>, <code>process.stderr</code> se convierten en objetos similares a archivos.</li>
+<li><code>subprocess.DEVNULL</code>: Redirige el flujo a "ninguna parte" (análogo a <code>/dev/null</code>).</li>
+<li>Un descriptor de archivo abierto (un número entero).</li>
+<li>Un objeto de archivo existente (por ejemplo, un archivo abierto <code>open('output.txt', 'w')</code>).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>capture_output=True</code> (para <code>run()</code>):</strong>
+<ul>
+<li>Una opción conveniente, equivalente a establecer <code>stdout=subprocess.PIPE</code> y <code>stderr=subprocess.PIPE</code>.</li>
+<li>El resultado estará disponible en <code>result.stdout</code> y <code>result.stderr</code>.</li>
+</ul>
+</li>
+<li><strong><code>text=True</code> (o <code>universal_newlines=True</code> para compatibilidad):</strong>
+<ul>
+<li>Si es <code>True</code>, los flujos <code>stdout</code> y <code>stderr</code> (así como <code>stdin</code>, si se pasa una cadena) se abrirán en modo de texto utilizando la codificación predeterminada (generalmente UTF-8). La decodificación/codificación se produce automáticamente.</li>
+<li>Si es <code>False</code> (predeterminado), los flujos se tratan como bytes.</li>
+<li>Desde Python 3.7, <code>text</code> es el alias preferido para <code>universal_newlines</code>. También puede especificar una codificación específica a través de <code>encoding</code> y un controlador de errores a través de <code>errors</code>.</li>
+</ul>
+</li>
+<li><strong><code>shell=False</code> (predeterminado):</strong>
+<ul>
+<li>Si es <code>False</code> (recomendado por razones de seguridad y previsibilidad), <code>args</code> debe ser una lista. El comando se ejecuta directamente.</li>
+<li>Si es <code>True</code>, <code>args</code> se pasa como una cadena al shell del sistema (por ejemplo, <code>/bin/sh</code> en Unix, <code>cmd.exe</code> en Windows) para su interpretación. Esto le permite usar las funciones del shell (variables, sustituciones, tuberías), pero es <strong>PELIGROSO</strong> si <code>args</code> contiene una entrada de usuario no verificada (riesgo de inyección de comandos).</li>
+</ul>
+</li>
+<li><strong><code>cwd=None</code>:</strong>
+<ul>
+<li>Establece el directorio de trabajo actual para el proceso secundario. Por defecto, se hereda del principal.</li>
+</ul>
+</li>
+<li><strong><code>env=None</code>:</strong>
+<ul>
+<li>Un diccionario que define las variables de entorno para el nuevo proceso. Por defecto, se hereda el entorno del proceso principal. Si se especifica, reemplaza por completo el entorno heredado. Para agregar/cambiar variables mientras se conserva el resto, primero debe copiar <code>os.environ</code> y luego modificarlo.</li>
+</ul>
+</li>
+<li><strong><code>timeout=None</code>:</strong>
+<ul>
+<li>El tiempo máximo en segundos asignado para la ejecución del comando. Si el proceso no se completa en este tiempo, se lanzará una excepción <code>subprocess.TimeoutExpired</code>. <code>Popen.communicate()</code> también acepta un <code>timeout</code>.</li>
+</ul>
+</li>
+<li><strong><code>check=False</code> (para <code>run()</code>):</strong>
+<ul>
+<li>Si es <code>True</code> y el proceso finaliza con un código de retorno distinto de cero, se lanzará una excepción <code>subprocess.CalledProcessError</code>.</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+<h3>4. Trabajar con resultados y errores</h3>
+
+<p><strong>El objeto <code>CompletedProcess</code> (el resultado de <code>run()</code>):</strong></p>
+
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+try:
+    # Attempting to run a command that may fail
+    result = subprocess.run(
+        ["git", "stotus"], # 'stotus' - a typo to demonstrate an error
+        capture_output=True,
+        text=True,
+        check=True, # Will raise an exception if returncode != 0
+        timeout=10
+    )
+    print("Comando ejecutado con éxito.")
+    print("Código de retorno:", result.returncode)
+    print("Stdout:", result.stdout)
+    print("Stderr:", result.stderr) # Usually empty on success
+
+except subprocess.CalledProcessError as e:
+    print(f"Error al ejecutar el comando (CalledProcessError):")
+    print(f"  Comando: {e.cmd}")
+    print(f"  Código de retorno: {e.returncode}")
+    print(f"  Stdout: {e.stdout}") # May contain output before the error
+    print(f"  Stderr: {e.stderr}") # Usually contains error information
+except subprocess.TimeoutExpired as e:
+    print(f"El comando no se completó en {e.timeout} segundos.")
+    print(f"  Comando: {e.cmd}")
+    if e.stdout: print(f"  Stdout (parcial): {e.stdout.decode(errors='ignore')}") # stdout is bytes
+    if e.stderr: print(f"  Stderr (parcial): {e.stderr.decode(errors='ignore')}") # stderr is bytes
+except FileNotFoundError:
+    print("Error: comando o programa no encontrado.")
+except Exception as e:
+    print(f"Se ha producido otro error: {e}")
+</code></pre>
+
+<p><strong>Atributos de <code>CompletedProcess</code>:</strong></p>
+<ul>
+<li><code>args</code>: Los argumentos utilizados para iniciar el proceso.</li>
+<li><code>returncode</code>: El código de retorno del proceso. 0 suele significar éxito.</li>
+<li><code>stdout</code>: La salida estándar del proceso (bytes o una cadena si <code>text=True</code> y <code>capture_output=True</code>).</li>
+<li><code>stderr</code>: El flujo de error estándar del proceso (bytes o una cadena si <code>text=True</code> y <code>capture_output=True</code>).</li>
+</ul>
+<p><strong>Excepciones:</strong></p>
+<ul>
+<li><code>subprocess.CalledProcessError</code>: Se lanza si <code>check=True</code> (para <code>run()</code>) o se usan <code>check_call()</code>, <code>check_output()</code> y el comando finaliza con un código distinto de cero. Contiene <code>returncode</code>, <code>cmd</code>, <code>output</code> (o <code>stdout</code>), <code>stderr</code>.</li>
+<li><code>subprocess.TimeoutExpired</code>: Si el tiempo de espera ha expirado. Contiene <code>cmd</code>, <code>timeout</code>, <code>stdout</code>, <code>stderr</code> (salida parcial, si la hay).</li>
+<li><code>FileNotFoundError</code>: Si no se encuentra el archivo ejecutable.</li>
+</ul>
+<p><strong>Interacción con un objeto <code>Popen</code>:</strong></p>
+
+<p>La clase <code>Popen</code> da más control:</p>
+
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+import time
+
+# Run a process in the background
+process = subprocess.Popen(["sleep", "5"])
+print(f"Proceso PID: {process.pid} iniciado.")
+
+# Non-blocking status check
+while process.poll() is None: # poll() returns None if the process is still running
+    print("El proceso todavía se está ejecutando...")
+    # You can read the output as it arrives (beware, it can block!)
+    # line = process.stdout.readline()
+    # if line: print(f"Salida: {line.strip()}")
+    time.sleep(1)
+
+# Wait for completion and get all output/errors
+# stdout_data, stderr_data = process.communicate(timeout=10) # Safe way
+
+# If communicate() was not used, after poll() != None you can read the rest
+if process.stdout:
+    for line in process.stdout:
+        print(f"Salida final: {line.strip()}")
+
+print(f"El proceso finalizó con el código: {process.returncode}")
+
+# If you need to force termination
+# process.terminate() # Sends SIGTERM
+# time.sleep(0.5)
+# if process.poll() is None: # If it hasn't finished
+#     process.kill()      # Sends SIGKILL
+</code></pre>
+
+<ul>
+<li><code>process.poll()</code>: Comprueba si el proceso secundario ha finalizado. Devuelve el código de retorno o <code>None</code>. No bloqueante.</li>
+<li><code>process.wait(timeout=None)</code>: Espera a que el proceso secundario finalice. Devuelve el código de retorno. Bloqueante.</li>
+<li><code>process.communicate(input=None, timeout=None)</code>:
+<ul>
+<li>La forma más segura de interactuar con un proceso cuando se usa <code>PIPE</code>.</li>
+<li>Envía datos a <code>stdin</code> (si se especifica <code>input</code>), lee todos los datos de <code>stdout</code> y <code>stderr</code> hasta el final y espera a que el proceso finalice.</li>
+<li>Devuelve una tupla <code>(stdout_data, stderr_data)</code>.</li>
+<li>Ayuda a evitar interbloqueos que pueden ocurrir con la lectura/escritura directa en <code>process.stdout</code>/<code>process.stdin</code> si los búferes se desbordan.</li>
+</ul>
+</li>
+<li><code>process.terminate()</code>: Envía la señal <code>SIGTERM</code> al proceso (terminación suave).</li>
+<li><code>process.kill()</code>: Envía la señal <code>SIGKILL</code> al proceso (terminación forzada).</li>
+<li><code>process.send_signal(signal)</code>: Envía la señal especificada al proceso.</li>
+<li><code>process.stdin</code>, <code>process.stdout</code>, <code>process.stderr</code>: Objetos similares a archivos para las tuberías, si se crearon con <code>PIPE</code>.</li>
+</ul>
+<hr>
+
+<h3>5. Escenarios de uso avanzados</h3>
+
+<p><strong>Redirección de la salida de un comando a la entrada de otro (tuberías):</strong></p>
+
+<p>Emulando <code>ps aux | grep python</code>:</p>
+
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+# Run the first command, its stdout will be a pipe
+ps_process = subprocess.Popen(["ps", "aux"], stdout=subprocess.PIPE)
+
+# Run the second command, its stdin will be the stdout of the first command
+# The stdout of the second command is also a pipe to read the result
+grep_process = subprocess.Popen(
+    ["grep", "python"],
+    stdin=ps_process.stdout, # Link stdout of ps to stdin for grep
+    stdout=subprocess.PIPE,
+    text=True
+)
+
+# Important! Close the stdout of the first command in the main process,
+# so that grep receives EOF when ps finishes.
+if ps_process.stdout:
+    ps_process.stdout.close()  
+
+# Get grep output
+stdout_data, stderr_data = grep_process.communicate()
+
+print("Resultado de la tubería:")
+print(stdout_data)
+
+if stderr_data:
+    print("Errores de grep:", stderr_data)
+
+# Make sure both processes have finished
+ps_process.wait() # communicate() has already waited
+# grep_process.wait() # communicate() has already waited
+print(f"código de retorno de ps: {ps_process.returncode}")
+print(f"código de retorno de grep: {grep_process.returncode}")
+</code></pre>
+<p><em>Nota:</em> Para tuberías simples, <code>subprocess.run("ps aux | grep python", shell=True, ...)</code> puede ser más simple, pero menos seguro y flexible.</p>
+
+<p><strong>Ejecución asíncrona de procesos:</strong></p>
+
+<p><code>Popen</code> no es bloqueante por naturaleza. Puede ejecutar varios procesos y administrarlos en paralelo.</p>
+
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+import time
+
+commands = [
+    ["ping", "-c", "3", "google.com"],
+    ["sleep", "2"],
+    ["ls", "-l", "/nonexistentpath"] # Command with an error
+]
+
+processes = []
+for cmd_args in commands:
+    print(f"Ejecutando: {' '.join(cmd_args)}")
+    # For asynchronicity, it is better to redirect stdout/stderr,
+    # so as not to interfere with each other or with the parent console.
+    # DEVNULL if output is not needed, PIPE if needed later.
+    proc = subprocess.Popen(cmd_args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    processes.append(proc)
+
+# Do other work or wait for completion
+while any(p.poll() is None for p in processes):
+    print("Waiting for all processes to complete...")
+    time.sleep(0.5)
+
+print("\nResultados:")
+for i, p in enumerate(processes):
+    print(f"El comando '{' '.join(commands[i])}' finalizó con el código: {p.returncode}")
+</code></pre>
+
+<p><strong>Interacción interactiva con un proceso:</strong></p>
+
+<p>Esta es una tarea compleja que requiere una gestión cuidadosa de los flujos para evitar interbloqueos. <code>communicate()</code> es bueno para un intercambio único. Para una sesión interactiva larga, es posible que necesite leer/escribir directamente en <code>p.stdin</code>, <code>p.stdout</code>, <code>p.stderr</code> usando E/S no bloqueante o hilos separados.</p>
+
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+# Example: start an interactive python session
+process = subprocess.Popen(
+    ['python', '-i'], # -i for interactive mode
+    stdin=subprocess.PIPE,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    text=True,
+    bufsize=1 # Line buffer for stdout/stderr (for interactivity)
+)
+
+def send_command(cmd_str):
+    print(f">>> {cmd_str}")
+    process.stdin.write(cmd_str + '\n')
+    process.stdin.flush() # Important!
+
+def read_output():
+    # Reading output can be tricky, as you need to know when to stop.
+    # This is a very simplified example. For real tasks, more robust solutions are needed.
+    # For example, reading until a certain pattern (the command line prompt).
+    output = ""
+    # Read stdout. In a real application, this should be done non-blockingly or in a separate thread.
+    # Here we assume that after the command there will be some output immediately.
+    # This is a very fragile assumption for the general case!
+    try:
+        # Popen does not have a readline with a timeout, this is one of the difficulties
+        # You can use select on process.stdout.fileno()
+        # or read character by character/line by line in a separate thread
+        # For simplicity, this is not here
+        while True: # Beware, it can block!
+            line = process.stdout.readline()
+            if not line: break # EOF
+            if ">>> " in line or "... " in line: # Primitive prompt detector
+                output += line
+                break
+            output += line
+    except Exception as e:
+        print(f"Error reading: {e}")
+    return output.strip()
+
+# Initialization: read the initial prompt
+initial_output = ""
+# Reading the Python welcome message
+# This is very simplified, as we don't know exactly how many lines to read
+for _ in range(5): # Let's try to read a few lines
+    try:
+        # Popen stdout has no timeout, must read carefully
+        # stdout.readline() can block.
+        # In real applications, select or threads are needed here.
+        line = process.stdout.readline()
+        if not line: break
+        initial_output += line
+        if ">>>" in line: break # Prompt found
+    except BlockingIOError:
+        break # If there was non-blocking reading
+print(f"Initial output:\n{initial_output.strip()}")
+
+
+send_command("a = 10")
+# For interactive interaction, reading the output is the hardest part.
+# communicate() is not suitable, as it closes the streams.
+# You must read carefully from process.stdout and process.stderr, 
+# possibly in separate threads, so as not to block the main one.
+# This example is NOT production-ready for complex interactivity.
+# print(read_output()) # This read_output is very primitive
+
+send_command("print(a * 2)")
+# print(read_output())
+
+# Terminate the process
+process.stdin.write("exit()\n")
+process.stdin.flush()
+stdout_data, stderr_data = process.communicate(timeout=5) # Wait for completion and collect the rest
+
+print("\nFinal standard output:")
+print(stdout_data)
+if stderr_data:
+    print("\nFinal standard error:")
+    print(stderr_data)
+
+print(f"The Python process finished with code: {process.returncode}")
+
+# For real interactive interaction, pty (pseudo-terminals)
+# are often used through the `pty` module on Unix-like systems, or libraries like `pexpect`.
+</code></pre>
+<p><em>Advertencia</em>: La interacción interactiva directa con <code>Popen</code> a través de <code>stdin</code>/<code>stdout</code>/<code>stderr</code> es difícil debido a los interbloqueos y el almacenamiento en búfer. Para una interactividad fiable, a menudo se utilizan bibliotecas como <code>pexpect</code> (para Unix) o análogas, que funcionan con pseudo-terminales (pty).</p>
+
+<p><strong>Trabajar con codificaciones:</strong></p>
+<ul>
+<li>Use <code>text=True</code> (o <code>universal_newlines=True</code>) para la decodificación/codificación automática.</li>
+<li>Si es necesario, puede especificar <code>encoding="su-codificación"</code> y <code>errors="manejador-de-errores"</code> (por ejemplo, <code>replace</code>, <code>ignore</code>).</li>
+<li>Si <code>text=False</code> (predeterminado), <code>stdout</code> y <code>stderr</code> serán cadenas de bytes. Deberá decodificarlos manualmente: <code>result.stdout.decode('utf-8', errors='replace')</code>.</li>
+</ul>
+<hr>
+
+<h3>6. Seguridad y mejores prácticas</h3>
+
+<ul>
+<li><strong>Riesgos de <code>shell=True</code> e inyección de comandos:</strong>
+<ul>
+<li><strong>Nunca</strong> use <code>shell=True</code> con comandos construidos a partir de una entrada de usuario no fiable. Esto abre la puerta a la inyección de comandos.</li>
+<li>Ejemplo de una vulnerabilidad:
+<pre class="line-numbers"><code class="language-python">
+        # DANGEROUS!
+        filename = input("Enter a filename to delete: ") # User enters "myinnocentfile.txt; rm -rf /"
+        subprocess.run(f"rm {filename}", shell=True, check=True)
+</code></pre>
+</li>
+<li>Si <code>shell=True</code> es absolutamente necesario (por ejemplo, para usar tuberías <code>|</code> o comodines <code>*</code> directamente en la línea de comandos), escape cuidadosamente todas las partes del comando formadas desde el exterior usando <code>shlex.quote()</code> (desde Python 3.3).</li>
+</ul>
+</li>
+<li><strong>Validación y escape de la entrada del usuario:</strong>
+<ul>
+<li>Incluso si <code>shell=False</code>, si los argumentos del comando se forman a partir de la entrada del usuario, deben validarse. Por ejemplo, si se espera un nombre de archivo, asegúrese de que sea un nombre de archivo válido y no algo como <code>../../../etc/passwd</code>.</li>
+</ul>
+</li>
+<li><strong>Pasar argumentos como una lista (cuando <code>shell=False</code>):</strong>
+<ul>
+<li>Esta es la forma más segura. Cada argumento se pasa como un elemento separado de la lista, y el sistema operativo los maneja correctamente, sin intentar interpretarlos como parte de un comando de shell.</li>
+<li>Ejemplo: <code>subprocess.run(["rm", filename_from_user])</code> — aquí <code>filename_from_user</code> siempre se tratará como un solo argumento (nombre de archivo), incluso si contiene espacios o caracteres especiales.</li>
+</ul>
+</li>
+<li><strong>Manejo de errores y códigos de retorno:</strong>
+<ul>
+<li>Compruebe siempre el <code>returncode</code> o use <code>check=True</code> (para <code>run()</code>) / <code>check_call()</code> / <code>check_output()</code> para asegurarse de que el comando se ejecutó correctamente.</li>
+<li>Maneje las posibles excepciones (<code>CalledProcessError</code>, <code>TimeoutExpired</code>, <code>FileNotFoundError</code>).</li>
+</ul>
+</li>
+<li><strong>Gestión de recursos:</strong>
+<ul>
+<li>Si abre tuberías (<code>PIPE</code>), asegúrese de que finalmente se cierren. <code>Popen.communicate()</code> lo hace automáticamente. Si está trabajando directamente con <code>p.stdin</code>, <code>p.stdout</code>, <code>p.stderr</code>, es posible que deba cerrarlos explícitamente.</li>
+<li>En aplicaciones de larga duración, asegúrese de que los procesos secundarios finalicen correctamente y no se conviertan en "zombis". Use <code>p.wait()</code> o <code>p.communicate()</code>. Si es necesario, use <code>p.terminate()</code> o <code>p.kill()</code>.</li>
+</ul>
+</li>
+<li><strong>Codificaciones:</strong> Tenga cuidado con las codificaciones cuando use <code>text=True</code> o cuando decodifique manualmente cadenas de bytes. Los problemas de codificación son una fuente común de errores.</li>
+</ul>
+<hr>
+
+<h3>7. Ejemplos prácticos</h3>
+
+<p><strong>1. Ejecutar un comando simple y comprobar el código de retorno:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+try:
+    # Run 'ls' for an existing directory
+    result = subprocess.run(["ls", "-l", "/tmp"], check=True)
+    print(f"Comando 'ls /tmp' ejecutado, código de retorno: {result.returncode}")
+
+    # Run 'ls' for a nonexistent directory
+    result_fail = subprocess.run(["ls", "/nonexistent"], check=True, stderr=subprocess.PIPE, text=True)
+    # This line will not execute if check=True, as an exception will be raised
+except subprocess.CalledProcessError as e:
+    print(f"Error al ejecutar el comando: {e.cmd}")
+    print(f"Código de retorno: {e.returncode}")
+    if e.stderr:
+        print(f"Stderr: {e.stderr.strip()}")
+</code></pre>
+
+<p><strong>2. Capturar la salida de un comando:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+try:
+    result = subprocess.run(
+        ["git", "status", "--short"],
+        capture_output=True,
+        text=True,
+        check=True,
+        cwd="."  # Specify the current directory as the working directory for git
+    )
+    print("Estado de Git:")
+    print(result.stdout)
+except FileNotFoundError:
+    print("Error: comando 'git' no encontrado. ¿Está Git instalado y en el PATH?")
+except subprocess.CalledProcessError as e:
+    print(f"Error de git: {e.stderr}")
+</code></pre>
+
+<p><strong>3. Enviar datos a la entrada de un proceso (usando <code>communicate</code>):</strong></p>
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+# Send text to 'grep' to search
+input_text = "hello world\npython is fun\nhello python"
+try:
+    process = subprocess.Popen(
+        ["grep", "python"],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    stdout_data, stderr_data = process.communicate(input=input_text, timeout=5)
+
+    if process.returncode == 0: # grep found matches
+        print("Líneas encontradas:")
+        print(stdout_data)
+    elif process.returncode == 1: # grep found no matches
+        print("No se encontraron coincidencias para 'python'.")
+    else: # another grep error
+        print(f"Error de grep (código {process.returncode}):")
+        if stderr_data: print(stderr_data)
+
+except subprocess.TimeoutExpired:
+    print("Grep no respondió a tiempo.")
+    process.kill() # kill the process if it hangs
+    process.communicate() # collect remaining output/errors
+</code></pre>
+
+<p><strong>4. Crear una tubería (<code>ls -l | wc -l</code>) sin <code>shell=True</code>:</strong>
+(Un ejemplo más detallado estaba en la sección 5)</p>
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+ls_proc = subprocess.Popen(["ls", "-l"], stdout=subprocess.PIPE)
+wc_proc = subprocess.Popen(["wc", "-l"], stdin=ls_proc.stdout, stdout=subprocess.PIPE, text=True)
+
+if ls_proc.stdout: # Make sure stdout exists
+    ls_proc.stdout.close()  # Allows wc_proc to receive EOF when ls_proc finishes
+
+output, _ = wc_proc.communicate()
+print(f"Número de archivos/directorios: {output.strip()}")
+</code></pre>
+
+<p><strong>5. Usar <code>timeout</code>:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+import subprocess
+
+try:
+    # A command that will run for 5 seconds
+    result = subprocess.run(["sleep", "5"], timeout=2)
+    print("El comando 'sleep 5' se completó (no debería haberlo hecho con timeout=2).")
+except subprocess.TimeoutExpired as e:
+    print(f"El comando '{e.cmd}' no se completó en {e.timeout} segundos.")
+</code></pre>
+
+<hr>
+
+<h3>8. Conclusión y recursos útiles</h3>
+
+<p>El módulo <code>subprocess</code> es una herramienta indispensable para cualquier desarrollador de Python que necesite interactuar con programas externos o con el entorno del sistema. Ofrece un equilibrio entre la facilidad de uso (a través de <code>subprocess.run()</code>) y una potente flexibilidad (a través de <code>subprocess.Popen()</code>).</p>
+
+<p><strong>Puntos clave:</strong></p>
+<ul>
+<li>Prefiera <code>subprocess.run()</code> para la mayoría de las tareas.</li>
+<li>Use <code>subprocess.Popen()</code> para la ejecución asíncrona o la gestión compleja de flujos.</li>
+<li><strong>Evite <code>shell=True</code></strong>, especialmente con la entrada del usuario, debido a los riesgos de seguridad. Pase los comandos como una lista de argumentos.</li>
+<li>Maneje siempre los códigos de retorno y las posibles excepciones.</li>
+<li>Tenga cuidado con las codificaciones cuando trabaje con salida de texto (<code>text=True</code> o decodificación manual).</li>
+<li><code>communicate()</code> es su amigo para un intercambio de datos seguro a través de <code>PIPE</code>.</li>
+</ul>
+<p><strong>Recursos útiles:</strong></p>
+<ul>
+<li>Documentación oficial de Python para el módulo <code>subprocess</code>: <a href="https://docs.python.org/3/library/subprocess.html">https://docs.python.org/3/library/subprocess.html</a></li>
+<li>PEP 324 – <code>subprocess</code> - A New Process Module: <a href="https://peps.python.org/pep-0324/">https://peps.python.org/pep-0324/</a></li>
+</ul>

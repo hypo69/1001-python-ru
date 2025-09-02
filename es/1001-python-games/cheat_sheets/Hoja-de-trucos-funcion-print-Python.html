@@ -1,0 +1,122 @@
+# La función `print()`
+
+La función `print()` en Python se utiliza para mostrar información en la consola. Es una de las funciones más simples y utilizadas con frecuencia, especialmente para depurar y mostrar datos. Consideremos los aspectos principales de su funcionamiento.
+
+<h2>Sintaxis</h2>
+<pre class="line-numbers"><code class="language-python">
+print(*objects, sep=' ', end='\n', file=sys.stdout, flush=False)
+</code></pre>
+
+<h3>Parámetros:</h3>
+<ol>
+<li><strong><code>*objects</code></strong>:
+<ul>
+<li>Una lista de objetos que se deben imprimir. Puede pasar uno o varios valores, separados por comas.</li>
+<li>Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+     print('Hola', 'mundo')
+</code></pre>
+Resultado: <code>Hola mundo</code></li>
+</ul>
+</li>
+<li><strong><code>sep</code></strong> (predeterminado <code>' '</code>):
+<ul>
+<li>El separador entre objetos, si se pasan varios.</li>
+<li>Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+     print('Hola', 'mundo', sep=' - ')
+</code></pre>
+Resultado: <code>Hola - mundo</code></li>
+</ul>
+</li>
+<li><strong><code>end</code></strong> (predeterminado <code>''</code>):
+<ul>
+<li>Especifica lo que se agregará al final de la línea. Por defecto, es un salto de línea.</li>
+<li>Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+     print('Hola', end='!')
+</code></pre>
+Resultado: <code>Hola!</code></li>
+</ul>
+</li>
+<li><strong><code>file</code></strong>:
+<ul>
+<li>El flujo donde se dirigirá la salida (por defecto <code>sys.stdout</code> — salida estándar).</li>
+<li>Ejemplo: salida a un archivo.
+<pre class="line-numbers"><code class="language-python">
+     with open('output.txt', 'w') as f:
+         print('Hola, archivo!', file=f)
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong><code>flush</code></strong> (predeterminado <code>False</code>):
+<ul>
+<li>Si se establece en <code>True</code>, fuerza el vaciado del búfer de salida.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>Ejemplos de uso</h2>
+<h3>Cadena simple</h3>
+<pre class="line-numbers"><code class="language-python">
+print('Hello, world!')
+</code></pre>
+Resultado: <code>Hello, world!</code>
+
+<h3>Imprimir varios valores</h3>
+<pre class="line-numbers"><code class="language-python">
+name = 'Anna'
+age = 25
+print('Nombre:', name, ', Edad:', age)
+</code></pre>
+Resultado: <code>Nombre: Anna , Edad: 25</code>
+
+<h3>Personalizar el separador</h3>
+<pre class="line-numbers"><code class="language-python">
+print(1, 2, 3, sep=' -> ')
+</code></pre>
+Resultado: <code>1 -> 2 -> 3</code>
+
+<h3>Personalizar el final de línea</h3>
+<pre class="line-numbers"><code class="language-python">
+for i in range(3):
+    print(i, end=' ')
+</code></pre>
+Resultado: <code>0 1 2</code>
+
+<h3>Usar f-strings con salida de nombre de variable</h3>
+<p>A partir de Python 3.8, puede usar f-strings para mostrar los valores de las variables con sus nombres en el formato <code>nombre=valor</code>. Esto es útil para la depuración, ya que le permite ver inmediatamente qué variable y qué valor se está mostrando.</p>
+<pre class="line-numbers"><code class="language-python">
+name = 'Ivan'
+age = 30
+print(f'{name=}, {age=}')
+</code></pre>
+Resultado: <code>name='Ivan', age=30</code>
+
+<hr>
+
+<h2>Consejos útiles para principiantes</h2>
+
+<ol>
+<li><strong>Depuración de código</strong>:
+Use <code>print()</code> para verificar los valores de las variables:
+<pre class="line-numbers"><code class="language-python">
+   x = 10
+   y = 20
+   print('Suma:', x + y)
+</code></pre>
+</li>
+<li><strong>Salida formateada</strong>:
+Para mostrar cadenas con sustitución de valores, es mejor usar el formato:
+<pre class="line-numbers"><code class="language-python">
+   name = 'Ivan'
+   age = 30
+   print(f'Me llamo {name}, tengo {age} años.')
+</code></pre>
+</li>
+<li><strong>Registro (Logging)</strong>:
+En proyectos más grandes, es mejor usar el módulo <code>logging</code> para la gestión de la salida, pero al principio, <code>print()</code> ayuda a mostrar datos rápidamente.</li>
+</ol>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">Al índice</a></p>

@@ -1,0 +1,149 @@
+<p dir="rtl"><strong>1. רשימות (<span dir="ltr">Lists</span>)</strong></p>
+<ul dir="rtl">
+<li><span dir="ltr"><strong>הגדרה:</strong></span> רשימות בפייתון הן אוספים מסודרים וניתנים לשינוי של פריטים. זה אומר שאתה יכול להוסיף, למחוק ולשנות פריטים ברשימה, וסדר הפריטים חשוב.</li>
+<li><span dir="ltr"><strong>ייצוג:</strong></span> רשימות נוצרות באמצעות סוגריים מרובעים <span dir="ltr">`[]`</span>, ופריטים מופרדים בפסיקים.</li>
+<li><span dir="ltr"><strong>דוגמאות:</strong></span>
+<pre class="line-numbers"><code class="language-python" dir="ltr">
+# יצירת רשימה
+boris_list = ["בוריס", "מוסקבה", 30, "מהנדס"]
+print(f"יצירת רשימה: {boris_list}")
+
+# גישה לפי אינדקס
+print(f"פריט באינדקס 0: {boris_list[0]}")
+
+# שינוי פריט
+boris_list[2] = 31
+print(f"שינוי פריט: {boris_list}")
+
+# הוספת פריט לסוף
+boris_list.append("נשוי")
+print(f"הוספה לסוף: {boris_list}")
+
+# הוספת פריט לפי אינדקס
+boris_list.insert(1, "רוסיה")
+print(f"הוספת פריט: {boris_list}")
+
+# מחיקת פריט לפי ערך
+boris_list.remove("מהנדס")
+print(f"מחיקת פריט לפי ערך: {boris_list}")
+
+# מחיקת פריט לפי אינדקס
+del boris_list[2]
+print(f"מחיקת פריט לפי אינדקס: {boris_list}")
+
+# הרחבת רשימה עם רשימה אחרת
+boris_list.extend(["תחביב", "דיג"])
+print(f"הרחבת רשימה: {boris_list}")
+
+# מחיקת פריט מהסוף
+boris_list.pop()
+print(f"מחיקת פריט מהסוף: {boris_list}")
+
+</code></pre>
+</li>
+</ul>
+<p dir="rtl"><strong>2. מילונים (<span dir="ltr">Dictionaries</span>)</strong></p>
+<ul dir="rtl">
+<li><span dir="ltr"><strong>הגדרה:</strong></span> מילונים בפייתון הם אוספים לא מסודרים של פריטים, כאשר כל פריט מורכב מזוג "מפתח-ערך".</li>
+<li><span dir="ltr"><strong>ייצוג:</strong></span> מילונים נוצרים באמצעות סוגריים מסולסלים <span dir="ltr">`{}`</span>, וזוגות "מפתח-ערך" מופרדים בנקודתיים <span dir="ltr">`:`</span>.</li>
+<li><span dir="ltr"><strong>דוגמאות:</strong></span>
+<pre class="line-numbers"><code class="language-python" dir="ltr">
+# יצירת מילון
+alice_dict = {"name": "אליס", "age": 25, "city": "לונדון", "occupation": "אמנית"}
+print(f"יצירת מילון: {alice_dict}")
+
+# גישה לפי מפתח
+print(f"ערך עבור מפתח 'name': {alice_dict['name']}")
+
+# שינוי ערך
+alice_dict["age"] = 26
+print(f"שינוי ערך: {alice_dict}")
+
+# הוספת זוג מפתח-ערך
+alice_dict["hobby"] = "ציור"
+print(f"הוספת זוג: {alice_dict}")
+
+# מחיקת זוג לפי מפתח
+del alice_dict["city"]
+print(f"מחיקת זוג: {alice_dict}")
+
+# מחיקת זוג באמצעות שיטת pop (עם ערך מוחזר)
+hobby = alice_dict.pop("hobby")
+print(f"מחיקה עם ערך מוחזר: {alice_dict}, ערך: {hobby}")
+
+# בדיקת קיום מפתח
+print(f"מפתח 'name' קיים: {'name' in alice_dict}")
+</code></pre>
+</li>
+</ul>
+<p dir="rtl"><strong>3. טאפלים (<span dir="ltr">Tuples</span>)</strong></p>
+<ul dir="rtl">
+<li><span dir="ltr"><strong>הגדרה:</strong></span> טאפלים בפייתון הם אוספים מסודרים ו<span dir="ltr"><strong>בלתי ניתנים לשינוי</strong></span> של פריטים.</li>
+<li><span dir="ltr"><strong>ייצוג:</strong></span> טאפלים נוצרים באמצעות סוגריים עגולים <span dir="ltr">`()`</span>, ופריטים מופרדים בפסיקים.</li>
+<li><span dir="ltr"><strong>דוגמאות:</strong></span>
+<pre class="line-numbers"><code class="language-python" dir="ltr">
+# יצירת טאפל
+boris_tuple = ("בוריס", "מוסקבה", 30, "מהנדס")
+print(f"יצירת טאפל: {boris_tuple}")
+
+# גישה לפי אינדקס
+print(f"פריט באינדקס 2: {boris_tuple[2]}")
+
+# לא ניתן לשנות פריט
+# boris_tuple[0] = "בוריס" # זה יגרום לשגיאה: TypeError: 'tuple' object does not support item assignment
+
+# לא ניתן להוסיף פריט
+# boris_tuple.append(4) # זה יגרום לשגיאה: AttributeError: 'tuple' object has no attribute 'append'
+
+# לא ניתן למחוק פריט
+# del boris_tuple[0]  # זה יגרום לשגיאה: TypeError: 'tuple' object doesn't support item deletion
+</code></pre>
+</li>
+</ul>
+<p dir="rtl"><strong>4. <span dir="ltr">SimpleNamespace</span></strong></p>
+<ul dir="rtl">
+<li><span dir="ltr"><strong>הגדרה:</strong></span> <span dir="ltr">`SimpleNamespace`</span> מהמודול <span dir="ltr">`types`</span> - היא מחלקה פשוטה המאפשרת ליצור אובייקטים שתכונותיהם (מאפיינים) ניתנות להגדרה הן בעת היצירה והן מאוחר יותר.</li>
+<li><span dir="ltr"><strong>ייצוג:</strong></span> כדי ליצור אובייקט <span dir="ltr">`SimpleNamespace`</span>, עליך לייבא אותו מ-<span dir="ltr">`types`</span> ולהעביר לו ארגומנטים בעלי שם (או לא להעביר כלל):
+<pre class="line-numbers"><code class="language-python" dir="ltr">
+from types import SimpleNamespace
+
+alice_namespace = SimpleNamespace(name="אליס", age=25, city="לונדון")
+</code></pre>
+</li>
+<li><span dir="ltr"><strong>תכונות:</strong></span>
+<ul dir="rtl">
+<li>מאפשרת יצירת אובייקטים עם תכונות דינמיות (בדומה למילון).</li>
+<li>נוחה ליצירת אובייקטים פשוטים לאחסון נתונים.</li>
+<li>תכונות נגישות באמצעות סימון נקודה, כמו אובייקטים רגילים: <span dir="ltr">`alice_namespace.name`</span></li>
+<li>בניגוד למילונים, סדר התכונות נשמר.</li>
+<li>ניתן לשנות שדות, אך לא ניתן להוסיף שדות חדשים.</li>
+</ul>
+</li>
+<li><span dir="ltr"><strong>דוגמאות:</strong></span>
+<pre class="line-numbers"><code class="language-python" dir="ltr">
+from types import SimpleNamespace
+
+# יצירת SimpleNamespace
+alice_namespace = SimpleNamespace(name="אליס", age=25, city="לונדון")
+print(f"יצירת SimpleNamespace: {alice_namespace}")
+
+# גישה לתכונה
+print(f"תכונה 'name': {alice_namespace.name}")
+
+# שינוי תכונה
+alice_namespace.age = 26
+print(f"שינוי תכונה: {alice_namespace}")
+
+# לא ניתן להוסיף תכונה חדשה
+# alice_namespace.occupation = "אמנית" # זה יגרום לשגיאה: AttributeError: 'SimpleNamespace' object has no attribute 'occupation'
+
+# הוספה באמצעות setattr
+setattr(alice_namespace, "occupation", "אמנית")
+print(f"הוספת תכונה: {alice_namespace}")
+
+# מחיקה באמצעות delattr
+delattr(alice_namespace, "city")
+print(f"מחיקת תכונה: {alice_namespace}")
+</code></pre>
+</li>
+</ul>

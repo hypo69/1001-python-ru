@@ -1,0 +1,248 @@
+**¿Qué son las comprensiones de lista?**
+
+En su forma más simple, una comprensión de lista es una forma compacta de crear una nueva lista a partir de una existente (o cualquier objeto iterable). En lugar de usar un bucle `for` tradicional y agregar elementos a la lista uno por uno, puede hacerlo en una sola línea de código.
+
+
+<ul>
+<li><strong>Concisión:</strong> Le permiten escribir menos código.</li>
+<li><strong>Legibilidad:</strong> Una vez que se acostumbre a su sintaxis, las encontrará más fáciles de entender que los bucles `for` equivalentes.</li>
+<li><strong>Rendimiento:</strong> En algunos casos, las comprensiones de lista pueden ser más rápidas que los bucles `for`.</li>
+</ul>
+<p>Aquí está la sintaxis básica de una comprensión de lista:</p>
+<pre class="line-numbers"><code class="language-python">
+new_list = [expression for item in iterable]
+</code></pre>
+<ul>
+<li><strong><code>expression</code></strong>: Expresión que define cómo se calculará cada elemento de la nueva lista. Puede ser cualquier cosa: un valor simple, una operación matemática, una llamada a una función.</li>
+<li><strong><code>item</code></strong>: Variable que toma el valor de cada elemento del <code>iterable</code> a su vez.</li>
+<li><strong><code>iterable</code></strong>: Objeto iterable, como una lista, tupla, cadena o el resultado de <code>range()</code>.</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<p>Suponga que tiene una lista de números y desea crear una nueva lista que contenga los cuadrados de esos números.</p>
+<p><strong>Sin comprensión de lista:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+squares = []
+for number in numbers:
+    squares.append(number**2)
+print(squares)  # Output: [1, 4, 9, 16, 25]
+</code></pre>
+<p><strong>Con comprensión de lista:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+squares = [number**2 for number in numbers]
+print(squares) # Output: [1, 4, 9, 16, 25]
+</code></pre>
+<p>¡La comprensión de lista hace que el código sea más corto y claro!</p>
+<p><strong>Agregar una condición</strong></p>
+<p>Las comprensiones de lista también le permiten agregar condiciones para seleccionar los elementos que se incluirán en la nueva lista.</p>
+<pre class="line-numbers"><code class="language-python">
+new_list = [expression for item in iterable if condition]
+</code></pre>
+<ul>
+<li><strong><code>condition</code></strong>: una condición que debe cumplirse para que un elemento se incluya en la nueva lista.</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<p>Creemos una lista de cuadrados de solo números pares de nuestra lista <code>numbers</code> original.</p>
+<p><strong>Sin comprensión de lista:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+even_squares = []
+for number in numbers:
+    if number % 2 == 0:
+        even_squares.append(number**2)
+print(even_squares) # Output: [4, 16]
+</code></pre>
+<p><strong>Con comprensión de lista:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+even_squares = [number**2 for number in numbers if number % 2 == 0]
+print(even_squares) # Output: [4, 16]
+</code></pre>
+<p>Agregué <code>if number % 2 == 0</code> a la comprensión de lista para filtrar solo los números pares.</p>
+<p><strong>Comprensiones de lista de varias líneas</strong></p>
+<p>Cuando las comprensiones de lista se vuelven más complejas, se pueden dividir en varias líneas para una mejor legibilidad.</p>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+squared_odds = [
+    number**2
+    for number in numbers
+    if number % 2 != 0
+]
+print(squared_odds) # Output: [1, 9, 25]
+</code></pre>
+<p>Esto hace que el código sea más comprensible, especialmente cuando tiene condiciones largas o expresiones complejas.</p>
+<p><strong>Ejercicio 1: Conversión de temperatura</strong></p>
+<p>Tiene una lista de temperaturas en grados Celsius y necesita convertirlas a grados Fahrenheit. La fórmula para la conversión es: <code>F = (C * 9/5) + 32</code>.</p>
+<p>Aquí está su lista de temperaturas en Celsius:</p>
+<pre class="line-numbers"><code class="language-python">
+celsius_temperatures = [0, 10, 20, 30, 40]
+</code></pre>
+<p><strong>Tarea:</strong></p>
+<ol>
+<li>Usando una comprensión de lista, cree una nueva lista <code>fahrenheit_temperatures</code> que contenga las temperaturas de <code>celsius_temperatures</code>, convertidas a grados Fahrenheit.</li>
+<li>Imprima la lista <code>fahrenheit_temperatures</code> resultante en la pantalla.</li>
+</ol>
+<p><strong>Sugerencia:</strong></p>
+<ul>
+<li>Use la fórmula <code>(celsius * 9/5) + 32</code> como expresión en la comprensión de lista.</li>
+<li>Piense en qué es <code>iterable</code> y qué es <code>item</code> en este caso.</li>
+</ul>
+<p>Intente escribir el código.</p>
+<p>Mi solución:</p>
+<pre class="line-numbers"><code class="language-python">
+# Original list of temperatures in Celsius
+celsius_temperatures = [0, 10, 20, 30, 40]
+
+# Use list comprehension to convert to Fahrenheit
+fahrenheit_temperatures = [
+    (celsius * 9/5) + 32  # Expression: conversion formula
+    for celsius in celsius_temperatures # Iterate over the elements of the list
+]
+
+# Print the result
+print(fahrenheit_temperatures) # Output: [32.0, 50.0, 68.0, 86.0, 104.0]
+</code></pre>
+<p><strong>Desglose del código:</strong></p>
+<ol>
+<li><strong><code>celsius_temperatures = [0, 10, 20, 30, 40]</code></strong>: Esta es la lista original de temperaturas en Celsius.</li>
+<li><strong><code>fahrenheit_temperatures = [...]</code></strong>: Aquí creamos una nueva lista usando una comprensión de lista.</li>
+<li><strong><code>(celsius * 9/5) + 32</code></strong>: Esta es la expresión que se ejecuta para cada elemento. Convierte la temperatura de Celsius a Fahrenheit.</li>
+<li><strong><code>for celsius in celsius_temperatures</code></strong>: Esta parte de la comprensión de lista itera sobre cada elemento en la lista <code>celsius_temperatures</code>, asignando su valor a la variable <code>celsius</code> en cada iteración.</li>
+<li><strong><code>print(fahrenheit_temperatures)</code></strong>: Imprime la lista resultante de temperaturas en Fahrenheit.</li>
+</ol>
+<p><strong>Notas importantes:</strong></p>
+<ul>
+<li>En este caso, <code>celsius_temperatures</code> es el <code>iterable</code>, y <code>celsius</code> es el <code>item</code>.</li>
+<li>Utilizo el formato de varias líneas para la comprensión de lista para mejorar la legibilidad del código.</li>
+<li>Dentro de la expresión, aplico directamente la fórmula de conversión usando el valor <code>celsius</code> actual.</li>
+</ul>
+<p><strong>Ejercicio 2: Filtrado y transformación de cadenas</strong></p>
+<p>Tiene una lista de palabras y necesita hacer lo siguiente:</p>
+<ol>
+<li>Filtrar las palabras que comienzan con la letra "a" (sin distinción entre mayúsculas y minúsculas).</li>
+<li>Convertir todas las palabras restantes a mayúsculas.</li>
+</ol>
+<p>Aquí está su lista de palabras:</p>
+<pre class="line-numbers"><code class="language-python">
+words = ["apple", "banana", "apricot", "kiwi", "Avocado", "orange"]
+</code></pre>
+<p><strong>Tarea:</strong></p>
+<ol>
+<li>Usando una comprensión de lista, cree una nueva lista <code>transformed_words</code> que contenga solo aquellas palabras de la lista <code>words</code> que no comiencen con la letra "a" (o "A"), y que se conviertan a mayúsculas.</li>
+<li>Imprima la lista <code>transformed_words</code> resultante en la pantalla.</li>
+</ol>
+<p><strong>Sugerencias:</strong></p>
+<ul>
+<li>Use el método de cadena <code>startswith()</code> para verificar si una palabra comienza con una letra específica. ¡No olvide la distinción entre mayúsculas y minúsculas! Convierta todo a minúsculas.</li>
+<li>Use el método de cadena <code>upper()</code> para convertir una cadena a mayúsculas.</li>
+<li>Piense en el orden de las operaciones. Primero filtre, luego transforme.</li>
+</ul>
+<p>Mi solución:</p>
+<pre class="line-numbers"><code class="language-python">
+# Original list of words
+words = ["apple", "banana", "apricot", "kiwi", "Avocado", "orange"]
+
+# Use list comprehension to filter and transform
+transformed_words = [
+    word.upper() # Convert to uppercase
+    for word in words # Iterate over the words in the list
+    if not word.lower().startswith("a") # Filter words that do not start with 'a'
+]
+
+# Print the result
+print(transformed_words) # Output: ['BANANA', 'KIWI', 'ORANGE']
+</code></pre>
+<p><strong>Desglose del código:</strong></p>
+<ol>
+<li><strong><code>words = ["apple", "banana", "apricot", "kiwi", "Avocado", "orange"]</code></strong>: Esta es la lista original de palabras.</li>
+<li><strong><code>transformed_words = [...]</code></strong>: Creamos una nueva lista usando una comprensión de lista.</li>
+<li><strong><code>word.upper()</code></strong>: Esta es la expresión que se ejecuta para cada palabra filtrada. Convierte la palabra a mayúsculas.</li>
+<li><strong><code>for word in words</code></strong>: Iterar sobre todas las palabras en la lista <code>words</code>.</li>
+<li><strong><code>if not word.lower().startswith("a")</code></strong>: Esta es la condición de filtrado.
+<ul>
+<li><code>word.lower()</code>: Primero, convertimos la palabra a minúsculas para que la comparación no distinga entre mayúsculas y minúsculas.</li>
+<li><code>startswith("a")</code>: Luego verificamos si la palabra comienza con la letra "a".</li>
+<li><code>not</code>: Invertimos el resultado para mantener solo aquellas palabras que <em>no</em> comienzan con la letra "a".</li>
+</ul>
+</li>
+<li><strong><code>print(transformed_words)</code></strong>: Imprime la lista resultante de palabras transformadas.</li>
+</ol>
+<p><strong>Puntos clave:</strong></p>
+<ul>
+<li>Métodos de cadena <code>lower()</code>, <code>upper()</code> y <code>startswith()</code> en la expresión y condición de la comprensión de lista.</li>
+<li>La condición de filtrado <code>if not word.lower().startswith("a")</code> asegura que solo las palabras que no comienzan con "a" (independientemente de las mayúsculas y minúsculas) se incluyan en la nueva lista.</li>
+<li>El filtrado se aplica primero, luego la conversión a mayúsculas.</li>
+<li>Una vez más, utilizo el formato de varias líneas para la legibilidad.</li>
+</ul>
+<p><strong>Ejercicio 3: Creación de un diccionario a partir de una lista de tuplas</strong></p>
+<p>Tiene una lista de tuplas, donde cada tupla contiene dos elementos: el nombre y la edad de una persona.</p>
+<pre class="line-numbers"><code class="language-python">
+people_data = [
+    ("Alice", 30),
+    ("Bob", 25),
+    ("Charlie", 35),
+    ("David", 28),
+]
+</code></pre>
+<p><strong>Tarea:</strong></p>
+<ol>
+<li>Usando una comprensión de lista, cree un diccionario <code>people_dict</code>, donde las claves sean los nombres de las personas y los valores, su edad.</li>
+<li>Imprima el diccionario <code>people_dict</code> en la pantalla.</li>
+</ol>
+<p><strong>Sugerencias:</strong></p>
+<ul>
+<li>Las comprensiones de lista crean listas, pero se pueden usar para crear listas de tuplas, que luego se pueden pasar al constructor <code>dict()</code>.</li>
+<li>Piense en cómo extraer el nombre y la edad de cada tupla.</li>
+<li>Recuerde que un diccionario es una estructura de datos que almacena pares clave-valor.</li>
+</ul>
+<p><strong>Una pequeña explicación:</strong></p>
+<p>En Python, puede crear un diccionario a partir de una lista de tuplas, donde cada tupla consta de dos elementos (clave, valor).
+Para hacer esto, uso el constructor <code>dict()</code>. Por ejemplo:</p>
+<pre class="line-numbers"><code class="language-python">
+my_list = [("a", 1), ("b", 2)]
+my_dict = dict(my_list)
+print(my_dict) # Output {'a': 1, 'b': 2}
+</code></pre>
+<p>Su tarea es usar una comprensión de lista para crear esta lista de tuplas, que luego se usará para crear el diccionario.</p>
+<p>Mi solución:</p>
+<pre class="line-numbers"><code class="language-python">
+# Original list of tuples with people data
+people_data = [
+    ("Alice", 30),
+    ("Bob", 25),
+    ("Charlie", 35),
+    ("David", 28),
+]
+
+# I use a list comprehension to create a list of tuples, which I then convert to a dictionary
+people_dict = dict(
+    [
+      (name, age) # Create a tuple (name, age)
+      for name, age in people_data # Iterate over the tuples in people_data
+    ]
+)
+
+# Print the resulting dictionary
+print(people_dict) # Output: {'Alice': 30, 'Bob': 25, 'Charlie': 35, 'David': 28}
+</code></pre>
+<p><strong>Desglose del código:</strong></p>
+<ol>
+<li><strong><code>people_data = [...]</code></strong>: Esta es la lista original de tuplas, donde cada tupla contiene el nombre y la edad de una persona.</li>
+<li><strong><code>people_dict = dict(...)</code></strong>: Usamos el constructor <code>dict()</code> para crear un diccionario a partir de una lista de tuplas.</li>
+<li><strong><code>[ (name, age) for name, age in people_data ]</code></strong>: Esta es una comprensión de lista que crea una lista de tuplas.
+<ul>
+<li><code>(name, age)</code>: Esta expresión crea una tupla a partir de dos elementos: <code>name</code> y <code>age</code>.</li>
+<li><code>for name, age in people_data</code>: Esta parte itera sobre todas las tuplas en la lista <code>people_data</code>. En cada iteración, la tupla se desempaqueta en dos variables: <code>name</code> y <code>age</code>.</li>
+</ul>
+</li>
+<li><strong><code>print(people_dict)</code></strong>: Imprime el diccionario creado.</li>
+</ol>
+<p><strong>Puntos clave:</strong></p>
+<ul>
+<li>La comprensión de lista crea una lista de tuplas.</li>
+<li>El constructor <code>dict()</code> convierte una lista de tuplas en un diccionario, usando el primer elemento de la tupla como clave y el segundo como valor.</li>
+<li>El desempaquetado de tuplas en el bucle <code>for name, age in people_data</code> hace que el código sea más legible.</li>
+<li>La comprensión de lista en este ejemplo se utiliza para preparar datos para el diccionario.</li>
+</ul>

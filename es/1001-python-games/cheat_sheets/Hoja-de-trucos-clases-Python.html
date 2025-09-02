@@ -1,0 +1,184 @@
+# Clases en `python`
+
+Las clases son uno de los mecanismos principales de la programación orientada a objetos (POO) en Python. Una clase puede considerarse como una "plantilla" o un "plano" para crear objetos que tienen atributos (datos) y métodos (funciones). Los objetos creados a partir de una clase se denominan instancias de la clase. Las clases permiten estructurar el código, mejorar su reutilización y facilitar su mantenimiento.
+
+<h3>Estructura de la clase</h3>
+
+<pre class="line-numbers"><code class="language-python">
+class ClassName:
+    # Class attributes
+    def __init__(self, param1, param2):
+        # Class constructor (initializer)
+        self.param1 = param1
+        self.param2 = param2
+
+    # Class methods
+    def method(self):
+        return f'{self.param1} y {self.param2}'
+</code></pre>
+
+<ol>
+<li><strong>Constructor</strong> (<code>__init__</code>):
+El constructor <code>__init__</code> es un método especial que se llama automáticamente cuando se crea un nuevo objeto. Se utiliza para inicializar los atributos del objeto.
+
+<ul>
+<li><code>self</code>: un parámetro que es una referencia a la instancia actual de la clase. En Python, es obligatorio pasarlo como el primer parámetro en todos los métodos de clase (no se pasa al llamar al método).</li>
+<li>Los atributos, como <code>param1</code> y <code>param2</code>, se asignan al objeto a través de <code>self</code>. Estos atributos pueden ser utilizados posteriormente por otros métodos de la clase.</li>
+</ul>
+</li>
+<li><strong>Atributos de la clase</strong>:
+Los atributos son variables que pertenecen a los objetos de esa clase. Se definen dentro del constructor (<code>__init__</code>) y se puede acceder a ellos utilizando una referencia al objeto.</li>
+<li><strong>Métodos de la clase</strong>:
+Los métodos son funciones que pueden manipular los atributos del objeto. Los métodos pueden usar los datos del objeto, modificarlos o realizar otras operaciones.</li>
+</ol>
+<h3>Creación de un objeto de clase</h3>
+
+Una vez que se define una clase, se pueden crear objetos de esa clase. Los objetos son instancias de la clase.
+
+<pre class="line-numbers"><code class="language-python">
+class Car:
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+
+    def description(self):
+        return f'{self.year} {self.make} {self.model}'
+
+# Object creation
+my_car = Car('Toyota', 'Corolla', 2020)
+print(my_car.description())  # Output: 2020 Toyota Corolla
+</code></pre>
+
+<ul>
+<li>En este ejemplo, creamos un objeto <code>my_car</code> de la clase <code>Car</code>. Al crear el objeto, se pasan valores para los atributos <code>make</code>, <code>model</code> y <code>year</code>, que se almacenan en el objeto.</li>
+<li>El método <code>description()</code> le permite obtener una representación de cadena del automóvil.</li>
+</ul>
+<h3>Tipos de métodos</h3>
+
+<ol>
+<li><strong>Métodos de instancia</strong>: Son métodos regulares que operan en instancias de la clase. Toman una referencia al objeto como primer parámetro (generalmente <code>self</code>).
+
+Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+   def method(self):
+       pass
+</code></pre>
+</li>
+<li><strong>Métodos de clase</strong>: Métodos que toman la clase misma como primer parámetro. El decorador <code>@classmethod</code> se utiliza para definir dichos métodos. Pueden cambiar el estado de la clase misma, no solo las instancias individuales.
+
+Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+   class MyClass:
+       @classmethod
+       def class_method(cls):
+           pass
+</code></pre>
+</li>
+<li><strong>Métodos estáticos</strong>: Son métodos que no usan <code>self</code> o <code>cls</code> (lo que significa que no tienen acceso ni a la instancia ni a la clase). Los métodos estáticos se declaran usando el decorador <code>@staticmethod</code>. Pueden ser útiles cuando un método no depende del estado del objeto o la clase, pero está relacionado con la lógica que pertenece a la clase.
+
+Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+   class MyClass:
+       @staticmethod
+       def static_method():
+           pass
+</code></pre>
+</li>
+</ol>
+<h3>Herencia</h3>
+
+Uno de los principios clave de la POO es la <strong>herencia</strong>. Una clase puede heredar el comportamiento de otra clase, extendiendo o modificando su funcionalidad. Esto permite la reutilización del código, evitando la duplicación.
+
+<pre class="line-numbers"><code class="language-python">
+class Animal:
+    def speak(self):
+        return 'Voz de animal'
+
+class Dog(Animal):  # The Dog class inherits from the Animal class
+    def speak(self):
+        return 'Guau'
+
+# Object creation
+dog = Dog()
+print(dog.speak())  # Output: Woof
+</code></pre>
+
+<ul>
+<li>La clase <code>Dog</code> hereda el método <code>speak</code> de la clase <code>Animal</code>, pero lo anula para devolver la cadena <code>'Guau'</code>.</li>
+</ul>
+<h3>Polimorfismo</h3>
+
+El <strong>polimorfismo</strong> significa la capacidad de los objetos de diferentes clases para usar los mismos métodos con diferentes implementaciones. En Python, esto es posible a través de la herencia y la anulación de métodos.
+
+<pre class="line-numbers"><code class="language-python">
+class Cat(Animal):
+    def speak(self):
+        return 'Miau'
+
+# Object creation
+cat = Cat()
+print(cat.speak())  # Output: Meow
+</code></pre>
+
+<p>Aquí <code>Cat</code> también anula el método <code>speak</code>, pero devuelve un valor diferente. Esto permite llamar al método <code>speak</code> independientemente del tipo de objeto.</p>
+<h3>Encapsulación</h3>
+
+<p>La <strong>encapsulación</strong> permite ocultar los detalles de implementación internos y proporcionar acceso a los datos a través de métodos públicos. Esto ayuda a prevenir el uso indebido de los datos.</p>
+
+<pre class="line-numbers"><code class="language-python">
+class Car:
+    def __init__(self, make, model):
+        self._make = make  # Protected attribute
+        self._model = model
+
+    def get_make(self):
+        return self._make
+
+    def set_make(self, make):
+        self._make = make
+
+# Object creation
+my_car = Car('Toyota', 'Corolla')
+print(my_car.get_make())  # Output: Toyota
+my_car.set_make('Honda')
+print(my_car.get_make())  # Output: Honda
+</code></pre>
+
+<p>Aquí, los atributos <code>_make</code> y <code>_model</code> están protegidos (en Python, un guion bajo generalmente significa que estos atributos no deben usarse directamente fuera de la clase), pero se puede acceder a ellos y modificarlos a través de los métodos <code>get_make</code> y <code>set_make</code>.</p>
+<h3>Otras características de las clases</h3>
+
+<ol>
+<li><strong>Destructor</strong> (<code>__del__</code>):
+Un método especial que se llama cuando un objeto es destruido (por ejemplo, cuando sale del ámbito). Se puede usar para liberar recursos.
+
+Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+class MyClass:
+    def __del__(self):
+        print("Object destroyed")
+
+obj = MyClass()
+del obj  # The object will be destroyed and the __del__ method will be called
+</code></pre>
+</li>
+<li><strong>Métodos mágicos</strong>:
+Son métodos especiales con doble guion bajo (por ejemplo, <code>__init__</code>, <code>__str__</code>, <code>__repr__</code>, <code>__eq__</code>). Permiten anular el comportamiento estándar de operaciones, como la creación de objetos, la comparación, la representación de objetos como cadenas, etc.
+
+Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __repr__(self):
+        return f'Point({self.x}, {self.y})'
+
+p = Point(3, 4)
+print(p)  # Output: Point(3, 4)
+</code></pre>
+</li>
+</ol>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">Al índice</a></p>

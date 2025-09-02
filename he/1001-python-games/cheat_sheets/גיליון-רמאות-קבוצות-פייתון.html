@@ -1,0 +1,158 @@
+<h2 dir="rtl">קבוצות (סטים) בפייתון</h2>
+<h3 dir="rtl">1. מבוא: מהן קבוצות?</h3>
+<p dir="rtl">במדעי המחשב ובמתמטיקה, קבוצות – זוהי דרך לייצג אוספים של אלמנטים ייחודיים. חשוב להבין ש:</p>
+<ul>
+<li dir="rtl"><strong>ייחודיות:</strong> כל אלמנט בקבוצה חייב להיות ייחודי. חזרות אינן מותרות.</li>
+<li dir="rtl"><strong>אי-סדר:</strong> סדר האלמנטים בקבוצה אינו חשוב.</li>
+</ul>
+<h3 dir="rtl">2. קבוצות ופירות</h3>
+<p dir="rtl">נדמיין שיש לנו רק את הפירות עצמם:</p>
+<ul>
+<li dir="rtl">🍎 (תפוח)</li>
+<li dir="rtl">🍐 (אגס)</li>
+<li dir="rtl">🍉 (אבטיח)</li>
+<li dir="rtl">🧺 (סלסלה)</li>
+</ul>
+<p dir="rtl">חשוב ש:</p>
+<ol>
+<li dir="rtl"><strong>בסט <em>אין</em> פירות זהים:</strong> אם בסט יש תפוח, לא יהיה שם תפוח זהה נוסף. כל פרי ייחודי בסט שלו.</li>
+<li dir="rtl"><strong>סדר הפירות אינו חשוב:</strong> אם בסט יש תפוח ואגס, זה אותו דבר כאילו היו שם אגס ותפוח. הסדר אינו משנה.</li>
+</ol>
+<p dir="rtl">לדוגמה, <code dir="ltr">{🍎, 🍐, 🍉}</code> — זוהי קבוצה, שבה יש תפוח, אגס ואבטיח.</p>
+<h3 dir="rtl">3. מדוע קבוצות דורשות ייחודיות של אלמנטים?</h3>
+<ul>
+<li dir="rtl">קבוצות מיועדות למעקב אחר <em>נוכחות</em> אלמנטים, ולא אחר <em>כמותם</em>.</li>
+<li dir="rtl">ייחודיות האלמנטים מפשטת את ביצוע הפעולות על קבוצות.</li>
+<li dir="rtl">קבוצות משמשות למניעת יתירות נתונים.</li>
+</ul>
+<h3 dir="rtl">4. פעולות על קבוצות (סטים של פירות):</h3>
+<ol>
+<li dir="rtl"><strong>איחוד (Union): "אוספים את כל הפירות לסט אחד"</strong>
+<ul>
+<li dir="rtl">מאחדים שני סטים של פירות, אוספים את כל הפירות לסט חדש. אם בשני הסטים יש פירות זהים, בסט החדש יהיה רק פרי אחד כזה.</li>
+<li dir="rtl">אם בסט <code dir="ltr">A</code> יש <code dir="ltr">{🍎, 🍐}</code>, ובסט <code dir="ltr">B</code> יש <code dir="ltr">{🍐, 🍉}</code>, אז בסט <code dir="ltr">A ∪ B</code> יהיה <code dir="ltr">{🍎, 🍐, 🍉}</code>.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>חיתוך (Intersection): "מוצאים פירות משותפים"</strong>
+<ul>
+<li dir="rtl">מחפשים <em>רק</em> את הפירות שנמצאים גם בסט <code dir="ltr">A</code> וגם בסט <code dir="ltr">B</code>.</li>
+<li dir="rtl">אם בסט <code dir="ltr">A</code> יש <code dir="ltr">{🍎, 🍐}</code>, ובסט <code dir="ltr">B</code> יש <code dir="ltr">{🍐, 🍉}</code>, אז בסט <code dir="ltr">A ∩ B</code> יהיה רק <code dir="ltr">{🍐}</code>.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>הפרש (Difference): "פירות שנמצאים בסט אחד, אך לא באחר"</strong>
+<ul>
+<li dir="rtl">מחפשים <em>רק</em> את הפירות שנמצאים בסט <code dir="ltr">A</code>, אך אינם נמצאים בסט <code dir="ltr">B</code>.</li>
+<li dir="rtl">אם בסט <code dir="ltr">A</code> יש <code dir="ltr">{🍎, 🍐}</code>, ובסט <code dir="ltr">B</code> יש <code dir="ltr">{🍐, 🍉}</code>, אז בסט <code dir="ltr">A - B</code> יהיה <code dir="ltr">{🍎}</code>, ובסט <code dir="ltr">B - A</code> יהיה <code dir="ltr">{🍉}</code>.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>הפרש סימטרי (Symmetric Difference): "פירות שנמצאים רק באחד מהסטים"</strong>
+<ul>
+<li dir="rtl">מחפשים <em>את כל</em> הפירות שנמצאים בסט <code dir="ltr">A</code> או בסט <code dir="ltr">B</code>, אך לא בשניהם בו זמנית.</li>
+<li dir="rtl">אם בסט <code dir="ltr">A</code> יש <code dir="ltr">{🍎, 🍐}</code>, ובסט <code dir="ltr">B</code> יש <code dir="ltr">{🍐, 🍉}</code>, אז בסט <code dir="ltr">A ^ B</code> יהיה <code dir="ltr">{🍎, 🍉}</code>.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>תת-קבוצה (Subset): "האם כל הפירות מסט אחד נמצאים באחר?"</strong>
+<ul>
+<li dir="rtl">בודקים האם סט <code dir="ltr">A</code> הוא תת-קבוצה של סט <code dir="ltr">B</code>. זה אומר שכל הפירות מסט <code dir="ltr">A</code> נמצאים גם בסט <code dir="ltr">B</code>.</li>
+<li dir="rtl"><strong>דוגמה:</strong> אם בסט <code dir="ltr">A</code> יש <code dir="ltr">{🍎, 🍐}</code>, ובסט <code dir="ltr">B</code> יש <code dir="ltr">{🍎, 🍐, 🍉}</code>, אז <code dir="ltr">A &lt;= B</code>.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>על-קבוצה (Superset): "האם סט אחד מכיל את כל הפירות מסט אחר?"</strong>
+<ul>
+<li dir="rtl">בודקים האם סט <code dir="ltr">A</code> הוא על-קבוצה של סט <code dir="ltr">B</code>. זה אומר שכל הפירות מסט <code dir="ltr">B</code> נמצאים גם בסט <code dir="ltr">A</code>.</li>
+<li dir="rtl">אם בסט <code dir="ltr">A</code> יש <code dir="ltr">{🍎, 🍐, 🍉}</code>, ובסט <code dir="ltr">B</code> יש <code dir="ltr">{🍎, 🍐}</code>, אז <code dir="ltr">A &gt;= B</code>.</li>
+</ul>
+</li>
+</ol>
+<pre class="line-numbers"><code class="language-python">from typing import Set
+
+def create_fruit_set(fruit_string: str) -> Set[str]:
+    """
+    יוצר קבוצת פירות ממחרוזת.
+
+    Args:
+        fruit_string: מחרוזת פירות (🍎, 🍐, 🍉, 🧺).
+
+    Returns:
+        קבוצת פירות ייחודיים.
+    """
+    if not all(fruit in ["🍎", "🍐", "🍉", "🧺"] for fruit in fruit_string):
+        raise ValueError("מחרוזת יכולה להכיל רק סמלים 🍎, 🍐, 🍉, 🧺")
+    return set(fruit_string)  # השתמש ב-set() ליצירת קבוצה
+
+def display_set(fruit_set: Set[str]) -> str:
+  """
+  ממיר קבוצת פירות למחרוזת להצגה.
+
+    Args:
+        fruit_set: קבוצת פירות.
+
+    Returns:
+        מחרוזת להצגה.
+  """
+  return "{" + ", ".join(fruit_set) + "}"
+
+
+# יוצרים קבוצות פירות
+fruits_set_A = create_fruit_set("🍎🍐")  # קבוצה A: {🍎, 🍐}
+fruits_set_B = create_fruit_set("🍐🍉")  # קבוצה B: {🍐, 🍉}
+fruits_set_C = create_fruit_set("🍎🍐🍉")  # קבוצה C: {🍎, 🍐, 🍉}
+fruits_set_D = create_fruit_set("🧺")  # קבוצה D: {🧺}
+
+# מדפיסים קבוצות
+print(f"קבוצה A: {display_set(fruits_set_A)}")
+print(f"קבוצה B: {display_set(fruits_set_B)}")
+print(f"קבוצה C: {display_set(fruits_set_C)}")
+print(f"קבוצה D: {display_set(fruits_set_D)}")
+
+# איחוד קבוצות (Union)
+union_result = fruits_set_A | fruits_set_B
+print(f"A ∪ B: {display_set(union_result)}")  # תוצאה: {🍎, 🍐, 🍉}
+
+# חיתוך קבוצות (Intersection)
+intersection_result = fruits_set_A & fruits_set_B
+print(f"A ∩ B: {display_set(intersection_result)}")  # תוצאה: {🍐}
+
+# הפרש קבוצות (Difference)
+difference_result_AB = fruits_set_A - fruits_set_B
+print(f"A - B: {display_set(difference_result_AB)}")  # תוצאה: {🍎}
+difference_result_BA = fruits_set_B - fruits_set_A
+print(f"B - A: {display_set(difference_result_BA)}")  # תוצאה: {🍉}
+
+# הפרש סימטרי של קבוצות (Symmetric Difference)
+symmetric_difference_result = fruits_set_A ^ fruits_set_B
+print(f"A ^ B: {display_set(symmetric_difference_result)}")  # תוצאה: {🍎, 🍉}
+
+# תת-קבוצה (Subset)
+subset_result1 = fruits_set_A <= fruits_set_C
+print(f"A <= C: {subset_result1}")  # תוצאה: True (A היא תת-קבוצה של C)
+subset_result2 = fruits_set_A <= fruits_set_B
+print(f"A <= B: {subset_result2}") # תוצאה: False (A אינה תת-קבוצה של B)
+
+# על-קבוצה (Superset)
+superset_result1 = fruits_set_C >= fruits_set_A
+print(f"C >= A: {superset_result1}")  # תוצאה: True (C היא על-קבוצה של A)
+superset_result2 = fruits_set_B >= fruits_set_A
+print(f"B >= A: {superset_result2}")  # תוצאה: False (B אינה על-קבוצה של A)
+
+# בדיקת נוכחות אלמנט
+print(f"🍎 ב-A: {'🍎' in fruits_set_A}")  # תוצאה: True
+print(f"🍉 ב-A: {'🍉' in fruits_set_A}")  # תוצאה: False
+</code></pre>
+<ul>
+<li dir="rtl"><strong><code dir="ltr">create_fruit_set(fruit_string)</code>:</strong> פונקציה זו יוצרת קבוצה ממחרוזת פירות.
+<ul>
+<li dir="rtl"><code dir="ltr">set(fruit_string)</code> הופך את המחרוזת לקבוצה, מסיר כפילויות והופך את סדר האלמנטים ללא רלוונטי.</li>
+<li dir="rtl">אנו בודקים שהמחרוזת מורכבת רק מתווי יוניקוד מותרים.</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">display_set(fruit_set)</code>:</strong> פונקציה זו משמשת להמרת קבוצה למחרוזת קריאה לצורך פלט.</li>
+<li dir="rtl"><strong>דוגמאות:</strong> אנו יוצרים מספר קבוצות ומפעילים עליהן פעולות שונות. תוצאות כל פעולה מודפסות למסך.</li>
+</ul>
+<h3 dir="rtl">5. משימות לתרגול:</h3>
+<ol>
+<li dir="rtl">צור קבוצות פירות משלך ונסה את כל הפעולות עליהן.</li>
+<li dir="rtl">יישם את הפונקציה <code dir="ltr">is_disjoint(set1, set2)</code>, שתבדוק האם שתי קבוצות זרות זו לזו (חיתוך = קבוצה ריקה).</li>
+<li dir="rtl">יישם את הפונקציה <code dir="ltr">power_set(fruit_set)</code>, שתחזיר את קבוצת כל תתי-הקבוצות של קבוצה נתונה.</li>
+<li dir="rtl">נסה ליישם קבוצות לפתרון בעיה אמיתית. לדוגמה, יש לך שתי רשימות אורחים למסיבה, מצא אורחים שנמצאים בשתי הרשימות, אורחים שנמצאים רק ברשימה הראשונה וכו'.</li>
+</ol>

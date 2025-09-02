@@ -1,0 +1,218 @@
+<p dir="rtl">השוואת <code dir="ltr">dict</code> ו-<code dir="ltr">SimpleNamespace</code> בפייתון. תכונות, יתרונות, מתי עדיף להשתמש בכל אחד מהם.</p>
+<p dir="rtl">שניהם מאפשרים לאחסן נתונים בעלי שם, אך עושים זאת בדרכים שונות, ולכל אחד מהם מאפיינים משלו.</p>
+<h3 dir="rtl">1. מילונים (<code dir="ltr">dict</code>)</h3>
+<ul>
+<li dir="rtl"><strong>הגדרה:</strong> <strong>מילון בפייתון</strong> – זוהי מבנה נתונים המאחסן זוגות "מפתח-ערך". מפתחות חייבים להיות טיפוסי נתונים בלתי ניתנים לשינוי (לדוגמה, מחרוזות, מספרים, טאפלים), והערכים יכולים להיות כל דבר.</li>
+<li dir="rtl"><strong>יצירה:</strong> מילונים נוצרים באמצעות סוגריים מסולסלים <code dir="ltr">{}</code> או הפונקציה <code dir="ltr">dict()</code>.</li>
+<li dir="rtl"><strong>גישה לערכים:</strong> ערכים נגישים לפי מפתח באמצעות סוגריים מרובעים <code dir="ltr">[]</code>.</li>
+<li dir="rtl"><strong>שינוי:</strong> ניתן לשנות ערכים, להוסיף זוגות "מפתח-ערך" חדשים ולמחוק קיימים.</li>
+<li dir="rtl"><strong>דוגמה:</strong>
+<pre class="line-numbers"><code class="language-python">my_dict = {
+    "name": "אליס",
+    "age": 30,
+    "city": "ניו יורק"
+}
+
+print(my_dict["name"])  # יוציא "אליס"
+
+my_dict["age"] = 31 # משנה ערך
+print(my_dict["age"]) # יוציא 31
+my_dict["occupation"] = "מהנדס" # מוסיף ערך חדש
+print(my_dict)
+del my_dict["city"] # מוחק ערך
+print(my_dict)
+</code></pre>
+</li>
+</ul>
+<h3 dir="rtl">2. <code dir="ltr">SimpleNamespace</code></h3>
+<ul>
+<li dir="rtl"><strong><code dir="ltr">SimpleNamespace</code></strong> – זוהי מחלקה פשוטה מהמודול <code dir="ltr">types</code>, המאפשרת לגשת לערכים כתכונות אובייקט. היא טובה לאחסון והעברת קבוצת נתונים.</li>
+<li dir="rtl"><strong>יצירה:</strong> <code dir="ltr">SimpleNamespace</code> נוצרת באמצעות הפונקציה <code dir="ltr">SimpleNamespace()</code> והעברת ארגומנטים בעלי שם.</li>
+<li dir="rtl"><strong>גישה לערכים:</strong> ערכים נגישים כתכונות אובייקט באמצעות סימון נקודה <code dir="ltr">.</code>.</li>
+<li dir="rtl"><strong>שינוי:</strong> ניתן לשנות ערכים, להוסיף תכונות חדשות ולמחוק קיימות.</li>
+<li dir="rtl"><strong>דוגמה:</strong>
+<pre class="line-numbers"><code class="language-python">from types import SimpleNamespace
+
+my_namespace = SimpleNamespace(
+    name="בוב",
+    age=25,
+    city="לונדון"
+)
+
+print(my_namespace.name)  # יוציא "בוב"
+my_namespace.age = 26 # משנה ערך
+print(my_namespace.age) # יוציא 26
+my_namespace.occupation = "רופא" # מוסיף ערך חדש
+print(my_namespace)
+del my_namespace.city # מוחק ערך
+print(my_namespace)
+</code></pre>
+</li>
+</ul>
+<h3 dir="rtl">השוואת <code dir="ltr">dict</code> ו-<code dir="ltr">SimpleNamespace</code></h3>
+<table>
+<thead>
+<tr>
+<th dir="rtl">מאפיין</th>
+<th dir="rtl"><code dir="ltr">dict</code></th>
+<th dir="rtl"><code dir="ltr">SimpleNamespace</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="rtl"><strong>גישה לערכים</strong></td>
+<td dir="ltr"><code dir="ltr">my_dict["key"]</code></td>
+<td dir="ltr"><code dir="ltr">my_namespace.attribute</code></td>
+</tr>
+<tr>
+<td dir="rtl"><strong>יצירה</strong></td>
+<td dir="ltr">{}</code> או <code dir="ltr">dict()</code></td>
+<td dir="ltr">SimpleNamespace()</code></td>
+</tr>
+<tr>
+<td dir="rtl"><strong>מפתחות/תכונות</strong></td>
+<td dir="rtl">מפתחות - כל אובייקט בלתי ניתן לשינוי</td>
+<td dir="rtl">תכונות - מחרוזות, כמו אובייקטים רגילים</td>
+</tr>
+<tr>
+<td dir="rtl"><strong>מוטביליות</strong></td>
+<td dir="rtl">מוטבילי (ניתן לשינוי)</td>
+<td dir="rtl">מוטבילי (ניתן לשינוי)</td>
+</tr>
+<tr>
+<td dir="rtl"><strong>נוחות</strong></td>
+<td dir="rtl">גמיש, מאפשר איטרציה על מפתחות וערכים, שימוש דינמי במפתחות</td>
+<td dir="rtl">נוח לגישה פשוטה לערכים כתכונות, כמו אובייקטים רגילים</td>
+</tr>
+<tr>
+<td dir="rtl"><strong>מטרה</strong></td>
+<td dir="rtl">אחסון ועיבוד נתונים</td>
+<td dir="rtl">אחסון והעברת נתונים כתכונות</td>
+</tr>
+</tbody>
+</table>
+<h3 dir="rtl">מתי להשתמש במה?</h3>
+<ul>
+<li dir="rtl"><strong>מילונים (<code dir="ltr">dict</code>):</strong>
+<ul>
+<li dir="rtl">כאשר יש לך מפתחות דינמיים (לדוגמה, כאשר מפתחות מגיעים ממקורות חיצוניים או נוצרים במהלך הריצה).</li>
+<li dir="rtl">כאשר אתה צריך להשתמש בשיטות מילון לעיבוד ואיטרציה של נתונים.</li>
+<li dir="rtl">כאשר אתה עובד עם נתונים שבהם שמות המפתחות יכולים להיות כל דבר.</li>
+<li dir="rtl">כאשר אתה צריך גמישות ודינמיות.</li>
+<li dir="rtl">כאשר אתה צריך מפתחות שאינם מחרוזות.</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">SimpleNamespace</code>:</strong>
+<ul>
+<li dir="rtl">כאשר אתה צריך ליצור אובייקט לאחסון נתונים ולגשת אליהם כתכונות.</li>
+<li dir="rtl">כאשר יש לך קבוצה מוגדרת מראש של תכונות.</li>
+<li dir="rtl">כאשר אתה רוצה שהקוד יהיה קריא יותר בעת גישה לתכונות (באמצעות סימון נקודה במקום סוגריים מרובעים).</li>
+<li dir="rtl">כאשר אתה מעביר נתונים לפונקציות או מודולים אחרים ורוצה לעשות זאת כאובייקט.</li>
+</ul>
+</li>
+</ul>
+<h3 dir="rtl">הבדלים בין <code dir="ltr">dict</code> ל-<code dir="ltr">SimpleNamespace</code></h3>
+<table>
+<thead>
+<tr>
+<th dir="rtl">מאפיין</th>
+<th dir="rtl"><code dir="ltr">dict</code></th>
+<th dir="rtl"><code dir="ltr">SimpleNamespace</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td dir="rtl"><strong>מבנה</strong></td>
+<td dir="rtl">מאחסן זוגות "מפתח-ערך"</td>
+<td dir="rtl">מאחסן ערכים כתכונות אובייקט</td>
+</tr>
+<tr>
+<td dir="rtl"><strong>גישה לערכים</strong></td>
+<td dir="rtl">משתמש בסוגריים מרובעים <code dir="ltr">[]</code> ומפתח: <code dir="ltr">my_dict["key"]</code></td>
+<td dir="rtl">משתמש בסימון נקודה <code dir="ltr">.</code>: <code dir="ltr">my_namespace.attribute</code></td>
+</tr>
+<tr>
+<td dir="rtl"><strong>מפתחות/תכונות</strong></td>
+<td dir="rtl">מפתחות יכולים להיות כל אובייקט <em>בלתי ניתן לשינוי</em> (מחרוזות, מספרים, טאפלים)</td>
+<td dir="rtl">תכונות חייבות להיות מחרוזות, כמו שמות משתנים, אך הן למעשה מפתחות מילון בצורת <code dir="ltr">.attr</code></td>
+</tr>
+<tr>
+<td dir="rtl"><strong>גמישות</strong></td>
+<td dir="rtl">גמיש מאוד, תומך בשיטות רבות (<code dir="ltr">keys()</code>, <code dir="ltr">values()</code>, <code dir="ltr">items()</code>)</td>
+<td dir="rtl">פחות גמיש, אין סט גדול של שיטות מובנות</td>
+</tr>
+<tr>
+<td dir="rtl"><strong>מטרה</strong></td>
+<td dir="rtl">אחסון ועיבוד נתונים שרירותיים</td>
+<td dir="rtl">אחסון והעברת נתונים <em>בעלי שם</em> כאובייקט, לעיתים קרובות עם מבנה מוגדר מראש</td>
+</tr>
+<tr>
+<td dir="rtl"><strong>ייצוג</strong></td>
+<td dir="rtl">ייצוג מחרוזתי הוא <code dir="ltr">{"key": "value"}</code></td>
+<td dir="rtl">ייצוג מחרוזתי הוא <code dir="ltr">namespace(attr="value")</code></td>
+</tr>
+</tbody>
+</table>
+<h3 dir="rtl">יתרונות <code dir="ltr">dict</code></h3>
+<ol>
+<li dir="rtl"><strong>גמישות מפתחות:</strong> מפתחות מילון יכולים להיות כל טיפוס נתונים בלתי ניתן לשינוי (מחרוזות, מספרים, טאפלים). זה מאפשר ליצור מילונים עם מבנה מורכב, שבהם מפתחות יכולים להיות, לדוגמה, קואורדינטות של נקודות או אובייקטים מורכבים אחרים.</li>
+<li dir="rtl"><strong>שיטות רבות:</strong> מילונים מספקים סט עשיר של שיטות מובנות לעבודה עם נתונים:
+<ul>
+<li dir="rtl"><code dir="ltr">keys()</code>: מחזיר את כל המפתחות במילון.</li>
+<li dir="rtl"><code dir="ltr">values()</code>: מחזיר את כל הערכים במילון.</li>
+<li dir="rtl"><code dir="ltr">items()</code>: מחזיר את כל זוגות "מפתח-ערך" כטאפלים.</li>
+<li dir="rtl"><code dir="ltr">get()</code>: מחזיר את הערך עבור מפתח או ערך ברירת מחדל אם המפתח אינו נמצא.</li>
+<li dir="rtl"><code dir="ltr">pop()</code>: מסיר אלמנט לפי מפתח ומחזיר את ערכו.</li>
+<li dir="rtl">ורבים אחרים.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>יצירה דינמית:</strong> מילונים ניתנים להרחבה בקלות, על ידי הוספת זוגות "מפתח-ערך" חדשים במהלך ביצוע התוכנית.</li>
+<li dir="rtl"><strong>איטרציה:</strong> ניתן לבצע איטרציה על מילונים בנוחות: לפי מפתחות, לפי ערכים או לפי זוגות מפתח-ערך.</li>
+<li dir="rtl"><strong>נוח ל-JSON:</strong> למילונים יש ייצוג נוח לעבודה עם נתוני <code dir="ltr">JSON</code>.</li>
+</ol>
+<h3 dir="rtl">יתרונות <code dir="ltr">SimpleNamespace</code></h3>
+<ol>
+<li dir="rtl"><strong>גישה לתכונות באמצעות סימון נקודה:</strong> גישה לערכים באמצעות סימון נקודה (<code dir="ltr">my_namespace.attribute</code>) קריאה ונוחה יותר מאשר שימוש בסוגריים מרובעים ומפתחות (<code dir="ltr">my_dict["key"]</code>). זה הופך את הקוד לדומה יותר לעבודה עם אובייקטים רגילים.</li>
+<li dir="rtl"><strong>נוחות בהעברת נתונים:</strong> <code dir="ltr">SimpleNamespace</code> נוחה לשימוש להעברת נתונים לפונקציות או מודולים כאשר יש צורך להעביר קבוצה של ערכים בעלי שם קשורים. ניתן להעביר אובייקט יחיד במקום מספר משתנים.</li>
+<li dir="rtl"><strong>פשטות יצירה:</strong> <code dir="ltr">SimpleNamespace</code> קלה ליצירה על ידי העברת ארגומנטים בעלי שם: <code dir="ltr">SimpleNamespace(name="אליס", age=30)</code>.</li>
+<li dir="rtl"><strong>פחות קוד:</strong> לגישה פשוטה לערכים כתכונות אובייקט, שימוש ב-<code dir="ltr">SimpleNamespace</code> עשוי לדרוש פחות קוד מאשר עבודה עם מילונים.</li>
+<li dir="rtl"><strong>מבנה צפוי:</strong> בניגוד למילון, <code dir="ltr">SimpleNamespace</code> יוצר אובייקט עם תכונות ספציפיות.</li>
+</ol>
+<h3 dir="rtl">מתי להשתמש במה:</h3>
+<ul>
+<li dir="rtl"><strong>השתמש ב-<code dir="ltr">dict</code> כאשר:</strong>
+<ul>
+<li dir="rtl">יש לך קבוצה דינמית של מפתחות שעשויה להשתנות במהלך ביצוע התוכנית.</li>
+<li dir="rtl">אתה צריך להשתמש בשיטות מילון לעיבוד ואיטרציה של נתונים.</li>
+<li dir="rtl">אתה עובד עם נתונים בפורמט "מפתח-ערך".</li>
+<li dir="rtl">אתה צריך גמישות ודינמיות.</li>
+<li dir="rtl">אתה צריך מפתחות שאינם מחרוזות.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>השתמש ב-<code dir="ltr">SimpleNamespace</code> כאשר:</strong>
+<ul>
+<li dir="rtl">יש לך קבוצה מוגדרת מראש של ערכים בעלי שם (תכונות).</li>
+<li dir="rtl">אתה צריך להעביר קבוצת נתונים כאובייקט.</li>
+<li dir="rtl">אתה צריך סימון נקודה קריא יותר לגישה לערכים.</li>
+<li dir="rtl">אתה צריך פשטות ונוחות ביצירת אובייקטים לאחסון נתונים.</li>
+<li dir="rtl">כאשר מבנה הנתונים לא אמור להשתנות באופן דינמי.</li>
+</ul>
+</li>
+</ul>
+<p dir="rtl"><strong>דוגמה:</strong></p>
+<p dir="rtl">יש לך פונקציה שמקבלת נתוני משתמש.</p>
+<pre class="line-numbers"><code class="language-python">from types import SimpleNamespace
+
+def process_user_data_with_dict(user_data: dict):
+    print(f"משתמש: {user_data.get('name', 'Unknown')}, גיל: {user_data.get('age', 'Unknown')}")
+
+def process_user_data_with_namespace(user_data: SimpleNamespace):
+     print(f"משתמש: {user_data.name}, גיל: {user_data.age}")
+
+user_dict = {"name": "אליס", "age": 30}
+user_namespace = SimpleNamespace(name="בוב", age=25)
+
+process_user_data_with_dict(user_dict)
+process_user_data_with_namespace(user_namespace)
+</code></pre>
+<p dir="rtl">בדוגמה זו, עבור <code dir="ltr">dict</code> אנו משתמשים בשיטה <code dir="ltr">get</code> כדי לאחזר ערכים, עם ערך מוגדר מראש אם המפתח אינו נמצא. עבור <code dir="ltr">SimpleNamespace</code> אנו ניגשים לתכונות ישירות, וזה קריא יותר.</p>

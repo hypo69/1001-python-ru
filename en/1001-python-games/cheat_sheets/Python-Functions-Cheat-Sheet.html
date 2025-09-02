@@ -1,0 +1,126 @@
+<h1>Functions in Python</h1>
+<p>Functions in Python are named blocks of code that perform a specific task. They allow you to organize code, make it more structured, and facilitate its reuse.</p>
+<h1>Table of Contents</h1>
+<ol>
+<li><a href="#function-declaration">Function Declaration</a></li>
+<li><a href="#function-parameters">Function Parameters</a>
+<ul>
+<li><a href="#types-of-parameters">Types of Parameters</a></li>
+</ul>
+</li>
+<li><a href="#return-value">Return Value</a></li>
+<li><a href="#local-and-global-variables">Local and Global Variables</a></li>
+<li><a href="#nested-functions">Nested Functions</a></li>
+<li><a href="#recursion">Recursion</a></li>
+<li><a href="#exception-handling-with-try-and-except">Exception Handling with <code>try</code> and <code>except</code></a></li>
+<li><a href="#function-usage-example">Function Usage Example</a></li>
+</ol>
+<h2>Function Declaration</h2>
+<p>A function is declared using the <code>def</code> keyword, followed by the function name, a list of parameters in parentheses, and a colon. The function body is written with an indent.</p>
+<pre class="line-numbers"><code class="language-python">def function_name(parameters):
+    # actions
+    return result
+</code></pre>
+<h3>Example:</h3>
+<pre class="line-numbers"><code class="language-python">def add(a: int, b: int) -> int:
+    """Returns the sum of two numbers."""
+    return a + b
+</code></pre>
+<p>Here:
+- <code>a: int</code> and <code>b: int</code> — function parameters with type annotations.
+- <code>-> int</code> — return value type annotation.</p>
+<h2>Function Parameters</h2>
+<p>Functions can accept parameters, which are input data. They are specified in parentheses after the function name.</p>
+<p>Example with one parameter:</p>
+<pre class="line-numbers"><code class="language-python">def greeting(name: str) -> str:
+    """Greets the user by name."""
+    return f"Hello, {name}!"
+</code></pre>
+<h3>Types of parameters:</h3>
+<ol>
+<li><strong>Required parameters</strong> — must be passed when calling the function.</li>
+<li><strong>Optional parameters</strong> — can have default values.
+   <pre class="line-numbers"><code class="language-python">def greeting(name: str, age: int = 18) -> str:
+       return f"Hello, {name}! You are {age} years old."
+</code></pre>
+</li>
+</ol>
+<h2>Return Value</h2>
+<p>A function can return a value using the <code>return</code> keyword. If <code>return</code> is not used, the function returns <code>None</code> by default.</p>
+<p>Example:</p>
+<pre class="line-numbers"><code class="language-python">def multiply(a: int, b: int) -> int:
+    """Returns the product of two numbers."""
+    return a * b
+</code></pre>
+<h2>Local and Global Variables</h2>
+<ul>
+<li><strong>Local variable</strong> — a variable that exists only inside a function. It is created and destroyed with each function call.</li>
+<li><strong>Global variable</strong> — a variable that is accessible throughout the code, including functions.</li>
+</ul>
+<p>Example of using a global variable:</p>
+<pre class="line-numbers"><code class="language-python">x = 10  # Global variable
+
+def show_x() -> int:
+    return x  # Accessing the global variable
+</code></pre>
+<p>If you need to change a global variable inside a function, you must use the <code>global</code> keyword:</p>
+<pre class="line-numbers"><code class="language-python">x = 10  # Global variable
+
+def change_x() -> None:
+    global x
+    x = 20
+</code></pre>
+<h2>Nested Functions</h2>
+<p>In Python, functions can be nested, meaning one function can be defined inside another. A nested function can access variables of the outer function.</p>
+<p>Example:</p>
+<pre class="line-numbers"><code class="language-python">def outer(a: int, b: int) -> int:
+    """A function that uses a nested function to calculate the difference."""
+    
+    def nested(x: int, y: int) -> int:
+        """Nested function returning the difference."""
+        return x - y
+    
+    return nested(a, b)
+</code></pre>
+<h2>Recursion</h2>
+<p>Recursion is when a function calls itself. This is useful for tasks that can be broken down into smaller, similar tasks (e.g., factorial).</p>
+<p>Example of recursion:</p>
+<pre class="line-numbers"><code class="language-python">def factorial(n: int) -> int:
+    """Calculates the factorial of a number using recursion."""
+    if n == 0:
+        return 1  # Base case
+    return n * factorial(n - 1)  # Recursive call
+</code></pre>
+<h2>Exception Handling with <code>try</code> and <code>except</code></h2>
+<p>Python provides an error handling mechanism using <code>try</code> and <code>except</code> blocks. Code that may cause an error is placed in the <code>try</code> block, and errors are handled in the <code>except</code> block.</p>
+<p>Example of error handling:</p>
+<pre class="line-numbers"><code class="language-python">def divide(a: int, b: int) -> float:
+    """Divides one number by another, handling possible errors."""
+    try:
+        result = a / b
+    except ZeroDivisionError:
+        return "Error: division by zero"
+    except Exception as e:
+        return f"An error occurred: {e}"
+    return result
+</code></pre>
+<p>Here:
+- The <code>try</code> block attempts to perform the division operation.
+- The <code>except ZeroDivisionError</code> block catches the division by zero error.
+- The <code>except Exception as e</code> block catches other exceptions and prints an error message.</p>
+<h2>Function Usage Example</h2>
+<pre class="line-numbers"><code class="language-python"># Adding two numbers
+print(add(5, 3))  # 8
+
+# Nested function
+print(outer(10, 4))  # 6
+
+# Recursion for factorial calculation
+print(factorial(5))  # 120
+
+# Exception handling for division
+print(divide(10, 2))  # 5.0
+print(divide(10, 0))  # Error: division by zero
+</code></pre>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">To Table of Contents</a></p>

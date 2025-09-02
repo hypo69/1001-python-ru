@@ -1,0 +1,78 @@
+<h2 dir="rtl"><span dir="ltr">BAGLES</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">6</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;בייגלס&quot; - זהו משחק היגיון-חידה, שבו השחקן מנסה לנחש מספר תלת-ספרתי, המורכב מספרות ייחודיות. לאחר כל ניסיון, השחקן מקבל רמזים: &quot;<span dir="ltr">PICO</span>&quot; פירושו שאחת הספרות נוחשה ונמצאת במיקום הנכון, &quot;<span dir="ltr">FERMI</span>&quot; פירושו שאחת הספרות נוחשה, אך לא במיקום הנכון, &quot;<span dir="ltr">BAGELS</span>&quot; פירושו שאף אחת מהספרות לא נוחשה.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">המחשב מייצר מספר תלת-ספרתי אקראי המורכב מספרות ייחודיות.</p></li>
+<li><p dir="rtl">השחקן מזין את ניחושיו כמספר תלת-ספרתי.</p></li>
+<li><p dir="rtl">המחשב מספק רמזים:</p>
+<ul>
+<li><p dir="rtl">&quot;<span dir="ltr">PICO</span>&quot; - ספרה אחת נוחשה ונמצאת במיקום הנכון.</p></li>
+<li><p dir="rtl">&quot;<span dir="ltr">FERMI</span>&quot; - ספרה אחת נוחשה, אך לא במיקום הנכון.</p></li>
+<li><p dir="rtl">&quot;<span dir="ltr">BAGELS</span>&quot; - אף אחת מהספרות לא נוחשה.</p></li>
+</ul>
+</li>
+<li><p dir="rtl">רמזים ניתנים בסדר מיקום הספרות במספר הנסתר, לדוגמה אם המספר הנסתר הוא <span dir="ltr"><code>123</code></span> והשחקן הזין <span dir="ltr"><code>142</code></span>, אז הרמזים יהיו <span dir="ltr"><code>PICO FERMI</code></span>.</p></li>
+<li><p dir="rtl">המשחק נמשך עד שהשחקן מנחש את המספר.</p></li>
+<li><p dir="rtl">אם לאחר <span dir="ltr">10</span> ניסיונות השחקן לא מנחש את המספר, המשחק מסתיים והמספר הנסתר מוצג.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">צור מספר תלת-ספרתי אקראי, המורכב מספרות ייחודיות (לדוגמה, <span dir="ltr">123</span>).</p></li>
+<li><p dir="rtl">הגדר את מספר הניסיונות ל-<span dir="ltr">0</span>.</p></li>
+<li><p dir="rtl">לולאה &quot;כל עוד המספר לא נוחש או מספר הניסיונות קטן מ-<span dir="ltr">10</span>&quot;:</p>
+<ol>
+<li><p dir="rtl">הגדל את מספר הניסיונות ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">בקש מהשחקן מספר תלת-ספרתי.</p></li>
+<li><p dir="rtl">השווה את המספר שהוזן למספר הנסתר וצור רמזים &quot;<span dir="ltr">PICO</span>&quot;, &quot;<span dir="ltr">FERMI</span>&quot; ו-&quot;<span dir="ltr">BAGELS</span>&quot;.</p></li>
+<li><p dir="rtl">אם המספר נוחש, הצג הודעת ניצחון ומספר ניסיונות.</p></li>
+<li><p dir="rtl">אם המספר לא נוחש, הצג את הרמזים שנוצרו.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">אם לאחר <span dir="ltr">10</span> ניסיונות המספר לא נוחש, הצג את המספר הנסתר והודעת הפסד.</p></li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> GenerateSecretNumber["<p align='left'>Generate secret number <code><b>secretNumber</b></code> (3 unique digits)
+    <code><b>numberOfGuesses = 0</b></code>
+    </p>"]
+    GenerateSecretNumber --> LoopStart{"Start loop: as long as not guessed and attempts < 10"}
+    LoopStart -- Yes --> IncreaseGuesses["<code><b>numberOfGuesses = numberOfGuesses + 1</b></code>"]
+    IncreaseGuesses --> InputGuess["User enters number: <code><b>userGuess</b></code>"]
+    InputGuess --> GenerateClues["<p align='left'>Generate clues (<code><b>clues</b></code>):
+    <ul>
+    <li><code><b>PICO</b></code>- digit guessed and in correct place</li>
+    <li><code><b>FERMI</b></code> - digit guessed but not in place</li>
+    <li><code><b>BAGELS</b></code> - none of the digits guessed</li>
+    </ul></p>"]
+    GenerateClues --> CheckWin{"Check: <code><b>userGuess == secretNumber?</b></code>"}
+    CheckWin -- Yes --> OutputWin["Display win message and number of attempts"]
+    OutputWin --> End["End"]
+    CheckWin -- No --> OutputClues["Display clues <code><b>clues</b></code>"]
+    OutputClues --> LoopStart
+    LoopStart -- No --> CheckLose{"Check: <code><b>numberOfGuesses == 10?</b></code>"}
+    CheckLose -- Yes --> OutputLose["Display lose message and <code><b>secretNumber</b></code>"]
+    OutputLose --> End
+    CheckLose -- No --> LoopStart
+
+</code></pre>
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">GenerateSecretNumber</span> - יצירת מספר סודי <span dir="ltr">secretNumber</span> מ-<span dir="ltr">3</span> ספרות ייחודיות ואתחול מספר הניסיונות <span dir="ltr">numberOfGuesses = 0</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת הלולאה, הנמשכת כל עוד המספר לא נוחש ומספר הניסיונות קטן מ-<span dir="ltr">10</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">IncreaseGuesses</span> - הגדלת מונה הניסיונות ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputGuess</span> - בקשת המשתמש להזין מספר ושמירתו במשתנה <span dir="ltr">userGuess</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">GenerateClues</span> - יצירת רמזים על בסיס השוואת <span dir="ltr">userGuess</span> ו-<span dir="ltr">secretNumber</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckWin</span> - בדיקה האם המספר שהוזן <span dir="ltr">userGuess</span> שווה למספר הסודי <span dir="ltr">secretNumber</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWin</span> - הצגת הודעת ניצחון ומספר ניסיונות.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputClues</span> - הצגת הרמזים שנוצרו.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckLose</span> - בדיקה האם מספר הניסיונות הגיע ל-<span dir="ltr">10</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputLose</span> - הצגת הודעת הפסד והמספר הסודי <span dir="ltr">secretNumber</span>.</p></li>
+</ul>

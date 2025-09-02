@@ -1,0 +1,82 @@
+<h3>Ask a question to the Gemini model</h3>
+<p>An API key is required to function.</p>
+<p>THE MODEL API KEY CAN BE OBTAINED HERE: <a href="https://aistudio.google.com/">https://aistudio.google.com/</a></p>
+<pre class="line-numbers"><code class="language-python">
+import google.generativeai as genai
+
+class GoogleGenerativeAI:
+    """
+    Class for interacting with Google Generative AI models.
+    """
+
+    MODELS = [
+        "gemini-1.5-flash-8b",
+        "gemini-2-13b",
+        "gemini-3-20b"
+    ]
+
+    def __init__(self, api_key: str, model_name: str = "gemini-2.0-flash-exp"):
+        """
+        Initializes the GoogleGenerativeAI model.
+
+        Arguments:
+            api_key (str): API key to access the generative model.
+            model_name (str, optional): Name of the model to use. Defaults to "gemini-2.0-flash-exp".
+        """
+        self.api_key = api_key
+        self.model_name = model_name
+        genai.configure(api_key=self.api_key)
+        self.model = genai.GenerativeModel(model_name=self.model_name)
+
+    def ask(self, q: str) -> str:
+        """
+        Sends a text query to the model and returns the response.
+
+        Arguments:
+            q (str): The question to send to the model.
+
+        Returns:
+            str: Model response.
+        """
+        try:
+            response = self.model.generate_content(q)
+            return response.text
+        except Exception as ex:
+            return f"Error: {str(ex)}"
+</code></pre>
+<h3>How this code works</h3>
+<ol>
+<li><strong>Library Import</strong>: We import the <code>google.generativeai</code> library, which provides an interface for interacting with Google AI models.</li>
+<li><strong><code>GoogleGenerativeAI</code> Class</strong>: This class encapsulates all the logic for interacting with the Gemini model. It takes an API key and a model name as parameters. The <code>gemini-2.0-flash-exp</code> model is used by default.</li>
+<li><strong><code>__init__</code> Method</strong>: In this method, the model is configured. We pass the API key and the model name, then we initialize the model object.</li>
+<li><strong><code>ask</code> Method</strong>: This method sends a text query to the model and returns the response. If something goes wrong, the method will return an error message.</li>
+</ol>
+<h3>How to use?</h3>
+<pre class="line-numbers"><code class="language-python">
+################################################################################
+#                                                                              #
+#             INSERT YOUR GEMINI API KEY                                       #
+#                                                                              #
+################################################################################
+
+API_KEY: str = input("Gemini API key: ")
+model = GoogleGenerativeAI(api_key=API_KEY)
+
+q = input("Question: ")
+response = model.ask(q)
+print(response)
+</code></pre>
+<ol>
+<li><strong>API Key Entry</strong>: First, the program asks the user for an API key to access the Gemini model. This key can be obtained from the <a href="https://aistudio.google.com/">Google AI Studio</a> website.</li>
+<li><strong>Model Object Creation</strong>: We create an object of the <code>GoogleGenerativeAI</code> class, passing it the API key.</li>
+<li><strong>Question Entry</strong>: The user enters the question they want to ask the model.</li>
+<li><strong>Getting the Response</strong>: The program sends the question to the model and displays the response on the screen.</li>
+</ol>
+<h3>Usage Example</h3>
+<p>You have an API key, and you want to ask the model: "How can I improve my code?". Here's what it will look like:</p>
+<pre class="line-numbers"><code class="language-text">
+Gemini API key: your_api_key
+Question: How can I improve my code?
+Response: To improve your code, it is recommended to follow clean code principles, such as naming variables and functions clearly and logically, using comments to explain complex logic, and applying SOLID principles for class and module design.
+</code></pre>
+<p>Run the code <a href="https://colab.research.google.com/github/hypo69/101_python_computer_games_ru/blob/master/GAMES/AI/ASK_GEMINI/ask_gemini_ru.ipynb">here</a></p>

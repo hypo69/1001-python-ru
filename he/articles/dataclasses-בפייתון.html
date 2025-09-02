@@ -1,0 +1,449 @@
+<h2 dir="rtl"><span dir="ltr">Dataclasses</span>: כשפייתון פוגש נתונים מובנים (עם דוגמאות חדשות עם שמות)</h2>
+
+<p dir="rtl">בפייתון, כשצריך מחלקה לאחסון נתונים, בדרך כלל צריך לכתוב קוד תבניתי עבור <span dir="ltr"><code>__init__</code></span>, <span dir="ltr"><code>__repr__</code></span>, <span dir="ltr"><code>__eq__</code></span> ומתודות קסם אחרות. המודול <span dir="ltr"><code>dataclasses</code></span>, שהוצג בפייתון <span dir="ltr">3.7</span>, נועד לפתור בעיה זו על ידי מתן הדקורטור <span dir="ltr"><code>@dataclass</code></span>, שמייצר באופן אוטומטי את המתודות הללו עבורך.</p>
+
+<h3 dir="rtl">מה זה <span dir="ltr">Dataclass</span>?</h3>
+
+<p dir="rtl"><span dir="ltr"><code>dataclass</code></span> היא מחלקה, שכפי שהשם מרמז, מיועדת בעיקר לאחסון נתונים. היא מספקת את היתרונות המרכזיים הבאים:</p>
+
+<ol>
+<li><p dir="rtl"><strong>פחות קוד תבניתי:</strong> מייצר באופן אוטומטי <span dir="ltr"><code>__init__</code></span>, <span dir="ltr"><code>__repr__</code></span>, <span dir="ltr"><code>__eq__</code></span>, <span dir="ltr"><code>__hash__</code></span> (בתנאים מסוימים), ומתודות קסם אחרות המבוססות על הערות הטיפוסים של השדות שלך.</p></li>
+<li><p dir="rtl">קריאות: הקוד הופך לתמציתי יותר וממוקד בהגדרת מבנה הנתונים.</p></li>
+<li><p dir="rtl">אינטרוספקציה: קל לבדוק את שדות ה-<span dir="ltr">dataclass</span> באמצעות פונקציות מאותו מודול <span dir="ltr"><code>dataclasses</code></span>.</p></li>
+<li><p dir="rtl">ביצועים (עם <span dir="ltr"><code>slots=True</code></span>): יכול לצרוך פחות זיכרון ולהיות מהיר יותר בגישה לתכונות.</p></li>
+</ol>
+
+<h3 dir="rtl">שימוש בסיסי</h3>
+
+<p dir="rtl">נתחיל עם דוגמה פשוטה. נניח שאנחנו צריכים מחלקה לייצוג נקודה במרחב דו-ממדי.</p>
+
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+# Create instance
+p1 = Point(10, 20)
+print(p1) # Point(x=10, y=20) - __repr__ automatically generated
+
+# Compare instances - __eq__ automatically generated
+p2 = Point(10, 20)
+p3 = Point(30, 40)
+print(p1 == p2) # True
+print(p1 == p3) # False
+</code></pre>
+
+<p dir="rtl">כפי שאתה יכול לראות, לא היינו צריכים לכתוב <span dir="ltr"><code>__init__</code></span> או <span dir="ltr"><code>__repr__</code></span>. הכל עבד "מהקופסה".</p>
+
+<h3 dir="rtl">פרמטרים של הדקורטור <span dir="ltr"><code>@dataclass</code></span></h3>
+
+<p dir="rtl">הדקורטור <span dir="ltr"><code>@dataclass</code></span> מקבל מספר פרמטרים המאפשרים לך להתאים אישית את ההתנהגות שנוצרת.</p>
+
+<pre class="line-numbers"><code class="language-python">@dataclass(
+    init=True,         # Whether to create __init__ (default True)
+    repr=True,         # Whether to create __repr__ (default True)
+    eq=True,           # Whether to create __eq__ (default True)
+    order=False,       # Whether to create __lt__, __le__, __gt__, __ge__ (default False)
+    unsafe_hash=False, # Whether to create __hash__ (default False)
+    frozen=False,      # Whether to make instances immutable (default False)
+    match_args=True,   # Whether to include the class in structural pattern matching (Python 3.10+, default True)
+    kw_only=False,     # Whether to make all fields keyword-only arguments in __init__ (Python 3.10+, default False)
+    slots=False        # Whether to use __slots__ to save memory (Python 3.10+, default False)
+)
+class MyDataClass:
+    # ...
+</code></pre>
+
+<p dir="rtl">בואו נבחן את החשובים שבהם, כולל אלה מהבקשה שלך:</p>
+
+<h4 dir="rtl"><span dir="ltr"><code>init=True</code></span> (ברירת מחדל)</h4>
+
+<p dir="rtl">אם <span dir="ltr"><code>True</code></span>, <span dir="ltr"><code>dataclass</code></span> ייצור מתודת <span dir="ltr"><code>__init__</code></span>. אם יש לך <span dir="ltr"><code>__init__</code></span> משלך ואתה משאיר את <span dir="ltr"><code>init=True</code></span>, ה-<span dir="ltr"><code>__init__</code></span> שלך יופעל, אך השדות שהוגדרו ב-<span dir="ltr">dataclass</span> לא יאותחלו דרכו באופן אוטומטי. בדרך כלל, אם אתה כותב <span dir="ltr"><code>__init__</code></span> משלך, אתה מגדיר <span dir="ltr"><code>init=False</code></span> כדי למנוע התנגשויות ולשלוט באופן מלא באתחול.</p>
+
+<pre class="line-numbers"><code class="language-python">@dataclass(init=False)
+class CustomPersonInit:
+    name: str
+    age: int
+
+    def __init__(self, name: str, age: int, welcome_message: str = "שלום!"):
+        self.name = name
+        self.age = age
+        print(welcome_message)
+
+alice = CustomPersonInit("אליס", 30) # Prints "Hello!"
+print(alice) # CustomPersonInit(name='אליס', age=30) - repr still works
+</code></pre>
+
+<h4 dir="rtl"><span dir="ltr"><code>repr=True</code></span> (ברירת מחדל)</h4>
+
+<p dir="rtl">אם <span dir="ltr"><code>True</code></span>, ייצור מתודת <span dir="ltr"><code>__repr__</code></span> המספקת ייצוג מחרוזת נוח של האובייקט, שימושי לניפוי באגים.</p>
+
+<h4 dir="rtl"><span dir="ltr"><code>eq=True</code></span> (ברירת מחדל)</h4>
+
+<p dir="rtl">אם <span dir="ltr"><code>True</code></span>, ייצור מתודת <span dir="ltr"><code>__eq__</code></span> המאפשרת לך להשוות שני מופעים של מחלקה לשוויון על ידי בדיקת שוויון כל השדות שלהם.</p>
+
+<h4 dir="rtl"><span dir="ltr"><code>order=False</code></span></h4>
+
+<p dir="rtl">אם <span dir="ltr"><code>True</code></span>, <span dir="ltr"><code>dataclass</code></span> ייצור מתודות <span dir="ltr"><code>__lt__</code></span>, <span dir="ltr"><code>__le__</code></span>, <span dir="ltr"><code>__gt__</code></span>, <span dir="ltr"><code>__ge__</code></span>. זה מאפשר לך להשוות מופעים עבור "קטן מ", "גדול מ" וכו'. ההשוואה מתבצעת לפי סדר הצהרת השדות. כדי ש-<span dir="ltr"><code>order=True</code></span> יעבוד, <span dir="ltr"><code>eq=True</code></span> חייב להיות מוגדר גם כן.</p>
+
+<pre class="line-numbers"><code class="language-python">@dataclass(order=True)
+class Person:
+    name: str
+    age: int
+
+alice = Person("אליס", 30)
+boris = Person("בוריס", 25)
+victor = Person("ויקטור", 35) # Let's add Victor
+galina = Person("גלינה", 30)
+alice_older = Person("אליס", 35)
+
+
+print(f"אליס ({alice.age}) > בוריס ({boris.age})? {alice > boris}") # False (because 'Alice' < 'Boris' by name). The comparison is lexicographical on the tuple (name, age). ('Alice', 30) < ('Boris', 25) is False. So `>` will be False.
+# Explanation: ('Alice', 30) > ('Boris', 25) -> False, because 'Alice' < 'Boris'.
+print(f"אליס ({alice.age}) < alice_older ({alice_older.age})? {alice < alice_older}") # True (because name is same, and age 30 < 35)
+print(f"גלינה ({galina.age}) == אליס ({alice.age})? {galina == alice}") # False (different names)
+</code></pre>
+
+<p dir="rtl"><strong>הערה חשובה:</strong> סדר השדות חשוב עבור <span dir="ltr"><code>order=True</code></span>.</p>
+
+<h4 dir="rtl"><span dir="ltr"><code>unsafe_hash=False</code></span></h4>
+
+<p dir="rtl">אם <span dir="ltr"><code>True</code></span>, ייצור מתודת <span dir="ltr"><code>__hash__</code></span>. <span dir="ltr">Dataclasses</span> אינם ניתנים לגיבוב כברירת מחדל אם הם ניתנים לשינוי (<span dir="ltr"><code>frozen=False</code></span>) מכיוון שאובייקטים ניתנים לגיבוב חייבים להיות בלתי ניתנים לשינוי. אם אתה בטוח שה-<span dir="ltr">dataclass</span> הניתן לשינוי שלך ישמש רק בהקשרים שבהם הגיבוב שלו לא ישתנה (וזה מסוכן!), תוכל להגדיר <span dir="ltr"><code>unsafe_hash=True</code></span>.</p>
+<p dir="rtl">הרבה יותר נפוץ, <span dir="ltr"><code>__hash__</code></span> נוצר באופן אוטומטי אם:</p>
+<ol>
+<li><p dir="rtl"><span dir="ltr"><code>frozen=True</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>frozen=False</code></span>, אבל <span dir="ltr"><code>eq=True</code></span> וכל השדות ניתנים לגיבוב גם כן.</p></li>
+</ol>
+
+<pre class="line-numbers"><code class="language-python">@dataclass(frozen=True) # Frozen dataclasses are hashable
+class ImmutablePoint:
+    x: int
+    y: int
+
+p = ImmutablePoint(1, 2)
+print(hash(p)) # Works
+
+@dataclass(unsafe_hash=True) # Dangerous if object is mutable
+class MutableButHashable:
+    value: int
+
+m = MutableButHashable(5)
+print(hash(m))
+m.value = 10
+print(hash(m)) # Hash changed, which can lead to issues when using set/dict
+</code></pre>
+
+<h4 dir="rtl"><span dir="ltr"><code>frozen=False</code></span></h4>
+
+<p dir="rtl">אם <span dir="ltr"><code>True</code></span>, מופעים של המחלקה הופכים לבלתי ניתנים לשינוי. לאחר יצירת אובייקט, לא תוכל לשנות את ערכי השדות שלו. זה שימושי ליצירת אובייקטים בלתי ניתנים לשינוי שקל יותר להשתמש בהם ביישומים מרובי הליכים או כמפתחות מילון (אם הם ניתנים לגיבוב).</p>
+
+<pre class="line-numbers"><code class="language-python">@dataclass(frozen=True)
+class Coordinate:
+    lat: float
+    lon: float
+
+c = Coordinate(10.0, 20.0)
+# c.lat = 15.0 # AttributeError: cannot assign to field 'lat'
+</code></pre>
+
+<h4 dir="rtl"><span dir="ltr"><code>kw_only=False</code></span> (פייתון <span dir="ltr">3.10+</span>)</h4>
+
+<p dir="rtl">אם <span dir="ltr"><code>True</code></span>, <strong>כל</strong> השדות ב-<span dir="ltr"><code>__init__</code></span> הופכים לארגומנטים של <strong>מילת מפתח בלבד</strong>. זה אומר שאתה חייב להעביר את ערכי השדות לפי שם, לא לפי מיקום. זה משפר את הקריאות ומונע שגיאות, במיוחד כאשר למחלקה יש שדות רבים או שהם עשויים להיות מאותו סוג.</p>
+
+<pre class="line-numbers"><code class="language-python">@dataclass(kw_only=True)
+class UserConfig:
+    username: str
+    email: str
+    is_active: bool = True
+    theme: str = "dark"
+
+# user1 = UserConfig("alice_ivanova", "alice@example.com") # TypeError: __init__() takes 0 positional arguments but 3 were given
+user1 = UserConfig(username="alice_ivanova", email="alice@example.com")
+print(user1)
+
+# You can override this behavior for a specific field with field(kw_only=False)
+@dataclass(kw_only=True)
+class MixedConfig:
+    # Mandatory positional (not in dataclass style)
+    # The `id` field will not be kw_only, even though the class was specified as kw_only=True
+    id: int = field(kw_only=False)
+    name: str = field(kw_only=False)
+
+    # The rest of the fields are kw_only
+    email: str
+    age: int = 0
+
+# Note that id and name are passed by position, and email is passed by name
+mixed_config = MixedConfig(123, "בוריס", email="boris@example.com")
+print(mixed_config)
+# mixed_config_fail = MixedConfig(id=123, name="ויקטור", email="viktor@example.com") # Error, id and name will be positional
+# This scenario is less typical, kw_only is usually applied to the entire class
+</code></pre>
+
+<p dir="rtl"><strong>הערה:</strong> <span dir="ltr"><code>field(kw_only=False)</code></span> על שדה עוקף את <span dir="ltr"><code>kw_only=True</code></span> ברמת המחלקה, מה שהופך את השדה הספציפי הזה למיקומי. עם זאת, לרוב, <span dir="ltr"><code>kw_only=True</code></span> משמש לכל המחלקה. השימוש העיקרי ב-<span dir="ltr"><code>field(kw_only=True)</code></span> הוא כאשר יש לך <span dir="dataclass">dataclass</span> רגיל (<span dir="ltr"><code>kw_only=False</code></span> כברירת מחדל), אבל אתה רוצה להפוך <em>כמה</em> שדות למילות מפתח בלבד.</p>
+
+<h4 dir="rtl"><span dir="ltr"><code>slots=False</code></span> (פייתון <span dir="ltr">3.10+</span>)</h4>
+
+<p dir="rtl">אם <span dir="ltr"><code>True</code></span>, <span dir="ltr"><code>dataclass</code></span> ייצור <span dir="ltr"><code>__slots__</code></span> עבור המחלקה שלך. <span dir="ltr"><code>__slots__</code></span> הוא תכונה מיוחדת המאפשרת לפייתון להקצות כמות קבועה של זיכרון למופעי מחלקה, במקום להשתמש במילון דינמי <span dir="ltr"><code>__dict__</code></span> לאחסון תכונות.</p>
+
+<p dir="rtl"><strong>יתרונות של <span dir="ltr"><code>slots=True</code></span>:</strong></p>
+<ul>
+<li><p dir="rtl">חיסכון בזיכרון: מפחית באופן משמעותי את כמות הזיכרון הנצרכת על ידי כל מופע. זה חשוב במיוחד עבור יישומים שיוצרים מיליוני אובייקטים.</p></li>
+<li><p dir="rtl">גישה מהירה יותר לתכונות: גישה לתכונות באמצעות <span dir="ltr"><code>__slots__</code></span> יכולה להיות מעט מהירה יותר, מכיוון שפייתון לא צריך לחפש אותן במילון.</p></li>
+</ul>
+
+<p dir="rtl"><strong>חסרונות של <span dir="ltr"><code>slots=True</code></span>:</strong></p>
+<ul>
+<li><p dir="rtl">לא ניתן להוסיף תכונות חדשות "על הדרך": לא תוכל להקצות תכונה שלא הוצהרה ב-<span dir="ltr">dataclass</span> (או ב-<span dir="ltr"><code>__slots__</code></span> של מחלקת אב).</p></li>
+<li><p dir="rtl">קשיים עם ירושה מרובה: זה יכול להיות קשה להשתמש ב-<span dir="ltr"><code>__slots__</code></span> עם ירושה מרובה, במיוחד אם כמה מחלקות אב אינן משתמשות ב-<span dir="ltr"><code>__slots__</code></span> או משתמשות בהן באופן שונה.</p></li>
+<li><p dir="rtl">אין לו <span dir="ltr"><code>__dict__</code></span>: למופעים לא תהיה תכונת <span dir="ltr"><code>__dict__</code></span> אלא אם כן היא נוספה במפורש ל-<span dir="ltr"><code>__slots__</code></span> או למחלקת אב.</p></li>
+</ul>
+
+<pre class="line-numbers"><code class="language-python">import sys
+
+@dataclass
+class RegularPoint:
+    x: int
+    y: int
+
+@dataclass(slots=True)
+class SlottedPoint:
+    x: int
+    y: int
+
+rp = RegularPoint(1, 2)
+sp = SlottedPoint(1, 2)
+
+print(f"Size of RegularPoint: {sys.getsizeof(rp)} bytes")
+# Approximately 56 bytes in Python 3.10+ (may vary)
+# print(rp.__dict__) # {'x': 1, 'y': 2} - has __dict__
+
+print(f"Size of SlottedPoint: {sys.getsizeof(sp)} bytes")
+# Approximately 32 bytes in Python 3.10+ (may vary) - significantly smaller
+# print(sp.__dict__) # AttributeError: 'SlottedPoint' object has no attribute '__dict__'
+
+# Attempt to add a new attribute to a dataclass with slots
+try:
+    sp.z = 30
+except AttributeError as e:
+    print(f"Error adding new attribute: {e}")
+</code></pre>
+
+<p dir="rtl"><strong>מתי להשתמש ב-<span dir="ltr"><code>slots=True</code></span>?</strong> כשאתה יוצר מספר גדול מאוד של מופעים של אותה מחלקה, וחיסכון בזיכרון הוא בראש סדר העדיפויות. זוהי אופטימיזציה נהדרת, אבל יש לה את הפשרות שלה.</p>
+
+<h3 dir="rtl">פונקציית <span dir="ltr"><code>field()</code></span>: תצורת שדה מפורטת</h3>
+
+<p dir="rtl">בנוסף לפרמטרים ברמת המחלקה, ניתן להגדיר כל שדה בנפרד באמצעות הפונקציה <span dir="ltr"><code>field()</code></span> מהמודול <span dir="ltr"><code>dataclasses</code></span>. זה שימושי במיוחד כאשר אתה זקוק ללוגיקה מורכבת יותר עבור שדות מאשר רק הערת טיפוס.</p>
+
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass, field
+from typing import List, Dict, Any
+import uuid # For generating IDs
+
+@dataclass
+class Product:
+    id: str = field(default_factory=lambda: "prod-" + str(uuid.uuid4())[:8], init=False) # Not initialized via __init__, automatically generated
+    name: str
+    price: float = field(compare=False, metadata={'unit': 'USD', 'min_value': 0.0}) # Not included in comparison, has metadata
+    tags: List[str] = field(default_factory=list, repr=False) # Uses factory function for list, not shown in repr
+    description: str = field(default="אין תיאור") # Regular default value
+    details: Dict[str, Any] = field(default_factory=dict, hash=False) # Not included in hashing
+
+p = Product(name="מחשב נייד", price=1200.0, tags=["אלקטרוניקה", "טכנולוגיה"])
+print(p)
+# Product(id='prod-...', name='Laptop', price=1200.0, description='No description', details={})
+# Note that 'tags' is not in repr, and 'id' is automatically generated.
+
+p2 = Product(name="מחשב נייד", price=1500.0, tags=["אלקטרוניקה", "טכנולוגיה"])
+print(f"p == p2? {p == p2}") # True, because price is not included in comparison (compare=False)
+
+# p3 = Product(name="מחשב שולחני", price=1000.0, details={"cpu": "Intel"})
+# print(hash(p3)) # TypeError: unhashable type: 'dict' (because details: hash=False)
+# If frozen=True, and details were not hash=False, then the dict would need to be immutable.
+</code></pre>
+
+<p dir="rtl">בואו נבחן את הפרמטרים של <span dir="ltr"><code>field()</code></span>:</p>
+
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr"><code>default</code></span></strong>: ערך ברירת מחדל רגיל עבור השדה.</p>
+<pre class="line-numbers"><code class="language-python">value: int = field(default=0)
+</code></pre>
+</li>
+
+<li><p dir="rtl"><strong><span dir="ltr"><code>default_factory</code></span></strong>: פונקציה ללא ארגומנטים שתופעל כדי לקבל את ערך ברירת המחדל עבור השדה. <strong>הקפד להשתמש ב-<span dir="ltr"><code>default_factory</code></span> עבור ערכי ברירת מחדל ניתנים לשינוי (רשימות, מילונים, אובייקטים) כדי למנוע בעיות של מצב משותף בין מופעים!</strong></p>
+<pre class="line-numbers"><code class="language-python">items: List[str] = field(default_factory=list)
+</code></pre>
+</li>
+
+<li><p dir="rtl"><strong><span dir="ltr"><code>init</code></span></strong>: אם <span dir="ltr"><code>True</code></span> (ברירת מחדל), השדה ייכלל במתודת <span dir="ltr"><code>__init__</code></span> שנוצרה. אם <span dir="ltr"><code>False</code></span>, השדה לא יהיה ארגומנט בקונסטרוקטור, ואתה חייב לספק לו <span dir="ltr"><code>default</code></span> / <span dir="ltr"><code>default_factory</code></span>, או לאתחל אותו ב-<span dir="ltr"><code>__post_init__</code></span>.</p>
+<pre class="line-numbers"><code class="language-python">import time
+timestamp: float = field(init=False, default_factory=time.time)
+</code></pre>
+</li>
+
+<li><p dir="rtl"><strong><span dir="ltr"><code>repr</code></span></strong>: אם <span dir="ltr"><code>True</code></span> (ברירת מחדל), השדה ייכלל במתודת <span dir="ltr"><code>__repr__</code></span> שנוצרה. שימושי להסתרת נתונים גדולים או רגישים.</p>
+<pre class="line-numbers"><code class="language-python">password: str = field(repr=False)
+</code></pre>
+</li>
+
+<li><p dir="rtl"><strong><span dir="ltr"><code>compare</code></span></strong>: אם <span dir="ltr"><code>True</code></span> (ברירת מחדל), השדה ייכלל במתודות <span dir="ltr"><code>__eq__</code></span> ו-<span dir="ltr"><code>__order__</code></span> שנוצרו. אם <span dir="ltr"><code>False</code></span>, הוא לא ישפיע על השוואת אובייקטים.</p>
+<pre class="line-numbers"><code class="language-python">version: str = field(compare=False)
+</code></pre>
+</li>
+
+<li><p dir="rtl"><strong><span dir="ltr"><code>hash</code></span></strong>: אם <span dir="ltr"><code>True</code></span> (ברירת מחדל), השדה ייכלל במתודת <span dir="ltr"><code>__hash__</code></span> שנוצרה. אם <span dir="ltr"><code>False</code></span>, הוא לא ישפיע על הגיבוב של האובייקט. אם המחלקה היא <span dir="ltr"><code>frozen=True</code></span>, אבל לשדה כלשהו יש <span dir="ltr"><code>hash=False</code></span>, אז המחלקה לא תוכל ליצור את ה-<span dir="ltr"><code>__hash__</code></span> שלה ותהפוך לבלתי ניתנת לגיבוב.</p>
+<pre class="line-numbers"><code class="language-python">config: Dict[str, Any] = field(hash=False, default_factory=dict)
+</code></pre>
+</li>
+
+<li><p dir="rtl"><strong><span dir="ltr"><code>metadata</code></span></strong>: מילון לאחסון נתונים שרירותיים המשויכים לשדה. <span dir="ltr"><code>dataclasses</code></span> מתעלמים מנתונים אלה, אך ניתן להשתמש בהם על ידי כלים חיצוניים (למשל, לאימות, סריאליזציה, יצירת תיעוד).</p>
+<pre class="line-numbers"><code class="language-python">user_id: int = field(metadata={'help': 'Unique user ID', 'validator': 'positive_int'})
+</code></pre>
+</li>
+
+<li><p dir="rtl"><strong><span dir="ltr"><code>kw_only</code></span></strong>: (פייתון <span dir="ltr">3.10+</span>) אם <span dir="ltr"><code>True</code></span>, שדה ספציפי זה הופך לארגומנט של מילת מפתח בלבד ב-<span dir="ltr"><code>__init__</code></span>. אם <span dir="ltr"><code>False</code></span>, הוא הופך למיקומי. זה מאפשר לך לערבב ארגומנטים מיקומיים ושל מילות מפתח בלבד כאשר ה-<span dir="ltr"><code>kw_only</code></span> של המחלקה הוא <span dir="ltr"><code>False</code></span> כברירת מחדל.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass
+class FlexibleParams:
+    mandatory_pos: str # Positional
+    optional_kw: int = field(default=0, kw_only=True) # Keyword-only
+
+    fp1 = FlexibleParams("נדרש", optional_kw=100)
+    # fp2 = FlexibleParams("נדרש", 200) # TypeError: __init__() takes 1 positional argument but 2 were given (optional_kw)
+</code></pre>
+</li>
+</ul>
+
+<h3 dir="rtl">פונקציית <span dir="ltr"><code>fields()</code></span>: אינטרוספקציה של <span dir="ltr">Dataclass</span></h3>
+
+<p dir="rtl">הפונקציה <span dir="ltr"><code>fields()</code></span> מהמודול <span dir="ltr"><code>dataclasses</code></span> מאפשרת לך לקבל מידע על השדות של <span dir="ltr">dataclass</span> או מופע שלו. היא מחזירה טאפל של אובייקטים <span dir="ltr"><code>Field</code></span>.</p>
+
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass, field, fields
+from typing import List
+
+@dataclass
+class Book:
+    title: str
+    author: str = field(metadata={'display_name': 'מחבר', 'max_length': 100})
+    pages: int = field(default=0, metadata={'min_value': 1})
+    tags: List[str] = field(default_factory=list, repr=False)
+
+# Get information about the fields of the Book class
+book_fields = fields(Book)
+
+for f in book_fields:
+    print(f"Field name: {f.name}")
+    print(f"Field type: {f.type}")
+    print(f"Default value: {f.default}")
+    print(f"Uses default_factory: {f.default_factory is not None}")
+    print(f"Included in init: {f.init}")
+    print(f"Included in repr: {f.repr}")
+    print(f"Included in compare: {f.compare}")
+    print(f"Included in hash: {f.hash}")
+    print(f"Metadata: {f.metadata}")
+    print(f"Keyword-only: {f.kw_only}") # For Python 3.10+
+    print("-" * 20)
+
+# Access metadata of a specific field:
+author_field_info = next(f for f in book_fields if f.name == 'author')
+print(f"Display name for author: {author_field_info.metadata.get('display_name')}")
+</code></pre>
+
+<p dir="rtl">לאובייקט <span dir="ltr"><code>Field</code></span> יש את התכונות הבאות: <span dir="ltr"><code>name</code></span>, <span dir="ltr"><code>type</code></span>, <span dir="ltr"><code>default</code></span>, <span dir="ltr"><code>default_factory</code></span>, <span dir="ltr"><code>init</code></span>, <span dir="ltr"><code>repr</code></span>, <span dir="ltr"><code>hash</code></span>, <span dir="ltr"><code>compare</code></span>, <span dir="ltr"><code>metadata</code></span>, <span dir="ltr"><code>kw_only</code></span>.</p>
+
+<h3 dir="rtl">מתודת <span dir="ltr"><code>__post_init__</code></span></h3>
+
+<p dir="rtl">לפעמים אתה זקוק ללוגיקה נוספת לאחר שה-<span dir="ltr"><code>__init__</code></span> האוטומטי של ה-<span dir="ltr">dataclass</span> סיים לאתחל את השדות. לשם כך, תוכל להגדיר מתודת <span dir="ltr"><code>__post_init__</code></span>. היא תופעל מיד לאחר <span dir="ltr"><code>__init__</code></span>.</p>
+
+<p dir="rtl">זה שימושי עבור:</p>
+<ul>
+<li><p dir="rtl">אימות נתונים.</p></li>
+<li><p dir="rtl">חישוב שדות נגזרים המבוססים על שדות שכבר אותחלו.</p></li>
+<li><p dir="rtl">ביצוע כל לוגיקה אחרת התלויה בשדות מאותחלים במלואם.</p></li>
+</ul>
+
+<pre class="line-numbers"><code class="language-python">import datetime
+
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    email: str = field(init=False) # This field will not be included in __init__ parameters
+    created_at: datetime.datetime = field(default_factory=datetime.datetime.now, init=False)
+
+    def __post_init__(self):
+        print(f"--- __post_init__ activated for {self.first_name} {self.last_name} ---")
+        # Validation
+        if not self.first_name or not self.last_name:
+            raise ValueError("First name and last name cannot be empty.")
+        # Calculate derived field
+        self.email = f"{self.first_name.lower()}.{self.last_name.lower()}@example.com"
+        print(f"User {self.first_name} {self.last_name} created with email: {self.email}")
+        print(f"Creation time: {self.created_at}")
+        print(f"--- __post_init__ finished ---")
+
+alice_ivanova = User("אליס", "איבנובה")
+print("\nObject created:")
+print(alice_ivanova)
+
+print("\n")
+
+try:
+    victor_no_last_name = User("ויקטור", "")
+except ValueError as e:
+    print(f"Error creating user: {e}")
+</code></pre>
+
+<h3 dir="rtl">ירושה של <span dir="ltr">Dataclass</span></h3>
+
+<p dir="rtl"><span dir="ltr">Dataclasses</span> תומכים בירושה. שדות ממחלקות בסיס נכללים במחלקות ילד.</p>
+
+<pre class="line-numbers"><code class="language-python">@dataclass
+class Vehicle:
+    make: str
+    model: str
+
+@dataclass
+class Car(Vehicle):
+    num_doors: int
+    is_electric: bool = False
+
+@dataclass
+class ElectricCar(Car):
+    battery_kwh: float
+
+alices_car = Car("Toyota", "Camry", 4)
+print(alices_car) # Car(make='Toyota', model='Camry', num_doors=4, is_electric=False)
+
+boris_car = ElectricCar("Tesla", "Model 3", 4, True, 75.0)
+print(boris_car) # ElectricCar(make='Tesla', model='Model 3', num_doors=4, is_electric=True, battery_kwh=75.0)
+</code></pre>
+
+<p dir="rtl"><strong>תכונות של ירושה עם <span dir="ltr"><code>slots=True</code></span>:</strong></p>
+<ul>
+<li><p dir="rtl">אם מחלקת האב משתמשת ב-<span dir="ltr"><code>__slots__</code></span>, מחלקת הילד חייבת להשתמש גם ב-<span dir="ltr"><code>__slots__</code></span> כדי לקבל את חיסכון הזיכרון.</p></li>
+<li><p dir="rtl">מחלקת הילד חייבת להגדיר <span dir="ltr"><code>__slots__</code></span> משלה עבור השדות החדשים שלה.</p></li>
+<li><p dir="rtl">אם מחלקת הילד אינה מגדירה <span dir="ltr"><code>__slots__</code></span>, יהיה לה <span dir="ltr"><code>__dict__</code></span> בנוסף ל-<span dir="ltr">slots</span> של האב.</p></li>
+</ul>
+
+<h3 dir="rtl">מתי להשתמש ב-<span dir="ltr">Dataclasses</span>?</h3>
+
+<ul>
+<li><p dir="rtl"><strong>מחלקות מיכל נתונים:</strong> כאשר המטרה העיקרית של המחלקה היא לאחסון נתונים, ואתה זקוק ל-<span dir="ltr"><code>__init__</code></span>, <span dir="ltr"><code>__repr__</code></span>, <span dir="ltr"><code>__eq__</code></span> אוטומטיים.</p></li>
+<li><p dir="rtl"><strong>אובייקטים בלתי ניתנים לשינוי:</strong> כאשר אתה זקוק לאובייקטים שמצבם לא אמור להשתנות לאחר היצירה (<span dir="ltr"><code>frozen=True</code></span>).</p></li>
+<li><p dir="rtl"><strong>תצורות:</strong> להגדרת מבנה של פרמטרי תצורה.</p></li>
+<li><p dir="rtl"><strong>אובייקטי העברת נתונים (<span dir="ltr">DTOs</span>):</strong> להעברת נתונים מובנים בין חלקי יישום.</p></li>
+<li><p dir="rtl"><strong>לוגיקה עסקית פשוטה:</strong> כאשר מתודות המחלקה פועלות בעיקר על נתוני המחלקה עצמה, אין להן מצב פנימי מורכב או תופעות לוואי.</p></li>
+</ul>
+
+<h3 dir="rtl">מתי לא להשתמש ב-<span dir="ltr">Dataclasses</span>?</h3>
+
+<ul>
+<li><p dir="rtl"><strong>מחלקות עם התנהגות עשירה:</strong> כאשר למחלקה יש לוגיקה עסקית מורכבת, מתודות רבות המקיימות אינטראקציה עם מערכות חיצוניות, או מצב פנימי מורכב, עדיף להשתמש במחלקה רגילה.</p></li>
+<li><p dir="rtl"><strong>מודלים של מיפוי <span dir="ltr">OR (ORM)</span>:</strong> למרות ש-<span dir="ltr">dataclasses</span> יכולים להיות חלק מ-<span dir="ltr">ORM</span>, הם אינם מחליפים מודלים מלאים של <span dir="ltr">ORM</span>, שלעתים קרובות דורשים מתודות ספציפיות לעבודה עם מסד נתונים, טעינה עצלה וכו'.</p></li>
+<li><p dir="rtl"><strong>פולימורפיזם והיררכיית ירושה עמוקה:</strong> אם יש לך היררכיית מחלקות מורכבת עם פולימורפיזם עמוק ועקיפת התנהגות, מחלקות רגילות עשויות להיות גמישות יותר.</p></li>
+</ul>
+
+<h3 dir="rtl">מסקנה</h3>
+
+<p dir="rtl"><span dir="ltr"><code>dataclasses</code></span> הם תוספת חזקה ונוחה לפייתון שמפשטת באופן משמעותי את יצירת המחלקות מוכוונות הנתונים. הם עוזרים לכתוב קוד נקי, קריא וניתן לתחזוקה יותר, ואפשרויות כמו <span dir="ltr"><code>slots=True</code></span> ו-<span dir="ltr"><code>kw_only=True</code></span> מספקות הזדמנויות נוספות לאופטימיזציה של ביצועים ושיפור הארגונומיה של ה-<span dir="ltr">API</span> של הקוד שלך. אל תשכח את <span dir="ltr"><code>field()</code></span> לתצורה מפורטת של כל שדה ואת <span dir="ltr"><code>fields()</code></span> לאינטרוספקציה!</p>

@@ -1,0 +1,245 @@
+<h2><strong>What is a list comprehension?</strong></h2>
+<p>In its simplest form, a list comprehension is a compact way to create a new list from an existing list (or any iterable object). Instead of using a traditional <code>for</code> loop and adding elements to the list one by one, you can do it in a single line of code.</p>
+<ul>
+<li><strong>Conciseness:</strong> They allow you to write less code.</li>
+<li><strong>Readability:</strong> Once you get used to their syntax, you will find them easier to understand than equivalent <code>for</code> loops.</li>
+<li><strong>Performance:</strong> In some cases, list comprehensions can be faster than <code>for</code> loops.</li>
+</ul>
+<p>Here is the basic syntax of a list comprehension:</p>
+<pre class="line-numbers"><code class="language-python">
+new_list = [expression for item in iterable]
+</code></pre>
+<ul>
+<li><strong><code>expression</code></strong>: An expression that defines how each element of the new list will be calculated. This can be anything: a simple value, a mathematical operation, a function call.</li>
+<li><strong><code>item</code></strong>: A variable that takes the value of each element of <code>iterable</code> in turn.</li>
+<li><strong><code>iterable</code></strong>: An iterable object, for example, a list, a tuple, a string, or the result of <code>range()</code>.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>Suppose you have a list of numbers, and you want to create a new list containing the squares of these numbers.</p>
+<p><strong>Without list comprehension:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+squares = []
+for number in numbers:
+    squares.append(number**2)
+print(squares)  # Output: [1, 4, 9, 16, 25]
+</code></pre>
+<p><strong>With list comprehension:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+squares = [number**2 for number in numbers]
+print(squares) # Output: [1, 4, 9, 16, 25]
+</code></pre>
+<p>The list comprehension makes the code shorter and clearer!</p>
+<p><strong>Adding a condition</strong></p>
+<p>List comprehensions also allow you to add conditions to select the elements that will be included in the new list.</p>
+<pre class="line-numbers"><code class="language-python">
+new_list = [expression for item in iterable if condition]
+</code></pre>
+<ul>
+<li><strong><code>condition</code></strong>: A condition that must be met for an element to be included in the new list.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>Let's create a list of squares of only even numbers from our original <code>numbers</code> list.</p>
+<p><strong>Without list comprehension:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+even_squares = []
+for number in numbers:
+    if number % 2 == 0:
+        even_squares.append(number**2)
+print(even_squares) # Output: [4, 16]
+</code></pre>
+<p><strong>With list comprehension:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+even_squares = [number**2 for number in numbers if number % 2 == 0]
+print(even_squares) # Output: [4, 16]
+</code></pre>
+<p>I added <code>if number % 2 == 0</code> to the list comprehension to filter only even numbers.</p>
+<p><strong>Multi-line list comprehensions</strong></p>
+<p>When list comprehensions become more complex, they can be split into multiple lines for better readability.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+numbers = [1, 2, 3, 4, 5]
+squared_odds = [
+    number**2
+    for number in numbers
+    if number % 2 != 0
+]
+print(squared_odds) # Output: [1, 9, 25]
+</code></pre>
+<p>This makes the code clearer, especially when you have long conditions or complex expressions.</p>
+<p><strong>Exercise 1: Temperature Conversion</strong></p>
+<p>You have a list of temperatures in Celsius, and you need to convert them to Fahrenheit. The conversion formula is: <code>F = (C * 9/5) + 32</code>.</p>
+<p>Here is your list of temperatures in Celsius:</p>
+<pre class="line-numbers"><code class="language-python">
+celsius_temperatures = [0, 10, 20, 30, 40]
+</code></pre>
+<p><strong>Task:</strong></p>
+<ol>
+<li>Using a list comprehension, create a new list <code>fahrenheit_temperatures</code> containing the temperatures from <code>celsius_temperatures</code>, converted to Fahrenheit.</li>
+<li>Display the resulting <code>fahrenheit_temperatures</code> list on the screen.</li>
+</ol>
+<p><strong>Hint:</strong></p>
+<ul>
+<li>Use the formula <code>(celsius * 9/5) + 32</code> as an expression in the list comprehension.</li>
+<li>Think about what is the <code>iterable</code> and what is the <code>item</code> in this case.</li>
+</ul>
+<p>Try to write the code.</p>
+<p>My solution:</p>
+<pre class="line-numbers"><code class="language-python">
+# Original list of temperatures in Celsius
+celsius_temperatures = [0, 10, 20, 30, 40]
+
+# Use list comprehension for Fahrenheit conversion
+fahrenheit_temperatures = [
+    (celsius * 9/5) + 32  # Expression: conversion formula
+    for celsius in celsius_temperatures # Iterate over the elements of the list
+]
+
+# Display the result
+print(fahrenheit_temperatures) # Output: [32.0, 50.0, 68.0, 86.0, 104.0]
+</code></pre>
+<p><strong>Code analysis:</strong></p>
+<ol>
+<li><strong><code>celsius_temperatures = [0, 10, 20, 30, 40]</code></strong>: This is the source list with temperatures in Celsius.</li>
+<li><strong><code>fahrenheit_temperatures = [...]</code></strong>: Here, we create a new list using a list comprehension.</li>
+<li><strong><code>(celsius * 9/5) + 32</code></strong>: This is the expression that is executed for each element. It converts the temperature from Celsius to Fahrenheit.</li>
+<li><strong><code>for celsius in celsius_temperatures</code></strong>: This part of the list comprehension iterates over each element of the <code>celsius_temperatures</code> list, assigning its value to the <code>celsius</code> variable at each iteration.</li>
+<li><strong><code>print(fahrenheit_temperatures)</code></strong>: Displays the resulting list of temperatures in Fahrenheit.</li>
+</ol>
+<p><strong>Important note:</strong></p>
+<ul>
+<li>In this case, <code>celsius_temperatures</code> is the <code>iterable</code>, and <code>celsius</code> is the <code>item</code>.</li>
+<li>I use multi-line formatting for the list comprehension to improve code readability.</li>
+<li>Inside the expression, I directly apply the conversion formula, using the current <code>celsius</code> value.</li>
+</ul>
+<p><strong>Exercise 2: Filtering and transforming strings</strong></p>
+<p>You have a list of words, and you need to do the following:</p>
+<ol>
+<li>Filter words that start with the letter "a" (case-insensitive).</li>
+<li>Convert all remaining words to uppercase.</li>
+</ol>
+<p>Here is your list of words:</p>
+<pre class="line-numbers"><code class="language-python">
+words = ["apple", "banana", "apricot", "kiwi", "Avocado", "orange"]
+</code></pre>
+<p><strong>Task:</strong></p>
+<ol>
+<li>Using a list comprehension, create a new list <code>transformed_words</code> containing only the words from the <code>words</code> list that do not start with the letter "a" (or "A"), and that are converted to uppercase.</li>
+<li>Display the resulting <code>transformed_words</code> list on the screen.</li>
+</ol>
+<p><strong>Hints:</strong></p>
+<ul>
+<li>Use the string method <code>startswith()</code> to check if a word starts with a specific letter. Don't forget case! Convert everything to lowercase.</li>
+<li>Use the string method <code>upper()</code> to convert a string to uppercase.</li>
+<li>Think about the order of operations. First filter, then transform.</li>
+</ul>
+<p>My solution:</p>
+<pre class="line-numbers"><code class="language-python">
+# Original list of words
+words = ["apple", "banana", "apricot", "kiwi", "Avocado", "orange"]
+
+# Use list comprehension for filtering and transformation
+transformed_words = [
+    word.upper() # Convert to uppercase
+    for word in words # Iterate over the words in the list
+    if not word.lower().startswith("a") # Filter words that do not start with 'a'
+]
+
+# Display the result
+print(transformed_words) # Output: ['BANANA', 'KIWI', 'ORANGE']
+</code></pre>
+<p><strong>Code analysis:</strong></p>
+<ol>
+<li><strong><code>words = ["apple", "banana", "apricot", "kiwi", "Avocado", "orange"]</code></strong>: This is the original list of words.</li>
+<li><strong><code>transformed_words = [...]</code></strong>: Creating a new list using a list comprehension.</li>
+<li><strong><code>word.upper()</code></strong>: This is the expression that is executed for each word that passes the filter. It converts the word to uppercase.</li>
+<li><strong><code>for word in words</code></strong>: Iteration over all words in the <code>words</code> list.</li>
+<li><strong><code>if not word.lower().startswith("a")</code></strong>: This is the filtering condition.
+<ul>
+<li><code>word.lower()</code>: First, we convert the word to lowercase, so that the comparison is case-insensitive.</li>
+<li><code>startswith("a")</code>: Then, we check if the word starts with the letter "a".</li>
+<li><code>not</code>: Inverts the result to keep only words that do not start with the letter "a".</li>
+</ul>
+</li>
+<li><strong><code>print(transformed_words)</code></strong>: Displays the list of transformed words.</li>
+</ol>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>String methods <code>lower()</code>, <code>upper()</code>, and <code>startswith()</code> in the expression and condition of the list comprehension.</li>
+<li>The filtering condition <code>if not word.lower().startswith("a")</code> ensures that only words that do not start with "a" (regardless of case) are included in the new list.</li>
+<li>Filtering is applied first, then conversion to uppercase.</li>
+<li>Again, I use multi-line formatting for better readability.</li>
+</ul>
+<p><strong>Exercise 3: Creating a dictionary from a list of tuples</strong></p>
+<p>You have a list of tuples, where each tuple contains two elements: the name and age of a person.</p>
+<pre class="line-numbers"><code class="language-python">
+people_data = [
+    ("Alice", 30),
+    ("Bob", 25),
+    ("Charlie", 35),
+    ("David", 28),
+]
+</code></pre>
+<p><strong>Task:</strong></p>
+<ol>
+<li>Using a list comprehension, create a dictionary <code>people_dict</code>, where the keys are the names of the people, and the values — their ages.</li>
+<li>Display the <code>people_dict</code> dictionary on the screen.</li>
+</ol>
+<p><strong>Hints:</strong></p>
+<ul>
+<li>List comprehensions create lists, but they can be used to create lists of tuples, which can then be passed to the <code>dict()</code> constructor.</li>
+<li>Think about how to extract the name and age from each tuple.</li>
+<li>Remember that a dictionary is a data structure that stores key-value pairs.</li>
+</ul>
+<p><strong>Small explanation:</strong></p>
+<p>In Python, you can create a dictionary from a list of tuples, where each tuple consists of two elements (key, value).
+For this, I use the <code>dict()</code> constructor. For example:</p>
+<pre class="line-numbers"><code class="language-python">
+my_list = [("a", 1), ("b", 2)]
+my_dict = dict(my_list)
+print(my_dict) # Output {'a': 1, 'b': 2}
+</code></pre>
+<p>Your task is to use list comprehension to create this list of tuples, which will then be used to create the dictionary.</p>
+<p>My solution:</p>
+<pre class="line-numbers"><code class="language-python">
+# Original list of tuples with people data
+people_data = [
+    ("Alice", 30),
+    ("Bob", 25),
+    ("Charlie", 35),
+    ("David", 28),
+]
+
+# I use list comprehension to create a list of tuples, which I then convert to a dictionary
+people_dict = dict(
+    [
+      (name, age) # Create a tuple (name, age)
+      for name, age in people_data # Iterate over the tuples in people_data
+    ]
+)
+
+# Display the resulting dictionary
+print(people_dict) # Output: {'Alice': 30, 'Bob': 25, 'Charlie': 35, 'David': 28}
+</code></pre>
+<p><strong>Code analysis:</strong></p>
+<ol>
+<li><strong><code>people_data = [...]</code></strong>: This is the original list of tuples, where each tuple contains the name and age of a person.</li>
+<li><strong><code>people_dict = dict(...)</code></strong>: We use the <code>dict()</code> constructor to create a dictionary from a list of tuples.</li>
+<li><strong><code>[ (name, age) for name, age in people_data ]</code></strong>: This is a list comprehension that creates a list of tuples.
+<ul>
+<li><code>(name, age)</code>: This expression creates a tuple from two elements: <code>name</code> and <code>age</code>.</li>
+<li><code>for name, age in people_data</code>: This part iterates over all tuples in the <code>people_data</code> list. At each iteration, the tuple is unpacked into two variables: <code>name</code> and <code>age</code>.</li>
+</ul>
+</li>
+<li><strong><code>print(people_dict)</code></strong>: Displays the created dictionary.</li>
+</ol>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>The list comprehension creates a list of tuples.</li>
+<li>The <code>dict()</code> constructor converts a list of tuples into a dictionary, using the first element of the tuple as the key and the second as the value.</li>
+<li>Tuple unpacking in the loop <code>for name, age in people_data</code> makes the code more readable.</li>
+<li>The list comprehension in this example is used to prepare the data for a dictionary.</li>
+</ul>

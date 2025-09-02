@@ -1,0 +1,382 @@
+<h2>Group Theory - Semigroup</h2>
+<p>The simplest structure in group theory is a semigroup. A semigroup is a set for which an associative binary operation is defined, which takes two elements from this set as input and returns a third. From now on, all examples will be given in the Python programming language.</p>
+<p>In Python, we can define the concept of a semigroup using <code>typing.Protocol</code> (for static type checking) or simply by convention (duck typing). For clarity, we will use dictionaries that store the <code>combine</code> operation.</p>
+<pre class="line-numbers"><code class="language-python">
+from typing import TypeVar, Callable, Protocol, Generic
+import functools # For reduce
+
+T = TypeVar('T')
+
+# We describe the structure of a semigroup using Protocol (for static typing)
+class Semigroup(Protocol[T]):
+    # Callable[[T, T], T] means a function that takes two arguments of type T
+    # and returns a value of type T
+    combine: Callable[[T, T], T]
+
+# Example: A semigroup of natural numbers (or integers/reals) with addition
+# We represent a specific semigroup as a dictionary with the key 'combine'
+addition_semigroup: Semigroup[int] = {
+    "combine": lambda a, b: a + b
+}
+
+# Example: A semigroup of numbers with multiplication
+multiplication_semigroup: Semigroup[int] = {
+    "combine": lambda a, b: a * b
+}
+
+# Example: A semigroup of strings with concatenation
+concatenation_semigroup: Semigroup[str] = {
+    "combine": lambda a, b: a + b
+}
+</code></pre>
+<p>The operation on the elements of a semigroup must have the property of associativity. Let's test this with the built-in <code>assert</code> function:</p>
+<pre class="line-numbers"><code class="language-python">
+def check_associativity(semigroup: Semigroup[T], a: T, b: T, c: T) -> None:
+    # We check that (a * b) * c == a * (b * c)
+    # We use the combine operation of the passed semigroup
+    left_side = semigroup["combine"](semigroup["combine"](a, b), c)
+    right_side = semigroup["combine"](a, semigroup["combine"](b, c))
+    assert left_side == right_side, f"Associativity failed for {semigroup}: ({a}, {b}, {c})"
+
+check_associativity(addition_semigroup, 1, 2, 3)
+check_associativity(multiplication_semigroup, 2, 3, 4) # 1*2*3 = 6, (1*2)*3 = 6, 1*(2*3)=6
+check_associativity(concatenation_semigroup, 'a', 'b', 'c')
+</code></pre>
+<p>A semigroup has no particularly interesting properties. However, even with their example, we see the convenience of group theory - the ability to work with sets and operations on them using an abstract interface (in our case, a dictionary with a <code>combine</code> function).</p>
+<p>For example, we can write a reduction function for a list of semigroup values using an initial value. This already hints at the next structure - a monoid.</p>
+<pre class="line-numbers"><code class="language-python">
+from typing import List
+
+# This function is more like a fold from the next section,
+# because it requires an initial value. A pure semigroup reduction
+# would require a non-empty list.
+def reduce_semigroup_with_initial(
+    values: List[T],
+    semigroup: Semigroup[T],
+    initial_value: T
+) -> T:
+    # We use functools.reduce to sequentially apply combine
+    return functools.reduce(semigroup["combine"], values, initial_value)
+
+# We can now use this function to reduce a list:
+sum_val = reduce_semigroup_with_initial([1, 2, 3, 4], addition_semigroup, 0)
+assert sum_val == 10
+
+product_val = reduce_semigroup_with_initial([1, 2, 3, 4], multiplication_semigroup, 1)
+assert product_val == 24
+
+concat_val = reduce_semigroup_with_initial(['a', 'b', 'c'], concatenation_semigroup, '')
+assert concat_val == 'abc'
+
+</code></pre>
+<p>The use of the semigroup reduction function smoothly leads us to the next, much more interesting structure of group theory - the monoid.</p>
+<p><strong>Group Theory - Monoid</strong>
+A monoid is a semigroup with a defined neutral element (<code>unit</code> or <code>identity</code>).</p>
+<pre class="line-numbers"><code class="language-python">
+# We define a protocol for a Monoid, inheriting from Semigroup
+class Monoid(Semigroup[T], Protocol[T]):
+    unit: T # Neutral element
+
+# Monoid of number addition (neutral element - 0)
+addition_monoid: Monoid[int] = {
+    "combine": lambda a, b: a + b,
+    "unit": 0
+}
+</code></pre>
+<p>The neutral element is an element such that its combination with any other element does not change that other element (<code>a + 0 = a</code>, <code>a * 1 = a</code>, <code>s + "" = s</code>). For the addition of numbers, this neutral element is, of course, zero.</p>
+<p>Let's test this property of a monoid with <code>assert</code>:</p>
+<pre class="line-numbers"><code class="language-python">
+def check_unit_combination(monoid: Monoid[T], value: T) -> None:
+    # We check that combine(value, unit) == value
+    # and combine(unit, value) == value (for completeness)
+    assert monoid["combine"](value, monoid["unit"]) == value
+    assert monoid["combine"](monoid["unit"], value) == value
+
+check_unit_combination(addition_monoid, 10)
+</code></pre>
+<p>The neutral element of the monoid of number multiplication is one.</p>
+<pre class="line-numbers"><code class="language-python">
+multiplication_monoid: Monoid[int] = {
+    "combine": lambda a, b: a * b,
+    "unit": 1
+}
+
+check_unit_combination(multiplication_monoid, 25)
+</code></pre>
+<p>Consequently, the neutral element of the string concatenation monoid is the empty string.</p>
+<pre class="line-numbers"><code class="language-python">
+concatenation_monoid: Monoid[str] = {
+    "combine": lambda a, b: a + b,
+    "unit": ""
+}
+
+check_unit_combination(concatenation_monoid, 'a')
+</code></pre>
+<p>And now, we come to the most interesting property of monoids - you can use the fold operation to work with them. This is essentially the same <code>reduce_semigroup_with_initial</code>, but now the initial value is taken directly from the monoid (<code>unit</code>).</p>
+<pre class="line-numbers"><code class="language-python">
+def fold(monoid: Monoid[T], values: List[T]) -> T:
+    # We use functools.reduce, starting with the neutral element monoid['unit']
+    return functools.reduce(monoid["combine"], values, monoid["unit"])
+
+# With fold, we have completely magical capabilities:
+sum_folded = fold(addition_monoid, [1, 2, 3, 4])
+assert sum_folded == 10
+
+product_folded = fold(multiplication_monoid, [1, 2, 3, 4])
+assert product_folded == 24
+
+concatenated_folded = fold(concatenation_monoid, ['a', 'b', 'c', 'd'])
+assert concatenated_folded == 'abcd'
+</code></pre>
+<p>We can also define monoids for number comparison operations. For <code>min</code>, the neutral element will be infinity, and for <code>max</code> - minus infinity.</p>
+<pre class="line-numbers"><code class="language-python">
+import math # For float('inf')
+
+min_monoid: Monoid[float] = { # We use float for infinity
+    "combine": lambda a, b: min(a, b),
+    "unit": float('inf')
+}
+
+max_monoid: Monoid[float] = {
+    "combine": lambda a, b: max(a, b),
+    "unit": float('-inf')
+}
+
+min_fold_result = fold(min_monoid, [1, 9, 6, 4])
+assert min_fold_result == 1
+
+max_fold_result = fold(max_monoid, [1, 9, 6, 4])
+assert max_fold_result == 9
+</code></pre>
+<p>And furthermore, we can define, for example, a monoid of functions. For example, a monoid of unary functions (taking one argument) on numbers, where the <code>combine</code> operation will be function composition, and the neutral element (<code>unit</code>) will be the identity function (<code>lambda x: x</code>).</p>
+<pre class="line-numbers"><code class="language-python">
+# Type for an IntUnaryFunc from int to int
+IntUnaryFunc = Callable[[int], int]
+
+# Monoid for function composition (int -> int)
+# IMPORTANT: The order of composition is f(g(x))
+function_monoid: Monoid[IntUnaryFunc] = {
+    "combine": lambda f, g: lambda x: f(g(x)), # f after g
+    "unit": lambda x: x # Identity function
+}
+
+add_one: IntUnaryFunc = lambda x: x + 1
+double: IntUnaryFunc = lambda x: x * 2
+
+# Folding a list of functions: [add_one, double]
+# First, the unit will be applied, then double, then add_one.
+# fold(monoid, [f, g]) is equivalent to combine(combine(unit, f), g) = combine(f, g)
+# combine(f, g) = lambda x: f(g(x))
+function_fold_result_func = fold(function_monoid, [add_one, double])
+
+# Apply the result to the number 1: add_one(double(1)) = add_one(2) = 3
+assert function_fold_result_func(1) == 3
+
+# If the order of functions is important and you need g(f(x)), you need to change combine:
+# "combine": lambda f, g: lambda x: g(f(x))
+</code></pre>
+<p>On the example of a monoid, we see that group theory allows us to work with many different sets and operations on them in the same way.</p>
+<p>Do you remember, in school, we were told that any number to the power of zero is equal to one, but we were never explained why?</p>
+<p>This property becomes obvious at first glance at the multiplication monoid. Exponentiation is the repeated application of the <code>combine</code> operation of the multiplication monoid. For example, <code>2^3</code> is <code>combine(combine(unit, 2), 2), 2)</code> or, which is the same, <code>combine(combine(2, 2), 2)</code>.</p>
+<pre class="line-numbers"><code class="language-python">
+# 2^3 using the multiplication monoid
+power_3 = multiplication_monoid["combine"](
+    multiplication_monoid["combine"](2, 2), # 2*2
+    2                                       # (2*2)*2
+)
+assert power_3 == 8
+</code></pre>
+<p>But what is zero power? It is the application of the <code>combine</code> operation zero times to the initial element. What result should we get? If we do not apply <code>combine</code> at all, we are left with only the neutral element <code>unit</code>, which in the case of the multiplication monoid is equal to one. That is why <code>x^0 = 1</code>.</p>
+<p><strong>Group Theory - Group</strong>
+A group is a monoid for which each element has an inverse element from the same set, so that the combination of an element with its inverse gives the neutral element.</p>
+<pre class="line-numbers"><code class="language-python">
+# We define a protocol for a Group, inheriting from Monoid
+class Group(Monoid[T], Protocol[T]):
+    inverse: Callable[[T], T] # Function to get the inverse element
+
+# A classic example of a group is the set of integers under the addition operation
+addition_group: Group[int] = {
+    "combine": lambda a, b: a + b,
+    "unit": 0,
+    "inverse": lambda a: -a # The inverse element for addition is negation
+}
+</code></pre>
+<p>The main property of a group is that the combination of an element with its inverse element always gives the neutral element of the group:</p>
+<pre class="line-numbers"><code class="language-python">
+def check_inversion_combination(group: Group[T], value: T) -> None:
+    # We check that combine(value, inverse(value)) == unit
+    # and combine(inverse(value), value) == unit
+    assert group["combine"](value, group["inverse"](value)) == group["unit"]
+    assert group["combine"](group["inverse"](value), value) == group["unit"]
+
+check_inversion_combination(addition_group, 5) # 5 + (-5) == 0
+</code></pre>
+<p>It can be said that a group is a mathematical structure that abstracts the notion of symmetry. It is with the help of this structure that physicists study the properties of space, time, energy, and elementary particles - at the heart of the mathematical apparatus of relativity theory and quantum mechanics is group theory. With its help, in 1918, Emmy Noether proved her famous theorems that any conservation law, whether the law of conservation of energy, momentum, or charge, follows from fundamental physical symmetries.</p>
+<p>Furthermore, monoids and groups are often used in functional programming. If you study a little group theory, you will see that many problems and structures in programming are special cases of a more abstract mathematical structure. The simplest example of a group in programming is the Undo-Redo system, implemented in many applications (the operation is the user's action, the inverse operation is the cancellation of the action, the neutral element is the absence of modifications).</p>
+<p><strong>Monadology</strong>
+The beauty of symmetries has fascinated people since ancient times. In the school founded by the legendary ancient Greek philosopher and geometer Pythagoras, his students revered the monad, represented as a circle with a fat dot at its very center:</p>
+<p>*(Image of Pythagoras' monad)*</p>
+<p>The mystical meaning of the monad lay in its central point - this point personifies the "nothing" from which the Universe is born. According to the Pythagoreans, there is no restriction on the emergence of all possible things from nothing, but at the same time as these things, their opposites also appear. By unfolding the zero-dimensional point into an infinite number of opposites, we obtain a circle - a figure on which there is an infinite number of points, for each of which, relative to the center of the circle, there is an opposite point. In general, this description fully corresponds to the notion of a group in group theory.</p>
+<p>In his philosophical magnum opus entitled "Monadology", the great German philosopher and mathematician Gottfried Wilhelm Leibniz expounded his vision of the world, according to which all our reality consists of an infinite number of such dual monads. In honor of this Pythagorean-Leibnizian concept of the monad, the main structure of another mathematical theory - category theory - was named.</p>
+<p>If group theory abstracts basic intuitive algebraic and geometric operations into general structures, then category theory is like the next step on the ladder of abstractions - an abstraction of abstractions. Category theory studies various mathematical structures - groups, graphs, sets - as abstract categories with objects (elements) and morphisms (operations) between them. Morphisms are usually represented by arrows and are called "arrows". A reflection of this name are lambda functions (<code>lambda</code>) or regular functions (<code>def</code>) in programming, which you probably know, which transform some values into others.</p>
+<p>Let's look at the basic concepts of category theory.</p>
+<p><strong>Category Theory - Arrow</strong>
+An arrow (or morphism) in category theory is a mapping (function) between two categories (sets of objects) - a correspondence from each object of the first category to an object of the second. Let's take, for example, two of the simplest categories - non-negative integers and strings of the letter "a".</p>
+<pre class="line-numbers"><code class="language-text">
+0 -> ""
+1 -> "a"
+2 -> "aa"
+3 -> "aaa"
+4 -> "aaaa"
+...
+</code></pre>
+<p>Here, it is clearly visible that each element of the category of numbers is mapped to an element of the category of strings composed of the letter 'a'. Any such mapping can be described by a function. In this case, it is:</p>
+<pre class="line-numbers"><code class="language-python">
+def map_number_to_a_string(num: int) -> str:
+    # We ensure that the number is non-negative for repetition
+    if num < 0:
+        raise ValueError("The input number must be non-negative")
+    return "a" * num # In Python, a string is repeated by multiplication
+
+assert map_number_to_a_string(3) == "aaa"
+</code></pre>
+<p>It is not necessary for an object of the first category to correspond to a unique object of the second. For example, for the following arrow from the category of numbers to the category of truth (boolean values), there are only two objects in the second category (<code>True</code> and <code>False</code>), but each object of the first is mapped to one of the objects of the second:</p>
+<pre class="line-numbers"><code class="language-text">
+0 -> False
+1 -> False
+2 -> False
+3 -> True
+4 -> True
+...
+n -> True (for n >= 3)
+</code></pre>
+<p>The function (arrow) in this case can be described as:</p>
+<pre class="line-numbers"><code class="language-python">
+def map_number_to_boolean(number: int) -> bool:
+    return number >= 3
+
+assert map_number_to_boolean(2) == False
+assert map_number_to_boolean(5) == True
+</code></pre>
+<p><strong>Category Theory - Functor and Endofunctor</strong>
+We can wrap objects of any category in abstract containers. If we have categories (types) A and B, and we have a container F (e.g., <code>list</code>, <code>Optional</code>, <code>Future</code>), which can contain one or more objects of categories A or B, then we get two new categories (types) F(A) and F(B) (e.g., <code>list[A]</code> and <code>list[B]</code>).</p>
+<p>For example, if we have a category of numbers (<code>int</code>) and a category of strings (<code>str</code>), and we have a <code>list</code> container, then we get two new categories - a list of numbers (<code>list[int]</code>) and a list of strings (<code>list[str]</code>). In Python, these relationships are reflected in the type system:</p>
+<pre class="line-numbers"><code class="language-python">
+number: int = 1
+string_value: str = 'a'
+
+numbers: list[int] = [1, 2, 3]
+strings: list[str] = ['a', 'b', 'c']
+</code></pre>
+<p>In category theory, mappings between categories of objects and categories of containers are described, which preserve the structure during transformation. Such mappings are called functors. The mapping itself is called <code>map</code> (or <code>fmap</code>).</p>
+<p>There are several different types of functors. The most used of them is the endofunctor, in which the transformation occurs within the same container category F(A) -> F(B) (e.g., <code>list[A] -> list[B]</code>).</p>
+<pre class="line-numbers"><code class="language-python">
+# General type for variables A and B
+A = TypeVar('A')
+B = TypeVar('B')
+
+# Protocol for a Functor
+class Functor(Protocol[A]):
+    # The map method takes a function (arrow) from A to B
+    # and returns a new Functor with elements of type B.
+    # Important: it returns an instance of the same functor type (e.g., list).
+    def map(self, func: Callable[[A], B]) -> 'Functor[B]':
+        ...
+
+# A classic example of an endofunctor in Python is the list.
+# Although list does not have a .map method by default, we can easily implement it
+# or use list comprehensions (which is more idiomatic).
+
+# Example of using list comprehension as an analogue of map:
+map_number_to_boolean_func = lambda number: number >= 3
+numbers_list: list[int] = [1, 2, 3, 4]
+
+# Apply the function to each element of the list, get a new list
+booleans_list: list[bool] = [map_number_to_boolean_func(n) for n in numbers_list]
+assert booleans_list == [False, False, True, True]
+
+# You can also use the built-in map function, which returns an iterator:
+booleans_iterator = map(map_number_to_boolean_func, numbers_list)
+assert list(booleans_iterator) == [False, False, True, True]
+</code></pre>
+<p>Thus, if we have an arrow (function) <code>A -> B</code>, then using a functor (for example, <code>list</code> and its <code>map</code> operation/list comprehension), we can construct an arrow <code>F[A] -> F[B]</code>.</p>
+<p>Several laws must be respected for functors.</p>
+<p>The first law is the identity law: <code>functor.map(id) == functor</code> (applying the identity function should not change the functor).</p>
+<pre class="line-numbers"><code class="language-python">
+def id_func(x: T) -> T:
+    return x
+
+# Check for a list:
+numbers_list = [1, 2, 3]
+assert [id_func(x) for x in numbers_list] == numbers_list
+</code></pre>
+<p>The second law is the composition law: <code>functor.map(g o f) == functor.map(f).map(g)</code> (where <code>g o f</code> is function composition, <code>lambda x: g(f(x))</code>). Mapping a function composition is equivalent to sequentially mapping these functions.</p>
+<pre class="line-numbers"><code class="language-python">
+f: Callable[[int], str] = lambda x: str(x) # int -> str
+g: Callable[[str], bool] = lambda x: len(x) > 1 # str -> bool
+compose_gf: Callable[[int], bool] = lambda x: g(f(x)) # int -> bool
+
+numbers_list = [5, 10, 15]
+
+# Left side: map(g o f)
+left_side = [compose_gf(x) for x in numbers_list] # [False, True, True]
+
+# Right side: map(f) then map(g)
+intermediate = [f(x) for x in numbers_list] # ['5', '10', '15']
+right_side = [g(y) for y in intermediate] # [False, True, True]
+
+assert left_side == right_side
+</code></pre>
+<p><strong>Category Theory - Monad</strong>
+A monad extends the capabilities of a functor by adding a <code>flatMap</code> operation (sometimes called <code>bind</code> or <code>>>=</code>) and a way to "wrap" a regular value in a monadic context (often called <code>unit</code>, <code>return</code> or <code>pure</code>, in Python for lists, it can simply be <code>lambda x: [x]</code>).</p>
+<pre class="line-numbers"><code class="language-python">
+# Protocol for a Monad (inherits from Functor)
+# IMPORTANT: This is a simplified representation. Correct monad typing in Python is complex.
+class Monad(Functor[A], Protocol[A]):
+    # flatMap takes a function that itself returns a monad
+    def flatMap(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
+        ...
+
+    # Static or class method to "wrap" a value
+    @classmethod
+    def unit(cls, value: A) -> 'Monad[A]':
+         ...
+
+# Again, we use a list as an example of a monad in Python.
+# Although list does not have flatMap/unit methods, we can simulate them.
+
+# 'unit' for a list: wrap a value in a list
+list_unit = lambda x: [x]
+
+# 'flatMap' for a list: apply a function to each element,
+# then "flatten" the result (combine the lists).
+# This is easy to do with a list comprehension with two for loops.
+def list_flat_map(data: list[A], func: Callable[[A], list[B]]) -> list[B]:
+    # For each x in data, apply func(x), which will return a list.
+    # Then, for each y in this internal list, add y to the result.
+    return [y for x in data for y in func(x)]
+
+# Example of use
+numbers = [1, 2, 3]
+# A function that for a number n returns a list [n, n+1]
+func_n_nplus1 = lambda number: [number, number + 1]
+
+flat_mapped_numbers = list_flat_map(numbers, func_n_nplus1)
+# Expected result:
+# For 1 -> [1, 2]
+# For 2 -> [2, 3]
+# For 3 -> [3, 4]
+# Combine: [1, 2, 2, 3, 3, 4]
+assert flat_mapped_numbers == [1, 2, 2, 3, 3, 4]
+</code></pre>
+<p>Other well-known examples of monads (or monad-like structures) in Python can be:</p>
+<ul>
+<li><code>asyncio.Future</code> (or <code>awaitables</code> in general) for asynchronous operations (where <code>await</code> is similar to <code>flatMap</code>).</li>
+<li>The <code>Optional</code> type (often implemented as <code>Union[T, None]</code>, although a correct monad requires a stricter <code>Maybe</code> or <code>Option</code> structure) for working with values that may be missing.</li>
+<li>Various monads from functional programming libraries for Python (e.g., <code>pymonad</code>, <code>returns</code>).</li>
+</ul>
+<p>Essentially, a monad is simply an abstraction of computations as such, allowing to build data processing pipelines, manage side effects, handle errors or asynchronous operations in a uniform way.</p>
+<p>*(Image/diagram of a monad)*</p>
+<p>Several special monadic laws must be respected for monads (left and right identity, associativity of <code>flatMap</code>), which, however, I will not give here, as it is time to finish this already long post. I just want to note that the most important advantage of monads is that they allow ordering the execution of isolated computations. An example of such an order in Python is the use of <code>await</code> for the sequential execution of asynchronous operations (<code>asyncio.Future</code>), which is conceptually similar to monadic composition.</p>
+<p><strong>Conclusion</strong>
+In conclusion, I would like to say that group theory and category theory are at the heart of all mathematics, computer science, and physics known to man. It is literally the language of the universe - the most expressive and poetically beautiful. I would have learned it just for the fact that God spoke it!</p>

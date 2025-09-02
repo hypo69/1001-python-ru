@@ -1,0 +1,464 @@
+<h2 dir="rtl">🚀 <span dir="ltr">CI/CD</span>: מהיסודות ועד לפרודקשן ב-<span dir="ltr">GCP</span> עם <span dir="ltr">GitHub Actions</span> – מדריך מלא עם דוגמאות 🚀</h2>
+
+<p dir="rtl">שלום, מפתחים! במאמר זה אסביר על <span dir="ltr">CI/CD</span> – הקונספט.</p>
+
+<h3 dir="rtl">מהו צינור <span dir="ltr">CI/CD</span> בהקשר של תכנות?</h3>
+
+<p dir="rtl"><strong>צינור <span dir="ltr">CI/CD</span> (אינטגרציה רציפה / אספקה רציפה או פריסה רציפה)</strong> הוא תהליך אוטומטי המאפשר למפתחים לספק שינויים בקוד במהירות ובאמינות לסביבת הייצור (פרודקשן).</p>
+
+<p dir="rtl">בואו נפרט את מושגי המפתח:</p>
+
+<h3 dir="rtl">🔧 <span dir="ltr">CI</span> — אינטגרציה רציפה (<span dir="ltr">Continuous Integration</span>)</h3>
+<p dir="rtl">זוהי פרקטיקה שבה מפתחים משלבים לעיתים קרובות שינויים בבסיס קוד משותף. כל שינוי כזה באופן אוטומטי:</p>
+<ul>
+<li><p dir="rtl"><strong>נבנה</strong> (<span dir="ltr">build</span>)</p></li>
+<li><p dir="rtl"><strong>נבדק</strong> (בדיקות יחידה, בדיקות אינטגרציה)</p></li>
+<li><p dir="rtl"><strong>נבדק להתאמה לתקנים</strong> (לינטינג, ניתוח סטטי)</p></li>
+</ul>
+
+<p dir="rtl">👉 <strong>מטרת <span dir="ltr">CI</span>:</strong> לזהות שגיאות בשלב מוקדם ככל האפשר, לפני שהן שוברות משהו חשוב או מגיעות לגרסה.</p>
+
+<h3 dir="rtl">🚀 <span dir="ltr">CD</span> — אספקה רציפה (<span dir="ltr">Continuous Delivery</span>) או פריסה רציפה (<span dir="ltr">Continuous Deployment</span>)</h3>
+<p dir="rtl">יש כאן שתי אפשרויות:</p>
+
+<h4 dir="rtl">✅ אספקה רציפה (<span dir="ltr">Continuous Delivery</span>)</h4>
+<p dir="rtl">לאחר מעבר מוצלח של שלב ה-<span dir="ltr">CI</span>, שינויים באופן אוטומטי:</p>
+<ul>
+<li><p dir="rtl">עוברים בדיקות נוספות (לדוגמה, <span dir="ltr">E2E</span> – בדיקות מקצה לקצה)</p></li>
+<li><p dir="rtl">מועברים לשרת <span dir="ltr">Staging</span> (בדיקה)</p></li>
+<li><p dir="rtl">👉 <strong>אך הפריסה לפרודקשן עדיין דורשת אישור ידני.</strong> זה נותן לצוות שליטה על <em>מתי</em> בדיוק השינויים ייראו למשתמשים.</p></li>
+</ul>
+
+<h4 dir="rtl">🤖 פריסה רציפה (<span dir="ltr">Continuous Deployment</span>)</h4>
+<p dir="rtl">זהו השלב הבא לאחר אספקה רציפה. כאן, הפריסה לפרודקשן מתבצעת <strong>באופן אוטומטי לחלוטין</strong>, אם כל שלבי הצינור הקודמים (בנייה, כל הבדיקות) עברו בהצלחה. זוהי רמת האוטומציה המתקדמת ביותר.</p>
+
+<h3 dir="rtl">🔄 ממה מורכב בדרך כלל צינור <span dir="ltr">CI/CD</span>?</h3>
+
+<p dir="rtl">צינור טיפוסי כולל את השלבים הבאים:</p>
+<ol>
+<li><p dir="rtl"><strong><span dir="ltr">Checkout</span></strong> — שיבוט הגרסה האחרונה של הקוד מהמאגר.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">Build</span></strong> — בניית הפרויקט (קומפילציה, הרכבת ארטיפקטים, תמונות <span dir="ltr">Docker</span>).</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">Test</span></strong> — הפעלת סוגי בדיקות שונים (יחידה, אינטגרציה, <span dir="ltr">E2E</span>).</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">Lint/Code Quality</span></strong> — בדיקת הקוד להתאמה לסגנון ושגיאות פוטנציאליות באמצעות מנתחים סטטיים.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">Deploy</span></strong> — פריסת היישום (לשרת <span dir="ltr">Staging</span> או <span dir="ltr">Production</span>).</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">Notify</span></strong> — שליחת התראות על סטטוס הצינור לצוות (לדוגמה, ל-<span dir="ltr">Slack</span>, אימייל).</p></li>
+</ol>
+
+<h3 dir="rtl">🛠 כלים פופולריים ל-<span dir="ltr">CI/CD</span>:</h3>
+
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">GitHub Actions</span></strong> (המוקד שלנו היום!)</p></li>
+<li><p dir="rtl"><span dir="ltr">GitLab CI/CD</span></p></li>
+<li><p dir="rtl"><span dir="ltr">Jenkins</span></p></li>
+<li><p dir="rtl"><span dir="ltr">CircleCI</span></p></li>
+<li><p dir="rtl"><span dir="ltr">Bitbucket Pipelines</span></p></li>
+<li><p dir="rtl"><span dir="ltr">Azure DevOps</span></p></li>
+<li><p dir="rtl"><span dir="ltr">TeamCity</span></p></li>
+</ul>
+
+<h3 dir="rtl">🧠 למה בכלל צריך <span dir="ltr">CI/CD</span>?</h3>
+
+<ul>
+<li><p dir="rtl"><strong>מפחית טעויות אנוש:</strong> אוטומציה מבטלת שגיאות הקשורות לפעולות ידניות.</p></li>
+<li><p dir="rtl"><strong>זיהוי מהיר של באגים:</strong> שגיאות נמצאות מוקדם יותר, קל וזול יותר לתקן אותן.</p></li>
+<li><p dir="rtl"><strong>אוטומציה של משימות שגרתיות:</strong> מפתחים מקדישים פחות זמן לבנייה ופריסה, ויותר – לקוד.</p></li>
+<li><p dir="rtl"><strong>שיפור איכות הקוד:</strong> בדיקות ובחינות מתמשכות מעלות את רף האיכות הכללי.</p></li>
+<li><p dir="rtl"><strong>אספקה מהירה של פיצ'רים למשתמשים:</strong> יכולות חדשות מגיעות למשתמש הקצה מהר יותר ולעיתים קרובות יותר.</p></li>
+</ul>
+
+<h3 dir="rtl">📦 דוגמאות פשוטות ל-<span dir="ltr">CI/CD</span> עם <span dir="ltr">GitHub Actions</span></h3>
+
+<p dir="rtl">בואו נסתכל על צינורות בסיסיים לטכנולוגיות פופולריות. כל הדוגמאות משתמשות ב-<span dir="ltr">GitHub Actions</span> ונשמרות בספריית <span dir="ltr"><code>.github/workflows/</code></span> של הפרויקט שלכם.</p>
+
+<h4 dir="rtl">🐍 <span dir="ltr">CI/CD</span> עבור <span dir="ltr">Python</span> (עם <span dir="ltr"><code>pytest</code></span> ו-<span dir="ltr"><code>flake8</code></span>)</h4>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/python-ci.yml
+name: Python CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' # Specify your version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt # Make sure you have requirements.txt
+          pip install flake8 pytest
+
+      - name: Lint with flake8
+        run: |
+          # Check code in src and tests folders (adjust to your project)
+          flake8 src tests
+
+      - name: Run tests
+        run: |
+          pytest
+</code></pre>
+
+<h4 dir="rtl">🌐 <span dir="ltr">CI/CD</span> עבור <span dir="ltr">Node.js</span> (עם <span dir="ltr"><code>npm test</code></span> ו-<span dir="ltr"><code>eslint</code></span>)</h4>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/node-ci.yml
+name: Node.js CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x] # Specify your Node.js version
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install # Or npm ci for more predictable installation
+
+      - name: Lint with ESLint
+        run: npx eslint . # Make sure ESLint is configured in the project
+
+      - name: Run tests
+        run: npm test
+</code></pre>
+
+<h4 dir="rtl">🐳 <span dir="ltr">CI/CD</span> עבור <span dir="ltr">Docker</span> (בנייה ודחיפה ל-<span dir="ltr">Docker Hub</span>)</h4>
+
+<p dir="rtl">לדוגמה זו תזדקק לסודות <span dir="ltr"><code>DOCKER_USERNAME</code></span> ו-<span dir="ltr"><code>DOCKER_PASSWORD</code></span> (או אסימון) בהגדרות מאגר <span dir="ltr">GitHub</span> שלך (<span dir="ltr"><code>Settings -&gt; Secrets and variables -&gt; Actions</code></span>).</p>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/docker-ci.yml
+name: Docker CI/CD
+
+on:
+  push:
+    branches: [ main ] # Run only for main branch
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        # Replace myapp with your application name
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:latest .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+</code></pre>
+
+<h3 dir="rtl">🚚 פריסה לפלטפורמות פופולריות</h3>
+
+<p dir="rtl">כעת, לאחר שיש לנו ארטיפקטים שנבנו ונבדקו (לדוגמה, תמונת <span dir="ltr">Docker</span>), בואו נראה כיצד ניתן לפרוס אותם.</p>
+
+<h4 dir="rtl">🟣 פריסה ל-<span dir="ltr">Heroku</span></h4>
+
+<p dir="rtl"><strong>🔐 סודות <span dir="ltr">GitHub</span>:</strong> <span dir="ltr"><code>HEROKU_API_KEY</code></span>, <span dir="ltr"><code>HEROKU_APP_NAME</code></span>.</p>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-heroku.yml
+name: Deploy to Heroku
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Login to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku auth:token
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+          git push heroku main -f # Be careful with -f (force push)
+</code></pre>
+<p dir="rtl">אם אתה פורס תמונת <span dir="ltr">Docker</span> ל-<span dir="ltr">Heroku</span>:</p>
+<pre class="line-numbers"><code class="language-yaml"># ... (Build and login steps for Docker Hub/GHCR from previous examples) ...
+# deploy:
+#   name: Deploy to Heroku
+#   needs: build # Depends on image build task
+#   runs-on: ubuntu-latest
+#   steps:
+#     # ...
+#     - name: Login to Heroku container registry
+#       run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
+#     - name: Tag image for Heroku
+#       # Assuming the image was built as ghcr.io/username/repo/myapp:latest
+#       run: docker tag ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+#     - name: Push image to Heroku
+#       run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+#     - name: Release Heroku App
+#       env:
+#         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+#       run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+</code></pre>
+
+<h4 dir="rtl">🟨 פריסה ל-<span dir="ltr">AWS</span> (לדוגמה, קבצים סטטיים ל-<span dir="ltr">S3</span>)</h4>
+
+<p dir="rtl"><strong>🔐 סודות <span dir="ltr">GitHub</span>:</strong> <span dir="ltr"><code>AWS_ACCESS_KEY_ID</code></span>, <span dir="ltr"><code>AWS_SECRET_ACCESS_KEY</code></span>, <span dir="ltr"><code>AWS_REGION</code></span>, <span dir="ltr"><code>S3_BUCKET_NAME</code></span>.</p>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-aws-s3.yml
+name: Deploy Static Site to AWS S3
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Sync files to S3
+        # Replace ./public with the path to your static files
+        run: aws s3 sync ./public s3://${{ secrets.S3_BUCKET_NAME }} --delete
+</code></pre>
+<p dir="rtl">לפריסה ל-<span dir="ltr"><strong>AWS Elastic Beanstalk</strong></span> בדרך כלל משתמשים ב-<span dir="ltr">EB CLI</span>, הצינור יהיה דומה, אך עם פקודות <span dir="ltr"><code>eb deploy</code></span>.</p>
+
+<h4 dir="rtl">🔵 פריסה ל-<span dir="ltr">Google Cloud Platform (GCP App Engine)</span></h4>
+
+<p dir="rtl"><strong>🔐 סודות <span dir="ltr">GitHub</span>:</strong> <span dir="ltr"><code>GCP_CREDENTIALS</code></span> (מפתח <span dir="ltr">JSON</span> של חשבון שירות), <span dir="ltr"><code>GCP_PROJECT_ID</code></span>.</p>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-gcp-app-engine.yml
+name: Deploy to GCP App Engine
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+          export_default_credentials: true
+      - name: Deploy to App Engine
+        # Make sure you have app.yaml in the project root
+        run: gcloud app deploy --quiet
+</code></pre>
+
+<h4 dir="rtl">🟪 פריסה ל-<span dir="ltr">Render.com</span></h4>
+
+<p dir="rtl"><span dir="ltr">Render</span> לעיתים קרובות פורס אוטומטית בעת <span dir="ltr">push</span> ל-<span dir="ltr">GitHub</span>, אם המאגר מחובר. אך עבור טריגר ידני (או כחלק מצינור מורכב יותר), ניתן להשתמש ב-<span dir="ltr">Deploy Hook</span>.</p>
+<p dir="rtl"><strong>🔐 סודות <span dir="ltr">GitHub</span>:</strong> <span dir="ltr"><code>RENDER_DEPLOY_HOOK</code></span> (כתובת <span dir="ltr">URL</span>, שהתקבלה מהגדרות השירות ב-<span dir="ltr">Render</span>).</p>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-render.yml
+name: Trigger Render Deploy
+
+on:
+  workflow_dispatch: # Allows manual triggering from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+</code></pre>
+
+<h3 dir="rtl">🌟 <span dir="ltr">CI/CD</span> מתקדם: בניית <span dir="ltr">Docker</span> ← דחיפה ל-<span dir="ltr">GHCR</span> ← <span dir="ltr">Staging/Production</span> ב-<span dir="ltr">GCP Cloud Run</span></h3>
+
+<p dir="rtl">ועכשיו, הדובדבן שבקצפת! בואו נבנה צינור מתקדם:</p>
+<ol>
+<li><p dir="rtl">בניית תמונת <span dir="ltr">Docker</span>.</p></li>
+<li><p dir="rtl">פרסום התמונה ב-<span dir="ltr">GitHub Container Registry (ghcr.io)</span>.</p></li>
+<li><p dir="rtl">פריסה אוטומטית לסביבת <span dir="ltr"><strong>Staging</strong></span> ב-<span dir="ltr">GCP Cloud Run</span>.</p></li>
+<li><p dir="rtl">פריסה לסביבת <span dir="ltr"><strong>Production</strong></span> ב-<span dir="ltr">GCP Cloud Run</span> <strong>לאחר אישור ידני</strong>.</p></li>
+</ol>
+
+<p dir="rtl">לשם כך, נזדקק למספר קבצי זרימת עבודה.</p>
+
+<p dir="rtl"><strong>סודות <span dir="ltr">GitHub</span> נדרשים:</strong></p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>GCP_PROJECT_ID</code></span>: מזהה הפרויקט שלך ב-<span dir="ltr">GCP</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>GCP_CREDENTIALS</code></span>: מפתח <span dir="ltr">JSON</span> של חשבון שירות <span dir="ltr">GCP</span> עם הרשאות פריסה ל-<span dir="ltr">Cloud Run</span> וגישה ל-<span dir="ltr">GHCR</span> (אם נדרש). בדרך כלל <span dir="ltr"><code>GITHUB_TOKEN</code></span> מספיק לגישה ל-<span dir="ltr">GHCR</span> מ-<span dir="ltr">Actions</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>GCP_REGION</code></span>: אזור עבור <span dir="ltr">Cloud Run</span> (לדוגמה, <span dir="ltr"><code>europe-west1</code></span>).</p></li>
+</ul>
+
+<h4 dir="rtl">1. בנייה ופרסום תמונת <span dir="ltr">Docker</span> ל-<span dir="ltr">GHCR</span></h4>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/build.yml
+name: Build & Push to GHCR
+
+on:
+  push:
+    branches: [main] # Run on push to main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read      # For checkout
+      packages: write     # For push to GHCR
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest
+          # Tagging by commit SHA can be added for uniqueness:
+          # tags: |
+          #   ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest
+          #   ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:${{ github.sha }}
+</code></pre>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>github.repository_owner</code></span>: בעל המאגר (שם המשתמש או הארגון שלך).</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>github.event.repository.name</code></span>: שם המאגר.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>myapp</code></span>: שם היישום/התמונה שלך.</p></li>
+</ul>
+
+<h4 dir="rtl">2. פריסה אוטומטית ל-<span dir="ltr">Staging (GCP Cloud Run)</span></h4>
+
+<p dir="rtl">זרימת עבודה זו תופעל אוטומטית לאחר השלמה מוצלחת של <span dir="ltr"><code>build.yml</code></span>.</p>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-staging.yml
+name: Deploy to GCP Cloud Run (Staging)
+
+on:
+  workflow_run:
+    workflows: ["Build & Push to GHCR"] # Build workflow name
+    types:
+      - completed
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    # Run only if build workflow completed successfully
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    # Use GitHub environments for Staging (optional, but recommended)
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url }} # URL will be available after deployment
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3 # Required if you use configurations from the repository
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Staging)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-staging' # Your Staging Cloud Run service name
+          region: '${{ secrets.GCP_REGION }}'
+          # Use image pushed in build.yml
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest'
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed' # Allow unauthenticated access for example
+</code></pre>
+
+<h4 dir="rtl">3. פריסה לפרודקשן עם אישור ידני (<span dir="ltr">GCP Cloud Run</span>)</h4>
+
+<p dir="rtl">זרימת עבודה זו מופעלת ידנית דרך ממשק המשתמש של <span dir="ltr">GitHub Actions</span>.</p>
+
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-prod.yml
+name: Deploy to GCP Cloud Run (Production)
+
+on:
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Production)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-production' # Your production service name
+          region: '${{ secrets.GCP_REGION }}'
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest' # Use the same 'latest' image
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed'
+          # For production, you can add --no-traffic and then gradually shift traffic
+          # traffic:
+          #   latest: true
+          #   percent: 100
+</code></pre>
+
+<p dir="rtl"><strong>היבטים חשובים של צינור מתקדם זה:</strong></p>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">GitHub Container Registry (ghcr.io):</span></strong> אנו משתמשים בו לאחסון תמונות <span dir="ltr">Docker</span>. זה נוח, מכיוון שהוא משולב היטב עם <span dir="ltr">GitHub Actions</span>.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>workflow_run</code></span>:</strong> מאפשר הפעלת זרימת עבודה אחת (פריסת <span dir="ltr">Staging</span>) עם השלמת אחרת (בנייה).</p></li>
+<li><p dir="rtl"><strong><span dir="ltr"><code>workflow_dispatch</code></span>:</strong> מאפשר הפעלה ידנית של זרימת עבודה (פריסת <span dir="ltr">Production</span>), ומספק שליטה.</p></li>
+<li><p dir="rtl"><strong>סביבות <span dir="ltr">GitHub</span>:</strong> מאפשרות הגדרת כללי הגנה עבור <span dir="ltr">Production</span> (לדוגמה, דרישת אישור ממבקרים ספציפיים) ואחסון סודות ספציפיים לסביבה.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">GCP Cloud Run</span>:</strong> אפשרות <span dir="ltr">serverless</span> מצוינת להפעלת יישומים מבוססי קונטיינרים.</p></li>
+</ul>
+
+<h3 dir="rtl">🔐 אבטחה – זה חשוב!</h3>
+
+<ul>
+<li><p dir="rtl"><strong>השתמש בסודות <span dir="ltr">GitHub</span>:</strong> לעולם אל תשמור אסימונים, סיסמאות או מפתחות <span dir="ltr">API</span> ישירות בקבצי <span dir="ltr">YAML</span>. השתמש ב-<span dir="ltr"><code>Settings -&gt; Secrets and variables -&gt; Actions</code></span> במאגר שלך.</p></li>
+<li><p dir="rtl"><strong>הרשאות מינימליות:</strong> עבור חשבונות שירות (לדוגמה, <span dir="ltr">GCP</span>) הענק רק את ההרשאות הנחוצות באמת לביצוע משימות <span dir="ltr">CI/CD</span>.</p></li>
+<li><p dir="rtl"><strong>בידוד סביבות:</strong> <span dir="ltr">Staging</span> ו-<span dir="ltr">Production</span> צריכים להיות מבודדים ככל האפשר. פרויקטים/חשבונות נפרדים בספקי ענן – זוהי פרקטיקה טובה.</p></li>
+<li><p dir="rtl"><strong>הגנת ענפים:</strong> הגדר הגנה עבור ענף <span dir="ltr"><code>main</code></span> (או <span dir="ltr"><code>master</code></span>), כך שניתן יהיה לדחוף אליו רק באמצעות <span dir="ltr">Pull Request</span> עם בדיקות <span dir="ltr">CI</span> חובה.</p></li>
+</ul>

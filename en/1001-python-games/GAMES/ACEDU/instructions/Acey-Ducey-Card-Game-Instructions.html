@@ -1,0 +1,66 @@
+<h3>Game Name: <strong>Acey-Ducey Card Game</strong></h3>
+<h4>Description</h4>
+<p>This is a simulation of the Acey-Ducey card game. The player places bets based on the probability that the next card will fall between two already open cards.</p>
+<ul>
+<li><strong>Starting Capital:</strong> The player starts with $100.</li>
+<li><strong>Game Rules:</strong>
+<ol>
+<li>The computer deals two cards.</li>
+<li>The player can decide whether to place a bet or not.</li>
+<li>If a bet is placed, a third card is drawn.</li>
+<li>If the value of the third card falls between the first two cards, the player wins the bet. Otherwise, the bet is lost.</li>
+</ol>
+</li>
+<li>The game ends when the player loses all capital or manually ends it.</li>
+</ul>
+<h4>Implementation</h4>
+<p><strong>Input Data:</strong></p>
+<ul>
+<li>User input for:
+<ul>
+<li>Initial bet size.</li>
+<li>Decision to place a bet or skip.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Output Data:</strong></p>
+<ul>
+<li>Message about the player's current capital.</li>
+<li>Information about bet results (win/loss).</li>
+<li>Card status in each round.</li>
+</ul>
+<h4>Step-by-step instructions for implementation:</h4>
+<ol>
+<li><strong>Game Initialization</strong>:
+   <ul>
+<li>Set the player's starting capital ($100).</li>
+<li>Announce game rules.</li>
+</ul>
+</li>
+<li><strong>Main Game Loop</strong>:
+   <ul>
+<li>Generate two random cards (range 2–14, where 11 = Jack, 12 = Queen, 13 = King, 14 = Ace).</li>
+<li>Display cards to the player.</li>
+<li>Request a bet (can skip the round by betting 0).</li>
+<li>Check: the bet must not exceed the current capital.</li>
+</ul>
+</li>
+<li><strong>Round Result</strong>:
+   <ul>
+<li>Generate a third card.</li>
+<li>Check if its value falls within the range between the first two cards.</li>
+<li>Change player's capital depending on the result.</li>
+</ul>
+</li>
+<li><strong>Game End</strong>:
+   <ul>
+<li>If the player's capital is 0, the game ends with an appropriate message.</li>
+<li>Offer the player to start a new game or exit.</li>
+</ul>
+</li>
+</ol>
+<h4>Limitations</h4>
+<ul>
+<li>All cards are unique within a single round.</li>
+<li>Support for basic game functionality without complex visual effects.</li>
+</ul>

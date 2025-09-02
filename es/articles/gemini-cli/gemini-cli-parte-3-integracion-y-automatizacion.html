@@ -1,0 +1,253 @@
+<h3><strong>Escenario para Gemini CLI: Juego de la Vida</strong></h3>
+<h4><strong>Paso 1: Creación de una instrucción del sistema <code>GEMINI.MD</code></strong></h4>
+<p>En el directorio de trabajo, crea un archivo <code>GEMINI.md</code> e inserta la instrucción del sistema en él. Ejemplo de instrucción:</p>
+<pre class="line-numbers"><code class="language-markdown">
+## 📘 Instrucción para la generación de código Python
+
+### 1. Reglas generales
+
+* Usa **Python 3.10+**.
+* Adhiérete a un **estilo de codificación claro, legible y sin ambigüedades**.
+* **Cada función, método y clase** debe tener:
+
+  * Anotaciones de tipo (`type hints`)
+  * Documentación completa y correcta en formato `docstring` (ver sección 3)
+  * Comentarios internos (`#`), donde sea necesario
+
+---
+
+### 2. Comentarios
+
+* Los comentarios deben ser **precisos** y describir **lo que hace el código**, no "lo que hacemos".
+* **Prohibido** usar pronombres: `hacemos`, `devolvemos`, `enviamos`, `vamos`, etc.
+* **Permitido** solo los términos: `extracción`, `ejecución`, `llamada`, `reemplazo`, `verificación`, `envío`, `La función realiza`, `La función cambia el valor`, etc.
+
+#### ❌ Ejemplo de comentario incorrecto:
+
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+# Incorrect comment example:
+# Get value of the parameter
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+#### ✅ Ejemplo de comentario correcto:
+
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+# Correct comment example:
+# The function extracts the value of the parameter
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+---
+
+### 3. Docstring (formato de documentación)
+
+Cada función/método/clase debe contener un `docstring` en el siguiente formato:
+
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+def function(param: str, param1: Optional[str | dict | str] = None) -> dict | None:
+    """
+    Args:
+        param (str): Description of the `param` parameter.
+        param1 (Optional[str | dict | str], optional): Description of the `param1` parameter. Defaults to `None`.
+
+    Returns:
+        dict | None: Description of the return value. Returns a dictionary or `None`.
+
+    Raises:
+        SomeError: Description of the situation in which the `SomeError` exception occurs.
+
+    Example:
+        &gt;&gt;&gt; function('param', 'param1')
+        {'param': 'param1'}
+    """
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+* **Todos los parámetros y valores de retorno deben ser descritos.**
+* Las formulaciones deben ser **concisas, precisas y sin ambigüedades**.
+* No se permite omitir la descripción de parámetros/valores de retorno/excepciones.
+
+---
+
+### 4. Anotación de tipo
+
+* **Todas las variables, parámetros y valores de retorno** deben ser anotados.
+* Usa la sintaxis de Python 3.10+: `list[int]`, `dict[str, Any]`, `str | None`, etc.
+* Ejemplos de anotaciones correctas:
+
+#### ✅ Tipos simples:
+
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+name: str = "John"
+count: int = 42
+flag: bool = True
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+#### ✅ Colecciones y tipos complejos:
+
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+from typing import Any, Optional, Callable, TypeAlias
+
+coordinates: tuple[float, float] = (55.75, 37.61)
+metadata: dict[str, Any] = {"debug": True}
+UserId: TypeAlias = int
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+#### ✅ Funciones y métodos:
+
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+def get_user_name(user_id: int) -> str:
+    """Returns the user's name by their identifier."""
+    ...
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+#### ✅ Funciones asíncronas:
+
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+async def fetch_users() -> AsyncIterator[dict[str, int | str]]:
+    ...
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+#### ✅ Tipos genéricos:
+
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+from typing import TypeVar, Generic
+
+T = TypeVar("T")
+
+class Container(Generic[T]):
+    def __init__(self, value: T) -> None:
+        self.value = value
+
+    def get(self) -> T:
+        return self.value
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+---
+
+### 5. Otros
+
+* Usa `default_factory` en `dataclass` para valores mutables (`list`, `dict`).
+* Para valores `Optional`, especifica `T | None` (Python 3.10+) o `Optional[T]`.
+* Para estructuras complejas, usa `TypeAlias`.
+
+---
+
+📌 **Sugerencia**: Al generar código, incluye siempre anotaciones de tipo, `docstring`, y evita el lenguaje subjetivo en los comentarios. El objetivo es la estructura de código más precisa, reproducible y formalizada posible.
+
+
+Este archivo se utilizará para configurar Gemini CLI.
+
+Para mayor comodidad, creemos un directorio `game`, que almacenará los archivos del proyecto, y un directorio `scenarios`, que almacenará los escenarios para Gemini CLI.
+
+El archivo `scenarios/life-create-code.md` contendrá las instrucciones para crear el código del "Juego de la Vida",
+el archivo `scenarios/life-create-test.md` contendrá las instrucciones para crear pruebas,
+y el archivo `scenarios/life-create-doc.md` contendrá las instrucciones para crear documentación.
+
+life-create-code.md:
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+Dentro del directorio `game`, crea un archivo `life.py`.
+Dentro, escribe la implementación del "Juego de la Vida" de Conway en Python, usando un enfoque orientado a objetos.
+Usa las bibliotecas: `numpy`, `pygame` (para gráficos).
+
+
+Requisitos:
+1.  Crea una clase `Game`.
+2.  En `__init__`, la clase debe aceptar las dimensiones de la cuadrícula (ancho, alto) y crear un campo inicial aleatorio.
+3.  Crea un método `step()` que actualice el estado del juego un paso de acuerdo con las reglas:
+    - Una célula viva con < 2 vecinos vivos muere (soledad).
+    - Una célula viva con 2 o 3 vecinos vivos sobrevive.
+    - Una célula viva con > 3 vecinos vivos muere (superpoblación).
+    - Una célula muerta con exactamente 3 vecinos vivos se vuelve viva (nacimiento).
+4.  Crea un método `display()` o anula `__str__` para imprimir el campo en la consola. Usa caracteres, por ejemplo '■' para una célula viva y ' ' para una muerta.
+5.  Usa la biblioteca `numpy` para operaciones eficientes con la cuadrícula.
+6.  En el bloque `if __name__ == '__main__':` añade un ejemplo que cree un juego y ejecute la simulación en un bucle con un pequeño retraso entre pasos.
+7. Para la visualización del juego, usa pygame o una biblioteca de gráficos, si es posible.
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+---
+
+life-create-test.md:
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+Dentro del directorio `game`, usando el contexto del archivo @life.py, crea un archivo con pruebas test_life.py. Usa el framework pytest.
+
+La prueba debe verificar la evolución correcta de un oscilador simple "Blinker" (tres células en fila).
+
+Escenario de prueba:
+1.  Importa la clase `Game` de `life`.
+2.  Crea una función de prueba, por ejemplo `test_blinker_oscillation`.
+3.  Dentro de la prueba, crea una instancia `Game` con un tamaño fijo (por ejemplo, 5x5).
+4.  Establece manualmente el estado inicial del campo para que haya una línea horizontal de tres células vivas (Blinker) en el centro.
+5.  Llama al método `game.step()`.
+6.  Usando `assert` y `numpy.array_equal`, verifica que el campo ha cambiado a una línea vertical de tres células.
+7.  Llama al método `game.step()` de nuevo.
+8.  Verifica que el campo ha vuelto a su estado horizontal original.
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+
+---
+
+life-create-doc.md:
+</code></pre>
+<pre class="line-numbers"><code class="language-markdown">
+Analiza los archivos @life.py y @test_life.py dentro del directorio `game` y crea un archivo de documentación doc.md basado en ellos.
+
+La estructura de la documentación debe ser la siguiente:
+-   **Título:** # Proyecto "Juego de la Vida"
+-   **Breve descripción:** Explicación de qué es este proyecto (implementación del autómata celular de Conway).
+-   **Estructura de archivos:** Breve descripción del propósito de los archivos `life.py` y `test_life.py`.
+-   **Cómo ejecutar la simulación:** Sección con el comando para ejecutar el archivo principal (`python life.py`).
+-   **Cómo ejecutar las pruebas:** Sección con el comando para ejecutar las pruebas (`pip install pytest numpy`, luego `pytest`).
+</code></pre>
+<p>La estructura de directorios se verá así:</p>
+<p><img src="assets/gemini_cli_3/1.png" alt="1"></p>
+<h4><strong>Paso 2: Creación del código del "Juego de la Vida"</strong></h4>
+<p>Lanza gemini-cli en la terminal:</p>
+<p><img src="assets/gemini_cli_3/2.png" alt="2"></p>
+<p>¡Importante! Asegúrate de estar en el directorio donde se encuentra el archivo <code>GEMINI.md</code>.</p>
+<p><img src="assets/gemini_cli_3/3.png" alt="3"></p>
+<p><img src="assets/gemini_cli_3/4.png" alt="4"></p>
+<p>Da permiso para crear el archivo:</p>
+<p><img src="assets/gemini_cli_3/5.png" alt="5"></p>
+<p>Después de eso, gemini-cli generará el archivo <code>life.py</code> en el directorio <code>game</code>:</p>
+<p><img src="assets/gemini_cli_3/6.png" alt="6"></p>
+<p>Continuar:</p>
+<pre class="line-numbers"><code class="language-bash">
+Crea un entorno virtual venv, instala las dependencias necesarias y ejecuta el código del juego.
+</code></pre>
+<p><img src="assets/gemini_cli_3/7.png" alt="7"></p>
+<p>Da los permisos necesarios para ejecutar scripts</p>
+<p><img src="assets/gemini_cli_3/8.png" alt="8"></p>
+<p>pip</p>
+<p><img src="assets/gemini_cli_3/9.png" alt="9"></p>
+<p>y finalmente gemini-cli inicia el juego:</p>
+<p><img src="assets/gemini_cli_3/10.png" alt="10"></p>
+<p>Paso 3: Creación de pruebas</p>
+<p><img src="assets/gemini_cli_3/12.png" alt="12"></p>
+<p><img src="assets/gemini_cli_3/11.png" alt="11"></p>
+<p>Error</p>
+<p><img src="assets/gemini_cli_3/13.png" alt="13"></p>
+<p>gemini-cli intenta resolver el problema</p>
+<p><img src="assets/gemini_cli_3/14.png" alt="14"></p>
+<p><img src="assets/gemini_cli_3/15.png" alt="15"></p>
+<p>Último paso — creación de la documentación</p>
+<p><img src="assets/gemini_cli_3/16.png" alt="16"></p>
+<p>¡Voila! Documentación creada:</p>
+<p><img src="assets/gemini_cli_3/17.png" alt="17"></p>

@@ -1,0 +1,9 @@
+{
+  "title": "Chatbot Gemini",
+  "placeholder": "Entrez votre message...",
+  "send": "Envoyer",
+  "sending": "Envoi...",
+  "user": "Vous",
+  "bot": "Bot",
+  "error": "Une erreur s'est produite lors de l'envoi du message. Veuillez réessayer."
+}

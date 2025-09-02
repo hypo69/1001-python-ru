@@ -1,0 +1,66 @@
+BAGLES:
+=================
+Dificultad: 6
+-----------------
+El juego "Bagels" es un juego de lógica y rompecabezas en el que el jugador intenta adivinar un número de tres dígitos compuesto por dígitos únicos. Después de cada intento, el jugador recibe pistas: "PICO" significa que uno de los dígitos ha sido adivinado y está en la posición correcta, "FERMI" significa que uno de los dígitos ha sido adivinado pero no está en la posición correcta, "BAGELS" significa que ninguno de los dígitos ha sido adivinado.
+
+Reglas del juego:
+1. La computadora genera un número aleatorio de tres dígitos compuesto por dígitos únicos.
+2. El jugador ingresa sus suposiciones como un número de tres dígitos.
+3. La computadora proporciona pistas:
+    - "PICO" - un dígito ha sido adivinado y está en la posición correcta.
+    - "FERMI" - un dígito ha sido adivinado pero no está en la posición correcta.
+    - "BAGELS" - ninguno de los dígitos ha sido adivinado.
+4. Las pistas se dan en el orden de los dígitos en el número oculto, por ejemplo, si el número oculto es `123` y el jugador ingresó `142`, las pistas serán `PICO FERMI`.
+5. El juego continúa hasta que el jugador adivina el número.
+6. Si después de 10 intentos el jugador no adivina el número, el juego termina y se muestra el número oculto.
+-----------------
+Algoritmo:
+1. Generar un número aleatorio de tres dígitos que conste de dígitos únicos (por ejemplo, 123).
+2. Establecer el número de intentos en 0.
+3. Bucle "mientras el número no sea adivinado o el número de intentos sea menor que 10":
+    3.1. Incrementar el número de intentos en 1.
+    3.2. Solicitar al jugador un número de tres dígitos.
+    3.3. Comparar el número ingresado con el oculto y generar pistas "PICO", "FERMI" y "BAGELS".
+    3.4. Si se adivina el número, mostrar un mensaje de victoria y el número de intentos.
+    3.5. Si no se adivina el número, mostrar las pistas generadas.
+4. Si después de 10 intentos el número no se adivina, mostrar el número oculto y un mensaje de derrota.
+5. Fin del juego.
+-----------------
+Diagrama de flujo:
+<pre class="line-numbers"><code class="language-mermaid">
+flowchart TD
+    Start["Start"] --> GenerateSecretNumber["<p align='left'>Generate secret number <code><b>secretNumber</b></code> (3 unique digits)<br><code><b>numberOfGuesses = 0</b></code>
+    </p>"]
+    GenerateSecretNumber --> LoopStart{"Start loop: while not guessed and guesses < 10"}
+    LoopStart -- Yes --> IncreaseGuesses["<code><b>numberOfGuesses = numberOfGuesses + 1</b></code>"]
+    IncreaseGuesses --> InputGuess["User enters number: <code><b>userGuess</b></code>"]
+    InputGuess --> GenerateClues["<p align='left'>Generate clues (<code><b>clues</b></code>):<br>
+    <ul>
+    <li><code><b>PICO</b></code>- digit guessed and in correct place</li>
+    <li><code><b>FERMI</b></code> - digit guessed but not in place</li>
+    <li><code><b>BAGELS</b></code> - none of the digits guessed</li>
+    </ul></p>"]
+    GenerateClues --> CheckWin{"Check: <code><b>userGuess == secretNumber?</b></code>"}
+    CheckWin -- Yes --> OutputWin["Display victory message and number of guesses"]
+    OutputWin --> End["End"]
+    CheckWin -- No --> OutputClues["Display clues <code><b>clues</b></code>"]
+    OutputClues --> LoopStart
+    LoopStart -- No --> CheckLose{"Check: <code><b>numberOfGuesses == 10?</b></code>"}
+    CheckLose -- Yes --> OutputLose["Display defeat message and <code><b>secretNumber</b></code>"]
+    OutputLose --> End
+    CheckLose -- No --> LoopStart
+</code></pre>
+Leyenda:
+    Start - Game start.
+    GenerateSecretNumber - Generate secret number secretNumber from 3 unique digits and initialize numberOfGuesses = 0.
+    LoopStart - Start of the loop, which continues until the number is guessed and the number of guesses is less than 10.
+    IncreaseGuesses - Increment the guess counter by 1.
+    InputGuess - Prompt the player to enter a number and store it in the userGuess variable.
+    GenerateClues - Generate clues based on the comparison of userGuess and secretNumber.
+    CheckWin - Check if the entered number userGuess is equal to the secret number secretNumber.
+    OutputWin - Display a victory message and the number of guesses.
+    End - Game end.
+    OutputClues - Display the generated clues.
+    CheckLose - Check if the number of guesses has reached 10.
+    OutputLose - Display a defeat message and the secret number secretNumber.

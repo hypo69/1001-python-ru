@@ -1,0 +1,93 @@
+<h2 dir="rtl"><span dir="ltr">CIVILW</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">7</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;מלחמת אזרחים&quot; מייצג סימולציה של קרב בין שני צבאות: הקונפדרציה והאיחוד. השחקן שולט בקונפדרציה ומקבל החלטות לגבי גודל כוחותיו וסוגי ההתקפות (התקפה ישירה או תמרון עוקף). מטרת המשחק - להביס את צבא האיחוד, תוך מזעור אבדותיו. המשחק לוקח בחשבון גורמים אקראיים המשפיעים על תוצאות הקרב, מה שהופך כל קרב לייחודי.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">השחקן שולט בצבא הקונפדרציה וחייב להביס את צבא האיחוד.</p></li>
+<li><p dir="rtl">השחקן מזין את מספר החיילים לשליחה להתקפה.</p></li>
+<li><p dir="rtl">השחקן בוחר את סוג ההתקפה: ישירה (<span dir="ltr">1</span>) או עוקפת (<span dir="ltr">2</span>).</p></li>
+<li><p dir="rtl">בהתאם לבחירת השחקן ולגורמים אקראיים, מחושבים אבדות לשני הצדדים.</p></li>
+<li><p dir="rtl">לאחר כל קרב, המשחק מציג את כוח האדם הנוכחי של שני הצדדים.</p></li>
+<li><p dir="rtl">המשחק מסתיים בניצחון של אחד הצדדים, כאשר כוח האדם של היריב שווה או קטן מ-<span dir="ltr">0</span>.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">הגדר את כוח האדם ההתחלתי של צבא האיחוד (<span dir="ltr">UnionForce</span>) ל-<span dir="ltr">1000</span> ושל צבא הקונפדרציה (<span dir="ltr">ConfederateForce</span>) ל-<span dir="ltr">800</span>.</p></li>
+<li><p dir="rtl">התחל לולאה &quot;כל עוד לשני הצבאות יש כוח אדם גדול מ-<span dir="ltr">0</span>&quot;:</p>
+<ol>
+<li><p dir="rtl">בקש מהשחקן את מספר החיילים שהוא רוצה לשלוח להתקפה (<span dir="ltr">AttackForce</span>).</p>
+<ol>
+<li><p dir="rtl">אם <span dir="ltr">AttackForce</span> גדול מכוחות הקונפדרציה הזמינים (<span dir="ltr">ConfederateForce</span>), הצג הודעה &quot;כוחות לא מספיקים&quot; וחזור לתחילת שלב <span dir="ltr">2.1</span>.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">בקש מהשחקן את סוג ההתקפה: ישירה (<span dir="ltr">1</span>) או עוקפת (<span dir="ltr">2</span>) (<span dir="ltr">AttackType</span>).</p></li>
+<li><p dir="rtl">חשב את אבדות הקונפדרציה (<span dir="ltr">ConfederateLosses</span>) באופן אקראי, על ידי הכפלת <span dir="ltr">AttackForce</span> במספר אקראי מ-<span dir="ltr">0</span> עד <span dir="ltr">0.4</span> (להתקפה ישירה) או במספר אקראי מ-<span dir="ltr">0</span> עד <span dir="ltr">0.2</span> (לתמרון עוקף).</p>
+<ol>
+<li><p dir="rtl">אם <span dir="ltr">ConfederateLosses</span> גדול מ-<span dir="ltr">AttackForce</span>, הגדר את <span dir="ltr">ConfederateLosses</span> שווה ל-<span dir="ltr">AttackForce</span>.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">חשב את אבדות האיחוד (<span dir="ltr">UnionLosses</span>) באופן אקראי, על ידי הכפלת <span dir="ltr">AttackForce</span> במספר אקראי מ-<span dir="ltr">0</span> עד <span dir="ltr">0.3</span>.</p>
+<ol>
+<li><p dir="rtl">אם <span dir="ltr">AttackType</span> שווה ל-<span dir="ltr">2</span>, הגדל את <span dir="ltr">UnionLosses</span> במספר אקראי מ-<span dir="ltr">0</span> עד <span dir="ltr">100</span>.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">עדכן את כוח האדם של הצבאות:</p>
+<p dir="rtl"><span dir="ltr">ConfederateForce = ConfederateForce - ConfederateLosses</span><br>
+<span dir="ltr">UnionForce = UnionForce - UnionLosses</span></p>
+</li>
+<li><p dir="rtl">הצג את כוח האדם הנוכחי של שני הצדדים.</p></li>
+<li><p dir="rtl">בדוק תנאי ניצחון:</p>
+<ol>
+<li><p dir="rtl">אם <span dir="ltr">UnionForce</span> קטן או שווה ל-<span dir="ltr">0</span>, הצג הודעה &quot;הקונפדרציה ניצחה!&quot; וסיים את המשחק.</p></li>
+<li><p dir="rtl">אם <span dir="ltr">ConfederateForce</span> קטן או שווה ל-<span dir="ltr">0</span>, הצג הודעה &quot;האיחוד ניצח!&quot; וסיים את המשחק.</p></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeForces["<p align='left'>Initialize variables:<br><code><b>unionForce = 1000</b></code><br><code><b>confederateForce = 800</b></code></p>"]
+    InitializeForces --> LoopStart{"Start loop: as long as both forces > 0"}
+    LoopStart -- Yes --> InputAttackForce["<p align='left'>Enter number of attacking forces:<br><code><b>attackForce</b></code></p>"]
+    InputAttackForce --> CheckForce{"Check:<br><code><b>attackForce > confederateForce?</b></code>"}
+    CheckForce -- Yes --> OutputInsufficient["Display message: <b>Insufficient forces</b>"]
+    OutputInsufficient --> InputAttackForce
+    CheckForce -- No --> InputAttackType["<p align='left'>Enter attack type:<br><b>1 - Direct</b>, <b>2 - Flanking</b><br><code><b>attackType</b></code></p>"]
+    InputAttackType --> CalculateConfederateLosses["<p align='left'>Calculate Confederate losses:<br><code><b>confederateLosses = attackForce * random(0, 0.4)</b></code><br>(or <code><b>random(0, 0.2)</b></code> for flanking attack)<br>If <code><b>confederateLosses > attackForce</b></code>, then <code><b>confederateLosses = attackForce</b></code></p>"]
+    CalculateConfederateLosses --> CalculateUnionLosses["<p align='left'>Calculate Union losses:<br><code><b>unionLosses = attackForce * random(0, 0.3)</b></code><br>If <code><b>attackType = 2</b></code>, then <code><b>unionLosses += random(0, 100)</b></code></p>"]
+    CalculateUnionLosses --> UpdateForces["<p align='left'>Update forces:<br><code><b>confederateForce -= confederateLosses</b></code><br><code><b>unionForce -= unionLosses</b></code></p>"]
+    UpdateForces --> OutputForces["<p align='left'>Display forces:<br><code><b>confederateForce</b></code>, <code><b>unionForce</b></code></p>"]
+    OutputForces --> CheckUnionWin{"Check:<br><code><b>unionForce <= 0?</b></code>"}
+    CheckUnionWin -- Yes --> OutputConfederateWin["Display message: <b>Confederacy won!</b>"]
+    OutputConfederateWin --> End["End"]
+    CheckUnionWin -- No --> CheckConfederateWin{"Check:<br><code><b>confederateForce <= 0?</b></code>"}
+     CheckConfederateWin -- Yes --> OutputUnionWin["Display message: <b>Union won!</b>"]
+    OutputUnionWin --> End
+    CheckConfederateWin -- No --> LoopStart
+    LoopStart -- No --> End
+</code></pre>
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeForces</span> - אתחול כוח האדם ההתחלתי של צבא האיחוד (<span dir="ltr">unionForce = 1000</span>) ושל הקונפדרציה (<span dir="ltr">confederateForce = 800</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת הלולאה, הנמשכת כל עוד לשני הצבאות יש כוח אדם גדול מ-<span dir="ltr">0</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputAttackForce</span> - בקשת המשתמש את מספר החיילים להתקפה (<span dir="ltr">attackForce</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckForce</span> - בדיקה האם לקונפדרציה יש מספיק כוחות להתקפה (<span dir="ltr">attackForce &gt; confederateForce</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputInsufficient</span> - הצגת הודעה &quot;כוחות לא מספיקים&quot;, אם כוחות התוקפים גדולים מכוחות הזמינים.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputAttackType</span> - בקשת המשתמש לבחור את סוג ההתקפה: ישירה (<span dir="ltr">1</span>) או עוקפת (<span dir="ltr">2</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">CalculateConfederateLosses</span> - חישוב אבדות הקונפדרציה (<span dir="ltr">confederateLosses</span>) על בסיס <span dir="ltr">attackForce</span> וסוג ההתקפה, תוך התחשבות בגורם אקראי. אם האבדות עולות על <span dir="ltr">attackForce</span>, האבדות מוגדרות שוות ל-<span dir="ltr">attackForce</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CalculateUnionLosses</span> - חישוב אבדות האיחוד (<span dir="ltr">unionLosses</span>) על בסיס <span dir="ltr">attackForce</span> וסוג ההתקפה, תוך התחשבות בגורם אקראי. בהתקפה עוקפת, אבדות האיחוד גדלות בנוסף במספר אקראי.</p></li>
+<li><p dir="rtl"><span dir="ltr">UpdateForces</span> - עדכון כוח האדם של שני הצבאות לאחר הקרב.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputForces</span> - הצגת כוח האדם הנוכחי של צבאות הקונפדרציה והאיחוד.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckUnionWin</span> - בדיקה האם הקונפדרציה ניצחה (כוח האדם של צבא האיחוד <span dir="ltr">&lt;= 0</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputConfederateWin</span> - הצגת הודעה על ניצחון הקונפדרציה.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckConfederateWin</span> - בדיקה האם האיחוד ניצח (כוח האדם של צבא הקונפדרציה <span dir="ltr">&lt;= 0</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputUnionWin</span> - הצגת הודעה על ניצחון האיחוד.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+</ul>

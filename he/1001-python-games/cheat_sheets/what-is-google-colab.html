@@ -1,0 +1,189 @@
+<h2 dir="rtl">מה זה <span dir="ltr">Google Colab</span>?</h2>
+<p dir="rtl"><span dir="ltr">Google Colab</span> היא פלטפורמה מבוססת ענן, שנוצרה על ידי גוגל, לעבודה עם מחברות <span dir="ltr">Jupyter</span> אינטראקטיביות.
+היא מספקת כלים רבי עוצמה לכתיבה והרצת קוד <span dir="ltr">Python</span>, ניתוח נתונים, אימון מודלים של למידת מכונה ושיתוף פעולה בפרויקטים.</p>
+<p dir="rtl"><span dir="ltr">Colab</span> מספקת גישה למשאבי מחשוב חזקים, כולל מעבדים גרפיים (<span dir="ltr">GPU</span>) ומעבדי טנסור (<span dir="ltr">TPU</span>).
+זה מאפשר לפתור בעיות מורכבות, כגון עיבוד מערכי נתונים גדולים או אימון רשתות עצביות, ללא צורך ברכישת חומרה יקרה. <span dir="ltr">Colab</span> בנויה על בסיס <span dir="ltr">Jupyter Notebook</span>, ומספקת ממשק נוח לעבודה עם קוד, טקסט וויזואליזציות. תוכל להריץ תאי קוד, להוסיף טקסט הסבר, ליצור גרפים וויזואליזציות ישירות בדפדפן שלך. ניתן להשתמש ב-<span dir="ltr">Colab</span> מיד לאחר פתיחתו. אין צורך להתקין תוכניות, ספריות או דרייברים נוספים. הכל כבר מוגדר לעבודה. תוכל לחבר את <span dir="ltr">Google Drive</span> שלך, מה שמאפשר לך להעלות נתונים בקלות, לשמור פרויקטים ולהבטיח גישה לקבצים מכל מקום. <span dir="ltr">Colab</span> תומכת בעבודה שיתופית. תוכל לשתף את הפרויקטים שלך עם עמיתים, לערוך מחברות בו זמנית ולדון בשינויים בזמן אמת.</p>
+<h3 dir="rtl">איך עובד <span dir="ltr">Google Colab</span>?</h3>
+<ul dir="rtl">
+<li>אתה מפעיל מחברת <span dir="ltr">Jupyter</span> בדפדפן, מה שחוסך את הצורך בהתקנת סביבה מקומית.</li>
+<li>הקוד מורץ בשרתי גוגל מרוחקים, והתוצאות מוצגות במחברת שלך.</li>
+<li>נתונים יכולים להיטען ממכשיר מקומי או מהענן, כגון <span dir="ltr">Google Drive</span>.</li>
+<li>אתה יכול להשתמש ב-<span dir="ltr">Colab</span> לכתיבת קוד <span dir="ltr">Python</span>, עבודה עם ספריות למידת מכונה (לדוגמה, <span dir="ltr">TensorFlow</span>, <span dir="ltr">PyTorch</span>), ניתוח נתונים באמצעות <span dir="ltr">Pandas</span> או יצירת ויזואליזציות באמצעות <span dir="ltr">Matplotlib</span> ו-<span dir="ltr">Seaborn</span>.</li>
+</ul>
+<h3 dir="rtl">איך נראה <span dir="ltr">Google Colab</span>?</h3>
+<p dir="rtl">ממשק <span dir="ltr">Colab</span> מורכב מכמה חלקים עיקריים:</p>
+<p dir="rtl">שורות קוד: אלו הם התאים שבהם תכתוב ותריץ את קוד ה-<span dir="ltr">Python</span> שלך.</p>
+<p dir="rtl">תאי טקסט: כאן תוכל להוסיף תיאורים, הסברים והערות לקוד שלך.</p>
+<p dir="rtl">תפריט: למעלה יש תפריט עם אפשרויות שונות לעבודה עם המחברת (קובץ, עריכה, תצוגה, כלים וכו').</p>
+<p dir="rtl">מנהל קבצים: משמאל יש פאנל מנהל קבצים שבו תוכל להציג קבצים ותיקיות בסביבת <span dir="ltr">Colab</span> שלך.</p>
+<p dir="rtl">ב-<span dir="ltr">Google Colab</span>, אתה עובד בסביבת ענן,
+שבה מערכת הקבצים מאורגנת כמו במחשב רגיל עם תיקיות וקבצים.
+<span dir="ltr">Colab</span> מספקת כלים לניווט, יצירה, צפייה ועריכה של קבצים.
+תוכל לתקשר עם מערכת הקבצים באמצעות <strong>פקודות קסם של <span dir="ltr">Jupyter</span></strong> (המתחילות ב-<span dir="ltr"><code>%</code></span>)
+ו<strong>פקודות <span dir="ltr">bash</span></strong> (המתחילות ב-<span dir="ltr"><code>!</code></span>).</p>
+<p dir="rtl"><strong>רשימת פקודות בסיסיות:</strong></p>
+<ol dir="rtl">
+<li><strong><span dir="ltr"><code>%pwd</code></span></strong> (<span dir="ltr">print working directory</span>):
+<ul dir="rtl">
+<li><strong>תיאור</strong>: מציג את ספריית העבודה הנוכחית (היכן שאתה נמצא כעת במערכת הקבצים).</li>
+<li><strong>דוגמה</strong>: <span dir="ltr"><code>%pwd</code></span></li>
+<li><strong>תוצאה</strong>: <span dir="ltr"><code>/content</code></span> (או ספרייה נוכחית אחרת)</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>%ls</code></span></strong> (<span dir="ltr">list</span>):
+<ul dir="rtl">
+<li><strong>תיאור</strong>: מציג רשימה של קבצים ותיקיות בספרייה הנוכחית.</li>
+<li><strong>דוגמה</strong>: <span dir="ltr"><code>%ls</code></span></li>
+<li><strong>תוצאה</strong>: רשימה של קבצים ותיקיות, לדוגמה: <span dir="ltr"><code>sample_data/  my_file.txt</code></span></li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>%cd &lt;נתיב&gt;</code></span></strong> (<span dir="ltr">change directory</span>):
+<ul dir="rtl">
+<li><strong>תיאור</strong>: עובר לספרייה המצוינת.</li>
+<li><strong>דוגמה</strong>: <span dir="ltr"><code>%cd sample_data</code></span></li>
+<li><strong>תוצאה</strong>: ספריית העבודה הנוכחית משתנה ל-<span dir="ltr"><code>/content/sample_data</code></span></li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>!head -&lt;מספר שורות&gt; &lt;שם קובץ&gt;</code></span></strong> :
+<ul dir="rtl">
+<li><strong>תיאור</strong>: מציג את מספר השורות הראשונות של קובץ הטקסט המצוין.</li>
+<li><strong>דוגמה</strong>: <span dir="ltr"><code>!head -5 README.md</code></span></li>
+<li><strong>תוצאה</strong>: 5 השורות הראשונות של הקובץ <span dir="ltr"><code>README.md</code></span>.</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>!cat &lt;שם קובץ&gt;</code></span></strong> :
+<ul dir="rtl">
+<li><strong>תיאור</strong>: מציג את תוכן קובץ הטקסט המצוין.</li>
+<li><strong>דוגמה</strong>: <span dir="ltr"><code>!cat sample_file.txt</code></span></li>
+<li><strong>תוצאה</strong>: כל תוכן הקובץ <span dir="ltr"><code>sample_file.txt</code></span>.</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>!echo "&lt;טקסט&gt;" &gt; &lt;שם קובץ&gt;</code></span></strong>
+<ul dir="rtl">
+<li><strong>תיאור:</strong> יוצר קובץ חדש עם השם המצוין וכותב בו טקסט. אם הקובץ כבר קיים, הוא יידרס</li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>!echo "זה הקובץ החדש שלי!" &gt; new_file.txt</code></span></li>
+<li><strong>תוצאה:</strong> יוצר את הקובץ <span dir="ltr"><code>new_file.txt</code></span> עם התוכן <span dir="ltr"><code>זה הקובץ החדש שלי!</code></span>.</li>
+</ul>
+</li>
+</ol>
+<p dir="rtl"><strong>נקודות מפתח:</strong></p>
+<ul dir="rtl">
+<li><strong>פקודות קסם</strong> (<span dir="ltr"><code>%</code></span>) - אלו הן פקודות <span dir="ltr">Jupyter</span> מיוחדות לעבודה עם סביבת <span dir="ltr">Colab</span>.</li>
+<li><strong>פקודות <span dir="ltr">bash</span></strong> (<span dir="ltr"><code>!</code></span>) - אלו הן פקודות המבוצעות בשורת הפקודה של לינוקס.</li>
+<li><strong>נתיב קובץ</strong>: נתיב הקובץ מציין היכן בדיוק הקובץ ממוקם במערכת הקבצים (לדוגמה, <span dir="ltr"><code>/content/sample_data/my_file.txt</code></span>).</li>
+<li><strong>ספרייה נוכחית</strong>: מיקומך במערכת הקבצים (משתנה באמצעות פקודת <span dir="ltr"><code>%cd</code></span>).</li>
+</ul>
+<p dir="rtl"><strong>תרשים הממחיש את רצף הפקודות:</strong></p>
+<pre><code class="language-mermaid">graph TD
+    A[התחלה] --> B(pwd: קבל ספרייה נוכחית);
+    B --> C(ls: ראה תוכן ספרייה נוכחית);
+    C --> D(cd: שנה ספרייה נוכחית);
+    D --> E(head: הצג תחילת קובץ טקסט);
+     E --> F(cat: הצג תוכן קובץ טקסט);
+       F --> G(echo: צור או דרוס קובץ טקסט);
+    G --> H(ls: ראה תוכן ספרייה שונה);
+     H --> I[סיום];
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+        style I fill:#ccf,stroke:#333,stroke-width:2px
+
+</code></pre>
+<p dir="rtl"><strong>העלאת קבצים ל-<span dir="ltr">Google Colab</span></strong></p>
+<p dir="rtl">ישנן מספר דרכים להעלות קבצים ל-<span dir="ltr">Colab</span>, ואנו נבחן את הנפוצות ביותר.</p>
+<ol dir="rtl">
+<li><strong>העלאה באמצעות מנהל קבצים (<span dir="ltr">GUI</span>)</strong>
+<ul dir="rtl">
+<li><strong>תיאור:</strong> הדרך הקלה ביותר להעלות קבצים, במיוחד קטנים, היא להשתמש בממשק הגרפי של מנהל הקבצים של <span dir="ltr">Colab</span>.</li>
+<li><strong>איך לעשות זאת:</strong>
+<ol dir="rtl">
+<li>פתח את פאנל מנהל הקבצים משמאל (סמל תיקייה).</li>
+<li>לחץ על סמל ההעלאה (בדרך כלל סימן פלוס או חץ למעלה).</li>
+<li>בחלון שנפתח, בחר את הקבצים במחשב שלך שברצונך להעלות.</li>
+<li>לחץ על "פתח" או "העלה".</li>
+</ol>
+</li>
+<li><strong>יתרונות:</strong> פשטות, בהירות, אינו דורש כתיבת קוד.</li>
+<li><strong>חסרונות:</strong> מתאים לקבצים קטנים, יש לבצע ידנית.</li>
+</ul>
+</li>
+<li><strong>העלאה באמצעות קוד <span dir="ltr">Python</span> (<span dir="ltr"><code>google.colab.files.upload()</code></span>)</strong>
+<ul dir="rtl">
+<li><strong>תיאור</strong>: שיטה זו מאפשרת לך להעלות קבצים באמצעות קוד <span dir="ltr">Python</span>, מה שמעניק גמישות רבה יותר.</li>
+<li><strong>איך לעשות זאת:</strong>
+<ol dir="rtl">
+<li>ייבא את מודול <span dir="ltr"><code>files</code></span> מספריית <span dir="ltr"><code>google.colab</code></span>.
+<pre class="line-numbers"><code class="language-python">from google.colab import files
+</code></pre>
+</li>
+<li>קרא לפונקציה <span dir="ltr"><code>files.upload()</code></span>
+<pre class="line-numbers"><code class="language-python">uploaded = files.upload()
+</code></pre>
+</li>
+<li>כאשר תריץ קוד זה, יופיע חלון דיאלוג שבו תוכל לבחור קבצים להעלאה.</li>
+</ol>
+</li>
+<li><strong>יתרונות:</strong> ניתן להשתמש בקוד, מאפשר עיבוד תוכנתי של קבצים שהועלו.</li>
+<li><strong>חסרונות:</strong> דורש כתיבת קוד, מעט פחות אינטואיטיבי ממנהל הקבצים.</li>
+</ul>
+<p dir="rtl">לאחר ביצוע קוד זה, הקבצים שהועלו יהיו זמינים כמילון <span dir="ltr"><code>uploaded</code></span>, כאשר המפתחות הם שמות הקבצים והערכים הם תוכנם כמחרוזות בתים.</p>
+<pre class="line-numbers"><code class="language-python"># דוגמה לשימוש בקבצים שהועלו
+for file_name, file_data in uploaded.items():
+       print(f"קובץ: {file_name}")
+       # עיבוד נתוני קובץ
+       # לדוגמה:
+       # import pandas as pd
+       # df = pd.read_csv(io.BytesIO(file_data))
+       # print(df.head())
+</code></pre>
+</li>
+<li><strong>שכפול מאגר <span dir="ltr">GitHub</span> (<span dir="ltr"><code>git clone</code></span>)</strong>
+<ul dir="rtl">
+<li><strong>תיאור</strong>: אם הקבצים שלך נמצאים במאגר <span dir="ltr">GitHub</span>, תוכל להעלות אותם על ידי שכפול המאגר ל-<span dir="ltr">Colab</span>.</li>
+<li><strong>איך לעשות זאת:</strong>
+<ol dir="rtl">
+<li>השתמש בפקודה <span dir="ltr"><code>git clone</code></span> עם כתובת ה-<span dir="ltr">URL</span> של המאגר.
+<pre class="line-numbers"><code class="language-python">!git clone &lt;URL_של_המאגר&gt;
+</code></pre>
+</li>
+<li>לדוגמה:
+<pre class="line-numbers"><code class="language-python">!git clone https://github.com/username/my_repository.git
+</code></pre>
+</li>
+<li>לאחר שכפול המאגר, התוכן יהיה זמין בתיקייה בעלת אותו שם כמו המאגר.</li>
+</ol>
+</li>
+<li><strong>יתרונות:</strong> קל להעלות את כל הקבצים ממאגר, דרך נוחה לפרויקטים עם בקרת גרסאות.</li>
+<li><strong>חסרונות:</strong> מתאים רק לקבצים במאגרי <span dir="ltr">GitHub</span>.</li>
+</ul>
+<p dir="rtl"><img src="https://i.ibb.co/7R1QG5Q/colab-git-clone.png" alt="שכפול מאגר GitHub ב-Colab"></p>
+<p dir="rtl"><em>שכפול מאגר <span dir="ltr">GitHub</span> ב-<span dir="ltr">Colab</span></em></p>
+</li>
+<li><strong>הורדת קובץ בודד מ-<span dir="ltr">GitHub</span></strong>
+<ul dir="rtl">
+<li><strong>תיאור</strong>: אם אתה זקוק רק לקובץ אחד או לכמה קבצים ממאגר <span dir="ltr">GitHub</span>, תוכל להוריד אותם ישירות.</li>
+<li><strong>איך לעשות זאת:</strong>
+<ol dir="rtl">
+<li>פתח את הקובץ הרצוי במאגר <span dir="ltr">GitHub</span>.</li>
+<li>לחץ על כפתור "<span dir="ltr">View raw</span>" (או "תצוגה גולמית").</li>
+<li>העתק את כתובת ה-<span dir="ltr">URL</span> של קובץ זה.</li>
+<li>השתמש ב-<span dir="ltr"><code>wget</code></span> או ב-<span dir="ltr"><code>curl</code></span> כדי להוריד את הקובץ.
+<pre class="line-numbers"><code class="language-python">!wget &lt;URL_של_הקובץ&gt;
+</code></pre>
+</li>
+<li>או
+<pre class="line-numbers"><code class="language-python">!curl &lt;URL_של_הקובץ&gt; -o &lt;שם_קובץ_ב-colab&gt;
+</code></pre>
+</li>
+</ol>
+</li>
+<li><strong>יתרונות</strong>: קל להוריד רק את הקבצים הנחוצים, ללא שכפול המאגר כולו.</li>
+<li><strong>חסרונות</strong>: דורש לדעת את הקישור הישיר לקובץ.</li>
+</ul>
+</li>
+</ol>
+<p dir="rtl"><strong>איזו שיטה לבחור?</strong></p>
+<ul dir="rtl">
+<li>לקבצים קטנים שצריך להעלות במהירות ובאופן ידני, <strong>מנהל הקבצים</strong> מתאים.</li>
+<li>אם צריך לעבד קבצים שהועלו באופן תוכנתי, השתמש ב-<strong><span dir="ltr"><code>files.upload()</code></span></strong>.</li>
+<li>להעלאת פרויקטים שלמים, השתמש ב-<strong><span dir="ltr"><code>git clone</code></span></strong>.</li>
+<li>להורדת קבצים בודדים, השתמש ב-<strong><span dir="ltr"><code>wget</code></span> או ב-</strong><span dir="ltr"><code>curl</code></span>**</li>
+</ul>

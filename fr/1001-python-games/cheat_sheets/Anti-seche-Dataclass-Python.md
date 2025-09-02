@@ -1,0 +1,316 @@
+**Qu'est-ce que `dataclass` ?**
+
+`dataclass` est un décorateur introduit dans Python 3.7, qui génère automatiquement des méthodes spéciales (telles que `__init__`, `__repr__`, `__eq__` et autres) pour les classes qui servent principalement de conteneurs de données. Cela vous évite d'écrire beaucoup de code répétitif.
+
+**Pourquoi utiliser `dataclass` ?**
+
+1.  **Réduction du code :** Au lieu de définir manuellement les méthodes `__init__`, `__repr__`, `__eq__`, etc., vous déclarez simplement les champs de données, et `dataclass` fait le reste.
+2.  **Amélioration de la lisibilité :** Les classes deviennent plus concises et compréhensibles, car elles se concentrent sur les données plutôt que sur l'implémentation technique.
+3.  **Réduction des erreurs :** Le code généré automatiquement est généralement plus fiable que le code écrit manuellement.
+4.  **Accélération du développement :** Vous pouvez créer des classes de données plus rapidement sans perdre de temps sur les tâches routinières.
+
+**Comment utiliser `dataclass` ?**
+
+Pour commencer, vous devez importer le décorateur `dataclass` du module `dataclasses` :
+
+```python
+from dataclasses import dataclass
+```
+
+Ensuite, vous marquez la classe avec le décorateur `@dataclass`, et définissez les champs de données comme des variables de classe ordinaires avec des annotations de type :
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+```
+
+Dans cet exemple, `Point` est une `dataclass` qui a deux champs : `x` et `y`, tous deux de type entier. `dataclass` créera automatiquement :
+    * Un constructeur `__init__`, vous permettant de créer des instances de classe, par exemple `Point(1, 2)`.
+    *  `__repr__`, renvoyant une représentation textuelle de l'objet, par exemple `Point(x=1, y=2)`.
+    * `__eq__`, vous permettant de comparer des objets, par exemple `Point(1, 2) == Point(1, 2)`.
+
+**Exemple d'utilisation simple**
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+# Création d'une instance de classe
+point1 = Point(1, 2)
+point2 = Point(1, 2)
+point3 = Point(3, 4)
+
+# Affichage
+print(point1) # Affichera : Point(x=1, y=2)
+print(point1 == point2) # Affichera : True
+print(point1 == point3) # Affichera : False
+```
+
+**Options de `dataclass`**
+
+`dataclass` fournit plusieurs paramètres pour personnaliser le comportement :
+
+*   `init` : Si `True` (par défaut), la méthode `__init__` est générée. Si `False`, la méthode `__init__` n'est pas créée.
+*   `repr` : Si `True` (par défaut), la méthode `__repr__` est générée. Si `False`, la méthode `__repr__` n'est pas créée.
+*   `eq` : Si `True` (par défaut), la méthode `__eq__` est générée. Si `False`, la méthode `__eq__` n'est pas créée.
+*   `order` : Si `True`, les méthodes de comparaison (`__lt__`, `__le__`, `__gt__`, `__ge__`) sont générées. La valeur par défaut est `False`.
+*   `unsafe_hash` : Si `False` (par défaut), la méthode `__hash__` n'est pas générée. Si `True`, la méthode `__hash__` sera générée, et la `dataclass` deviendra hachable.
+*   `frozen` : Si `True`, les instances de classe seront immuables (en lecture seule). La valeur par défaut est `False`.
+
+**Exemples d'utilisation des paramètres**
+1. Désactiver la méthode `__repr__` et rendre la classe immuable
+```python
+from dataclasses import dataclass
+
+@dataclass(repr=False, frozen=True)
+class Point:
+    x: int
+    y: int
+
+# Création d'une instance de classe
+point1 = Point(1, 2)
+# Affichage
+print(point1) # Affichera : <__main__.Point object at 0x000001D8322F6770> (car __repr__ n'est pas défini)
+
+# La modification d'une instance provoquera une erreur
+try:
+    point1.x = 10
+except Exception as e:
+    print (e) # Affichera : cannot assign to field 'x'
+```
+2. Définir l'ordre, ajouter la méthode de hachage et rendre la classe immuable
+```python
+from dataclasses import dataclass
+
+@dataclass(order=True, unsafe_hash=True, frozen=True)
+class Point:
+    x: int
+    y: int
+
+# Création d'une instance de classe
+point1 = Point(1, 2)
+point2 = Point(3, 4)
+point3 = Point(1, 2)
+# Affichage
+print(point1 < point2) # Affichera : True
+print(point1 == point3) # Affichera : True
+
+# Vous pouvez maintenant utiliser la classe comme clé de dictionnaire
+my_dict = {point1: "first", point2: "second"}
+print(my_dict) # Affichera : {Point(x=1, y=2): 'first', Point(x=3, y=4): 'second'}
+```
+
+**Valeurs par défaut**
+
+Vous pouvez définir des valeurs par défaut pour les champs :
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int = 0
+    y: int = 0
+
+# Création d'une instance de classe
+point1 = Point()
+point2 = Point(1, 2)
+
+# Affichage
+print(point1) # Affichera : Point(x=0, y=0)
+print(point2) # Affichera : Point(x=1, y=2)
+```
+Lors de la création d'une instance de classe, si aucune valeur n'est passée, la valeur par défaut sera utilisée.
+
+**Utilisation de `dataclass` avec des types mutables**
+
+Soyez prudent lorsque vous utilisez des types de données mutables (listes, dictionnaires) comme valeurs par défaut. Ils ne seront créés qu'une seule fois et seront utilisés par toutes les instances de classe :
+
+```python
+from dataclasses import dataclass
+from typing import List
+
+@dataclass
+class BadExample:
+    items: List[int] = []
+
+bad1 = BadExample()
+bad2 = BadExample()
+
+bad1.items.append(1)
+print (bad1.items) # Affichera : [1]
+print (bad2.items) # Affichera : [1] 
+```
+Dans l'exemple ci-dessus, les modifications apportées à `bad1.items` sont également reflétées dans `bad2.items`. Cela se produit parce que les deux instances de classe utilisent la même liste par défaut.
+
+Pour éviter cela, utilisez `dataclasses.field` et `default_factory` :
+```python
+from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class GoodExample:
+    items: List[int] = field(default_factory=list)
+
+good1 = GoodExample()
+good2 = GoodExample()
+
+good1.items.append(1)
+print (good1.items) # Affichera : [1]
+print (good2.items) # Affichera : []
+```
+Dans ce cas, `default_factory=list` créera une nouvelle liste vide pour chaque nouvelle instance de classe.
+
+**Diagramme**
+
+Voici un diagramme montrant les concepts principaux de `dataclass` :
+
+```mermaid
+classDiagram
+    class DataClass {
+        <<decorator>>
+        +init: bool = True
+        +repr: bool = True
+        +eq: bool = True
+        +order: bool = False
+        +unsafe_hash: bool = False
+        +frozen: bool = False
+        --
+        +__init__(...)
+        +__repr__()
+        +__eq__(...)
+        +__lt__(...)
+        +__le__(...)
+        +__gt__(...)
+        +__ge__(...)
+        +__hash__()
+    }
+    class UserDefinedClass {
+        <<class>>
+        +field1: type
+        +field2: type
+        +field3: type = defaultValue
+        +field4: type = field(default_factory=...)
+    }
+    DataClass <|-- UserDefinedClass
+```
+
+Dans ce diagramme :
+*   `DataClass` représente le décorateur `@dataclass` et ses paramètres.
+*   `UserDefinedClass` est la classe que vous déclarez en utilisant le décorateur `@dataclass`.
+*   La flèche de `DataClass` vers `UserDefinedClass` montre que `DataClass` est appliquée à `UserDefinedClass`.
+
+
+
+## `dict()`, `__dir__()` et autres fonctionnalités de `dataclass`.
+
+*   `dict()` ne fonctionne pas directement avec les instances de `dataclass`. Pour convertir en dictionnaire, vous devez utiliser des méthodes manuelles ou des bibliothèques tierces.
+*   `__dir__()` renvoie une liste de tous les attributs et méthodes de l'objet, y compris les méthodes et les champs générés par `dataclass`.
+*   `__dataclass_fields__` et `__dataclass_params__` fournissent des métadonnées sur les champs et les paramètres de `dataclass`.
+
+**1. `dict()` dans le contexte de `dataclass`**
+
+   - **Pas de support automatique :** La fonction intégrée `dict()` ne fonctionne pas directement avec les instances de `dataclass`, comme avec les dictionnaires ordinaires. Si vous essayez d'appeler `dict(instance_of_dataclass)`, vous obtiendrez une erreur `TypeError: cannot convert dictionary update sequence element #0 to a sequence`.
+   
+   - **Conversion en dictionnaire :** Pour convertir une instance de `dataclass` en dictionnaire, vous devez le faire manuellement ou utiliser une bibliothèque tierce. Voici comment vous pouvez le faire manuellement :
+
+     ```python
+     from dataclasses import dataclass
+     
+     @dataclass
+     class Person:
+         name: str
+         age: int
+     
+     person = Person("Alice", 30)
+     
+     # Conversion manuelle en dictionnaire
+     person_dict = {field.name: getattr(person, field.name) for field in dataclasses.fields(Person)}
+     print(person_dict)  # Affichera : {'name': 'Alice', 'age': 30}
+
+     #Alternative :
+     person_dict = person.__dict__
+     print(person_dict) #Affichera : {'name': 'Alice', 'age': 30}
+     ```
+   - **Pourquoi ?** `dataclass` est principalement conçu pour représenter des données sous forme de classes. Bien que les données soient stockées en tant qu'attributs d'objet, `dataclass` ne les rend pas automatiquement accessibles en tant que dictionnaire.
+
+**2. `__dir__()` dans `dataclass`**
+
+   - **Renvoie les attributs :** La méthode `__dir__()` renvoie une liste de chaînes représentant les noms des attributs et des méthodes de l'objet. Pour `dataclass`, `__dir__()` inclura :
+     - Tous les champs de données définis.
+     - Les méthodes générées automatiquement (`__init__`, `__repr__`, `__eq__`, etc., selon les paramètres).
+     - Toute autre méthode ajoutée manuellement.
+
+   - **Exemple :**
+      ```python
+      from dataclasses import dataclass
+      
+      @dataclass
+      class Point:
+          x: int
+          y: int
+          
+          def distance(self):
+                return (self.x**2 + self.y**2)**0.5
+      
+      point = Point(1, 2)
+      print(dir(point))
+      #Affichera :
+      #['__class__', '__dataclass_fields__', '__dataclass_params__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'distance', 'x', 'y']
+
+      ```
+
+   - **Utilité :** `__dir__()` peut être utile pour l'introspection - visualiser les attributs et méthodes disponibles d'une instance de `dataclass`.
+   
+**3. Autres fonctionnalités de `dataclass`**
+
+   - **`__dataclass_fields__` :**
+      - C'est un attribut de classe qui contient un dictionnaire où les clés sont les noms des champs `dataclass`, et les valeurs sont des objets `dataclasses.Field`.
+      - Cet attribut vous permet d'obtenir des métadonnées sur les champs `dataclass` (par exemple, le type, la valeur par défaut, etc.).
+
+     ```python
+     from dataclasses import dataclass, fields
+     
+     @dataclass
+     class Point:
+          x: int = 0
+          y: int = 0
+     
+     print(Point.__dataclass_fields__)
+     #Affichera :
+     #{'x': Field(name='x',type=<class 'int'>,default=0,default_factory=MISSING,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False), 'y': Field(name='y',type=<class 'int'>,default=0,default_factory=MISSING,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False)}
+     ```
+     ```python
+     # Utiliser fields() pour le même résultat
+     for field in fields(Point):
+         print(field.name, field.type, field.default)
+     #Affichera :
+     #x <class 'int'> 0
+     #y <class 'int'> 0
+     ```
+  
+   - **`__dataclass_params__` :**
+      - C'est un attribut de classe qui stocke des informations sur les paramètres de `dataclass` (par exemple, `init`, `repr`, `eq`, `order`, etc.).
+      - Cela vous permet d'accéder aux paramètres avec lesquels la `dataclass` a été créée.
+
+      ```python
+      from dataclasses import dataclass
+      
+      @dataclass(order = True, frozen = True)
+      class Point:
+        x: int
+        y: int
+      print(Point.__dataclass_params__)
+      #Affichera :
+      #dataclass_params(init=True,repr=True,eq=True,order=True,unsafe_hash=False,frozen=True)
+      ```
+
+   - **Utilisation avec l'héritage :** Vous pouvez créer des `dataclass` en héritant d'autres `dataclass`.
+   - **Utilisation avec `typing.NamedTuple` :** `dataclass` est une alternative plus flexible à `typing.NamedTuple`, car elle permet de définir des valeurs par défaut, d'ajouter des méthodes personnalisées et de rendre la classe mutable ou immuable.

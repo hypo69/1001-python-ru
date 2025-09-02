@@ -1,0 +1,194 @@
+# Patrón Singleton en `Python`
+
+En `Python`, el patrón Singleton es un patrón de diseño que garantiza que una clase tendrá solo una instancia y proporciona un punto de acceso global a esa instancia. Esto significa que al intentar crear un nuevo objeto de esta clase, siempre obtendrá el mismo objeto.
+
+Los Singletons son útiles cuando necesita limitar el número de instancias de una clase, por ejemplo:
+
+<ul>
+<li>Para gestionar la conexión a la base de datos (para no abrir muchas conexiones).</li>
+<li>Para almacenar la configuración global de la aplicación (para que todas las partes de la aplicación utilicen la misma configuración).</li>
+<li>Para el registro (para que todos los mensajes vayan a un solo archivo).</li>
+</ul>
+<p>Varias formas de implementar un Singleton en <code>Python</code>.</p>
+<hr>
+<p><strong>Formas de implementar un Singleton:</strong></p>
+<ol>
+<li><strong>Mediante la sobrescritura del método <code>__new__</code></strong>
+<ul>
+<li>El método <code>__new__</code> es responsable de crear una instancia de clase. Al sobrescribirlo, puedo controlar este proceso.</li>
+<li>En este ejemplo, almacenaré la única instancia de la clase en la variable <code>_instance</code>.</li>
+<li>Si la instancia aún no existe, la crearé; de lo contrario, devolveré la instancia existente.</li>
+<li><strong>Código <code>Python</code>:</strong>
+
+<pre class="line-numbers"><code class="language-python">
+class Singleton:
+    _instance = None  # Stores the single instance
+
+    def __new__(cls, *args, **kwargs):
+        """
+        Overrides the __new__ method to control instance creation.
+
+        Args:
+            cls: The class for which the instance is being created.
+            *args: Positional arguments for the constructor.
+            **kwargs: Keyword arguments for the constructor.
+
+        Returns:
+            The single instance of the class.
+        """
+        if not cls._instance: # If the instance has not been created yet
+            cls._instance = super().__new__(cls, *args, **kwargs) # Creates a new instance
+        return cls._instance # Returns the existing instance
+
+# Example of use
+s1 = Singleton()
+s2 = Singleton()
+
+print(s1 is s2)  # Will print True, as it is the same object
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<ol start="2">
+<li><strong>Mediante un decorador</strong>
+<ul>
+<li>Un decorador es una función que modifica una clase.</li>
+<li>En este ejemplo, crearé una función decoradora <code>singleton</code> que toma una clase y devuelve su versión envuelta.</li>
+<li>Dentro del decorador, almaceno las instancias de clase en el diccionario <code>instances</code>.</li>
+<li>Si la instancia de clase aún no se ha creado, la crearé y la guardaré en el diccionario; de lo contrario, devolveré la instancia existente.</li>
+<li><strong>Código <code>Python</code>:</strong>
+
+<pre class="line-numbers"><code class="language-python">
+def singleton(cls):
+    """
+    Decorator to create a Singleton.
+
+    Args:
+        cls: The class to convert to Singleton.
+
+    Returns:
+        The modified class, which is a Singleton.
+    """
+    instances = {} # Stores instances
+
+    def wrapper(*args, **kwargs):
+        """
+        Wrapper function that returns the single instance of the class.
+
+        Args:
+           *args: Positional arguments for the constructor.
+           **kwargs: Keyword arguments for the constructor.
+
+        Returns:
+            The single instance of the class.
+        """
+        if cls not in instances: # If the instance has not been created yet
+            instances[cls] = cls(*args, **kwargs) # Creates an instance and stores it
+        return instances[cls] # Returns the existing instance
+    return wrapper
+
+@singleton # Applies the decorator to the class
+class MyClass:
+    pass
+
+# Example of use
+obj1 = MyClass()
+obj2 = MyClass()
+
+print(obj1 is obj2)  # Will print True, as it is the same object
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<ol start="3">
+<li><strong>Mediante una metaclase</strong>
+<ul>
+<li>Una metaclase permite controlar la creación de clases.</li>
+<li>En este ejemplo, crearé una metaclase <code>SingletonMeta</code> que supervisará la creación de instancias.</li>
+<li>La metaclase almacena las instancias de clase en el diccionario <code>_instances</code>.</li>
+<li>Al crear una nueva instancia, verifico si ya está en el diccionario; si no, la creo; de lo contrario, devuelvo la instancia existente.</li>
+<li><strong>Código <code>Python</code>:</strong>
+
+<pre class="line-numbers"><code class="language-python">
+class SingletonMeta(type):
+    """
+    Metaclass to create a Singleton.
+    """
+    _instances = {} # Stores instances
+
+    def __call__(cls, *args, **kwargs):
+        """
+        Overrides the __call__ method to control instance creation.
+
+        Args:
+            cls: The class for which the instance is being created.
+            *args: Positional arguments for the constructor.
+            **kwargs: Keyword arguments for the constructor.
+
+        Returns:
+            The single instance of the class.
+        """
+        if cls not in cls._instances: # If the instance has not been created yet
+            cls._instances[cls] = super().__call__(*args, **kwargs) # Creates a new instance
+        return cls._instances[cls] # Returns the existing instance
+
+class Singleton(metaclass=SingletonMeta):
+    """
+    Class that is a Singleton.
+    """
+    pass
+
+# Example of use
+s1 = Singleton()
+s2 = Singleton()
+
+print(s1 is s2)  # Will print True, as it is the same object
+             </code></pre>
+</li>
+</ol>
+<hr>
+<ol start="4">
+<li><strong>Mediante un módulo</strong>
+<ul>
+<li>En <code>Python</code>, un módulo en sí mismo es un Singleton.</li>
+<li>Puedo crear un objeto en un módulo, y será la única instancia.</li>
+<li><strong>Código <code>Python</code>:</strong>
+<pre class="line-numbers"><code class="language-python">
+        # singleton.py file
+        class Singleton:
+            pass
+
+        instance = Singleton()
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+        # In another file
+        from singleton import instance
+
+        obj1 = instance
+        obj2 = instance
+
+        print(obj1 is obj2)  # Will print True, as it is the same object
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>Ventajas del Singleton:</strong></p>
+<ul>
+<li><strong>Garantía de instancia única:</strong> Singleton garantiza que una clase tendrá solo una instancia. Esto es útil para gestionar recursos que deben ser únicos.</li>
+<li><strong>Acceso global:</strong> Singleton proporciona un punto de acceso global a la instancia de la clase, lo que simplifica el uso de esta instancia en cualquier parte del programa.</li>
+</ul>
+<p><strong>Desventajas del Singleton:</strong></p>
+<ul>
+<li><strong>Estado global:</strong> Singleton puede llevar al uso de estado global, lo que puede causar efectos secundarios inesperados y complicar las pruebas.</li>
+<li><strong>Violación de los principios de la POO:</strong> Singleton puede violar el principio de responsabilidad única y la encapsulación.</li>
+</ul>
+<p><strong>¿Cuándo usar Singleton?</strong></p>
+<ul>
+<li>Cuando necesita que un objeto exista como una única instancia (por ejemplo, configuración, registrador, conexión a la base de datos).</li>
+<li>Cuando necesita acceso global a este objeto.</li>
+</ul>

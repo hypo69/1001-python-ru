@@ -1,0 +1,159 @@
+<h1>Sets in Python</h1>
+<p><strong>1. Introduction: What is a set?</strong></p>
+<p>In computer science and mathematics, sets are a way to represent collections of unique elements. It is important to understand that:</p>
+<ul>
+<li><strong>Uniqueness:</strong> Each element in a set must be unique. Duplicates are not allowed.</li>
+<li><strong>Unordered:</strong> The order of elements in a set does not matter.</li>
+</ul>
+<p><strong>2. Sets and fruits</strong></p>
+<p>We will imagine that we only have the fruits themselves:</p>
+<ul>
+<li>🍎 (apple)</li>
+<li>🍐 (pear)</li>
+<li>🍉 (watermelon)</li>
+<li>🧺 (basket)</li>
+</ul>
+<p>It is important that:</p>
+<ol>
+<li><strong>There are <em>no</em> identical fruits in the set:</strong> If there is an apple in the set, there will not be another identical apple. Each fruit is unique in its set.</li>
+<li><strong>The order of fruits does not matter:</strong> If there is an apple and a pear in the set, it is the same as if there were a pear and an apple. The order does not matter.</li>
+</ol>
+<p>For example, <code>{🍎, 🍐, 🍉}</code> is a set containing an apple, a pear, and a watermelon.</p>
+<p><strong>3. Why do sets require unique elements?</strong></p>
+<ul>
+<li>Sets are designed to track the <em>presence</em> of elements, not their <em>quantity</em>.</li>
+<li>The uniqueness of elements simplifies the execution of set operations.</li>
+<li>Sets are used to eliminate data redundancy.</li>
+</ul>
+<p><strong>4. Set operations (fruit sets):</strong></p>
+<ol>
+<li><strong>Union: "Gather all fruits into a single set"</strong>
+<ul>
+<li>Combine two sets of fruits, gathering all fruits into a new set. If there are identical fruits in both sets, the new set will have only one of these fruits.</li>
+<li>If set A has {🍎, 🍐}, and set B has {🍐, 🍉}, then set A ∪ B will be {🍎, 🍐, 🍉}.</li>
+</ul>
+</li>
+<li><strong>Intersection: "Find common fruits"</strong>
+<ul>
+<li>Find <em>only</em> the fruits that are in both set A and set B.</li>
+<li>If set A has {🍎, 🍐}, and set B has {🍐, 🍉}, then set A ∩ B will be only {🍐}.</li>
+</ul>
+</li>
+<li><strong>Difference: "Fruits that are in one set but not in another"</strong>
+<ul>
+<li>Find <em>only</em> the fruits that are in set A, but not in set B.</li>
+<li>If set A has {🍎, 🍐}, and set B has {🍐, 🍉}, then set A - B will be {🍎}, and set B - A will be {🍉}.</li>
+</ul>
+</li>
+<li><strong>Symmetric difference: "Fruits that are only in one of the sets"</strong>
+<ul>
+<li>Find <em>all</em> fruits that are either in set A or in set B, but not in both simultaneously.</li>
+<li>If set A has {🍎, 🍐}, and set B has {🍐, 🍉}, then set A ^ B will be {🍎, 🍉}.</li>
+</ul>
+</li>
+<li><strong>Subset: "Are all fruits from one set in another?"</strong>
+<ul>
+<li>Check if set A is a subset of set B. This means that all fruits in set A are also in set B.</li>
+<li><strong>Example:</strong> If set A has {🍎, 🍐}, and set B has {🍎, 🍐, 🍉}, then A <= B.</li>
+</ul>
+</li>
+<li><strong>Superset: "Does one set contain all fruits from another?"</strong>
+<ul>
+<li>Check if set A is a superset of set B. This means that all fruits in set B are also in set A.</li>
+<li>If set A has {🍎, 🍐, 🍉}, and set B has {🍎, 🍐}, then A >= B.</li>
+</ul>
+</li>
+</ol>
+<pre class="line-numbers"><code class="language-python">
+from typing import Set
+
+def create_fruit_set(fruit_string: str) -> Set[str]:
+    """
+    Creates a set of fruits from a string.
+
+    Args:
+        fruit_string: String of fruits (🍎, 🍐, 🍉, 🧺).
+
+    Returns:
+        A set of unique fruits.
+    """
+    if not all(fruit in ["🍎", "🍐", "🍉", "🧺"] for fruit in fruit_string):
+        raise ValueError("The string can only contain the symbols 🍎, 🍐, 🍉, 🧺")
+    return set(fruit_string)  # Use set() to create a set
+
+def display_set(fruit_set: Set[str]) -> str:
+  """
+  Converts a set of fruits into a string for display.
+
+    Args:
+        fruit_set: Set of fruits.
+
+    Returns:
+        String for display.
+  """
+  return "{" + ", ".join(fruit_set) + "}"
+
+
+# Create fruit sets
+fruits_set_A = create_fruit_set("🍎🍐")  # Set A: {🍎, 🍐}
+fruits_set_B = create_fruit_set("🍐🍉")  # Set B: {🍐, 🍉}
+fruits_set_C = create_fruit_set("🍎🍐🍉")  # Set C: {🍎, 🍐, 🍉}
+fruits_set_D = create_fruit_set("🧺")  # Set D: {🧺}
+
+# Display the sets
+print(f"Set A: {display_set(fruits_set_A)}")
+print(f"Set B: {display_set(fruits_set_B)}")
+print(f"Set C: {display_set(fruits_set_C)}")
+print(f"Set D: {display_set(fruits_set_D)}")
+
+# Union of sets
+union_result = fruits_set_A | fruits_set_B
+print(f"A ∪ B: {display_set(union_result)}")  # Result: {🍎, 🍐, 🍉}
+
+# Intersection of sets
+intersection_result = fruits_set_A & fruits_set_B
+print(f"A ∩ B: {display_set(intersection_result)}")  # Result: {🍐}
+
+# Difference of sets
+difference_result_AB = fruits_set_A - fruits_set_B
+print(f"A - B: {display_set(difference_result_AB)}")  # Result: {🍎}
+difference_result_BA = fruits_set_B - fruits_set_A
+print(f"B - A: {display_set(difference_result_BA)}")  # Result: {🍉}
+
+# Symmetric difference of sets
+symmetric_difference_result = fruits_set_A ^ fruits_set_B
+print(f"A ^ B: {display_set(symmetric_difference_result)}")  # Result: {🍎, 🍉}
+
+# Subset
+subset_result1 = fruits_set_A <= fruits_set_C
+print(f"A <= C: {subset_result1}")  # Result: True (A is a subset of C)
+subset_result2 = fruits_set_A <= fruits_set_B
+print(f"A <= B: {subset_result2}") # Result: False (A is not a subset of B)
+
+# Superset
+superset_result1 = fruits_set_C >= fruits_set_A
+print(f"C >= A: {superset_result1}")  # Result: True (C is a superset of A)
+superset_result2 = fruits_set_B >= fruits_set_A
+print(f"B >= A: {superset_result2}")  # Result: False (B is not a superset of A)
+
+# Check for element presence
+print(f"🍎 in A: {'🍎' in fruits_set_A}")  # Result: True
+print(f"🍉 in A: {'🍉' in fruits_set_A}")  # Result: False
+</code></pre>
+<ul>
+<li><strong><code>create_fruit_set(fruit_string)</code>:</strong> This function creates a set from a string of fruits.
+<ul>
+<li><code>set(fruit_string)</code> converts the string into a set, removing duplicates and making the order of elements irrelevant.</li>
+<li>We check that the string contains only allowed Unicode characters.</li>
+</ul>
+</li>
+<li><strong><code>display_set(fruit_set)</code>:</strong> This function is used to convert a set into a readable string for display.</li>
+<li><strong>Examples:</strong> We create several sets and apply various operations to them. The results of each operation are displayed on the screen.</li>
+</ul>
+<p><strong>5. Practical exercises:</strong></p>
+<ol>
+<li>Create your own sets of fruits and try all operations on them.</li>
+<li>Implement a function <code>is_disjoint(set1, set2)</code> that will check if two sets are disjoint (intersection = empty set).</li>
+<li>Implement a function <code>power_set(fruit_set)</code> that will return the set of all subsets of a given set.</li>
+<li>Try to apply sets to solve a real problem. For example, you have two guest lists for a party, find the guests who are on both lists, the guests who are only on the first list, etc.</li>
+</ol>

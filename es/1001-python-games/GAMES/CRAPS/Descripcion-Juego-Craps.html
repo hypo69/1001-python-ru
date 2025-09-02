@@ -1,0 +1,70 @@
+CRAPS:
+=================
+Dificultad: 7
+-----------------
+El juego "Craps" es un juego de dados de azar en el que el jugador apuesta al resultado de lanzar dos dados. En la primera ronda, el jugador gana si la suma de los dados es 7 u 11, y pierde si la suma es 2, 3 o 12. Si la suma de los dados es 4, 5, 6, 8, 9 o 10, este se convierte en el "punto" del jugador, y continúa lanzando los dados hasta que ese número se lanza de nuevo (en cuyo caso el jugador gana) o se lanza un 7 (en cuyo caso el jugador pierde).
+
+Reglas del juego:
+1. Al comienzo del juego, el jugador lanza dos dados.
+2. Si la suma de los dados es 7 u 11, el jugador gana.
+3. Si la suma de los dados es 2, 3 o 12, el jugador pierde.
+4. Si la suma de los dados es 4, 5, 6, 8, 9 o 10, ese número se convierte en el "punto".
+5. Después de establecer el "punto", el jugador continúa lanzando los dados hasta que:
+   - se lanza el "punto" de nuevo, entonces el jugador gana.
+   - se lanza un 7, entonces el jugador pierde.
+-----------------
+Algoritmo:
+1. Generar valores aleatorios para dos dados (del 1 al 6).
+2. Calcular la suma de los valores obtenidos.
+3. Si la suma es 7 u 11, mostrar un mensaje de victoria y pasar al paso 7.
+4. Si la suma es 2, 3 o 12, mostrar un mensaje de derrota y pasar al paso 7.
+5. Guardar la suma como el "punto".
+6. Iniciar un bucle:
+    6.1 Generar valores aleatorios para dos dados.
+    6.2 Calcular la suma de los valores obtenidos.
+    6.3 Si la suma es igual al "punto", mostrar un mensaje de victoria y pasar al paso 7.
+    6.4 Si la suma es 7, mostrar un mensaje de derrota y pasar al paso 7.
+    6.5 De lo contrario, repetir el bucle desde el paso 6.
+7. Fin del juego.
+-----------------
+Diagrama de flujo:
+<pre class="line-numbers"><code class="language-mermaid">
+flowchart TD
+    Start["Start"] --> RollDice1["Generate values for two dice: <code><b>dice1, dice2</b></code>"]
+    RollDice1 --> CalculateSum1["<code><b>sumOfDice = dice1 + dice2</b></code>"]
+    CalculateSum1 --> CheckWin1{"Check: <code><b>sumOfDice == 7 or sumOfDice == 11?</b></code>"}
+    CheckWin1 -- Yes --> OutputWin1["Display message: <b>YOU WIN!</b>"]
+    OutputWin1 --> End["End"]
+    CheckWin1 -- No --> CheckLose1{"Check: <code><b>sumOfDice == 2 or sumOfDice == 3 or sumOfDice == 12?</b></code>"}
+    CheckLose1 -- Yes --> OutputLose1["Display message: <b>YOU LOSE!</b>"]
+    OutputLose1 --> End
+    CheckLose1 -- No --> SetPoint["<code><b>point = sumOfDice</b></code>"]
+    SetPoint --> LoopStart{"Start loop: while not won or lost"}
+    LoopStart --> RollDice2["Generate values for two dice: <code><b>dice1, dice2</b></code>"]
+    RollDice2 --> CalculateSum2["<code><b>sumOfDice = dice1 + dice2</b></code>"]
+     CalculateSum2 --> CheckWin2{"Check: <code><b>sumOfDice == point?</b></code>"}
+    CheckWin2 -- Yes --> OutputWin2["Display message: <b>YOU WIN!</b>"]
+    OutputWin2 --> End
+    CheckWin2 -- No --> CheckLose2{"Check: <code><b>sumOfDice == 7?</b></code>"}
+    CheckLose2 -- Yes --> OutputLose2["Display message: <b>YOU LOSE!</b>"]
+     OutputLose2 --> End
+    CheckLose2 -- No --> LoopStart
+</code></pre>
+
+Leyenda:
+   Start - Inicio del programa.
+    RollDice1 - Generar valores aleatorios para dos dados (dice1, dice2) en el primer lanzamiento.
+    CalculateSum1 - Calcular la suma de los valores de dice1 y dice2 y guardar el resultado en la variable sumOfDice.
+    CheckWin1 - Comprobar si sumOfDice es 7 u 11. Si es así, el jugador gana.
+    OutputWin1 - Mostrar mensaje "¡USTED GANA!" y finalizar el juego.
+    CheckLose1 - Comprobar si sumOfDice es 2, 3 o 12. Si es así, el jugador pierde.
+    OutputLose1 - Mostrar mensaje "¡USTED PIERDE!" y finalizar el juego.
+    SetPoint - Si no se ganó ni se perdió en el primer lanzamiento, sumOfDice se guarda en la variable point, que se convierte en el "número de punto".
+    LoopStart - Inicio del bucle que continúa hasta que el jugador gana o pierde.
+    RollDice2 - Generar valores aleatorios para dos dados (dice1, dice2) en lanzamientos posteriores.
+    CalculateSum2 - Calcular la suma de los valores de dice1 y dice2 y guardar el resultado en la variable sumOfDice.
+    CheckWin2 - Comprobar si sumOfDice es igual al "número de punto" point. Si es así, el jugador gana.
+    OutputWin2 - Mostrar mensaje "¡USTED GANA!" y finalizar el juego.
+    CheckLose2 - Comprobar si sumOfDice es 7. Si es así, el jugador pierde.
+    OutputLose2 - Mostrar mensaje "¡USTED PIERDE!" y finalizar el juego.
+    End - Fin del programa.

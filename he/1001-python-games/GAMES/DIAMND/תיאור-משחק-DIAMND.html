@@ -1,0 +1,81 @@
+<h2 dir="rtl"><span dir="ltr">DIAMND</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">7</span></p>
+<hr>
+<p dir="rtl">המשחק <span dir="ltr">DIAMND</span> הוא משחק טקסטואלי שבו השחקן מנסה לצייר יהלום מכוכביות, על ידי קביעת גובהו. המשחק מבקש תחילה מהמשתמש גובה יהלום אי-זוגי. לאחר מכן, אם המספר שהוזן הוא אי-זוגי, המשחק בונה יהלום מכוכביות, תוך שימוש ברווחים ליצירת הגיאומטריה הנכונה של הצורה. אם המספר שהוזן הוא זוגי או קטן מ-<span dir="ltr">1</span>, מוצגת הודעת שגיאה.</p>
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">השחקן מזין מספר אי-זוגי, הקובע את גובה היהלום.</p></li>
+<li><p dir="rtl">אם הוזן מספר זוגי או מספר קטן מ-<span dir="ltr">1</span>, המשחק מציג הודעת שגיאה.</p></li>
+<li><p dir="rtl">אם הוזן מספר תקין (אי-זוגי וגדול מ-<span dir="ltr">0</span>), המשחק מציג על המסך יהלום מכוכביות בגובה שצוין.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">בקש מהמשתמש להזין את גובה היהלום (<span dir="ltr">H</span>).</p></li>
+<li><p dir="rtl">בדוק האם <span dir="ltr">H</span> זוגי או קטן מ-<span dir="ltr">1</span>. אם כן, הצג הודעת שגיאה ועבור לשלב <span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">אם <span dir="ltr">H</span> אי-זוגי וגדול מ-<span dir="ltr">0</span>, אז:</p>
+<ol>
+<li><p dir="rtl">הגדר את המשתנה <span dir="ltr"><code>space</code></span> ל-<span dir="ltr">H // 2</span> (חלוקה שלמה).</p></li>
+<li><p dir="rtl">הגדר את המשתנה <span dir="ltr"><code>stars</code></span> ל-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">התחל לולאה מ-<span dir="ltr">1</span> עד <span dir="ltr">H</span> כולל:</p>
+<ol>
+<li><p dir="rtl">הצג <span dir="ltr"><code>space</code></span> רווחים.</p></li>
+<li><p dir="rtl">הצג <span dir="ltr"><code>stars</code></span> כוכביות.</p></li>
+<li><p dir="rtl">הצג מעבר שורה.</p></li>
+<li><p dir="rtl">אם מספר השורה הנוכחי קטן מ-<span dir="ltr">H // 2 + 1</span>:</p>
+<ol>
+<li><p dir="rtl">הקטן את <span dir="ltr"><code>space</code></span> ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">הגדל את <span dir="ltr"><code>stars</code></span> ב-<span dir="ltr">2</span>.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">אחרת:</p>
+<ol>
+<li><p dir="rtl">הגדל את <span dir="ltr"><code>space</code></span> ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">הקטן את <span dir="ltr"><code>stars</code></span> ב-<span dir="ltr">2</span>.</p></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InputHeight["Enter diamond height (height)"]
+    InputHeight --> CheckHeight{"Check: <code><b>height</b></code> odd and > 0?"}
+    CheckHeight -- No --> OutputError["Display message: <b>Enter an odd number greater than 0</b>"]
+    OutputError --> InputHeight
+    CheckHeight -- Yes --> InitializeVars["<p align='left'>Initialize variables: 
+    <code><b>
+    spaces = height // 2 <br>
+    stars = 1
+    </b></code></p>"]
+    InitializeVars --> LoopStart{"Start loop: from 1 to <code><b>height</b></code>"}
+    LoopStart -- Yes --> OutputSpaces["Display <code><b>spaces</b></code> spaces"]
+    OutputSpaces --> OutputStars["Display <code><b>stars</b></code> stars"]
+     OutputStars --> OutputNewline["Display newline"]
+     OutputNewline --> CheckRow{"Check: current row <= <code><b>height // 2 + 1</b></code>"}
+     CheckRow -- Yes --> DecreaseSpaceIncreaseStars["<code><b>spaces = spaces - 1<br> stars = stars + 2</b></code>"]
+     DecreaseSpaceIncreaseStars --> LoopStart
+     CheckRow -- No --> IncreaseSpaceDecreaseStars["<code><b>spaces = spaces + 1<br> stars = stars - 2</b></code>"]
+     IncreaseSpaceDecreaseStars --> LoopStart
+     LoopStart -- No --> End["End"]
+</code></pre>
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputHeight</span> - בקשת המשתמש להזין את גובה היהלום ושמירת הערך במשתנה <span dir="ltr"><code>height</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckHeight</span> - בדיקה האם הגובה שהוזן הוא מספר אי-זוגי גדול מ-<span dir="ltr">0</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputError</span> - הצגת הודעת שגיאה אם הגובה אינו עומד בתנאי.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeVars</span> - אתחול משתנים: <span dir="ltr"><code>spaces</code></span> (מספר רווחים) מוגדר ל-<span dir="ltr"><code>height // 2</code></span>, ו-<span dir="ltr"><code>stars</code></span> (מספר כוכביות) מוגדר ל-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת הלולאה, החוזרת על עצמה <span dir="ltr"><code>height</code></span> פעמים.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputSpaces</span> - הצגת <span dir="ltr"><code>spaces</code></span> רווחים.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputStars</span> - הצגת <span dir="ltr"><code>stars</code></span> כוכביות.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputNewline</span> - הצגת תו שורה חדשה.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckRow</span> - בדיקה האם השורה הנוכחית קטנה או שווה למרכז היהלום (<span dir="ltr"><code>height // 2 + 1</code></span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">DecreaseSpaceIncreaseStars</span> - הקטנת מספר הרווחים <span dir="ltr"><code>spaces</code></span> ב-<span dir="ltr">1</span> והגדלת מספר הכוכביות <span dir="ltr"><code>stars</code></span> ב-<span dir="ltr">2</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">IncreaseSpaceDecreaseStars</span> - הגדלת מספר הרווחים <span dir="ltr"><code>spaces</code></span> ב-<span dir="ltr">1</span> והקטנת מספר הכוכביות <span dir="ltr"><code>stars</code></span> ב-<span dir="ltr">2</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+</ul>

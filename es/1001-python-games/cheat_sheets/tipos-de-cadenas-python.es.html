@@ -1,0 +1,129 @@
+En Python, las cadenas son uno de los tipos de datos más importantes y utilizados. Aquí hay una breve descripción de los diferentes tipos de cadenas y sus características:
+
+<hr>
+
+<h3>1. <strong>Cadenas normales</strong></h3>
+<p>Una cadena normal se crea usando comillas simples <code>&#39;</code> o dobles <code>&quot;</code>.</p>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s1 = &#39;\¡Hola, mundo!&#39;
+s2 = &quot;\¡Python es genial!&quot;
+</code></pre>
+<p>Son idénticas, pero es importante ser consistente en el uso de un solo estilo.</p>
+<hr>
+<h3>2. <strong>Cadenas multilínea</strong></h3>
+<p>Las cadenas multilínea se encierran entre comillas triples <code>&#39;&#39;&#39;</code> o <code>&quot;&quot;&quot;</code>. Permiten escribir texto en varias líneas.</p>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s3 = &#39;&#39;&#39;Esta es una cadena
+en varias
+líneas.&#39;&#39;&#39;
+</code></pre>
+<hr>
+<h3>3. <strong>f-strings (cadenas formateadas)</strong></h3>
+<p>Las f-strings (o cadenas formateadas) se utilizan para incrustar valores de variables y expresiones directamente dentro de una cadena. El carácter <code>f</code> se agrega antes de la cadena.</p>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+name = &#39;Boris&#39;
+age = 25
+s4 = f&#39;Me llamo {name}, tengo {age} años.&#39;
+print(s4)  # Me llamo Boris, tengo 25 años.
+</code></pre>
+<p>La ventaja de las f-strings es que son simples y legibles.
+En las versiones más recientes de Python (a partir de <strong>3.8</strong>), apareció una característica conveniente: el uso de <code>f&#39;{name=}&#39;</code> en las f-strings. Esta construcción muestra no solo el valor de la variable, sino también su nombre, lo que es especialmente útil para la depuración.</p>
+<h3>Ejemplo de uso de <code>f&#39;{name=}&#39;</code>:</h3>
+<pre class="line-numbers"><code class="language-python">
+name = &#39;Boris&#39;
+age = 25
+
+# Display the variable name and its value
+print(f&#39;{name=}, {age=}&#39;)
+# Result: name=&#39;Boris&#39;, age=25
+</code></pre>
+<h3>Características:</h3>
+<ol>
+<li><strong>Visualización automática del nombre de la variable</strong>:
+Python sustituye automáticamente el nombre de la variable y su valor, separados por <code>=</code>.</li>
+<li><strong>Funciona con expresiones</strong>:
+Puede usar expresiones dentro de una f-string, y también se mostrarán.</li>
+</ol>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+x = 10
+y = 5
+print(f&#39;{x + y=}&#39;)
+# Result: x + y=15
+</code></pre>
+<ol start="3">
+<li><strong>Aplicable a funciones de cadena</strong>:
+Puede mostrar el resultado de métodos u operaciones en cadenas.</li>
+</ol>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s = &#39;Python&#39;
+print(f&#39;{s.upper()=}&#39;)
+# Result: s.upper()=&#39;PYTHON&#39;
+</code></pre>
+<h3>Para qué es útil:</h3>
+<ul>
+<li><strong>Depuración de código</strong>: Comprobar rápidamente los valores de las variables y expresiones.</li>
+<li><strong>Legibilidad</strong>: Se ve claramente a qué variable pertenece un valor.</li>
+</ul>
+<hr>
+<h3>4. <strong>r-strings (cadenas crudas)</strong></h3>
+<p>Las r-strings (cadenas crudas) se crean agregando el carácter <code>r</code> antes de la cadena. Se utilizan para trabajar con caracteres que normalmente se interpretan como especiales, como los caracteres de nueva línea (<code>\n</code>) o tabulación (<code>\t</code>).</p>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s5 = r&#39;C:\new_folder\test&#39;
+print(s5)  # C:\new_folder\test
+</code></pre>
+<p>Sin <code>r</code>, esta cadena se interpretaría con <code>\n</code> reemplazado por un salto de línea.</p>
+<hr>
+<h3>5. <strong>u-strings (cadenas Unicode)</strong></h3>
+<p>Las u-strings eran importantes en Python 2 para trabajar con Unicode, pero en Python 3, las cadenas son Unicode por defecto, por lo que agregar <code>u</code> ya no es necesario.</p>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s6 = u&#39;\¡Hola, mundo!&#39;
+</code></pre>
+<hr>
+<h3>6. <strong>b-strings (cadenas de bytes)</strong></h3>
+<p>Las cadenas de bytes se utilizan para trabajar con datos binarios. Dichas cadenas comienzan con <code>b</code>. No admiten caracteres Unicode, solo bytes.</p>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+# Byte string representing the header of a PNG file
+image_bytes = b&#39;\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR&#39;
+
+# Check that the data matches the PNG format
+if image_bytes.startswith(b&#39;\x89PNG&#39;):
+    print(&#39;Esta es una imagen PNG.&#39;)
+else:
+    print(&#39;Formato desconocido.&#39;)
+</code></pre>
+<hr>
+<h3>7. <strong>Cadenas con escape</strong></h3>
+<p>Para incluir caracteres especiales en una cadena, se utilizan secuencias de escape con una barra invertida (<code>\</code>).</p>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s8 = &#39;Esta es una cadena con comillas: \&#39;simples\&#39; y \&quot;dobles\&quot;.&#39;
+</code></pre>
+<hr>
+<h3>8. <strong>Combinación de f-strings y r-strings</strong></h3>
+<p>Se pueden combinar tipos de cadenas. Por ejemplo, f-strings y cadenas crudas:</p>
+<p><strong>Ejemplo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+path = &#39;new_folder&#39;
+s9 = fr&#39;C:\\{path}\\test&#39;
+print(s9)  # C:\new_folder\test
+</code></pre>
+<hr>
+<h3>Resumen</h3>
+<p>En Python, las cadenas son flexibles y convenientes. La elección del tipo de cadena depende de la tarea:</p>
+<ul>
+<li>Para texto normal — <code>&#39;</code> o <code>&quot;</code>.</li>
+<li>Para texto multilínea — <code>&#39;&#39;&#39;</code> o <code>&quot;&quot;&quot;</code>.</li>
+<li>Para sustitución de valores — <code>f</code>.</li>
+<li>Para rutas o expresiones regulares — <code>r</code>.</li>
+<li>Para datos binarios — <code>b</code>.</li>
+</ul>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">Al índice</a></p>

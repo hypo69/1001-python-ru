@@ -1,0 +1,82 @@
+<h2 dir="rtl"><span dir="ltr">CHIEF</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">4</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;<span dir="ltr">CHIEF</span>&quot; - זהו משחק שבו השחקן משמש כמנהל מפעל, המתכנן ייצור. השחקן קובע את כמות המוצרים המיוצרים מכל סוג, והמחשב קובע האם ערכים אלו עומדים בדרישות הנדרשות. אם לא, השחקן מקבל הודעה אילו ערכים היו שגויים. מטרת המשחק - להגיע לייצור אופטימלי, על ידי ניחוש נכון של כמות המוצרים.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">המחשב מנחש שלושה ערכים בטווח של <span dir="ltr">1</span> עד <span dir="ltr">10</span>: <span dir="ltr"><code>targetA</code></span>, <span dir="ltr"><code>targetB</code></span> ו-<span dir="ltr"><code>targetC</code></span>.</p></li>
+<li><p dir="rtl">השחקן מזין את ניחושיו לגבי הערכים <span dir="ltr"><code>userA</code></span>, <span dir="ltr"><code>userB</code></span> ו-<span dir="ltr"><code>userC</code></span>.</p></li>
+<li><p dir="rtl">המחשב בודק האם הערכים שהוזנו תואמים לערכים הנסתרים.</p></li>
+<li><p dir="rtl">אם כל שלושת הערכים נוחשו נכון, המשחק מסתיים בניצחון.</p></li>
+<li><p dir="rtl">אם לפחות ערך אחד אינו תואם, המחשב מציג אילו ערכים היו שגויים.</p></li>
+<li><p dir="rtl">המשחק נמשך עד שהשחקן מנחש את כל שלושת הערכים.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">צור מספרים שלמים אקראיים <span dir="ltr"><code>targetA</code></span>, <span dir="ltr"><code>targetB</code></span> ו-<span dir="ltr"><code>targetC</code></span> בטווח של <span dir="ltr">1</span> עד <span dir="ltr">10</span>.</p></li>
+<li><p dir="rtl">התחל לולאה &quot;כל עוד לא נוחשו כל המספרים&quot;:</p>
+<ol>
+<li><p dir="rtl">בקש מהשחקן להזין שלושה מספרים שלמים: <span dir="ltr"><code>userA</code></span>, <span dir="ltr"><code>userB</code></span> ו-<span dir="ltr"><code>userC</code></span>.</p></li>
+<li><p dir="rtl">אתחל את המחרוזת <span dir="ltr"><code>message</code></span> כריקה.</p></li>
+<li><p dir="rtl">אם <span dir="ltr"><code>userA</code></span> אינו שווה ל-<span dir="ltr"><code>targetA</code></span>, הוסף &quot;<span dir="ltr">A</span>&quot; ל-<span dir="ltr"><code>message</code></span>.</p></li>
+<li><p dir="rtl">אם <span dir="ltr"><code>userB</code></span> אינו שווה ל-<span dir="ltr"><code>targetB</code></span>, הוסף &quot;<span dir="ltr">B</span>&quot; ל-<span dir="ltr"><code>message</code></span>.</p></li>
+<li><p dir="rtl">אם <span dir="ltr"><code>userC</code></span> אינו שווה ל-<span dir="ltr"><code>targetC</code></span>, הוסף &quot;<span dir="ltr">C</span>&quot; ל-<span dir="ltr"><code>message</code></span>.</p></li>
+<li><p dir="rtl">אם <span dir="ltr"><code>message</code></span> אינה ריקה, הצג הודעה &quot;שגיאה ב-&quot; ו-<span dir="ltr"><code>message</code></span>.</p></li>
+<li><p dir="rtl">אחרת, הצג הודעה &quot;ניחשת נכון!&quot;.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeVariables["<p align='left'>Initialize variables:
+    <code><b>
+    targetA = random(1, 10)
+    targetB = random(1, 10)
+    targetC = random(1, 10)
+    </b></code></p>"]
+    InitializeVariables --> LoopStart{"Start loop: as long as not guessed"}
+    LoopStart --> InputValues["<p align='left'>User enters numbers:
+    <code><b>
+    userA
+    userB
+    userC
+    </b></code></p>"]
+    InputValues --> InitializeMessage["<code><b>message = ""</b></code>"]
+    InitializeMessage --> CheckA{"Check: <code><b>userA == targetA?</b></code>"}
+    CheckA -- No --> AppendA["<code><b>message = message + 'A'</b></code>"]
+    AppendA --> CheckB{"Check: <code><b>userB == targetB?</b></code>"}
+    CheckA -- Yes --> CheckB
+    CheckB -- No --> AppendB["<code><b>message = message + 'B'</b></code>"]
+    AppendB --> CheckC{"Check: <code><b>userC == targetC?</b></code>"}
+    CheckB -- Yes --> CheckC
+    CheckC -- No --> AppendC["<code><b>message = message + 'C'</b></code>"]
+    AppendC --> CheckMessage{"Check: <code><b>message != "" ?</b></code>"}
+    CheckC -- Yes --> CheckMessage
+    CheckMessage -- Yes --> OutputWrong["Display message: <b>Error in {message}</b>"]
+    OutputWrong --> LoopStart
+    CheckMessage -- No --> OutputWin["Display message: <b>You guessed correctly!</b>"]
+    OutputWin --> End["End"]
+    LoopStart -- No --> End
+</code></pre>
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeVariables</span> - אתחול משתנים: <span dir="ltr"><code>targetA</code></span>, <span dir="ltr"><code>targetB</code></span>, <span dir="ltr"><code>targetC</code></span> נוצרים באופן אקראי מ-<span dir="ltr">1</span> עד <span dir="ltr">10</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת הלולאה, הנמשכת עד שהשחקן מנחש את כל המספרים.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputValues</span> - בקשת המשתמש להזין שלושה מספרים <span dir="ltr"><code>userA</code></span>, <span dir="ltr"><code>userB</code></span>, <span dir="ltr"><code>userC</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeMessage</span> - אתחול מחרוזת ריקה <span dir="ltr"><code>message</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckA</span> - בדיקה האם המספר שהוזן <span dir="ltr"><code>userA</code></span> שווה למספר הנסתר <span dir="ltr"><code>targetA</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">AppendA</span> - הוספת <span dir="ltr">'A'</span> ל-<span dir="ltr"><code>message</code></span>, אם <span dir="ltr"><code>userA</code></span> אינו שווה ל-<span dir="ltr"><code>targetA</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckB</span> - בדיקה האם המספר שהוזן <span dir="ltr"><code>userB</code></span> שווה למספר הנסתר <span dir="ltr"><code>targetB</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">AppendB</span> - הוספת <span dir="ltr">'B'</span> ל-<span dir="ltr"><code>message</code></span>, אם <span dir="ltr"><code>userB</code></span> אינו שווה ל-<span dir="ltr"><code>targetB</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckC</span> - בדיקה האם המספר שהוזן <span dir="ltr"><code>userC</code></span> שווה למספר הנסתר <span dir="ltr"><code>targetC</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">AppendC</span> - הוספת <span dir="ltr">'C'</span> ל-<span dir="ltr"><code>message</code></span>, אם <span dir="ltr"><code>userC</code></span> אינו שווה ל-<span dir="ltr"><code>targetC</code></span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckMessage</span> - בדיקה האם המחרוזת <span dir="ltr"><code>message</code></span> ריקה.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWrong</span> - הצגת הודעה &quot;שגיאה ב-&quot; ותוכן <span dir="ltr"><code>message</code></span>, אם המחרוזת אינה ריקה.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWin</span> - הצגת הודעה &quot;ניחשת נכון!&quot;, אם המחרוזת <span dir="ltr"><code>message</code></span> ריקה.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+</ul>

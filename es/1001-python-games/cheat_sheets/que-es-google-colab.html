@@ -1,0 +1,186 @@
+¿Qué es Google Colab?
+
+Google Colab es una plataforma basada en la nube, creada por Google, para trabajar con cuadernos interactivos de Jupyter Notebook.
+Proporciona herramientas potentes para escribir y ejecutar código Python, analizar datos, entrenar modelos de aprendizaje automático y colaborar en proyectos.
+
+Colab proporciona acceso a potentes recursos computacionales, incluyendo unidades de procesamiento gráfico (GPU) y unidades de procesamiento tensorial (TPU).
+Esto permite resolver problemas complejos, como el procesamiento de grandes conjuntos de datos o el entrenamiento de redes neuronales, sin necesidad de adquirir hardware costoso. Colab está construido sobre Jupyter Notebook, proporcionando una interfaz conveniente para trabajar con código, texto y visualizaciones. Puedes ejecutar celdas de código, insertar texto explicativo, crear gráficos y visualizaciones directamente en tu navegador. Puedes usar Colab inmediatamente después de abrirlo. No es necesario instalar programas, bibliotecas o controladores adicionales. Todo ya está configurado para funcionar. Puedes conectar tu Google Drive, lo que te permite cargar datos fácilmente, guardar proyectos y asegurar el acceso a los archivos desde cualquier lugar. Colab admite el trabajo colaborativo. Puedes compartir tus proyectos con colegas, editar cuadernos simultáneamente y discutir cambios en tiempo real.
+
+
+
+### ¿Cómo funciona Google Colab?
+- Ejecutas un cuaderno Jupyter en el navegador, lo que elimina la necesidad de instalar un entorno local.
+- El código se ejecuta en servidores remotos de Google, y los resultados se muestran en tu cuaderno.
+- Los datos se pueden cargar desde un dispositivo local o desde la nube, como Google Drive.
+- Puedes usar Colab para escribir código Python, trabajar con bibliotecas de aprendizaje automático (por ejemplo, TensorFlow, PyTorch), analizar datos usando Pandas o crear visualizaciones a través de Matplotlib y Seaborn.
+
+
+
+¿Cómo se ve Google Colab?
+
+
+La interfaz de Colab consta de varias partes principales:
+
+Celdas de código: Son las celdas donde escribirás y ejecutarás tu código Python.
+
+Celdas de texto: Aquí puedes añadir descripciones, explicaciones y notas a tu código.
+
+Menú: En la parte superior hay un menú con varias opciones para trabajar con el cuaderno (archivo, editar, ver, herramientas, etc.).
+
+Administrador de archivos: A la izquierda hay un panel de administrador de archivos donde puedes ver archivos y carpetas en tu entorno de Colab.
+
+
+
+En Google Colab, trabajas en un entorno en la nube,
+donde el sistema de archivos está organizado como en una computadora normal con carpetas y archivos.
+Colab proporciona herramientas para navegar, crear, ver y editar archivos.
+Puedes interactuar con el sistema de archivos usando **comandos mágicos de Jupyter** (que comienzan con `%`)
+y **comandos bash** (que comienzan con `!`).
+
+**Lista de comandos básicos:**
+
+1.  **`%pwd`** (print working directory):
+    *   **Descripción**: Muestra el directorio de trabajo actual (donde te encuentras actualmente en el sistema de archivos).
+    *   **Ejemplo**: `%pwd`
+    *   **Resultado**: `/content` (o cualquier otro directorio actual)
+
+2.  **`%ls`** (list):
+    *   **Descripción**: Lista archivos y carpetas en el directorio actual.
+    *   **Ejemplo**: `%ls`
+    *   **Resultado**: Lista de archivos y carpetas, por ejemplo: `sample_data/  my_file.txt`
+
+3.  **`%cd <ruta>`** (change directory):
+    *   **Descripción**: Cambia al directorio especificado.
+    *   **Ejemplo**: `%cd sample_data`
+    *   **Resultado**: El directorio de trabajo actual cambia a `/content/sample_data`
+
+4.  **`!head -<número de líneas> <nombre de archivo>`** :
+    *   **Descripción**: Muestra las primeras líneas del archivo de texto especificado.
+    *   **Ejemplo**: `!head -5 README.md`
+    *   **Resultado**: Las primeras 5 líneas del archivo `README.md`. 
+
+5.  **`!cat <nombre de archivo>`** :
+    *   **Descripción**: Muestra el contenido del archivo de texto especificado.
+    *   **Ejemplo**: `!cat sample_file.txt`
+    *   **Resultado**: Todo el contenido del archivo `sample_file.txt`. 
+
+6.   **`!echo "<texto>" > <nombre de archivo>`**
+    *   **Descripción:** Crea un nuevo archivo con el nombre especificado y escribe texto en él. Si el archivo ya existe, se sobrescribirá
+    *   **Ejemplo:** `!echo "¡Este es mi nuevo archivo!" > new_file.txt`
+    *   **Resultado:** Crea `new_file.txt` con el contenido `¡Este es mi nuevo archivo!`. 
+
+**Puntos clave:**
+
+*   **Comandos mágicos** (`%`) - son comandos especiales de Jupyter para trabajar con el entorno de Colab.
+*   **Comandos bash** (`!`) - son comandos que se ejecutan en la línea de comandos de Linux.
+*   **Ruta del archivo**: La ruta del archivo indica exactamente dónde se encuentra el archivo en el sistema de archivos (por ejemplo, `/content/sample_data/my_file.txt`).
+*   **Directorio actual**: Tu posición en el sistema de archivos (cambiada por el comando `%cd`).
+
+**Diagrama que ilustra la secuencia de comandos:**
+
+```mermaid
+graph TD
+    A[Inicio] --> B(pwd: obtener directorio actual);
+    B --> C(ls: ver contenido del directorio actual);
+    C --> D(cd: cambiar directorio actual);
+    D --> E(head: ver inicio del archivo de texto);
+     E --> F(cat: ver contenido del archivo de texto);
+       F --> G(echo: crear o sobrescribir archivo de texto);
+    G --> H(ls: ver contenido del directorio cambiado);
+     H --> I[Fin];
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+        style I fill:#ccf,stroke:#333,stroke-width:2px
+
+```
+
+**Carga de archivos en Google Colab**
+
+Hay varias formas de cargar archivos en Colab, y veremos las más comunes.
+
+1.  **Carga a través del administrador de archivos (GUI)**
+    *   **Descripción:** La forma más sencilla de cargar archivos, especialmente los pequeños, es usar la interfaz gráfica del administrador de archivos de Colab.
+    *   **Cómo hacerlo:**
+        1.  Abre el panel del administrador de archivos a la izquierda (icono de carpeta).
+        2.  Haz clic en el icono de carga (normalmente un signo más o una flecha hacia arriba).
+        3.  En la ventana que se abre, selecciona los archivos de tu computadora que deseas cargar.
+        4.  Haz clic en "Abrir" o "Cargar".
+    *   **Pros:** Simplicidad, claridad, no requiere escribir código.
+    *   **Contras:** Adecuado para archivos pequeños, debe hacerse manualmente.
+
+
+
+2.  **Carga a través de código Python (`google.colab.files.upload()`)**
+    *   **Descripción**: Este método te permite cargar archivos usando código Python, lo que proporciona más flexibilidad.
+    *   **Cómo hacerlo:**
+        1.  Importa el módulo `files` de la biblioteca `google.colab`.
+           ```python
+           from google.colab import files
+           ```
+        2.  Llama a la función `files.upload()`
+             ```python
+             uploaded = files.upload()
+             ```
+        3.  Al ejecutar este código, aparecerá un cuadro de diálogo donde puedes seleccionar los archivos para cargar.
+    *   **Pros:** Se puede usar en código, permite el procesamiento programático de archivos cargados.
+    *   **Contras:** Requiere escribir código, un poco menos intuitivo que el administrador de archivos.
+
+    Después de ejecutar este código, los archivos cargados estarán disponibles como un diccionario `uploaded`, donde las claves son los nombres de los archivos y los valores son su contenido como cadenas de bytes.
+    ```python
+    # Ejemplo de uso de archivos cargados
+    for file_name, file_data in uploaded.items():
+       print(f"Archivo: {file_name}")
+       # Procesamiento de datos del archivo
+       # Por ejemplo:
+       # import pandas as pd
+       # df = pd.read_csv(io.BytesIO(file_data))
+       # print(df.head())
+    ```
+
+
+3.  **Clonación de un repositorio de GitHub (`git clone`)**
+    *   **Descripción**: Si tus archivos están en un repositorio de GitHub, puedes cargarlos clonando el repositorio en Colab.
+    *   **Cómo hacerlo:**
+        1.  Usa el comando `git clone` con la URL del repositorio.
+            ```python
+            !git clone <URL_del_repositorio>
+            ```
+            Por ejemplo:
+           ```python
+           !git clone https://github.com/username/my_repository.git
+           ```
+        2. Después de clonar el repositorio, el contenido estará disponible en una carpeta con el mismo nombre que el repositorio.
+    *   **Pros:** Fácil de cargar todos los archivos de un repositorio, una forma conveniente para proyectos con control de versiones.
+    *   **Contras:** Solo apto para archivos en repositorios de GitHub.
+
+
+   ```html
+<div align="center">
+  <img src="https://i.ibb.co/7R1QG5Q/colab-git-clone.png" alt="Clonación de repositorio de GitHub en Colab" width="600" >
+  <p><em>Clonación de repositorio de GitHub en Colab</em></p>
+</div>
+```
+
+4.  **Descarga de un solo archivo de GitHub**
+     *   **Descripción**: Si solo necesitas uno o unos pocos archivos de un repositorio de GitHub, puedes descargarlos directamente.
+     *   **Cómo hacerlo:**
+         1.  Abre el archivo deseado en el repositorio de GitHub.
+         2.  Haz clic en el botón "Ver sin formato".
+         3.  Copia la URL de este archivo.
+        4.  Usa `wget` o `curl` para descargar el archivo.
+            ```python
+            !wget <URL_del_archivo>
+            ```
+           o
+             ```python
+            !curl <URL_del_archivo> -o <nombre_de_archivo_en_colab>
+             ```
+    *   **Pros**: Fácil de descargar solo los archivos necesarios, sin clonar todo el repositorio.
+    *   **Contras**: Requiere conocer el enlace directo al archivo.
+
+
+**¿Qué método elegir?**
+
+*   Para archivos pequeños que necesitan cargarse rápida y manualmente, el **administrador de archivos** es adecuado.
+*   Si necesitas procesar archivos cargados programáticamente, usa **`files.upload()`**.
+*   Para cargar proyectos completos, usa **`git clone`**.
+*  Para descargar archivos individuales, usa **`wget` o `curl`**

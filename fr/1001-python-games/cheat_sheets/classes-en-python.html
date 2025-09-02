@@ -1,0 +1,157 @@
+<h1>Classes en <code>python</code></h1>
+<p>Les classes sont l'un des principaux mécanismes de la programmation orientée objet (POO) en Python. Une classe peut être considérée comme un "modèle" ou un "plan" pour créer des objets qui ont des attributs (données) et des méthodes (fonctions). Les objets créés à partir d'une classe sont appelés des instances de la classe. Les classes permettent de structurer le code, d'améliorer sa réutilisation et de faciliter sa maintenance.</p>
+<h3>Structure de la classe</h3>
+<pre class="line-numbers"><code class="language-python">class ClassName:
+    # Attributs de la classe
+    def __init__(self, param1, param2):
+        # Constructeur (initialiseur) de la classe
+        self.param1 = param1
+        self.param2 = param2
+
+    # Méthodes de la classe
+    def method(self):
+        return f'{self.param1} et {self.param2}'
+</code></pre>
+<ol>
+<li><strong>Constructeur</strong> (<code>__init__</code>) :
+Le constructeur <code>__init__</code> est une méthode spéciale qui est automatiquement appelée lors de la création d'un nouvel objet. Il est utilisé pour initialiser les attributs de l'objet.</li>
+</ol>
+<ul>
+<li><code>self</code> : un paramètre qui est une référence à l'instance actuelle de la classe. En Python, il doit obligatoirement être passé comme premier paramètre dans toutes les méthodes de classe (il n'est pas passé lors de l'appel de la méthode).</li>
+<li>Les attributs, tels que <code>param1</code> et <code>param2</code>, sont assignés à l'objet via <code>self</code>. Ces attributs peuvent ensuite être utilisés par d'autres méthodes de classe.</li>
+</ul>
+<ol start="2">
+<li><strong>Attributs de classe</strong> :
+Les attributs sont des variables qui appartiennent aux objets de cette classe. Ils sont définis dans le constructeur (<code>__init__</code>) et peuvent être accédés via une référence d'objet.</li>
+<li><strong>Méthodes de classe</strong> :
+Les méthodes sont des fonctions qui peuvent manipuler les attributs d'un objet. Les méthodes peuvent utiliser les données de l'objet, les modifier ou effectuer d'autres opérations.</li>
+</ol>
+<h3>Création d'un objet de classe</h3>
+<p>Une fois qu'une classe est définie, des objets de cette classe peuvent être créés. Les objets sont des instances de la classe.</p>
+<pre class="line-numbers"><code class="language-python">class Car:
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+
+    def description(self):
+        return f'{self.year} {self.make} {self.model}'
+
+# Création d'un objet
+my_car = Car('Toyota', 'Corolla', 2020)
+print(my_car.description())  # Sortie : 2020 Toyota Corolla
+</code></pre>
+<ul>
+<li>Dans cet exemple, nous avons créé un objet <code>my_car</code> de la classe <code>Car</code>. Lors de la création de l'objet, les valeurs des attributs <code>make</code>, <code>model</code> et <code>year</code> sont passées, qui sont stockées dans l'objet.</li>
+<li>La méthode <code>description()</code> permet d'obtenir une représentation textuelle de la voiture.</li>
+</ul>
+<h3>Types de méthodes</h3>
+<ol>
+<li><strong>Méthodes d'instance</strong> : Ce sont des méthodes régulières qui opèrent sur des instances de la classe. Elles prennent une référence à l'objet comme premier paramètre (généralement <code>self</code>).</li>
+</ol>
+<p>Exemple :
+<pre class="line-numbers"><code class="language-python">   def method(self):
+       pass
+</code></pre>
+</p>
+<ol start="2">
+<li><strong>Méthodes de classe</strong> : Méthodes qui prennent la classe elle-même comme premier paramètre. Le décorateur <code>@classmethod</code> est utilisé pour définir de telles méthodes. Elles peuvent modifier l'état de la classe elle-même, et non ses instances individuelles.</li>
+</ol>
+<p>Exemple :
+<pre class="line-numbers"><code class="language-python">   class MyClass:
+       @classmethod
+       def class_method(cls):
+           pass
+</code></pre>
+</p>
+<ol start="3">
+<li><strong>Méthodes statiques</strong> : Ce sont des méthodes qui n'utilisent ni <code>self</code> ni <code>cls</code> (c'est-à-dire qu'elles n'ont accès ni à l'instance ni à la classe). Les méthodes statiques sont déclarées à l'aide du décorateur <code>@staticmethod</code>. Elles peuvent être utiles lorsqu'une méthode ne dépend pas de l'état de l'objet ou de la classe, mais est liée à une logique appartenant à la classe.</li>
+</ol>
+<p>Exemple :
+<pre class="line-numbers"><code class="language-python">   class MyClass:
+       @staticmethod
+       def static_method():
+           pass
+</code></pre>
+</p>
+<h3>Héritage</h3>
+<p>L'un des principes clés de la POO est l'<strong>héritage</strong>. Une classe peut hériter du comportement d'une autre classe, en étendant ou en modifiant ses fonctionnalités. Cela permet la réutilisation du code, évitant la duplication.</p>
+<pre class="line-numbers"><code class="language-python">class Animal:
+    def speak(self):
+        return 'Voix d'animal'
+
+class Dog(Animal):  # La classe Dog hérite de la classe Animal
+    def speak(self):
+        return 'Ouaf'
+
+# Création d'objets
+dog = Dog()
+print(dog.speak())  # Sortie : Ouaf
+</code></pre>
+<ul>
+<li>La classe <code>Dog</code> hérite de la méthode <code>speak</code> de la classe <code>Animal</code>, mais la surcharge pour renvoyer la chaîne 'Ouaf'.</li>
+</ul>
+<h3>Polymorphisme</h3>
+<p>Le <strong>polymorphisme</strong> signifie la capacité des objets de différentes classes à utiliser les mêmes méthodes avec des implémentations différentes. En Python, cela est possible grâce à l'héritage et à la surcharge de méthodes.</p>
+<pre class="line-numbers"><code class="language-python">class Cat(Animal):
+    def speak(self):
+        return 'Miaou'
+
+# Création d'objets
+cat = Cat()
+print(cat.speak())  # Sortie : Miaou
+</code></pre>
+<p>Ici, <code>Cat</code> surcharge également la méthode <code>speak</code>, mais renvoie une valeur différente. Cela permet d'appeler la méthode <code>speak</code> quel que soit le type d'objet.</p>
+<h3>Encapsulation</h3>
+<p>L'<strong>encapsulation</strong> permet de masquer les détails d'implémentation internes et de fournir un accès aux données via des méthodes publiques. Cela permet d'éviter une utilisation incorrecte des données.</p>
+<pre class="line-numbers"><code class="language-python">class Car:
+    def __init__(self, make, model):
+        self._make = make  # Attribut protégé
+        self._model = model
+
+    def get_make(self):
+        return self._make
+
+    def set_make(self, make):
+        self._make = make
+
+# Création d'un objet
+my_car = Car('Toyota', 'Corolla')
+print(my_car.get_make())  # Sortie : Toyota
+my_car.set_make('Honda')
+print(my_car.get_make())  # Sortie : Honda
+</code></pre>
+<p>Ici, les attributs <code>_make</code> et <code>_model</code> sont protégés (généralement en Python, un underscore signifie que ces attributs ne doivent pas être utilisés directement en dehors de la classe), but they can be accessed and modified through the <code>get_make</code> and <code>set_make</code> methods.</p>
+<h3>Autres fonctionnalités des classes</h3>
+<ol>
+<li><strong>Destructeur</strong> (<code>__del__</code>) :
+Une méthode spéciale qui est appelée lorsqu'un objet est détruit (par exemple, lorsqu'il sort de la portée). Elle peut être utilisée pour libérer des ressources.</li>
+</ol>
+<p>Exemple :
+<pre class="line-numbers"><code class="language-python">   class MyClass:
+       def __del__(self):
+           print("Objet détruit")
+
+   obj = MyClass()
+   del obj  # L'objet sera détruit et la méthode __del__ sera appelée
+</code></pre>
+</p>
+<ol start="2">
+<li><strong>Méthodes magiques</strong> :
+Ce sont des méthodes spéciales avec deux underscores (par exemple, <code>__init__</code>, <code>__str__</code>, <code>__repr__</code>, <code>__eq__</code>). Elles permettent de surcharger le comportement standard des opérations telles que la création d'objets, la comparaison, la représentation textuelle des objets, etc.</li>
+</ol>
+<p>Exemple :
+<pre class="line-numbers"><code class="language-python">   class Point:
+       def __init__(self, x, y):
+           self.x = x
+           self.y = y
+
+       def __repr__(self):
+           return f'Point({self.x}, {self.y})'
+
+   p = Point(3, 4)
+   print(p)  # Sortie : Point(3, 4)
+</code></pre>
+</p>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">Vers la table des matières</a></p>

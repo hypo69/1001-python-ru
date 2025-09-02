@@ -1,0 +1,92 @@
+ANIMAL:
+=================
+Dificultad: 4
+-----------------
+El juego "ANIMAL" es un juego de adivinanzas de animales en el que la computadora selecciona un animal al azar de una lista, y el jugador intenta adivinarlo ingresando sus suposiciones. El juego continúa hasta que el jugador adivina el animal.
+
+Reglas del juego:
+1.  La computadora selecciona un animal al azar de una lista predefinida.
+2.  El jugador ingresa sus suposiciones para el animal oculto.
+3.  Después de cada intento, la computadora informa si el jugador adivinó el animal o no.
+4.  El juego continúa hasta que el jugador adivina el animal oculto.
+-----------------
+Algoritmo:
+1.  Definir una lista de animales.
+2.  Seleccionar un animal al azar de la lista.
+3.  Iniciar un bucle "mientras el animal no sea adivinado":
+    3.1 Solicitar al jugador que ingrese el nombre del animal.
+    3.2 Si el nombre ingresado coincide con el animal oculto, ir al paso 4.
+    3.3 De lo contrario, mostrar "NO".
+4. Mostrar "¡CORRECTO!".
+5. Fin del juego.
+-----------------
+Diagrama de flujo:
+<pre class="line-numbers"><code class="language-mermaid">
+flowchart TD
+    Start["Start"] --> InitializeAnimals["<p align='left'>Initialize animal list:<br><code><b>
+    animals = ['DOG', 'CAT', 'HORSE', 'COW', 'PIG']
+    </b></code></p>"]
+    InitializeAnimals --> ChooseRandomAnimal["Choose random animal from list: <code><b>targetAnimal</b></code>"]
+    ChooseRandomAnimal --> LoopStart{"Start loop: until guessed"}
+    LoopStart -- Yes --> InputAnimal["User enters animal name: <code><b>userAnimal</b></code>"]
+    InputAnimal --> CheckAnimal{"Check: <code><b>userAnimal == targetAnimal?</b></code>"}
+    CheckAnimal -- Yes --> OutputWin["Display message: <b>CORRECT!</b>"]
+    OutputWin --> End["End"]
+    CheckAnimal -- No --> OutputWrong["Display message: <b>NO</b>"]
+    OutputWrong --> LoopStart
+    LoopStart -- No --> End
+
+</code></pre>
+Leyenda:
+    Start - Program start.
+    InitializeAnimals - Inicialización de la lista de animales.
+    ChooseRandomAnimal - Selección de un animal al azar de la lista y guardarlo en la variable targetAnimal.
+    LoopStart - Inicio del bucle, que continúa hasta que se adivina el animal.
+    InputAnimal - Solicitar al usuario que ingrese el nombre del animal y guardarlo en la variable userAnimal.
+    CheckAnimal - Comprobar si el nombre del animal ingresado userAnimal coincide con el animal oculto targetAnimal.
+    OutputWin - Mostrar un mensaje de victoria si los nombres de los animales coinciden.
+    End - Fin del programa.
+    OutputWrong - Mostrar el mensaje "NO" si el nombre del animal ingresado no coincide con el animal oculto.
+<pre class="line-numbers"><code class="language-python">
+import random
+
+# List of animals for the game
+animals = ['DOG', 'CAT', 'HORSE', 'COW', 'PIG']
+
+# Choose a random animal from the list
+targetAnimal = random.choice(animals)
+
+# Start the loop until the animal is guessed
+while True:
+    # Ask the user to enter the animal name
+    userAnimal = input("Adivina el animal (DOG, CAT, HORSE, COW, PIG): ").upper()
+
+    # Check if the user guessed the animal
+    if userAnimal == targetAnimal:
+        print("¡CORRECTO!") # Display correct message
+        break # End the loop if the animal is guessed
+    else:
+        print("NO") # Display incorrect message
+</code></pre>
+Explicación del código:
+
+1.  **Importar módulo `random`**:
+    -   <code>import random</code>: Importa el módulo <code>random</code>, que se utiliza para seleccionar un animal al azar.
+
+2.  **Lista de animales**:
+    -   <code>animals = ['DOG', 'CAT', 'HORSE', 'COW', 'PIG']</code>: Crea una lista de cadenas con nombres de animales.
+
+3.  **Selección de animal al azar**:
+    -   <code>targetAnimal = random.choice(animals)</code>: Selecciona un animal al azar de la lista <code>animals</code> y lo guarda en la variable <code>targetAnimal</code>.
+
+4.  **Bucle principal del juego <code>while True:</code>**:
+    -   Un bucle infinito que continúa hasta que el jugador adivina el animal.
+    -   <strong>Entrada</strong>:
+        -   <code>userAnimal = input("Adivina el animal (DOG, CAT, HORSE, COW, PIG): ").upper()</code>: Solicita al usuario que ingrese el nombre del animal y lo convierte a mayúsculas para una comparación sin distinción entre mayúsculas y minúsculas.
+    -   <strong>Condición de victoria</strong>:
+        -   <code>if userAnimal == targetAnimal:</code>: Comprueba si el nombre del animal ingresado por el usuario coincide con el oculto.
+        -   <code>print("¡CORRECTO!")</code>: Muestra un mensaje de victoria si se adivina el animal.
+        -   <code>break</code>: Termina el bucle (y el juego) si se adivina el animal.
+    -   <strong>Mensaje de respuesta incorrecta</strong>:
+        -   <code>else:</code>: Se ejecuta si el nombre del animal ingresado no coincide con el oculto.
+        -   <code>print("NO")</code>: Muestra el mensaje "NO" si la respuesta es incorrecta.

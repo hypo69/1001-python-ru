@@ -1,0 +1,190 @@
+# Algoritmos de ordenación
+
+En la vida cotidiana y en la programación, nos encontramos con la necesidad de ordenar datos.
+Esto puede ser cualquier cosa: una lista de compras, libros en un estante o resultados de búsqueda.
+Los algoritmos de ordenación son un conjunto de instrucciones que nos ayudan a organizar los elementos en un orden determinado, ya sea ascendente,
+descendente o según algún otro criterio.
+
+Por ejemplo, utilizo frutas de diferentes tamaños.
+
+<strong>Representación de frutas con tamaños:</strong>
+
+Asociaremos las frutas con los tamaños. Usaremos tuplas, donde:
+
+<ul>
+<li>El primer elemento es el tamaño de la fruta:
+<ul>
+<li>🍎 (pequeña) – manzana</li>
+<li>🍐 (mediana) – pera</li>
+<li>🍉 (grande) – melón</li>
+<li>🧺 (muy grande) – cesta</li>
+</ul>
+</li>
+<li>El segundo elemento es un identificador único, para el funcionamiento del programa.</li>
+</ul>
+<p>Ejemplo: <code>(🍎, 1)</code> – es una manzana pequeña con identificador 1.</p>
+<pre class="line-numbers"><code class="language-python">
+from typing import List, Tuple
+
+def compare_fruits(fruit1: Tuple[str, int], fruit2: Tuple[str, int]) -> int:
+    """
+    Compares two fruits by size.
+
+    Args:
+        fruit1: Tuple (size, identifier).
+        fruit2: Tuple (size, identifier).
+
+    Returns:
+        -1 if fruit1 is less than fruit2, 1 if fruit1 is greater than fruit2, 0 if they are equal.
+    """
+    order = {"🍎": 0, "🍐": 1, "🍉": 2, "🧺": 3}  # Define the order of fruits by size
+    size1 = order.get(fruit1[0]) # Get the size of the first fruit
+    size2 = order.get(fruit2[0]) # Get the size of the second fruit
+    if size1 < size2: # If the size of the first fruit is smaller, return -1
+        return -1
+    elif size1 > size2: # If the size of the first fruit is larger, return 1
+        return 1
+    else: # If the sizes are equal, return 0
+      return 0
+</code></pre>
+
+<p><strong>Algoritmos de ordenación (comparación por tamaño de fruta):</strong></p>
+<ol>
+<li><strong>Ordenación de burbuja (Bubble Sort):</strong> (Las burbujas más ligeras suben antes)
+<ul>
+<li>El algoritmo compara frutas adyacentes por tamaño. Si una fruta es más grande que la adyacente, intercambia posiciones con ella.</li>
+<li>Este proceso se repite hasta que toda la lista de frutas esté ordenada de menor a mayor.</li>
+<li>Analogía: Imagine que tiene un acuario con burbujas de aire de diferentes tamaños. Las burbujas más ligeras (correspondientes a frutas más pequeñas) subirán a la superficie antes que las más pesadas (correspondientes a frutas más grandes). Así, las frutas más ligeras "flotan" a la parte superior de la lista, y las más pesadas se hunden hasta el fondo.</li>
+</ul>
+<pre class="line-numbers"><code class="language-mermaid">
+graph TD
+    A[Start] --> B{Are there unsorted fruits?};
+    B -- Sí --> C[Compare two adjacent fruits];
+    C -- La primera es más grande --> D[Swap positions];
+    D --> E[Go to next pair];
+    C -- La primera no es más grande --> E;
+    E --> F{Reached end of list?};
+    F -- No --> C;
+    F -- Sí --> G{Was there a swap?};
+    G -- Sí --> B;
+    G -- No --> H[End];
+    B -- No --> H;
+    H[End]
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+def bubble_sort(fruits: List[Tuple[str, int]]) -> List[Tuple[str, int]]:
+    """
+    Sorts a list of fruits by size, using the "bubble sort" algorithm.
+
+    Args:
+        fruits: List of tuples (size, identifier).
+
+    Returns:
+        Sorted list of tuples.
+    """
+    n = len(fruits)  # Get the number of fruits
+    for i in range(n):  # Iterate through the list n times
+        for j in range(0, n - i - 1):  # Iterate through the unsorted part of the list
+            if compare_fruits(fruits[j], fruits[j + 1]) == 1:  # If the fruit on the left is larger than the one on the right
+                fruits[j], fruits[j + 1] = fruits[j + 1], fruits[j]  # Swap positions
+        return fruits
+
+</code></pre>
+</li>
+<li><strong>Ordenación por inserción (Insertion Sort):</strong>
+<ul>
+<li>El algoritmo construye una lista ordenada, agregando frutas una por una. Una nueva fruta se inserta en la posición correcta para mantener el orden por tamaño.</li>
+<li>La ordenación por inserción es buena para listas pequeñas o para aquellas donde los datos ya están casi ordenados.</li>
+</ul>
+</li>
+<li><strong>Ordenación por selección (Selection Sort):</strong>
+<ul>
+<li>El algoritmo encuentra la fruta más pequeña en la parte sin ordenar de la lista. Luego coloca esta fruta en la primera posición de la parte sin ordenar de la lista.</li>
+<li>Este proceso se repite hasta que todas las frutas estén ordenadas.</li>
+<li>La ordenación por selección es simple pero ineficiente para listas grandes.</li>
+</ul>
+</li>
+</ol>
+<pre class="line-numbers"><code class="language-python">
+def insertion_sort(fruits: List[Tuple[str, int]]) -> List[Tuple[str, int]]:
+    """
+    Sorts a list of fruits by size, using the "insertion sort" algorithm.
+
+    Args:
+        fruits: List of tuples (size, identifier).
+
+    Returns:
+        Sorted list of tuples.
+    """
+    for i in range(1, len(fruits)): # Start from the second fruit (the first is considered sorted)
+        key = fruits[i] # Take the next fruit
+        j = i - 1 # Index of the previous fruit
+        while j >= 0 and compare_fruits(fruits[j], key) == 1: # Find the position in the sorted part where to insert the fruit
+            fruits[j + 1] = fruits[j] # Shift fruits to make space for the new one
+            j -= 1
+        fruits[j + 1] = key # Insert the fruit in the correct position
+    return fruits
+
+def selection_sort(fruits: List[Tuple[str, int]]) -> List[Tuple[str, int]]:
+    """
+    Sorts a list of fruits by size, using the "selection sort" algorithm.
+
+    Args:
+        fruits: List of tuples (size, identifier).
+
+    Returns:
+        Sorted list of tuples.
+    """
+    n = len(fruits) # Get the number of fruits in the list
+    for i in range(n): # Iterate through all fruits in the list
+        min_index = i # Index of the smallest fruit
+        for j in range(i + 1, n): # Find the smallest fruit in the unsorted part
+            if compare_fruits(fruits[j], fruits[min_index]) == -1: # If a fruit smaller than the current minimum is found
+                min_index = j # Remember the index of the new minimum
+        fruits[i], fruits[min_index] = fruits[min_index], fruits[i] # Swap the current fruit with the smallest in the unsorted part
+    return fruits
+
+def display_fruits(fruits: List[Tuple[str, int]]) -> str:
+    """
+    Converts a list of fruits into a string for display.
+
+    Args:
+        fruits: List of tuples (size, identifier).
+
+    Returns:
+        String to display the list of fruits.
+    """
+    return ", ".join(f"{fruit[0]}{fruit[1]}" for fruit in fruits)  # Build string for output
+
+
+# Create a list of fruits to sort
+fruits = [
+    ("🍉", 1), ("🍎", 2), ("🍐", 3), ("🧺", 4), ("🍎", 5), ("🍉", 6), ("🍐", 7),
+    ("🍎", 8), ("🧺", 9), ("🍉", 10), ("🍐", 11), ("🍎", 12)
+]
+
+print("Lista original de frutas: " + display_fruits(fruits))  # Print the original list
+print("Ejemplos: Manzana (🍎) < Peras (🍐) < Melón (🍉) < Cestas (🧺)")  # Display the order of the fruits
+
+# Bubble sort
+sorted_fruits_bubble = bubble_sort(fruits.copy()) # Sort a copy of the list
+print("Ordenación de burbuja: " + display_fruits(sorted_fruits_bubble)) # Print the result
+
+# Insertion sort
+sorted_fruits_insertion = insertion_sort(fruits.copy()) # Sort a copy of the list
+print("Ordenación por inserción: " + display_fruits(sorted_fruits_insertion)) # Print the result
+
+# Selection sort
+sorted_fruits_selection = selection_sort(fruits.copy()) # Sort a copy of the list
+print("Ordenación por selección: " + display_fruits(sorted_fruits_selection)) # Print the result
+</code></pre>
+
+<p><strong>Explicación del código:</strong></p>
+<ol>
+<li><strong><code>compare_fruits(fruit1, fruit2)</code>:</strong> Esta función compara dos frutas por tamaño y devuelve -1 si la primera fruta es más pequeña, 1 si es más grande y 0 si son iguales. Utilizo el diccionario <code>order</code> para definir el orden de los tamaños de las frutas.</li>
+<li><strong><code>bubble_sort(fruits)</code>:</strong> Implemento el algoritmo de ordenación de burbuja, donde las frutas adyacentes se comparan y se intercambian si están en el orden incorrecto.</li>
+<li><strong><code>insertion_sort(fruits)</code>:</strong> Implemento el algoritmo de ordenación por inserción, donde cada nueva fruta se inserta en la posición correcta en la parte ya ordenada de la lista.</li>
+<li><strong><code>selection_sort(fruits)</code>:</strong> Implemento el algoritmo de ordenación por selección, donde en cada pasada encuentro la fruta más pequeña y la coloco en la posición correcta.</li>
+<li><strong><code>display_fruits(fruits)</code>:</strong> Esta función convierte una lista de frutas en una cadena para una salida conveniente.</li>
+<li><strong>Ejemplos:</strong> Al final, creo una lista de frutas y aplico los tres algoritmos de ordenación, imprimiendo los resultados de cada uno. También le muestro el orden en que se ordenan las frutas.</li>
+</ol>

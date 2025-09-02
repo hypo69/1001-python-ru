@@ -1,0 +1,63 @@
+# La función `input()`
+La función `input()` en Python se utiliza para obtener datos del usuario a través de la entrada de texto. Pausa la ejecución del programa hasta que el usuario introduce datos y pulsa Enter. Después de eso, devuelve el valor introducido como una cadena.
+
+<h3>Sintaxis</h3>
+<pre class="line-numbers"><code class="language-python">
+input([prompt])
+</code></pre>
+
+<ul>
+<li><code>prompt</code> (opcional): una cadena que se muestra al usuario antes de la entrada. Puede ser un mensaje con una instrucción, por ejemplo: <code>"Introduce tu nombre: "</code>.</li>
+</ul>
+<h3>Ejemplo de uso</h3>
+<pre class="line-numbers"><code class="language-python">
+# Ask the user for their name
+name = input('Introduce tu nombre: ')
+print(f'¡Hola, {name}!')
+</code></pre>
+
+<p><strong>Resultado de la ejecución:</strong></p>
+<pre class="line-numbers"><code class="language-text">
+Introduce tu nombre: Alex
+¡Hola, Alex!
+</code></pre>
+
+<h3>Características</h3>
+<ol>
+<li><strong>Devuelve una cadena</strong>
+Todos los datos introducidos a través de <code>input()</code> se interpretan como cadenas. Si se necesita un número, debe convertirse:
+<pre class="line-numbers"><code class="language-python">
+age = int(input('Introduce tu edad: '))
+print(f'Tu edad: {age}')
+</code></pre>
+</li>
+<li><strong>Manejo de errores</strong>
+Para evitar errores durante la conversión (por ejemplo, si el usuario introdujo texto en lugar de un número), puede usar un bloque <code>try-except</code>:
+<pre class="line-numbers"><code class="language-python">
+try:
+       number = int(input('Introduce un número: '))
+       print(f'Has introducido el número {number}')
+   except ValueError:
+       print('Error: debes introducir un número.')
+</code></pre>
+</li>
+<li><strong>Uso en bucles</strong>
+A menudo, <code>input()</code> se usa en bucles para solicitar datos repetidamente:
+<pre class="line-numbers"><code class="language-python">
+while True:
+       text = input('Introduce algo (o "salir" para terminar): ')
+       if text.lower() == 'salir':
+           print('Saliendo del programa.')
+           break
+       print(f'Has introducido: {text}')
+</code></pre>
+</li>
+</ol>
+<h3>Consejos para principiantes</h3>
+<ul>
+<li>Asegúrate de que el tipo de datos coincide con tus expectativas (por ejemplo, convierte la entrada a un número si es necesario).</li>
+<li>Valida siempre los datos para evitar errores de entrada.</li>
+<li>Usa mensajes <code>prompt</code> claros y concisos para que el usuario entienda lo que se le pide.</li>
+</ul>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">Al índice</a></p>

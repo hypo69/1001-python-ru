@@ -1,0 +1,154 @@
+<h2>Despliegue automático de un sitio Jekyll en GitHub Pages</h2>
+<p>Para automatizar el proceso de despliegue, utilizaremos GitHub Actions, que permiten realizar diversas tareas, incluida la construcción y publicación de sitios web, directamente en su repositorio.</p>
+<h3>1: Resumen del archivo de flujo de trabajo</h3>
+<p>Primero, veamos el archivo de flujo de trabajo principal que controla el proceso de construcción y despliegue. Este archivo está escrito en YAML y normalmente se encuentra en el directorio <code>.github/workflows</code>. Aquí está su contenido:</p>
+<pre class="line-numbers"><code class="language-yaml">
+# Example workflow for building and deploying a Jekyll site to GitHub Pages
+name: Desplegar Jekyll con dependencias de GitHub Pages preinstaladas
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configurar páginas
+        uses: actions/configure-pages@v5
+      - name: Construir con Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./docs/gemini/consultant/ru/src
+          destination: ./_site
+      - name: Cargar artefacto
+        uses: actions/upload-pages-artifact@v3
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+</code></pre>
+<h3>2: Desglose de la estructura del flujo de trabajo</h3>
+<p>Ahora, analicemos cada sección de este archivo:</p>
+<h4>2.1. Información general</h4>
+<ul>
+<li><code>name: Desplegar Jekyll con dependencias de GitHub Pages preinstaladas</code>: El nombre del flujo de trabajo que verá en la lista de Acciones en el repositorio.</li>
+<li><code>on</code>: Describe cuándo debe ejecutarse el flujo de trabajo:
+<ul>
+<li><code>push</code>: El flujo de trabajo se ejecuta en cada push a la rama <code>master</code>.</li>
+<li><code>workflow_dispatch</code>: Le permite ejecutar manualmente el flujo de trabajo a través de la interfaz de GitHub.</li>
+</ul>
+</li>
+<li><code>permissions</code>: Configura los permisos para la ejecución del flujo de trabajo:
+<ul>
+<li><code>contents: read</code>: Permiso para leer código del repositorio.</li>
+<li><code>pages: write</code>: Permiso para publicar en GitHub Pages.</li>
+<li><code>id-token: write</code>: Permiso para obtener un token de autenticación (requerido para GitHub Actions).</li>
+</ul>
+</li>
+<li><code>concurrency</code>: Configura la ejecución paralela del flujo de trabajo:
+<ul>
+<li><code>group: "pages"</code>: Garantiza que solo un flujo de trabajo para GitHub Pages se ejecute a la vez.</li>
+<li><code>cancel-in-progress: false</code>: Evita la cancelación de la ejecución actual del flujo de trabajo cuando se inicia una nueva.</li>
+</ul>
+</li>
+</ul>
+<h4>2.2. Sección <code>jobs</code></h4>
+<p>Esta sección describe las tareas que deben realizarse. Tenemos dos trabajos: <code>build</code> y <code>deploy</code>.</p>
+<h5>2.2.1. <code>build</code>: Construcción del sitio</h5>
+<ul>
+<li><code>runs-on: ubuntu-latest</code>: Indica que el trabajo se ejecuta en un servidor Ubuntu.</li>
+<li><code>steps</code>: Enumera los pasos que se ejecutan durante la construcción:
+<ul>
+<li><code>name: Checkout</code>: Extrae el código fuente del repositorio.</li>
+<li><code>uses: actions/checkout@v4</code>: Utiliza una acción predefinida para extraer el código.</li>
+<li><code>name: Configurar páginas</code>: Configura el entorno para trabajar con GitHub Pages.</li>
+<li><code>uses: actions/configure-pages@v5</code>: Utiliza una acción predefinida para la configuración.</li>
+<li><code>name: Construir con Jekyll</code>: Inicia la construcción del sitio Jekyll.</li>
+<li><code>uses: actions/jekyll-build-pages@v1</code>: Utiliza una acción predefinida para la construcción.</li>
+<li><code>with:</code>: Configura los parámetros de la acción:
+<ul>
+<li><code>source: ./docs/gemini/consultant/ru/src</code>: Especifica dónde se encuentran los archivos fuente de su sitio. <strong>Nota</strong>: la ruta a sus archivos <code>docs/gemini/consultant/ru/src</code>.</li>
+<li><code>destination: ./_site</code>: Especifica dónde colocar los archivos construidos.</li>
+</ul>
+</li>
+<li><code>name: Cargar artefacto</code>: Carga los archivos construidos para pasarlos al siguiente trabajo.</li>
+<li><code>uses: actions/upload-pages-artifact@v3</code>: Utiliza una acción predefinida para cargar artefactos.</li>
+</ul>
+</li>
+</ul>
+<h5>2.2.2. <code>deploy</code>: Publicación del sitio</h5>
+<ul>
+<li><code>environment</code>: Configura el entorno para la publicación.
+<ul>
+<li><code>name: github-pages</code>: Nombre del entorno.</li>
+<li><code>url: ${{ steps.deployment.outputs.page_url }}</code>: Obtiene la URL del sitio publicado.</li>
+</ul>
+</li>
+<li><code>runs-on: ubuntu-latest</code>: Indica que el trabajo se ejecuta en un servidor Ubuntu.</li>
+<li><code>needs: build</code>: Indica que el trabajo <code>deploy</code> debe ejecutarse después de que el trabajo <code>build</code> se haya completado con éxito.</li>
+<li><code>steps</code>: Enumera los pasos que se ejecutan durante la publicación:
+<ul>
+<li><code>name: Desplegar en GitHub Pages</code>: Realiza la publicación del sitio en GitHub Pages.</li>
+<li><code>id: deployment</code>: Establece el identificador para la acción.</li>
+<li><code>uses: actions/deploy-pages@v4</code>: Utiliza una acción predefinida para el despliegue.</li>
+</ul>
+</li>
+</ul>
+<h3>3: ¿Qué hacen los archivos Markdown?</h3>
+<p>Los archivos con la extensión <code>.md</code> (Markdown) son la base de un sitio Jekyll. Markdown es un lenguaje de marcado simple que le permite formatear texto.
+Jekyll procesa automáticamente los archivos <code>.md</code>, convirtiéndolos en páginas HTML. Sus archivos deben estar ubicados en la carpeta especificada en el flujo de trabajo <code>docs/gemini/consultant/ru/src</code>.</p>
+<h3>4: Diagrama de flujo</h3>
+<pre class="line-numbers"><code class="language-mermaid">
+graph TD
+    A[Start: Push or manual activation] --> B(Repository verification);
+    B --> C[Build site in _site folder];
+    C --> D[Upload artifact];
+    D --> E[Publish to GitHub Pages];
+    E --> F[End: Site published];
+    
+    style A fill:#D46A6A,stroke:#333,stroke-width:2px
+    style B fill:#D46A6A,stroke:#333,stroke-width:2px
+    style C fill:#D46A6A,stroke:#333,stroke-width:2px
+    style D fill:#D46A6A,stroke:#333,stroke-width:2px
+    style E fill:#D46A6A,stroke:#333,stroke-width:2px
+    style F fill:#D46A6A,stroke:#333,stroke-width:2px
+    
+    linkStyle 0,1,2,3,4 stroke:#333,stroke-width:2px
+</code></pre>
+<h3>5: Cómo funciona</h3>
+<ol>
+<li><strong>Cambio de código:</strong> Realiza cambios en sus archivos <code>.md</code> o <code>.html</code>, que se encuentran en la carpeta <code>docs/gemini/consultant/ru/src</code>.</li>
+<li><strong>Push:</strong> Envía (push) sus cambios a la rama <code>master</code> de su repositorio de GitHub.</li>
+<li><strong>Ejecución del flujo de trabajo:</strong> GitHub Actions ejecuta automáticamente el flujo de trabajo descrito en el archivo YAML.</li>
+<li><strong>Construcción:</strong> El flujo de trabajo primero descarga el código del repositorio, luego construye el sitio Jekyll a partir de sus archivos fuente en la carpeta <code>_site</code>.</li>
+<li><strong>Publicación:</strong> El sitio construido se publica en GitHub Pages.</li>
+<li><strong>Sitio listo:</strong> Después de eso, su sitio es accesible en la URL especificada en la configuración de GitHub Pages.</li>
+</ol>

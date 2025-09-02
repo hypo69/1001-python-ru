@@ -1,0 +1,91 @@
+<p>ACE:
+=================
+Difficulty: 7
+-----------------
+The game "ACE" is a game in which two players take turns drawing cards from a deck and try to score more points. An Ace counts as 1 point, cards from 2 to 10 count as their face value, and Jack, Queen, and King count as 10. The player with more points wins. The game continues until a certain number of rounds are played.</p>
+<p>Game rules:
+1. Two players play.
+2. Players take turns drawing cards from the deck.
+3. Each card has a certain number of points: Ace - 1, cards from 2 to 10 - face value, Jack, Queen, and King - 10.
+4. Each player tries to score as many points as possible per round.
+5. At the end of the round, players' scores are compared.
+6. The game consists of a certain number of rounds.
+7. The player with more points across all rounds is declared the winner of the game.
+-----------------
+Algorithm:
+1. Initialize player 1 and player 2 scores to zero.
+2. Prompt for the number of rounds.
+3. Start a loop for the number of rounds:
+    3.1. Player 1 draws a card.
+    3.2. Display player 1's card and card points.
+    3.3. Add card points to player 1's total score.
+    3.4. Player 2 draws a card.
+    3.5. Display player 2's card and card points.
+    3.6. Add card points to player 2's total score.
+    3.7. If player 1's score is greater than player 2's score, display "PLAYER 1 WINS THE ROUND".
+    3.8. If player 2's score is greater than player 1's score, display "PLAYER 2 WINS THE ROUND".
+    3.9. If player 1's score is equal to player 2's score, display "TIE GAME THIS ROUND".
+4. Display player 1's total score.
+5. Display player 2's total score.
+6. If player 1's total score is greater than player 2's total score, display "PLAYER 1 WINS THE GAME".
+7. If player 2's total score is greater than player 1's total score, display "PLAYER 2 WINS THE GAME".
+8. If player 1's total score is equal to player 2's total score, display "TIE GAME".
+9. End of game.
+-----------------
+Flowchart:</p>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeScores["<p align='left'>Initialize variables:&lt;br&gt;&lt;code&gt;&lt;b&gt;player1Score = 0&lt;/b&gt;&lt;/code&gt;&lt;br&gt;&lt;code&gt;&lt;b&gt;player2Score = 0&lt;/b&gt;&lt;/code&gt;</p>"]
+    InitializeScores --> InputRounds["Input number of rounds: &lt;code&gt;&lt;b&gt;numberOfRounds&lt;/b&gt;&lt;/code&gt;"]
+    InputRounds --> RoundLoopStart{"Start round loop"}
+    RoundLoopStart -- Yes --> Player1DrawsCard["Player 1 draws card: &lt;code&gt;&lt;b&gt;card1, card1Value&lt;/b&gt;&lt;/code&gt;"]
+    Player1DrawsCard --> OutputPlayer1Card["Display player 1's card and points: &lt;code&gt;&lt;b&gt;card1, card1Value&lt;/b&gt;&lt;/code&gt;"]
+    OutputPlayer1Card --> UpdatePlayer1Score["&lt;code&gt;&lt;b&gt;player1Score = player1Score + card1Value&lt;/b&gt;&lt;/code&gt;"]
+    UpdatePlayer1Score --> Player2DrawsCard["Player 2 draws card: &lt;code&gt;&lt;b&gt;card2, card2Value&lt;/b&gt;&lt;/code&gt;"]
+    Player2DrawsCard --> OutputPlayer2Card["Display player 2's card and points: &lt;code&gt;&lt;b&gt;card2, card2Value&lt;/b&gt;&lt;/code&gt;"]
+    OutputPlayer2Card --> UpdatePlayer2Score["&lt;code&gt;&lt;b&gt;player2Score = player2Score + card2Value&lt;/b&gt;&lt;/code&gt;"]
+    UpdatePlayer2Score --> CompareScores{"Compare round scores: &lt;code&gt;&lt;b&gt;card1Value > card2Value?&lt;/b&gt;&lt;/code&gt;"}
+    CompareScores -- Yes --> OutputPlayer1RoundWin["Display: &lt;b&gt;PLAYER 1 WINS THE ROUND&lt;/b&gt;"]
+    CompareScores -- No --> CompareScores2{"Compare round scores: &lt;code&gt;&lt;b&gt;card2Value > card1Value?&lt;/b&gt;&lt;/code&gt;"}
+    CompareScores2 -- Yes --> OutputPlayer2RoundWin["Display: &lt;b&gt;PLAYER 2 WINS THE ROUND&lt;/b&gt;"]
+    CompareScores2 -- No --> OutputTieRound["Display: &lt;b&gt;TIE GAME THIS ROUND&lt;/b&gt;"]
+    OutputPlayer1RoundWin --> RoundLoopEnd
+    OutputPlayer2RoundWin --> RoundLoopEnd
+    OutputTieRound --> RoundLoopEnd
+     RoundLoopEnd --> RoundLoopStart {"Start round loop"}
+
+    RoundLoopStart -- No --> OutputTotalPlayer1Score["Display player 1's total score: &lt;code&gt;&lt;b&gt;player1Score&lt;/b&gt;&lt;/code&gt;"]
+    OutputTotalPlayer1Score --> OutputTotalPlayer2Score["Display player 2's total score: &lt;code&gt;&lt;b&gt;player2Score&lt;/b&gt;&lt;/code&gt;"]
+    OutputTotalPlayer2Score --> CompareTotalScores{"Compare total scores: &lt;code&gt;&lt;b&gt;player1Score > player2Score?&lt;/b&gt;&lt;/code&gt;"}
+    CompareTotalScores -- Yes --> OutputPlayer1GameWin["Display: &lt;b&gt;PLAYER 1 WINS THE GAME&lt;/b&gt;"]
+    CompareTotalScores -- No --> CompareTotalScores2{"Compare total scores: &lt;code&gt;&lt;b&gt;player2Score > player1Score?&lt;/b&gt;&lt;/code&gt;"}
+     CompareTotalScores2 -- Yes --> OutputPlayer2GameWin["Display: &lt;b&gt;PLAYER 2 WINS THE GAME&lt;/b&gt;"]
+    CompareTotalScores2 -- No --> OutputTieGame["Display: &lt;b&gt;TIE GAME&lt;/b&gt;"]
+    OutputPlayer1GameWin --> End["End"]
+    OutputPlayer2GameWin --> End
+    OutputTieGame --> End
+</code></pre>
+<p><strong>Legend</strong>
+    Start - Program start.
+    InitializeScores - Initialize player1Score and player2Score variables to zero.
+    InputRounds - Prompt user for the number of rounds numberOfRounds for the game.
+    RoundLoopStart - Start loop for each game round. The loop executes numberOfRounds times.
+    Player1DrawsCard - Player 1 draws card card1 and its value card1Value is determined.
+    OutputPlayer1Card - Display information about player 1's card card1 and its value card1Value.
+    UpdatePlayer1Score - Update player 1's total score, adding card1Value to player1Score.
+    Player2DrawsCard - Player 2 draws card card2 and its value card2Value is determined.
+    OutputPlayer2Card - Display information about player 2's card card2 and its value card2Value.
+    UpdatePlayer2Score - Update player 2's total score, adding card2Value to player2Score.
+    CompareScores - Compare card values card1Value and card2Value to determine the round winner.
+    OutputPlayer1RoundWin - Display message about player 1 winning the round.
+    CompareScores2 - Compare card values card2Value and card1Value to determine the round winner.
+    OutputPlayer2RoundWin - Display message about player 2 winning the round.
+    OutputTieRound - Display message about a tie in the round.
+    RoundLoopEnd - End of round loop.
+    OutputTotalPlayer1Score - Display player 1's total score player1Score.
+    OutputTotalPlayer2Score - Display player 2's total score player2Score.
+    CompareTotalScores - Compare total scores of players player1Score and player2Score to determine the game winner.
+    OutputPlayer1GameWin - Display message about player 1 winning the game.
+     CompareTotalScores2 - Compare total scores of players player2Score and player1Score to determine the game winner.
+    OutputPlayer2GameWin - Display message about player 2 winning the game.
+    OutputTieGame - Display message about a tie in the game.
+    End - Program end.</p>

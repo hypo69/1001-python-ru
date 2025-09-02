@@ -1,0 +1,432 @@
+<h2 dir="rtl">תורת החבורות - חבורה למחצה</h2>
+
+<p dir="rtl">המבנה הפשוט ביותר בתורת החבורות הוא חבורה למחצה. חבורה למחצה היא קבוצה כלשהי, שעבורה מוגדרת פעולה בינארית אסוציאטיבית, המקבלת שני איברים מהקבוצה הזו ומחזירה איבר שלישי. להלן, כל הדוגמאות יינתנו בשפת התכנות פייתון.</p>
+
+<p dir="rtl">בפייתון, אנו יכולים להגדיר את מושג החבורה למחצה באמצעות <span dir="ltr"><code>typing.Protocol</code></span> (לבדיקת טיפוסים סטטית) או פשוט לפי מוסכמה (<span dir="ltr">duck typing</span>). לשם הבהרה, נשתמש במילונים המאחסנים את פעולת <span dir="ltr"><code>combine</code></span>.</p>
+
+<pre class="line-numbers"><code class="language-python">from typing import TypeVar, Callable, Protocol, Generic
+import functools # for reduce
+
+T = TypeVar('T')
+
+# We describe the semigroup structure using Protocol (for static typing)
+class Semigroup(Protocol[T]):
+    # Callable[[T, T], T] means a function that takes two arguments of type T
+    # And returns a value of type T
+    combine: Callable[[T, T], T]
+
+# Example: semigroup of natural numbers (or integers/reals) with addition
+# We represent a specific semigroup as a dictionary with the key 'combine'
+addition_semigroup: Semigroup[int] = {
+    "combine": lambda a, b: a + b
+}
+
+# Example: semigroup of numbers with multiplication
+multiplication_semigroup: Semigroup[int] = {
+    "combine": lambda a, b: a * b
+}
+
+# Example: semigroup of strings with concatenation
+concatenation_semigroup: Semigroup[str] = {
+    "combine": lambda a, b: a + b
+}
+</code></pre>
+
+<p dir="rtl">הפעולה על איברי החבורה למחצה חייבת בהכרח להיות בעלת תכונת האסוציאטיביות. בואו נבדוק זאת באמצעות פונקציית <span dir="ltr"><code>assert</code></span> המובנית:</p>
+
+<pre class="line-numbers"><code class="language-python">def check_associativity(semigroup: Semigroup[T], a: T, b: T, c: T) -> None:
+    # We check that (a * b) * c == a * (b * c)
+    # We use the combine operation from the passed semigroup
+    left_side = semigroup["combine"](semigroup["combine"](a, b), c)
+    right_side = semigroup["combine"](a, semigroup["combine"](b, c))
+    assert left_side == right_side, f"האסוציאטיביות נכשלה עבור {semigroup}: ({a}, {b}, {c})"
+
+check_associativity(addition_semigroup, 1, 2, 3)
+check_associativity(multiplication_semigroup, 2, 3, 4) # 1*2*3 = 6, (1*2)*3 = 6, 1*(2*3)=6
+check_associativity(concatenation_semigroup, 'a', 'b', 'c')
+</code></pre>
+
+<p dir="rtl">לחבורות למחצה אין תכונות מעניינות במיוחד. עם זאת, גם בדוגמה שלהן, אנו רואים את הנוחות של תורת החבורות - היכולת לעבוד עם קבוצות ופעולות עליהן באמצעות ממשק מופשט (במקרה שלנו, מילון עם פונקציית <span dir="ltr"><code>combine</code></span>).</p>
+
+<p dir="rtl">לדוגמה, אנו יכולים לכתוב פונקציית רדוקציה (קיפול) עבור רשימת ערכי חבורה למחצה באמצעות ערך התחלתי. זה כבר מרמז על המבנה הבא - מונואיד.</p>
+
+<pre class="line-numbers"><code class="language-python">from typing import List
+
+# This function is more similar to fold from the next section,
+# Because it requires an initial value. Pure reduction of a semigroup
+# Will require a non-empty list.
+def reduce_semigroup_with_initial(
+    values: List[T],
+    semigroup: Semigroup[T],
+    initial_value: T
+) -> T:
+    # We use functools.reduce to apply combine sequentially
+    return functools.reduce(semigroup["combine"], values, initial_value)
+
+# כעת אנו יכולים להשתמש בפונקציה זו כדי לצמצם רשימה:
+sum_val = reduce_semigroup_with_initial([1, 2, 3, 4], addition_semigroup, 0)
+assert sum_val == 10
+
+product_val = reduce_semigroup_with_initial([1, 2, 3, 4], multiplication_semigroup, 1)
+assert product_val == 24
+
+concat_val = reduce_semigroup_with_initial(['a', 'b', 'c'], concatenation_semigroup, '')
+assert concat_val == 'abc'
+
+</code></pre>
+<p dir="rtl">השימוש בפונקציית רדוקציה של חבורה למחצה מוביל אותנו בצורה חלקה למבנה הבא, המעניין הרבה יותר מתורת החבורות - המונואיד.</p>
+
+<h2 dir="rtl">תורת החבורות - מונואיד</h2>
+
+<p dir="rtl">מונואיד הוא חבורה למחצה עם איבר ניטרלי מוגדר (<span dir="ltr"><code>unit</code></span> או <span dir="ltr"><code>identity</code></span>).</p>
+
+<pre class="line-numbers"><code class="language-python"># We define a protocol for a monoid, inheriting from Semigroup
+class Monoid(Semigroup[T], Protocol[T]):
+    unit: T # Neutral element
+
+# Monoid of number addition (neutral element - 0)
+addition_monoid: Monoid[int] = {
+    "combine": lambda a, b: a + b,
+    "unit": 0
+}
+</code></pre>
+
+<p dir="rtl">איבר ניטרלי הוא איבר ששילובו עם כל איבר אחר אינו משנה אותו (<span dir="ltr"><code>a + 0 = a</code></span>, <span dir="ltr"><code>a * 1 = a</code></span>, <span dir="ltr"><code>s + "" = s</code></span>). עבור חיבור מספרים, האיבר הניטרלי הוא, כמובן, אפס.</p>
+
+<p dir="rtl">בואו נבדוק תכונה זו של מונואיד באמצעות <span dir="ltr"><code>assert</code></span>:</p>
+
+<pre class="line-numbers"><code class="language-python">def check_unit_combination(monoid: Monoid[T], value: T) -> None:
+    # We check that combine(value, unit) == value
+    # And combine(unit, value) == value (for completeness)
+    assert monoid["combine"](value, monoid["unit"]) == value
+    assert monoid["combine"](monoid["unit"], value) == value
+
+check_unit_combination(addition_monoid, 10)
+</code></pre>
+
+<p dir="rtl">האיבר הניטרלי של מונואיד כפל מספרים הוא אחד.</p>
+
+<pre class="line-numbers"><code class="language-python">multiplication_monoid: Monoid[int] = {
+    "combine": lambda a, b: a * b,
+    "unit": 1
+}
+
+check_unit_combination(multiplication_monoid, 25)
+</code></pre>
+
+<p dir="rtl">בהתאם לכך, האיבר הניטרלי של מונואיד שרשור מחרוזות הוא מחרוזת ריקה.</p>
+
+<pre class="line-numbers"><code class="language-python">concatenation_monoid: Monoid[str] = {
+    "combine": lambda a, b: a + b,
+    "unit": ""
+}
+
+check_unit_combination(concatenation_monoid, 'a')
+</code></pre>
+
+<p dir="rtl">וכעת אנו מגיעים לתכונה המעניינת ביותר של מונואידים - ניתן להשתמש בפעולת הקיפול (<span dir="ltr"><code>fold</code></span>) כדי לעבוד איתם. זוהי למעשה אותה <span dir="ltr"><code>reduce_semigroup_with_initial</code></span>, אך כעת הערך ההתחלתי נלקח ישירות מהמונואיד (<span dir="ltr"><code>unit</code></span>).</p>
+
+<pre class="line-numbers"><code class="language-python">def fold(monoid: Monoid[T], values: List[T]) -> T:
+    # We use functools.reduce, starting from the neutral element monoid['unit']
+    return functools.reduce(monoid["combine"], values, monoid["unit"])
+
+# עם fold, נפתחות בפנינו יכולות קסומות לחלוטין:
+sum_folded = fold(addition_monoid, [1, 2, 3, 4])
+assert sum_folded == 10
+
+product_folded = fold(multiplication_monoid, [1, 2, 3, 4])
+assert product_folded == 24
+
+concatenated_folded = fold(concatenation_monoid, ['a', 'b', 'c', 'd'])
+assert concatenated_folded == 'abcd'
+</code></pre>
+
+<p dir="rtl">אנו יכולים גם להגדיר מונואידים עבור פעולות השוואת מספרים. עבור <span dir="ltr"><code>min</code></span>, האיבר הניטרלי יהיה אינסוף, ועבור <span dir="ltr"><code>max</code></span> - מינוס אינסוף.</p>
+
+<pre class="line-numbers"><code class="language-python">import math # for float('inf')
+min_monoid: Monoid[float] = { # We use float for infinity
+    "combine": lambda a, b: min(a, b),
+    "unit": float('inf')
+}
+max_monoid: Monoid[float] = {
+    "combine": lambda a, b: max(a, b),
+    "unit": float('-inf')
+}
+min_fold_result = fold(min_monoid, [1, 9, 6, 4])
+assert min_fold_result == 1
+max_fold_result = fold(max_monoid, [1, 9, 6, 4])
+assert max_fold_result == 9
+</code></pre>
+
+<p dir="rtl">ויותר מכך, אנו יכולים להגדיר, לדוגמה, מונואיד של פונקציות. לדוגמה, מונואיד של פונקציות אונריות (המקבלות ארגומנט אחד) על מספרים, כאשר פעולת <span dir="ltr"><code>combine</code></span> תהיה הרכבת פונקציות, והאיבר הניטרלי (<span dir="ltr"><code>unit</code></span>) יהיה פונקציית הזהות (<span dir="ltr"><code>lambda x: x</code></span>).</p>
+
+<pre class="line-numbers"><code class="language-python"># Type for unary function from int to int
+IntUnaryFunc = Callable[[int], int]
+
+# Monoid for function composition (int -> int)
+# Important: the order of composition is f(g(x))
+function_monoid: Monoid[IntUnaryFunc] = {
+    "combine": lambda f, g: lambda x: f(g(x)), # f after g
+    "unit": lambda x: x # Identity function
+}
+
+add_one: IntUnaryFunc = lambda x: x + 1
+double: IntUnaryFunc = lambda x: x * 2
+
+# Folding a list of functions: [add_one, double]
+# unit will be applied first, then double, then add_one.
+# fold(monoid, [f, g]) is equivalent to combine(combine(unit, f), g) = combine(f, g)
+# combine(f, g) = lambda x: f(g(x))
+function_fold_result_func = fold(function_monoid, [add_one, double])
+
+# Apply the result to the number 1: add_one(double(1)) = add_one(2) = 3
+assert function_fold_result_func(1) == 3
+
+# If the order of functions is important and g(f(x)) is needed, combine should be changed:
+# "combine": lambda f, g: lambda x: g(f(x))
+</code></pre>
+
+<p dir="rtl">בדוגמת המונואיד, אנו רואים שתורת החבורות מאפשרת לנו לעבוד עם קבוצות ופעולות רבות ושונות עליהן באותה צורה.</p>
+
+<p dir="rtl">זוכרים, בבית הספר אמרו לנו שכל מספר בחזקת אפס שווה לאחד, אבל אף פעם לא הסבירו למה?</p>
+
+<p dir="rtl">תכונה זו מתבהרת במבט ראשון על מונואיד הכפל. העלאה בחזקה היא יישום חוזר ונשנה של פעולת <span dir="ltr"><code>combine</code></span> של מונואיד הכפל. לדוגמה, <span dir="ltr"><code>2^3</code></span> הוא <span dir="ltr"><code>combine(combine(unit, 2), 2), 2)</code></span> או, מה שזהה, <span dir="ltr"><code>combine(combine(2, 2), 2)</code></span>.</p>
+
+<pre class="line-numbers"><code class="language-python"># 2^3 using the multiplication monoid
+power_3 = multiplication_monoid["combine"](
+    multiplication_monoid["combine"](2, 2), # 2*2
+    2                                       # (2*2)*2
+)
+assert power_3 == 8
+</code></pre>
+
+<p dir="rtl">אבל מהי חזקת אפס? זוהי יישום פעולת <span dir="ltr"><code>combine</code></span> אפס פעמים על האיבר ההתחלתי. איזו תוצאה עלינו לקבל? אם איננו מיישמים <span dir="ltr"><code>combine</code></span> כלל, נשאר לנו רק האיבר הניטרלי <span dir="ltr"><code>unit</code></span>, שבמקרה של מונואיד הכפל שווה לאחד. לכן <span dir="ltr"><code>x^0 = 1</code></span>.</p>
+
+<h2 dir="rtl">תורת החבורות - חבורה</h2>
+
+<p dir="rtl">חבורה היא מונואיד, שעבור כל איבר בו מוגדר איבר הופכי מאותה קבוצה, כך ששילוב האיבר עם ההופכי שלו נותן את האיבר הניטרלי.</p>
+
+<pre class="line-numbers"><code class="language-python"># We define a protocol for a group, inheriting from Monoid
+class Group(Monoid[T], Protocol[T]):
+    inverse: Callable[[T], T] # Function to get the inverse element
+
+# A classic example of a group is the set of integers with the addition operation
+addition_group: Group[int] = {
+    "combine": lambda a, b: a + b,
+    "unit": 0,
+    "inverse": lambda a: -a # The inverse element for addition is the negative
+}
+</code></pre>
+
+<p dir="rtl">התכונה העיקרית של חבורה היא ששילוב איבר עם האיבר ההופכי שלו תמיד מניב את האיבר הניטרלי של החבורה:</p>
+
+<pre class="line-numbers"><code class="language-python">def check_inversion_combination(group: Group[T], value: T) -> None:
+    # We check that combine(value, inverse(value)) == unit
+    # And combine(inverse(value), value) == unit
+    assert group["combine"](value, group["inverse"](value)) == group["unit"]
+    assert group["combine"](group["inverse"](value), value) == group["unit"]
+
+check_inversion_combination(addition_group, 5) # 5 + (-5) == 0
+</code></pre>
+
+<p dir="rtl">ניתן לומר שחבורה היא מבנה מתמטי המופשט את מושג הסימטריה. באמצעות מבנה זה חוקרים פיזיקאים את תכונות המרחב, הזמן, האנרגיה והחלקיקים האלמנטריים - בבסיס המנגנון המתמטי של תורת היחסות ומכניקת הקוונטים נמצאת תורת החבורות. בעזרתה, בשנת <span dir="ltr">1918</span>, הוכיחה אמי נתר את משפטיה המפורסמים לפיהם כל חוק שימור, בין אם זה חוק שימור אנרגיה, תנע או מטען, נובע מסימטריות פיזיקליות יסודיות.</p>
+
+<p dir="rtl">בנוסף, מונואידים וחבורות מיושמים לעיתים קרובות בתכנות פונקציונלי. אם תלמד מעט מתורת החבורות, תראה שבעיות ומבנים רבים בתכנות הם מקרים פרטיים של מבנה מתמטי מופשט יותר. הדוגמה הפשוטה ביותר לחבורה בתכנות היא מערכת <span dir="ltr">Undo-Redo</span>, המיושמת ביישומים רבים (הפעולה היא פעולת המשתמש, הפעולה ההופכית היא ביטול הפעולה, האיבר הניטרלי הוא היעדר שינויים).</p>
+
+<h2 dir="rtl">מונדולוגיה</h2>
+
+<p dir="rtl">יופי הסימטריות ריתק אנשים מאז ימי קדם. בבית הספר שהוקם על ידי הפילוסוף והגיאומטריקן היווני הקדום האגדי פיתגורס, תלמידיו סגדו למונאדה, המתוארת כעיגול עם נקודה עבה במרכזו:</p>
+
+<p dir="rtl">*(תמונה של מונאדת פיתגורס)*</p>
+
+<p dir="rtl">המשמעות המיסטית של המונאדה טמונה בנקודת המרכז שלה - נקודה זו מגלמת את ה&quot;כלום&quot; שממנו נוצר היקום. לפי הפיתגוראים, אין הגבלות על הופעת כל הדברים האפשריים מכלום, אך במקביל לדברים אלה, מופיעים גם ההפכים שלהם. על ידי פרישת נקודה אפס-ממדית למספר אינסופי של הפכים, אנו מקבלים מעגל - צורה שעליה נמצא מספר אינסופי של נקודות, שעבור כל אחת מהן, ביחס למרכז המעגל, קיימת נקודה הפוכה. באופן כללי, תיאור זה מתיישב לחלוטין עם מושג החבורה מתורת החבורות.</p>
+
+<p dir="rtl">במגנום אופוס הפילוסופי שלו בשם &quot;מונדולוגיה&quot;, הפילוסוף והמתמטיקאי הגרמני הגדול גוטפריד וילהלם לייבניץ הציג את השקפת עולמו, לפיה כל המציאות שלנו מורכבת ממספר אינסופי של מונאדות כפולות כאלה. לכבוד מושג המונאדה הפיתגוראי-לייבניציאני הזה, נקרא המבנה העיקרי מתורה מתמטית אחרת - תורת הקטגוריות.</p>
+
+<p dir="rtl">אם תורת החבורות מופשטת פעולות אלגבריות וגיאומטריות אינטואיטיביות בסיסיות למבנים כלליים, אז תורת הקטגוריות היא, כביכול, הצעד הבא בסולם ההפשטות - הפשטה של הפשטות. תורת הקטגוריות חוקרת מבנים מתמטיים שונים - חבורות, גרפים, קבוצות - כקטגוריות מופשטות עם אובייקטים (איברים) ומורפיזמים (פעולות) ביניהם. מורפיזמים מתוארים בדרך כלל כחצים ונקראים &quot;חצים&quot;. הד של שם זה הן פונקציות למבדה (<span dir="ltr"><code>lambda</code></span>) או פונקציות רגילות (<span dir="ltr"><code>def</code></span>) בתכנות, שאתה כנראה מכיר, הממירות ערכים מסוימים לאחרים.</p>
+
+<p dir="rtl">בואו נבחן את מושגי היסוד של תורת הקטגוריות.</p>
+
+<h2 dir="rtl">תורת הקטגוריות - חץ</h2>
+
+<p dir="rtl">חץ (או מורפיזם) בתורת הקטגוריות נקרא מיפוי (פונקציה) בין שתי קטגוריות (קבוצות של אובייקטים) - התאמה של כל אובייקט מהקטגוריה הראשונה לאובייקט כלשהו מהקטגוריה השנייה. ניקח לדוגמה שתי קטגוריות פשוטות ביותר - מספרים שלמים לא שליליים ומחרוזות מהאות &quot;a&quot;.</p>
+
+<pre>
+0 -> ""
+1 -> "a"
+2 -> "aa"
+3 -> "aaa"
+4 -> "aaaa"
+...
+</pre>
+
+<p dir="rtl">כאן נראה בבירור שכל איבר מקטגוריית המספרים ממופה לאיבר מקטגוריית המחרוזות המורכבות מהאות <span dir="ltr">'a'</span>. כל מיפוי כזה יכול להיות מתואר באמצעות פונקציה. במקרה זה, זה:</p>
+
+<pre class="line-numbers"><code class="language-python">def map_number_to_a_string(num: int) -> str:
+    # We will ensure that the number is non-negative for return
+    if num < 0:
+        raise ValueError("מספר הקלט חייב להיות לא שלילי")
+    return "a" * num # In Python, a string repeats itself by multiplication
+
+assert map_number_to_a_string(3) == "aaa"
+</code></pre>
+
+<p dir="rtl">אין הכרח שאיבר מהקטגוריה הראשונה יתאים לאיבר ייחודי מהשנייה. לדוגמה, עבור החץ הבא מקטגוריית המספרים לקטגוריית האמת (ערכים בוליאניים), בקטגוריה השנייה יש רק שני איברים (<span dir="ltr"><code>True</code></span> ו-<span dir="ltr"><code>False</code></span>), אך כל איבר מהראשונה ממופה לאחד מהאיברים מהשנייה:</p>
+
+<pre>
+0 -> False
+1 -> False
+2 -> False
+3 -> True
+4 -> True
+...
+n -> True (עבור n >= 3)
+</pre>
+
+<p dir="rtl">הפונקציה (חץ) במקרה זה יכולה להיות מתוארת כ:</p>
+
+<pre class="line-numbers"><code class="language-python">def map_number_to_boolean(number: int) -> bool:
+    return number >= 3
+
+assert map_number_to_boolean(2) == False
+assert map_number_to_boolean(5) == True
+</code></pre>
+
+<h2 dir="rtl">תורת הקטגוריות - פונקטור ואנדופונקטור</h2>
+
+<p dir="rtl">אנו יכולים לעטוף אובייקטים מכל קטגוריה במעין מכלים מופשטים. אם יש לנו קטגוריות (טיפוסים) <span dir="ltr">A</span> ו-<span dir="ltr">B</span>, ויש לנו מכל <span dir="ltr">F</span> כלשהו (לדוגמה, <span dir="ltr"><code>list</code></span>, <span dir="ltr"><code>Optional</code></span>, <span dir="ltr"><code>Future</code></span>), שיכול להכיל בתוכו אובייקט אחד או יותר מקטגוריות <span dir="ltr">A</span> או <span dir="ltr">B</span>, אז אנו מקבלים שתי קטגוריות חדשות (טיפוסים) <span dir="ltr">F(A)</span> ו-<span dir="ltr">F(B)</span> (לדוגמה, <span dir="ltr"><code>list[A]</code></span> ו-<span dir="ltr"><code>list[B]</code></span>).</p>
+
+<p dir="rtl">לדוגמה, אם יש לנו קטגוריית מספרים (<span dir="ltr"><code>int</code></span>) וקטגוריית מחרוזות (<span dir="ltr"><code>str</code></span>), ויש לנו מכל <span dir="ltr"><code>list</code></span>, אז אנו מקבלים שתי קטגוריות חדשות - רשימת מספרים (<span dir="ltr"><code>list[int]</code></span>) ורשימת מחרוזות (<span dir="ltr"><code>list[str]</code></span>). בפייתון, קשרים אלה משתקפים במערכת הטיפוסים:</p>
+
+<pre class="line-numbers"><code class="language-python">number: int = 1
+string_value: str = 'a'
+
+numbers: list[int] = [1, 2, 3]
+strings: list[str] = ['a', 'b', 'c']
+</code></pre>
+
+<p dir="rtl">בתורת הקטגוריות מתוארים מיפויים בין קטגוריות של אובייקטים וקטגוריות של מכלים, אשר שומרים על המבנה במהלך הטרנספורמציה. מיפויים כאלה נקראים פונקטורים. המיפוי עצמו נקרא <span dir="ltr"><code>map</code></span> (או <span dir="ltr"><code>fmap</code></span>).</p>
+
+<p dir="rtl">קיימים מספר סוגים שונים של פונקטורים. הנפוץ ביותר מביניהם הוא האנדופונקטור, שבו הטרנספורמציה מתרחשת בתוך אותה קטגוריית מכל <span dir="ltr">F(A) -&gt; F(B)</span> (לדוגמה, <span dir="ltr"><code>list[A] -&gt; list[B]</code></span>).</p>
+
+<pre class="line-numbers"><code class="language-python"># General type for variables A and B
+A = TypeVar('A')
+B = TypeVar('B')
+
+# Protocol for Functor
+class Functor(Protocol[A]):
+    # The map method takes a function (arrow) from A to B
+    # And returns a new functor with elements of type B.
+    # Important: it returns an instance of the same functor type (e.g., list).
+    def map(self, func: Callable[[A], B]) -> 'Functor[B]':
+        ...
+
+# A classic example of an endofunctor in Python is a list.
+# Although list does not have a .map method by default, we can easily implement it
+# Or use list comprehensions (which is more idiomatic).
+
+# Example of using list comprehension as an analogy to map:
+map_number_to_boolean_func = lambda number: number >= 3
+numbers_list: list[int] = [1, 2, 3, 4]
+
+# Apply the function to each element in the list, get a new list
+booleans_list: list[bool] = [map_number_to_boolean_func(n) for n in numbers_list]
+assert booleans_list == [False, False, True, True]
+
+# You can also use the built-in map function, which returns an iterator:
+booleans_iterator = map(map_number_to_boolean_func, numbers_list)
+assert list(booleans_iterator) == [False, False, True, True]
+</code></pre>
+
+<p dir="rtl">לפיכך, אם יש לנו חץ (פונקציה) <span dir="ltr"><code>A -&gt; B</code></span>, אז באמצעות פונקטור (לדוגמה, <span dir="ltr"><code>list</code></span> ופעולות ה-<span dir="ltr"><code>map</code></span>/<span dir="ltr">list comprehension</code></span> שלו), אנו יכולים לבנות חץ <span dir="ltr"><code>F[A] -&gt; F[B]</code></span>.</p>
+
+<p dir="rtl">עבור פונקטורים חייבים להתקיים מספר חוקים.</p>
+
+<p dir="rtl">החוק הראשון - חוק הזהות: <span dir="ltr"><code>functor.map(id) == functor</code></span> (החלת פונקציית הזהות לא אמורה לשנות את הפונקטור).</p>
+
+<pre class="line-numbers"><code class="language-python">def id_func(x: T) -> T:
+    return x
+
+# Check for list:
+numbers_list = [1, 2, 3]
+assert [id_func(x) for x in numbers_list] == numbers_list
+</code></pre>
+
+<p dir="rtl">החוק השני - חוק ההרכבה: <span dir="ltr"><code>functor.map(g o f) == functor.map(f).map(g)</code></span> (כאשר <span dir="ltr"><code>g o f</code></span> היא הרכבת פונקציות, <span dir="ltr"><code>lambda x: g(f(x))</code></span>). מיפוי הרכבת פונקציות שווה ערך למיפוי רציף של פונקציות אלה.</p>
+
+<pre class="line-numbers"><code class="language-python">f: Callable[[int], str] = lambda x: str(x) # int -> str
+g: Callable[[str], bool] = lambda x: len(x) > 1 # str -> bool
+compose_gf: Callable[[int], bool] = lambda x: g(f(x)) # int -> bool
+
+numbers_list = [5, 10, 15]
+
+# Left side: map(g o f)
+left_side = [compose_gf(x) for x in numbers_list] # [False, True, True]
+
+# Right side: map(f) and then map(g)
+intermediate = [f(x) for x in numbers_list] # ['5', '10', '15']
+right_side = [g(y) for y in intermediate] # [False, True, True]
+
+assert left_side == right_side
+</code></pre>
+
+<h2 dir="rtl">תורת הקטגוריות - מונאדה</h2>
+
+<p dir="rtl">מונאדה מרחיבה את יכולות הפונקטור, על ידי הוספת פעולת <span dir="ltr"><code>flatMap</code></span> (המכונה לעיתים <span dir="ltr"><code>bind</code></span> או <span dir="ltr"><code>&gt;&gt;=</code></span>) ודרך &quot;לעטוף&quot; ערך רגיל בהקשר מונאדי (המכונה לעיתים קרובות <span dir="ltr"><code>unit</code></span>, <span dir="ltr"><code>return</code></span> או <span dir="ltr"><code>pure</code></span>, בפייתון עבור רשימות זה יכול להיות פשוט <span dir="ltr"><code>lambda x: [x]</code></span>).</p>
+
+<pre class="line-numbers"><code class="language-python"># Protocol for Monad (inherits from Functor)
+# Important: This is a simple representation. Correct typing of monads in Python is complex.
+class Monad(Functor[A], Protocol[A]):
+    # flatMap takes a function that itself returns a monad
+    def flatMap(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
+        ...
+
+    # Static or class method for "wrapping" a value
+    @classmethod
+    def unit(cls, value: A) -> 'Monad[A]':
+         ...
+
+# Again, we use a list as an example of a monad in Python.
+# Although list does not have flatMap/unit methods, we can simulate them.
+
+# 'unit' for list: wrap value in a list
+list_unit = lambda x: [x]
+
+# 'flatMap' for list: apply function to each element,
+# And then flatten the result (combine lists).
+# This is easily done using list comprehension with two for loops.
+def list_flat_map(data: list[A], func: Callable[[A], list[B]]) -> list[B]:
+    # For each x in data, apply func(x), which will return a list.
+    # Then for each y in this inner list, add y to the result.
+    return [y for x in data for y in func(x)]
+
+# Example usage
+numbers = [1, 2, 3]
+# Function that for a number n returns a list [n, n+1]
+func_n_nplus1 = lambda number: [number, number + 1]
+
+flat_mapped_numbers = list_flat_map(numbers, func_n_nplus1)
+# Expected result:
+# For 1 -> [1, 2]
+# For 2 -> [2, 3]
+# For 3 -> [3, 4]
+# Combination: [1, 2, 2, 3, 3, 4]
+assert flat_mapped_numbers == [1, 2, 2, 3, 3, 4]
+</code></pre>
+
+<p dir="rtl">דוגמאות ידועות נוספות למונאדות (או מבנים דמויי מונאדה) בפייתון יכולות להיות:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>asyncio.Future</code></span> (או <span dir="ltr"><code>awaitables</code></span> באופן כללי) עבור פעולות אסינכרוניות (כאשר <span dir="ltr"><code>await</code></span> דומה ל-<span dir="ltr"><code>flatMap</code></span>).</p></li>
+<li><p dir="rtl">טיפוס <span dir="ltr"><code>Optional</code></span> (הממומש לעיתים קרובות כ-<span dir="ltr"><code>Union[T, None]</code></span>, אם כי עבור מונאדה נכונה נדרש מבנה <span dir="ltr"><code>Maybe</code></span> או <span dir="ltr"><code>Option</code></span> מחמיר יותר) לעבודה עם ערכים שעשויים להיות חסרים.</p></li>
+<li><p dir="rtl">מונאדות שונות מספריות תכנות פונקציונליות עבור פייתון (לדוגמה, <span dir="ltr"><code>pymonad</code></span>, <span dir="ltr"><code>returns</code></span>).</p></li>
+</ul>
+
+<p dir="rtl">בעיקרו של דבר, מונאדה היא פשוט הפשטה של חישובים כשלעצמם, המאפשרת לבנות צינורות עיבוד נתונים, לנהל תופעות לוואי, לטפל בשגיאות או באסינכרוניות באופן אחיד.</p>
+
+<p dir="rtl">*(תמונה/תרשים של מונאדה)*</p>
+
+<p dir="rtl">עבור מונאדות, חייבים להתקיים מספר חוקים מונאדיים מיוחדים (זהות שמאלית וימנית, אסוציאטיביות של <span dir="ltr"><code>flatMap</code></span>), אשר, עם זאת, לא אציג כאן, מכיוון שהגיע הזמן לסיים פוסט ארוך זה. אני רק רוצה לציין שהיתרון החשוב ביותר של מונאדות הוא שהן מאפשרות לסדר את ביצוע החישובים המבודדים. דוגמה לסדר כזה בפייתון היא השימוש ב-<span dir="ltr"><code>await</code></span> לביצוע רציף של פעולות אסינכרוניות (<span dir="ltr"><code>asyncio.Future</code></span>), הדומה מבחינה רעיונית להרכבה מונאדית.</p>
+
+<h2 dir="rtl">מסקנה</h2>
+
+<p dir="rtl">לסיכום, ברצוני לומר שתורת החבורות ותורת הקטגוריות נמצאות בבסיס כל המתמטיקה, מדעי המחשב והפיזיקה הידועים לאדם. זוהי פשוט שפת היקום - המבטאת ביותר והיפה ביותר מבחינה פואטית. הייתי לומד אותה רק בגלל שאלוהים דיבר בה!</p>

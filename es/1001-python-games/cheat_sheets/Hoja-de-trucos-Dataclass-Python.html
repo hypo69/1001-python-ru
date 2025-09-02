@@ -1,0 +1,299 @@
+**¿Qué es `dataclass`?**
+
+`dataclass` es un decorador introducido en Python 3.7 que genera automáticamente métodos especiales (como `__init__`, `__repr__`, `__eq__` y otros) para clases que principalmente sirven como contenedores de datos. Esto le evita tener que escribir mucho código repetitivo.
+
+**¿Por qué usar `dataclass`?**
+
+<ol>
+<li><strong>Reducción de código:</strong> En lugar de definir manualmente los métodos `__init__`, `__repr__`, `__eq__`, etc., simplemente declara los campos de datos, y `dataclass` hace el resto.</li>
+<li><strong>Mejora de la legibilidad:</strong> Las clases se vuelven más concisas y comprensibles, ya que se centran en los datos en lugar de la implementación técnica.</li>
+<li><strong>Reducción de errores:</strong> El código generado automáticamente suele ser más fiable que el código escrito manualmente.</li>
+<li><strong>Desarrollo acelerado:</strong> Puede crear clases de datos más rápido sin perder tiempo en tareas rutinarias.</li>
+</ol>
+<p><strong>¿Cómo usar `dataclass`?</strong></p>
+<p>Primero, debe importar el decorador `dataclass` del módulo `dataclasses`:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+</code></pre>
+<p>Luego, marca la clase con el decorador `@dataclass` y define los campos de datos como variables de clase regulares con anotaciones de tipo:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+</code></pre>
+<p>En este ejemplo, <code>Point</code> es una <code>dataclass</code> que tiene dos campos: <code>x</code> e <code>y</code>, ambos de tipo entero. <code>dataclass</code> creará automáticamente:
+    * Un constructor <code>__init__</code>, que le permite crear instancias de clase, por ejemplo <code>Point(1, 2)</code>.
+    *  <code>__repr__</code>, que devuelve una representación de cadena del objeto, por ejemplo <code>Point(x=1, y=2)</code>.
+    * <code>__eq__</code>, que le permite comparar objetos, por ejemplo <code>Point(1, 2) == Point(1, 2)</code>.</p>
+<p><strong>Ejemplo de uso simple</strong></p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+# Creating a class instance
+point1 = Point(1, 2)
+point2 = Point(1, 2)
+point3 = Point(3, 4)
+
+# Output
+print(point1) # Output: Point(x=1, y=2)
+print(point1 == point2) # Output: True
+print(point1 == point3) # Output: False
+</code></pre>
+<p><strong>Opciones de `dataclass`</strong></p>
+<p><code>dataclass</code> proporciona varios parámetros para personalizar el comportamiento:</p>
+<ul>
+<li><code>init</code>: Si <code>True</code> (predeterminado), se genera el método <code>__init__</code>. Si <code>False</code>, el método <code>__init__</code> no se crea.</li>
+<li><code>repr</code>: Si <code>True</code> (predeterminado), se genera el método <code>__repr__</code>. Si <code>False</code>, el método <code>__repr__</code> no se crea.</li>
+<li><code>eq</code>: Si <code>True</code> (predeterminado), se genera el método <code>__eq__</code>. Si <code>False</code>, el método <code>__eq__</code> no se crea.</li>
+<li><code>order</code>: Si <code>True</code>, se generan los métodos de comparación (<code>__lt__</code>, <code>__le__</code>, <code>__gt__</code>, <code>__ge__</code>). El valor predeterminado es <code>False</code>.</li>
+<li><code>unsafe_hash</code>: Si <code>False</code> (predeterminado), el método <code>__hash__</code> no se genera. Si <code>True</code>, la <code>dataclass</code> se volverá hasheable.</li>
+<li><code>frozen</code>: Si <code>True</code>, las instancias de clase serán inmutables (solo lectura). El valor predeterminado es <code>False</code>.</li>
+</ul>
+<p><strong>Ejemplos de uso de parámetros</strong>
+1. Deshabilitar el método <code>__repr__</code> y hacer la clase inmutable</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass(repr=False, frozen=True)
+class Point:
+    x: int
+    y: int
+
+# Creating a class instance
+point1 = Point(1, 2)
+# Output
+print(point1) # Output: <__main__.Point object at 0x000001D8322F6770> (since __repr__ is not defined)
+
+# Modifying an instance will raise an error
+try:
+    point1.x = 10
+except Exception as e:
+    print (e) # Output: cannot assign to field 'x'
+</code></pre>
+<p>2. Establecer el orden, agregar el método hash y hacer la clase inmutable</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass(order=True, unsafe_hash=True, frozen=True)
+class Point:
+    x: int
+    y: int
+
+# Creating a class instance
+point1 = Point(1, 2)
+point2 = Point(3, 4)
+point3 = Point(1, 2)
+# Output
+print(point1 < point2) # Output: True
+print(point1 == point3) # Output: True
+
+# Now you can use the class as a dictionary key
+my_dict = {point1: "first", point2: "second"}
+print(my_dict) # Output: {Point(x=1, y=2): 'first', Point(x=3, y=4): 'second'}
+</code></pre>
+<p><strong>Valores predeterminados</strong></p>
+<p>Puede establecer valores predeterminados para los campos:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int = 0
+    y: int = 0
+
+# Creating a class instance
+point1 = Point()
+point2 = Point(1, 2)
+
+# Output
+print(point1) # Output: Point(x=0, y=0)
+print(point2) # Output: Point(x=1, y=2)
+</code></pre>
+<p>Al crear una instancia de clase, si no se pasan valores, se utilizará el valor predeterminado.</p>
+<p><strong>Uso de `dataclass` con tipos mutables</strong></p>
+<p>Tenga cuidado al usar tipos de datos mutables (listas, diccionarios) como valores predeterminados. Se crearán solo una vez y serán utilizados por todas las instancias de clase:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+from typing import List
+
+@dataclass
+class BadExample:
+    items: List[int] = []
+
+bad1 = BadExample()
+bad2 = BadExample()
+
+bad1.items.append(1)
+print (bad1.items) # Output: [1]
+print (bad2.items) # Output: [1] 
+</code></pre>
+<p>En el ejemplo anterior, los cambios en <code>bad1.items</code> también se reflejan en <code>bad2.items</code>. Esto sucede porque ambas instancias de clase usan la misma lista predeterminada.</p>
+<p>Para evitar esto, use <code>dataclasses.field</code> y <code>default_factory</code>:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class GoodExample:
+    items: List[int] = field(default_factory=list)
+
+good1 = GoodExample()
+good2 = GoodExample()
+
+good1.items.append(1)
+print (good1.items) # Output: [1]
+print (good2.items) # Output: []
+</code></pre>
+<p>En este caso, <code>default_factory=list</code> creará una nueva lista vacía para cada nueva instancia de clase.</p>
+<p><strong>Diagrama</strong></p>
+<p>Aquí hay un diagrama que muestra los conceptos principales de <code>dataclass</code>:</p>
+<pre class="line-numbers"><code class="language-mermaid">
+classDiagram
+    class DataClass {
+        <<decorator>>
+        +init: bool = True
+        +repr: bool = True
+        +eq: bool = True
+        +order: bool = False
+        +unsafe_hash: bool = False
+        +frozen: bool = False
+        --
+        +__init__(...)
+        +__repr__()
+        +__eq__(...)
+        +__lt__(...)
+        +__le__(...)
+        +__gt__(...)
+        +__ge__(...)
+        +__hash__()
+    }
+    class UserDefinedClass {
+        <<class>>
+        +field1: type
+        +field2: type
+        +field3: type = defaultValue
+        +field4: type = field(default_factory=...)
+    }
+    DataClass <|-- UserDefinedClass
+</code></pre>
+<p>En este diagrama:
+*   <code>DataClass</code> representa el decorador `@dataclass` y sus parámetros.
+*   <code>UserDefinedClass</code> es la clase que declara usando el decorador `@dataclass`.
+*   La flecha de <code>DataClass</code> a <code>UserDefinedClass</code> muestra que <code>DataClass</code> se aplica a <code>UserDefinedClass</code>.</p>
+<h2><code>dict()</code>, <code>__dir__()</code> y otras características de <code>dataclass</code>.</h2>
+<ul>
+<li><code>dict()</code> no funciona directamente con instancias de <code>dataclass</code>. Para convertir a un diccionario, debe usar métodos manuales o bibliotecas de terceros.</li>
+<li><code>__dir__()</code> devuelve una lista de todos los atributos y métodos del objeto, incluidos los métodos y campos generados por <code>dataclass</code>.</li>
+<li><code>__dataclass_fields__</code> y <code>__dataclass_params__</code> proporcionan metadatos sobre los campos y parámetros de <code>dataclass</code>.</li>
+</ul>
+<p><strong>1. <code>dict()</code> en el contexto de <code>dataclass</code></strong></p>
+<ul>
+<li><strong>Sin soporte automático:</strong> La función incorporada <code>dict()</code> no funciona directamente con instancias de <code>dataclass</code>, como con los diccionarios normales. Si intenta llamar a <code>dict(instance_of_dataclass)</code>, obtendrá un <code>TypeError: cannot convert dictionary update sequence element #0 to a sequence</code>.</li>
+<li><strong>Conversión a un diccionario:</strong> Para convertir una instancia de <code>dataclass</code> a un diccionario, debe hacerlo manualmente o usar una biblioteca de terceros. Así es como puede hacerlo manualmente:
+<pre class="line-numbers"><code class="language-python">
+     from dataclasses import dataclass
+     
+     @dataclass
+     class Person:
+         name: str
+         age: int
+     
+     person = Person("Alice", 30)
+     
+     # Manual conversion to dictionary
+     person_dict = {field.name: getattr(person, field.name) for field in dataclasses.fields(Person)}
+     print(person_dict)  # Output: {'name': 'Alice', 'age': 30}
+
+     #Alternative option:
+     person_dict = person.__dict__
+     print(person_dict) #Output: {'name': 'Alice', 'age': 30}
+</code></pre>
+</li>
+<li><strong>¿Por qué?</strong> <code>dataclass</code> está diseñado principalmente para representar datos como clases. Aunque los datos se almacenan como atributos de objeto, <code>dataclass</code> no los hace automáticamente accesibles como un diccionario.</li>
+</ul>
+<p><strong>2. <code>__dir__()</code> en <code>dataclass</code></strong></p>
+<ul>
+<li><strong>Devuelve atributos:</strong> El método <code>__dir__()</code> devuelve una lista de cadenas que representan los nombres de los atributos y métodos del objeto. Para <code>dataclass</code>, <code>__dir__()</code> incluirá:
+<ul>
+<li>Todos los campos de datos definidos.</li>
+<li>Métodos generados automáticamente (<code>__init__</code>, <code>__repr__</code>, <code>__eq__</code>, etc., según la configuración).</li>
+<li>Cualquier otro método agregado manualmente.</li>
+</ul>
+</li>
+<li><strong>Ejemplo:</strong>
+<pre class="line-numbers"><code class="language-python">
+      from dataclasses import dataclass
+      
+      @dataclass
+      class Point:
+          x: int
+          y: int
+          
+          def distance(self):
+                return (self.x**2 + self.y**2)**0.5
+      
+      point = Point(1, 2)
+      print(dir(point))
+      #Output:
+      #['__class__', '__dataclass_fields__', '__dataclass_params__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'distance', 'x', 'y']
+
+</code></pre>
+</li>
+<li><strong>Utilidad:</strong> <code>__dir__()</code> puede ser útil para la introspección: ver los atributos y métodos disponibles de una instancia de <code>dataclass</code>.</li>
+</ul>
+<p><strong>3. Otras características de <code>dataclass</code></strong></p>
+<ul>
+<li><strong><code>__dataclass_fields__</code>:</strong>
+<ul>
+<li>Este es un atributo de clase que contiene un diccionario donde las claves son los nombres de los campos de <code>dataclass</code>, y los valores son objetos <code>dataclasses.Field</code>.</li>
+<li>Este atributo le permite obtener metadatos sobre los campos de <code>dataclass</code> (por ejemplo, tipo, valor predeterminado, etc.).</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">
+     from dataclasses import dataclass, fields
+     
+     @dataclass
+     class Point:
+          x: int = 0
+          y: int = 0
+     
+     print(Point.__dataclass_fields__)
+     #Output:
+     #{'x': Field(name='x',type=<class 'int'>,default=0,default_factory=MISSING,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False), 'y': Field(name='y',type=<class 'int'>,default=0,default_factory=MISSING,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False)}
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+     # Use fields() for the same result
+     for field in fields(Point):
+         print(field.name, field.type, field.default)
+     #Output:
+     #x <class 'int'> 0
+     #y <class 'int'> 0
+</code></pre>
+</li>
+<li><strong><code>__dataclass_params__</code>:</strong>
+<ul>
+<li>Este es un atributo de clase que almacena información sobre los parámetros de <code>dataclass</code> (por ejemplo, <code>init</code>, <code>repr</code>, <code>eq</code>, <code>order</code>, etc.).</li>
+<li>Esto le permite acceder a la configuración con la que se creó la <code>dataclass</code>.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">
+      from dataclasses import dataclass
+      
+      @dataclass(order = True, frozen = True)
+      class Point:
+        x: int
+        y: int
+      print(Point.__dataclass_params__)
+      #Output:
+      #dataclass_params(init=True,repr=True,eq=True,order=True,unsafe_hash=False,frozen=True)
+</code></pre>
+</li>
+<li><strong>Uso con herencia:</strong> Puede crear <code>dataclass</code> heredando de otras <code>dataclass</code>.</li>
+<li><strong>Uso con <code>typing.NamedTuple</code>:</strong> <code>dataclass</code> es una alternativa más flexible a <code>typing.NamedTuple</code>, ya que permite establecer valores predeterminados, agregar métodos personalizados y hacer que la clase sea mutable o inmutable.</li>
+</ul>

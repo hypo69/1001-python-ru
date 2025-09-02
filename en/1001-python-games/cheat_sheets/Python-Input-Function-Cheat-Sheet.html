@@ -1,0 +1,53 @@
+<h1>The <code>input()</code> function</h1>
+<p>The <code>input()</code> function in Python is used to get data from the user via text input. It pauses program execution until the user enters data and presses Enter. After that, it returns the entered value as a string.</p>
+<h3>Syntax</h3>
+<pre class="line-numbers"><code class="language-python">input([prompt])
+</code></pre>
+<ul>
+<li><code>prompt</code> (optional): a string that is displayed to the user before input. This can be a message with instructions, for example: <code>"Enter your name: "</code>.</li>
+</ul>
+<h3>Usage Example</h3>
+<pre class="line-numbers"><code class="language-python"># Prompting the user for their name
+name = input('Enter your name: ')
+print(f'Hello, {name}!')
+</code></pre>
+<p><strong>Execution result:</strong></p>
+<pre class="line-numbers"><code class="language-text">Enter your name: Alex
+Hello, Alex!
+</code></pre>
+<h3>Features</h3>
+<ol>
+<li><strong>Returns a string</strong>
+   All data entered via <code>input()</code> is interpreted as strings. If a number is needed, it must be converted:
+   <pre class="line-numbers"><code class="language-python">age = int(input('Enter your age: '))
+   print(f'Your age: {age}')
+</code></pre>
+</li>
+<li><strong>Error handling</strong>
+   To avoid errors during conversion (for example, if the user entered text instead of a number), you can use a <code>try-except</code> block:
+   <pre class="line-numbers"><code class="language-python">try:
+       number = int(input('Enter a number: '))
+       print(f'You entered the number {number}')
+   except ValueError:
+       print('Error: you must enter a number.')
+</code></pre>
+</li>
+<li><strong>Usage in loops</strong>
+   Often <code>input()</code> is used in loops to repeatedly request data:
+   <pre class="line-numbers"><code class="language-python">while True:
+       text = input('Enter something (or "exit" to quit): ')
+       if text.lower() == 'exit':
+           print('Exiting program.')
+           break
+       print(f'You entered: {text}')
+</code></pre>
+</li>
+</ol>
+<h3>Tips for beginners</h3>
+<ul>
+<li>Make sure the data type matches your expectations (e.g., convert input to a number if needed).</li>
+<li>Always validate data to prevent input errors.</li>
+<li>Use clear and concise <code>prompt</code> messages so the user understands what is required of them.</li>
+</ul>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">To Table of Contents</a></p>

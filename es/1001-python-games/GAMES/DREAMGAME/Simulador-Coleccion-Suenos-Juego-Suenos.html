@@ -1,0 +1,137 @@
+Autor del código original:
+https://github.com/Mstislav95/CashFlow_101/blob/main/CashFlow_model.ipynb
+
+https://ok4u.club/cashflow101-rules/
+
+https://www.youtube.com/watch?v=sG_RWsvYT7k&ab_channel=MstislavEfimov
+
+
+# Juego de los sueños: Simulador de recolección de "sueños"
+
+## Descripción
+
+Simulación de un juego en el que el jugador se mueve por el tablero de juego, lanzando dos dados de seis caras.
+En algunas celdas del tablero hay "sueños" que el jugador puede "recolectar".
+El objetivo del juego es comprender qué "sueños" son los más probables de recolectar según las reglas dadas.
+
+## Reglas del juego
+
+1.  El jugador comienza el juego en la posición inicial (asumimos que es 0).
+2.  En un turno, el jugador lanza dos dados de seis caras y se mueve un número de celdas igual a la suma de los valores obtenidos.
+3.  El tablero de juego tiene 48 celdas. Si el jugador se mueve más allá de la celda 48, regresa al principio, "dando la vuelta" al tablero (por ejemplo, si la posición actual es 47 y se lanza un 4, la nueva posición será 3).
+4.  En algunas celdas (especificadas en la lista `dream_numbers`) hay "sueños".
+5.  Si el jugador cae en una celda con un "sueño" y aún no la ha visitado en la iteración actual, el "sueño" se considera recolectado.
+6.  El juego continúa durante un número de movimientos especificado (`moves`).
+7.  El juego se simula un número de veces especificado (`num_iterations`).
+8.  Como resultado del programa, se calcula la frecuencia de recolección de cada "sueño" y la probabilidad de su recolección.
+
+## Características del código
+
+<ul>
+<li><strong>Modelado</strong>: El código simula el movimiento del jugador en el tablero de juego usando lanzamientos de dados.</li>
+<li><strong>Recolección de "Sueños"</strong>: El código rastrea cuándo el jugador cae en celdas con "sueños" y cuenta su número.</li>
+<li><strong>Análisis</strong>: El programa analiza los resultados de la simulación y calcula la frecuencia y la probabilidad de recolectar cada "sueño".</li>
+<li><strong>Clase <code>DreamGame</code></strong>: El código está encapsulado en la clase <code>DreamGame</code>, lo que lo hace más estructurado y reutilizable.</li>
+<li><strong>Generación de nombres de sueños</strong>: Los nombres de "sueños" se generan usando el modelo Gemini, lo que hace que cada juego sea único.</li>
+<li><strong>Optimización</strong>: El código está optimizado usando <code>collections.Counter</code> para contar frecuencias y generadores para iterar a través de simulaciones.</li>
+</ul>
+<h2>Capacidades</h2>
+
+<ul>
+<li><strong>Personalización de parámetros</strong>: Puede personalizar fácilmente el número de movimientos por juego (<code>moves</code>) y el número de simulaciones de juego (<code>num_iterations</code>).</li>
+<li><strong>Nombres dinámicos</strong>: Los nombres de "sueños" se generan dinámicamente usando el modelo Gemini, lo que agrega variedad al juego.</li>
+<li><strong>Análisis de probabilidad</strong>: La obtención de la probabilidad de recolectar cada "sueño" le permite analizar y comparar su disponibilidad.</li>
+<li><strong>Extensibilidad</strong>: El código es fácilmente extensible y se puede modificar para agregar nuevas mecánicas de juego.</li>
+</ul>
+<h2>Desglose del código</h2>
+
+<h3>Clase <code>DreamGame</code></h3>
+
+<p>La clase <code>DreamGame</code> encapsula toda la lógica del juego.</p>
+
+<h4><code>__init__(self, dream_numbers: List[int], moves: int = 3, num_iterations: int = 100_000)</code></h4>
+
+<p>Constructor de la clase que inicializa el juego:</p>
+<ul>
+<li><code>dream_numbers</code>: Lista de números que representan las posiciones de los "sueños".</li>
+<li><code>moves</code>: Número de movimientos por juego.</li>
+<li><code>num_iterations</code>: Número de simulaciones de juego.</li>
+<li><code>self.dreams</code>: Diccionario que mapea los números de los sueños a sus nombres. Se rellena usando <code>_generate_dream_names</code>.</li>
+</ul>
+<h4><code>_generate_dream_names(self) -> None</code></h4>
+
+<p>Método que genera nombres de "sueños" usando el modelo Gemini.</p>
+<ul>
+<li>Forma una solicitud al modelo Gemini para generar un número específico de nombres de "sueños" únicos.</li>
+<li>Procesa la respuesta y crea un diccionario <code>self.dreams</code>, mapeando el número de "sueño" a su nombre.</li>
+<li>Genera un error si el modelo no devuelve texto o no puede generar el número de nombres requerido.</li>
+</ul>
+<h4><code>_simulate_game(self) -> Counter[str]</code></h4>
+
+<p>Método que simula un juego:</p>
+<ul>
+<li>Inicializa un contador <code>dreams_frequency</code> para rastrear la frecuencia de recolección de "sueños".</li>
+<li>Inicializa la variable <code>square</code>, que representa la posición actual del jugador en el tablero, y <code>visited_dreams</code> para rastrear los sueños recolectados.</li>
+<li>Realiza un número específico de movimientos (<code>moves</code>), moviendo al jugador por el tablero de juego.</li>
+<li>Si el jugador cae en una celda con un "sueño" y aún no la ha visitado, incrementa el contador para ese "sueño".</li>
+<li>Devuelve un objeto <code>Counter</code> con la frecuencia de recolección de "sueños".</li>
+</ul>
+<h4><code>run_experiment(self) -> pd.DataFrame</code></h4>
+
+<p>Método que ejecuta la simulación del juego varias veces y devuelve un DataFrame con los resultados:</p>
+<ul>
+<li>Ejecuta la simulación del juego un número de veces especificado (<code>num_iterations</code>).</li>
+<li>Suma las frecuencias de recolección de "sueños" de cada simulación.</li>
+<li>Convierte los resultados a un DataFrame, donde las columnas son "Sueño" y "Frecuencia".</li>
+<li>Ordena el DataFrame por frecuencia en orden descendente.</li>
+<li>Agrega una columna "Probabilidad", calculada como la relación entre la "Frecuencia" y el número total de simulaciones.</li>
+<li>Devuelve un DataFrame con los resultados.</li>
+</ul>
+<h3>Uso</h3>
+<p>Al final del script, se crea una instancia de la clase <code>DreamGame</code> y se ejecuta el experimento. El resultado se imprime en la pantalla como un DataFrame.</p>
+<pre class="line-numbers"><code class="language-python">
+if __name__ == '__main__':
+    dream_numbers = [1, 3, 5, 7, 10, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47]
+    game = DreamGame(dream_numbers, moves=3, num_iterations=10_000)
+    df_result = game.run_experiment()
+    print(df_result)
+</code></pre>
+<h2>Requisitos</h2>
+<ul>
+<li>Python 3.6+</li>
+<li>Bibliotecas: <code>pandas</code>, <code>google-generativeai</code></li>
+<li>Variable de entorno <code>GOOGLE_API_KEY</code> con su clave API de Gemini</li>
+</ul>
+<h2>Instalación</h2>
+<ol>
+<li>Instale Python 3.6+</li>
+<li>Instale las bibliotecas: <code>pip install pandas google-generativeai</code></li>
+<li>Establezca la variable de entorno <code>GOOGLE_API_KEY</code> con su clave API de Gemini.</li>
+<li>Ejecute el script <code>python your_script_name.py</code></li>
+</ol>
+<h2>Ejemplos de uso</h2>
+<pre class="line-numbers"><code class="language-python">
+    dream_numbers = [2,4,8,16,32,44]
+    game = DreamGame(dream_numbers, moves=5, num_iterations=1000)
+    df_result = game.run_experiment()
+    print(df_result)
+</code></pre>
+<p>En este ejemplo:
+* A game object is created
+* 10,000 games are simulated with three moves
+* The simulation result is displayed as a pandas DataFrame.
+</p>
+<pre class="line-numbers"><code class="language-python">
+    dream_numbers = [2,4,8,16,32,44]
+    game = DreamGame(dream_numbers, moves=5, num_iterations=1000)
+    df_result = game.run_experiment()
+    print(df_result)
+</code></pre>
+<p>En este ejemplo:
+* A game object is created with different dream numbers
+* 1000 games are simulated with five moves
+* The simulation result is displayed as a pandas DataFrame.
+</p>
+<h2>Licencia</h2>
+
+<p>MIT</p>

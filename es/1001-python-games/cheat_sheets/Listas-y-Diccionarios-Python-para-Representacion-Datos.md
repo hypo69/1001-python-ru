@@ -1,0 +1,91 @@
+Ejemplos de uso de listas y diccionarios para representar datos de productos. Desglosaré un producto abstracto por sus características y mostraré cómo usar una lista para representar productos en una categoría.
+
+*   **Diccionario (`dict`)** – es una forma ideal de representar las *características* de un solo producto, donde hay pares "clave-valor".
+*   **Lista (`list`)** – es una excelente manera de representar un *conjunto* de productos similares, donde cada producto puede ser representado por un diccionario.
+
+**1. Diccionario (`dict`) para representar las características del producto**
+
+Un diccionario para representar las características de un solo producto. En este caso, las claves del diccionario serán los nombres de las características, y los valores serán sus valores correspondientes.
+
+```python
+product = {
+    "id": "12345",
+    "name": "Smartphone SuperPhone X",
+    "brand": "SuperTech",
+    "price": 999.99,
+    "color": "Gris espacial",
+    "screen_size": 6.7,
+    "storage": "256 GB",
+    "camera": "108 MP",
+    "os": "Android 13",
+    "available": True
+}
+
+print("--- Características del producto ---")
+for key, value in product.items():
+    print(f"{key}: {value}")
+
+print("\n--- Acceso a características específicas ---")
+print(f"Nombre: {product['name']}")
+print(f"Precio: ${product['price']}")
+print(f" Disponible: {'sí' if product['available'] else 'no'}")
+
+```
+
+**Explicación del código:**
+
+*   diccionario `product`, donde las claves son los nombres de las características del producto (id, nombre, marca, precio, etc.), y los valores son sus valores correspondientes.
+*   `product.items()` para iterar sobre todos los pares "clave-valor" e imprimirlos en la pantalla.
+
+**2. Lista (`list`) para representar productos en una categoría**
+
+Una lista para representar una lista de productos en una categoría específica.
+En este caso, cada elemento de la lista representará un producto separado, que, a su vez, puede ser representado por un diccionario.
+
+```python
+products = [
+    {
+        "id": "12345",
+        "name": "Smartphone SuperPhone X",
+        "brand": "SuperTech",
+        "price": 999.99,
+        "available": True
+    },
+    {
+        "id": "67890",
+        "name": "Tableta TabPro S",
+        "brand": "TechGenius",
+        "price": 799.99,
+        "available": False
+    },
+    {
+        "id": "13579",
+        "name": "Auriculares SoundBeats Pro",
+        "brand": "AudioMax",
+        "price": 199.99,
+        "available": True
+    }
+]
+print("\n--- Lista de productos en la categoría ---")
+
+for product in products:
+   print(f"{product['name']} ({product['brand']}), Precio: ${product['price']}, Disponible: {'Sí' if product['available'] else 'No'}")
+
+print("\n--- Acceso al primer producto ---")
+
+first_product = products[0]
+print(f"ID: {first_product['id']}, Nombre: {first_product['name']}")
+
+print("\n--- Mostrar solo nombres de productos ---")
+for product in products:
+  print(f"Nombre: {product['name']}")
+```
+
+**Explicación del código:**
+
+*   Lista `products`, donde cada elemento es un diccionario que representa un producto separado.
+*   Iteré a través de la lista e imprimí información sobre cada producto, usando las claves del diccionario para acceder a las características del producto.
+*   Mostré cómo acceder al primer producto de la lista usando el índice `0`.
+*   Iteré a través de la lista nuevamente y mostré cómo mostrar solo los nombres de los productos.
+
+```

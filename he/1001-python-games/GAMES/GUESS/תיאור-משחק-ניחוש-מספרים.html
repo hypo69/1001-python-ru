@@ -1,0 +1,65 @@
+<h2 dir="rtl"><span dir="ltr">GUESS</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">3</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;נחש את המספר&quot; - זהו משחק קלאסי, שבו המחשב בוחר מספר אקראי בטווח של <span dir="ltr">1</span> עד <span dir="ltr">100</span>, והשחקן צריך לנחש את המספר הזה, מקבל רמזים &quot;נמוך מדי&quot; או &quot;גבוה מדי&quot; לאחר כל ניסיון. המשחק נמשך עד שהשחקן מנחש את המספר.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">המחשב בוחר מספר שלם אקראי מ-<span dir="ltr">1</span> עד <span dir="ltr">100</span>.</p></li>
+<li><p dir="rtl">השחקן מזין את ניחושיו לגבי המספר הנסתר.</p></li>
+<li><p dir="rtl">לאחר כל ניסיון, המחשב מדווח האם המספר שהוזן היה נמוך מדי, גבוה מדי או נוחש.</p></li>
+<li><p dir="rtl">המשחק נמשך עד שהשחקן מנחש את המספר הנסתר.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">הגדר את מספר הניסיונות ל-<span dir="ltr">0</span>.</p></li>
+<li><p dir="rtl">צור מספר אקראי בטווח של <span dir="ltr">1</span> עד <span dir="ltr">100</span>.</p></li>
+<li><p dir="rtl">התחל לולאה &quot;כל עוד המספר לא נוחש&quot;:</p>
+<ol>
+<li><p dir="rtl">הגדל את מספר הניסיונות ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">בקש מהשחקן להזין מספר.</p></li>
+<li><p dir="rtl">אם המספר שהוזן שווה למספר הנסתר, עבור לשלב <span dir="ltr">4</span>.</p></li>
+<li><p dir="rtl">אם המספר שהוזן קטן מהמספר הנסתר, הצג הודעה &quot;נמוך מדי&quot;.</p></li>
+<li><p dir="rtl">אם המספר שהוזן גדול מהמספר הנסתר, הצג הודעה &quot;גבוה מדי&quot;.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">הצג הודעה &quot;ניחשת ב- {מספר ניסיונות} ניסיונות!&quot;</p></li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeVariables["<p align='left'>Initialize variables:
+    <code><b>
+    numberOfGuesses = 0
+    targetNumber = random(1, 100)
+    </b></code></p>"]
+    InitializeVariables --> LoopStart{"Start loop: until guessed"}
+    LoopStart -- Yes --> IncreaseGuesses["<code><b>numberOfGuesses = numberOfGuesses + 1</b></code>"]
+    IncreaseGuesses --> InputGuess["User enters number: <code><b>userGuess</b></code>"]
+    InputGuess --> CheckGuess{"Check: <code><b>userGuess == targetNumber?</b></code>"}
+    CheckGuess -- Yes --> OutputWin["Display message: <b>Guessed in <code>{numberOfGuesses}</code> attempts!</b>"]
+    OutputWin --> End["End"]
+    CheckGuess -- No --> CheckLow{"Check: <code><b>userGuess &lt; targetNumber</b></code>?"}
+    CheckLow -- Yes --> OutputLow["Display message: <b>Too low</b>"]
+    OutputLow --> LoopStart
+    CheckLow -- No --> OutputHigh["Display message: <b>Too high</b>"]
+    OutputHigh --> LoopStart
+
+</code></pre>
+
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeVariables</span> - אתחול משתנים: <span dir="ltr">numberOfGuesses</span> (מונה ניסיונות) מוגדר ל-<span dir="ltr">0</span>, ו-<span dir="ltr">targetNumber</span> (מספר נסתר) נוצר באופן אקראי מ-<span dir="ltr">1</span> עד <span dir="ltr">100</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת הלולאה, הנמשכת עד שהמספר נוחש.</p></li>
+<li><p dir="rtl"><span dir="ltr">IncreaseGuesses</span> - הגדלת מונה הניסיונות ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputGuess</span> - בקשת המשתמש להזין מספר ושמירתו במשתנה <span dir="ltr">userGuess</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckGuess</span> - בדיקה האם המספר שהוזן <span dir="ltr">userGuess</span> שווה למספר הנסתר <span dir="ltr">targetNumber</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWin</span> - הצגת הודעה &quot;ניחשת ב- {מספר ניסיונות} ניסיונות!&quot; אם המספרים שווים, עם ציון מספר הניסיונות.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckLow</span> - בדיקה האם המספר שהוזן <span dir="ltr">userGuess</span> קטן מהמספר הנסתר <span dir="ltr">targetNumber</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputLow</span> - הצגת הודעה &quot;נמוך מדי&quot; אם המספר שהוזן קטן מהמספר הנסתר.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputHigh</span> - הצגת הודעה &quot;גבוה מדי&quot; אם המספר שהוזן גדול מהמספר הנסתר.</p></li>
+</ul>

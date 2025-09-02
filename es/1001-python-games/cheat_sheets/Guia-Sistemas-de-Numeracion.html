@@ -1,0 +1,776 @@
+# Sistemas de numeración
+
+¡Hola! Comenzamos nuestra inmersión en el fascinante mundo de los sistemas de numeración. ¡Prepárese, hoy aprenderá muchas cosas nuevas e interesantes!
+
+# Sistemas de numeración
+
+<strong>1. Sistema de numeración abstracto</strong>
+
+<p>Imagine que los números son como palabras que se pueden escribir con diferentes "letras". No importa exactamente cómo denotemos los números, lo principal es que se observen ciertas reglas:</p>
+
+<ul>
+<li><strong>Base:</strong> Es la cantidad de símbolos (dígitos) únicos que usamos. Denotemos la base como <code>b</code>. Por ejemplo, en el sistema decimal la base es 10.</li>
+<li><strong>Dígitos:</strong> Son los símbolos que usamos para escribir números. Por lo general, son dígitos arábigos (0, 1, 2, 3, ...), pero también pueden ser otros símbolos, por ejemplo, letras latinas (I, V, X) o incluso frutas (🍎, 🍐, 🍉).</li>
+<li><strong>Posición:</strong> Cada dígito en la representación de un número tiene su propia posición, lo que afecta su valor. Esto significa que el mismo dígito puede tener un valor diferente dependiendo de dónde se encuentre en el número.</li>
+<li><strong>Valores posicionales:</strong> Cada posición se denomina valor posicional (por ejemplo, unidades, decenas, centenas, etc.). En cada posición, el valor del dígito se multiplica por la base elevada a la potencia correspondiente al número del valor posicional.</li>
+</ul>
+<p><strong>¿Cómo se construye un sistema de numeración?</strong></p>
+<ol>
+<li><strong>Elección de una base:</strong> Elegimos un número entero <code>b</code> que será la base de nuestro sistema.</li>
+<li><strong>Elección de dígitos:</strong> Necesitamos <code>b</code> dígitos únicos. Por lo general, son 0, 1, 2, ..., <code>b-1</code>. Por ejemplo, para el sistema binario (base 2), tenemos los dígitos 0 y 1.</li>
+<li><strong>Escritura de un número:</strong> Un número se escribe como una secuencia de dígitos. El valor de cada dígito se multiplica por la base elevada a la potencia igual a su posición (comenzando desde 0 a la derecha).</li>
+</ol>
+<p><strong>Fórmula para calcular el valor de un número:</strong></p>
+<p>Si tenemos un número escrito como una secuencia de dígitos <code>dₙ dₙ₋₁ ... d₁ d₀</code>, su valor en el sistema decimal se puede calcular usando la fórmula:</p>
+<p><code>valor = dₙ * bⁿ + dₙ₋₁ * bⁿ⁻¹ + ... + d₁ * b¹ + d₀ * b⁰</code></p>
+<p>Donde:</p>
+<ul>
+<li><code>dᵢ</code> - dígito en la i-ésima posición</li>
+<li><code>b</code> - base del sistema de numeración</li>
+<li><code>i</code> - número de posición (de derecha a izquierda, comenzando desde 0)</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<p>Supongamos que tenemos el número 123 en el sistema decimal (base 10). Según la fórmula:</p>
+<p><code>1 * 10² + 2 * 10¹ + 3 * 10⁰ = 100 + 20 + 3 = 123₁₀</code></p>
+<p><strong>Órdenes de magnitud (posiciones):</strong></p>
+<p>Los órdenes de magnitud, como ya hemos dicho, son las posiciones de los dígitos en un número, cada posición tiene su propio peso, que se determina por la base elevada a la potencia de su número ordinal.</p>
+<ul>
+<li><code>d₀</code>: unidades (<code>b⁰</code>)</li>
+<li><code>d₁</code>: <code>b</code> (<code>b¹</code>)</li>
+<li><code>d₂</code>: <code>b²</code></li>
+<li><code>d₃</code>: <code>b³</code></li>
+<li>y así sucesivamente</li>
+</ul>
+<p><strong>Reglas:</strong></p>
+<ol>
+<li><strong>Rango de dígitos:</strong> Se utilizan dígitos del 0 al <code>b-1</code>.</li>
+<li><strong>Principio posicional:</strong> El valor de un dígito depende de su posición.</li>
+<li><strong>Transición al siguiente orden:</strong> Cuando un orden alcanza el valor <code>b</code>, se produce un acarreo al siguiente orden (análogo a cómo después de 9 en el sistema decimal, se suma 1 al siguiente orden y se obtiene 10).</li>
+</ol>
+<h2>Ejemplo: Sistema de numeración de frutas</h2>
+<p>Consideremos un ejemplo de un sistema de numeración abstracto con frutas:</p>
+<ul>
+<li>🍎 (manzana)</li>
+<li>🍐 (pera)</li>
+<li>🍉 (melón)</li>
+<li>🧺 (cesta)</li>
+</ul>
+<p><strong>Reglas:</strong></p>
+<ol>
+<li>3 🍎 = 1 🍐</li>
+<li>5 🍐 = 3 🍉</li>
+<li>2 🍉 = 1 🧺</li>
+</ol>
+<p><strong>Representación de números:</strong></p>
+<p>Representaremos el número de frutas como una cadena, donde cada carácter Unicode corresponde a una fruta. Por ejemplo, "🍎🍎🍎" son 3 manzanas, y "🍉🍉" son 2 melones.</p>
+<p><strong>Operaciones aritméticas:</strong></p>
+<p>Podemos realizar operaciones de suma y resta. Primero, hagamos la suma.</p>
+<p><strong>Código Python:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+def normalize_fruits(fruits: str) -> str:
+    """
+    Normalizes a string of fruits, reducing it to its minimum representation,
+    using fruit exchange rules.
+
+    Args:
+        fruits: String of fruits (🍎, 🍐, 🍉, 🧺).
+
+    Returns:
+        String with normalized fruit count.
+    """
+    apples = fruits.count('🍎')
+    pears = fruits.count('🍐')
+    melons = fruits.count('🍉')
+    baskets = fruits.count('🧺')
+
+    # Convert apples to pears
+    pears += apples // 3
+    apples %= 3
+
+    # Convert pears to melons
+    melons += (pears * 3) // 5
+    pears %= 5
+
+    # Convert melons to baskets
+    baskets += melons // 2
+    melons %= 2
+
+    # Reassemble the string, baskets first, then melons, pears, apples
+    return (
+        "🧺" * baskets
+        + "🍉" * melons
+        + "🍐" * pears
+        + "🍎" * apples
+    )
+
+def add_fruits(fruits1: str, fruits2: str) -> str:
+    """
+    Adds two fruit strings.
+
+    Args:
+        fruits1: Fruit string.
+        fruits2: Fruit string.
+
+    Returns:
+        String with the sum of the fruits.
+    """
+    return normalize_fruits(fruits1 + fruits2)
+
+def sub_fruits(fruits1: str, fruits2: str) -> str:
+    """
+    Subtracts the second fruit string from the first, if possible.
+
+    Args:
+        fruits1: Fruit string to subtract from.
+        fruits2: Fruit string to subtract.
+
+    Returns:
+        String with the fruit difference or "Cannot subtract" if the result is negative.
+    """
+
+    apples1 = fruits1.count('🍎')
+    pears1 = fruits1.count('🍐')
+    melons1 = fruits1.count('🍉')
+    baskets1 = fruits1.count('🧺')
+
+    apples2 = fruits2.count('🍎')
+    pears2 = fruits2.count('🍐')
+    melons2 = fruits2.count('🍉')
+    baskets2 = fruits2.count('🧺')
+
+
+    # Temporary representation as total number of apples
+    total_apples1 = apples1 + pears1 * 3 + melons1 * 15 // 3 + baskets1 * 30
+    total_apples2 = apples2 + pears2 * 3 + melons2 * 15 // 3 + baskets2 * 30
+
+    if total_apples1 < total_apples2:
+        return "No se puede restar"
+    else:
+        total_apples = total_apples1 - total_apples2
+
+    # Return the normalized representation of the sum of apples
+    result_fruits = ""
+    baskets = total_apples // 30
+    result_fruits += "🧺" * baskets
+    total_apples %= 30
+    melons = (total_apples*3) // 15
+    result_fruits += "🍉" * melons
+    total_apples %= 15
+    pears = total_apples // 3
+    result_fruits += "🍐" * pears
+    total_apples %= 3
+    result_fruits += "🍎" * total_apples
+
+    return normalize_fruits(result_fruits)
+
+
+
+# Examples:
+fruits1 = "🍎🍎🍎🍎🍎" # 5 apples
+fruits2 = "🍎🍎🍎" # 3 apples
+print(f"{fruits1} + {fruits2} = {add_fruits(fruits1, fruits2)}")
+
+fruits3 = "🍐🍐"  # 2 pears
+fruits4 = "🍎🍎🍎🍎" # 4 apples
+print(f"{fruits3} + {fruits4} = {add_fruits(fruits3, fruits4)}")
+
+fruits5 = "🍉🍉" # 2 melons
+fruits6 = "🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎" # 15 apples
+print(f"{fruits5} + {fruits6} = {add_fruits(fruits5, fruits6)}")
+
+fruits7 = "🧺🧺" # 2 baskets
+fruits8 = "🍉🍉🍉" # 3 melons
+print(f"{fruits7} + {fruits8} = {add_fruits(fruits7, fruits8)}")
+
+fruits9 = "🧺🍉🍐🍎" # 1 basket, 1 melon, 1 pear, 1 apple
+fruits10 = "🍉🍐🍎" # 1 melon, 1 pear, 1 apple
+print(f"{fruits9} - {fruits10} = {sub_fruits(fruits9, fruits10)}")
+
+fruits11 = "🧺🍉" # 1 basket, 1 melon
+fruits12 = "🧺🍉🍎🍎🍎" # 1 basket, 1 melon, 3 apples
+print(f"{fruits11} - {fruits12} = {sub_fruits(fruits11, fruits12)}")
+
+fruits13 = "🍉🍉🍉" # 3 melons
+fruits14 = "🍎🍎🍎🍎" # 4 apples
+print(f"{fruits13} - {fruits14} = {sub_fruits(fruits13, fruits14)}")
+
+fruits15 = "🍐🍐🍐🍐🍐" # 5 pears
+fruits16 = "🍉" # 1 melon
+print(f"{fruits15} - {fruits16} = {sub_fruits(fruits15, fruits16)}")
+</code></pre>
+<p><strong>Explicación del código:</strong></p>
+<ol>
+<li><strong><code>normalize_fruits(fruits)</code>:</strong> Esta función convierte una cadena de frutas a su forma mínima. Primero cuenta la cantidad de cada fruta, luego, usando las reglas de intercambio, las convierte a unidades más grandes (manzanas a peras, peras a melones, melones a cestas), y después de la conversión, las concatena de nuevo en una cadena con el conjunto mínimo de frutas.</li>
+<li><strong><code>add_fruits(fruits1, fruits2)</code>:</strong> Esta función realiza la suma de dos cadenas de frutas. Simplemente concatena las dos cadenas y luego normaliza el resultado.</li>
+<li><strong><code>sub_fruits(fruits1, fruits2)</code>:</strong> Esta función es para restar una cadena de frutas de otra. Convierte todo a "número de manzanas" y luego realiza la resta, y luego convierte las manzanas de nuevo a una forma normalizada, mientras verifica la posibilidad de la resta.</li>
+<li><strong>Ejemplos:</strong> Al final del código, se dan ejemplos de suma y resta con varias combinaciones de frutas y la salida de los resultados.</li>
+</ol>
+<p><strong>Tareas:</strong></p>
+<ol>
+<li>Intente agregar una función al código para multiplicar frutas por un número entero (por ejemplo, <code>multiply_fruits(fruits, n)</code>).</li>
+<li>Implemente la función <code>compare_fruits(fruits1, fruits2)</code>, que compara dos cadenas de frutas y devuelve "mayor", "menor" o "igual".</li>
+<li>Invente sus propias reglas de intercambio de frutas y modifique el código en consecuencia.</li>
+<li>Agregue validación de datos de entrada (para asegurarse de que la cadena contenga solo caracteres Unicode permitidos).</li>
+<li>Implemente una resta más avanzada, por ejemplo, no emita un error "No se puede restar", sino que muestre el resultado con un signo menos (tarea avanzada).</li>
+</ol>
+<h2>2. Sistemas de numeración específicos</h2>
+<p>Ahora pasemos a ejemplos específicos de sistemas de numeración que se utilizan a menudo en la informática y la vida cotidiana.</p>
+<h3>2.1. Sistema binario (base 2)</h3>
+<ul>
+<li><strong>Dígitos:</strong> 0, 1</li>
+<li><strong>Utilizado en computadoras:</strong> Todos los datos en las computadoras se representan en código binario (bits).</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<ul>
+<li>Número <code>1011₂</code> (se lee "uno cero uno uno base 2"). Conversión al sistema decimal:
+<code>1 * 2³ + 0 * 2² + 1 * 2¹ + 1 * 2⁰ = 8 + 0 + 2 + 1 = 11₁₀</code></li>
+</ul>
+<p><strong>Python:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+def bin_to_dec(binary: str) -> int:
+    """
+    Converts a binary number (string) to decimal.
+
+    Args:
+        binary: Binary number as a string.
+
+    Returns:
+        Decimal representation of the number (integer).
+    """
+    decimal = 0  # Initialize decimal value
+    power = 0  # Initialize power of two (positional value exponent)
+    for digit in reversed(binary):  # Iterate over the digits of the binary number in reverse order
+        if digit == '1':
+            decimal += 2 ** power  # If the digit is '1', add 2 to the power of the positional value
+        power += 1  # Increment the power for the next positional value
+    return decimal  # Return decimal value
+
+
+binary_number = "1011"
+decimal_number = bin_to_dec(binary_number)
+print(f"Binario {binary_number} = Decimal {decimal_number}")
+
+def dec_to_bin(decimal: int) -> str:
+    """
+    Converts a decimal number (integer) to binary representation (string).
+
+    Args:
+        decimal: Decimal number.
+
+    Returns:
+        Binary representation of the number (string).
+    """
+    if decimal == 0:  # If the decimal number is 0
+        return "0"  # Return string "0"
+    binary = ""  # Initialize string for binary number
+    while decimal > 0:  # While the decimal number is greater than 0
+        binary = str(decimal % 2) + binary  # Add the remainder of the division by 2 to the beginning of the binary string
+        decimal = decimal // 2  # Divide the decimal number by 2 (integer division)
+    return binary  # Return binary string
+
+
+decimal_number = 11
+binary_number = dec_to_bin(decimal_number)
+print(f"Decimal {decimal_number} = Binario {binary_number}")
+</code></pre>
+
+<h3>2.2. Sistema ternario (base 3)</h3>
+<ul>
+<li><strong>Dígitos:</strong> 0, 1, 2</li>
+<li><strong>Teóricamente interesante:</strong> Se utiliza en algunas áreas de las matemáticas y la informática.</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<ul>
+<li>Número <code>210₃</code> (se lee "dos uno cero base 3"). Conversión al sistema decimal:
+<code>2 * 3² + 1 * 3¹ + 0 * 3⁰ = 18 + 3 + 0 = 21₁₀</code></li>
+</ul>
+<p><strong>Python:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+def ternary_to_dec(ternary: str) -> int:
+    """
+    Converts a ternary number (string) to decimal.
+
+    Args:
+        ternary: Ternary number as a string.
+
+    Returns:
+        Decimal representation of the number (integer).
+    """
+    decimal = 0  # Initialize decimal value
+    power = 0  # Initialize power of three (positional value exponent)
+    for digit in reversed(ternary):  # Iterate over the digits of the ternary number in reverse order
+        decimal += int(digit) * (3 ** power)  # Add digit * 3 to the power of the positional value
+        power += 1  # Increment the power for the next positional value
+    return decimal  # Return decimal value
+
+
+ternary_number = "210"
+decimal_number = ternary_to_dec(ternary_number)
+print(f"Ternario {ternary_number} = Decimal {decimal_number}")
+
+def dec_to_ternary(decimal: int) -> str:
+    """
+    Converts a decimal number (integer) to ternary representation (string).
+
+    Args:
+        decimal: Decimal number.
+
+    Returns:
+        Ternary representation of the number (string).
+    """
+    if decimal == 0:  # If the decimal number is 0
+        return "0"  # Return string "0"
+    ternary = ""  # Initialize string for ternary number
+    while decimal > 0:  # While the decimal number is greater than 0
+        ternary = str(decimal % 3) + ternary  # Add the remainder of the division by 3 to the beginning of the ternary string
+        decimal = decimal // 3  # Divide the decimal number by 3 (integer division)
+    return ternary  # Return ternary string
+
+
+decimal_number = 21
+ternary_number = dec_to_ternary(decimal_number)
+print(f"Decimal {decimal_number} = Ternario {ternary_number}")
+</code></pre>
+
+<h3>2.3. Sistema septenario (base 7)</h3>
+<ul>
+<li><strong>Dígitos:</strong> 0, 1, 2, 3, 4, 5, 6</li>
+<li><strong>Menos común:</strong> Se utiliza en algunas áreas restringidas, por ejemplo, en algunos sistemas de codificación. También tiene aplicación práctica en los días de la semana.</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<ul>
+<li>Número <code>345₇</code> (se lee "tres cuatro cinco base 7"). Conversión al sistema decimal:
+<code>3 * 7² + 4 * 7¹ + 5 * 7⁰ = 147 + 28 + 5 = 180₁₀</code></li>
+</ul>
+<p><strong>Python:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+def septenary_to_dec(septenary: str) -> int:
+    """
+    Converts a septenary number (string) to decimal.
+
+    Args:
+        septenary: Septenary number as a string.
+
+    Returns:
+        Decimal representation of the number (integer).
+    """
+    decimal = 0  # Initialize decimal value
+    power = 0  # Initialize power of seven (positional value exponent)
+    for digit in reversed(septenary):  # Iterate over the digits of the septenary number in reverse order
+        decimal += int(digit) * (7 ** power)  # Add digit * 7 to the power of the positional value
+        power += 1  # Increment the power for the next positional value
+    return decimal  # Return decimal value
+
+
+septenary_number = "345"
+decimal_number = septenary_to_dec(septenary_number)
+print(f"Septenario {septenary_number} = Decimal {decimal_number}")
+
+def dec_to_septenary(decimal: int) -> str:
+    """
+    Converts a decimal number (integer) to septenary representation (string).
+
+    Args:
+        decimal: Decimal number.
+
+    Returns:
+        Septenary representation of the number (string).
+    """
+    if decimal == 0: # If the decimal number is 0
+        return "0" # Return string "0"
+    septenary = ""  # Initialize string for septenary number
+    while decimal > 0:  # While the decimal number is greater than 0
+        septenary = str(decimal % 7) + septenary  # Add the remainder of the division by 7 to the beginning of the septenary string
+        decimal = decimal // 7  # Divide the decimal number by 7 (integer division)
+    return septenary  # Return septenary string
+
+
+decimal_number = 180
+septenary_number = dec_to_septenary(decimal_number)
+print(f"Decimal {decimal_number} = Septenario {septenary_number}")
+</code></pre>
+
+<h3>2.4. Sistema decimal (base 10)</h3>
+<ul>
+<li><strong>Dígitos:</strong> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9</li>
+<li><strong>Cotidiano:</strong> El sistema más común que usamos todos los días.</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<ul>
+<li>Número <code>789₁₀</code>. Conversión al sistema decimal: (no tiene sentido, ya es decimal)
+<code>7 * 10² + 8 * 10¹ + 9 * 10⁰ = 700 + 80 + 9 = 789₁₀</code></li>
+</ul>
+<h3>2.5. Sistema hexadecimal (base 16)</h3>
+<ul>
+<li><strong>Dígitos:</strong> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F
+<ul>
+<li>A = 10, B = 11, C = 12, D = 13, E = 14, F = 15</li>
+</ul>
+</li>
+<li><strong>Ampliamente utilizado en programación:</strong> Para representar colores, direcciones de memoria, códigos de máquina, etc. A menudo se utiliza para acortar la representación de números binarios.</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<ul>
+<li>Número <code>2AF₁₆</code> (se lee "dos a efe base 16"). Conversión al sistema decimal:
+<code>2 * 16² + 10 * 16¹ + 15 * 16⁰ = 512 + 160 + 15 = 687₁₀</code></li>
+</ul>
+<p><strong>Python:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+def hex_to_dec(hexadecimal: str) -> int:
+    """
+    Converts a hexadecimal number (string) to decimal.
+
+    Args:
+        hexadecimal: Hexadecimal number as a string.
+
+    Returns:
+        Decimal representation of the number (integer).
+    """
+    decimal = 0  # Initialize decimal value
+    power = 0  # Initialize power of 16 (positional value exponent)
+    for digit in reversed(hexadecimal):  # Iterate over the digits of the hexadecimal number in reverse order
+        if digit.isdigit():  # If the digit is a number
+            decimal += int(digit) * (16 ** power)  # Add digit * 16 to the power of the positional value
+        elif digit.upper() == 'A':  # If the digit is 'A'
+            decimal += 10 * (16 ** power)  # Add 10 * 16 to the power of the positional value
+        elif digit.upper() == 'B':  # If the digit is 'B'
+            decimal += 11 * (16 ** power)  # Add 11 * 16 to the power of the positional value
+        elif digit.upper() == 'C':  # If the digit is 'C'
+            decimal += 12 * (16 ** power)  # Add 12 * 16 to the power of the positional value
+        elif digit.upper() == 'D':  # If the digit is 'D'
+            decimal += 13 * (16 ** power)  # Add 13 * 16 to the power of the positional value
+        elif digit.upper() == 'E':  # If the digit is 'E'
+            decimal += 14 * (16 ** power)  # Add 14 * 16 to the power of the positional value
+        elif digit.upper() == 'F':  # If the digit is 'F'
+            decimal += 15 * (16 ** power)  # Add 15 * 16 to the power of the positional value
+        power += 1  # Increment the power for the next positional value
+    return decimal  # Return decimal value
+
+
+hex_number = "2AF"
+decimal_number = hex_to_dec(hex_number)
+print(f"Hexadecimal {hex_number} = Decimal {decimal_number}")
+
+def dec_to_hex(decimal: int) -> str:
+    """
+    Converts a decimal number (integer) to hexadecimal representation (string).
+
+    Args:
+        decimal: Decimal number.
+
+    Returns:
+        Hexadecimal representation of the number (string).
+    """
+    if decimal == 0:  # If the decimal number is 0
+        return "0"  # Return string "0"
+    hex_digits = "0123456789ABCDEF"  # String to map remainders and hexadecimal digits
+    hexadecimal = ""  # Initialize string for hexadecimal number
+    while decimal > 0:  # While the decimal number is greater than 0
+        remainder = decimal % 16  # Get the remainder of the division by 16
+        hexadecimal = hex_digits[remainder] + hexadecimal  # Add the corresponding digit to the beginning of the hexadecimal string
+        decimal = decimal // 16  # Divide the decimal number by 16 (integer division)
+    return hexadecimal  # Return hexadecimal string
+
+
+decimal_number = 687
+hex_number = dec_to_hex(decimal_number)
+print(f"Decimal {decimal_number} = Hexadecimal {hex_number}")
+</code></pre>
+
+<h3>2.6. Sistema sexagesimal (base 60)</h3>
+<ul>
+<li><strong>Dígitos:</strong> 0-59 (en aplicación práctica, se utilizan combinaciones de símbolos)</li>
+<li><strong>Histórico:</strong> Utilizado en la antigua Babilonia, y ahora para medir el tiempo (horas, minutos, segundos) y ángulos.</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<ul>
+<li>Representemos el número <code>25:30:15₆₀</code> (25 grados, 30 minutos, 15 segundos) o
+<code>25 * 60² + 30 * 60¹ + 15 * 60⁰ = 25 * 3600 + 30 * 60 + 15 * 1 = 90000 + 1800 + 15 = 91815₁₀</code> (número total de segundos)</li>
+</ul>
+<h2>3. Ejemplos de sistemas de numeración en la vida cotidiana</h2>
+<p>Los sistemas de numeración no son solo conceptos matemáticos abstractos, sino también métodos reales de codificación de información. Aquí hay algunos ejemplos:</p>
+<h3>3.1. Números romanos</h3>
+<p>El sistema de numeración romano es un sistema no posicional que utiliza letras latinas para escribir números. Este sistema todavía se utiliza, por ejemplo, para numerar capítulos en libros o para denotar siglos.</p>
+<p><strong>Código Python:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+import sys
+
+def roman_to_int(roman_str: str) -> int:
+    """
+    Converts a Roman numeral (string) to decimal.
+
+    Args:
+        roman_str: Roman numeral as a string.
+
+    Returns:
+        Decimal representation of the number (integer).
+    """
+    roman_dict = {
+        'I': 1,
+        'V': 5,
+        'X': 10,
+        'L': 50,
+        'C': 100,
+        'D': 500,
+        'M': 1000
+    }
+
+    number = 0
+    roman_str = roman_str.replace("IV","IIII")
+    roman_str = roman_str.replace("IX","VIIII")
+    roman_str = roman_str.replace("XL","XXXX")
+    roman_str = roman_str.replace("XC","LXXXX")
+    roman_str = roman_str.replace("CD","CCCC")
+    roman_str = roman_str.replace("CM","DCCCC")
+    for char in roman_str:
+        number += roman_dict[char]
+
+    return number
+
+# Example of use
+if __name__ == '__main__':
+    roman_number = sys.argv[1] # Get Roman numeral from command line arguments
+    decimal_number = roman_to_int(roman_number)
+    print(f"Romano {roman_number} = Decimal {decimal_number}")
+</code></pre>
+
+<h3>3.2. Código Morse</h3>
+<p>El código Morse es un sistema para codificar caracteres usando una combinación de señales cortas y largas (puntos y guiones). Se usaba para transmitir mensajes por telégrafo.</p>
+<p><strong>Código Python:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+import time
+import platform
+
+# Morse code dictionary with Cyrillic alphabet
+morse_code_dict = {
+    'A': '.-',    'А': '.-',
+    'B': '-...',   'Б': '-...',
+    'C': '-.-.',   'В': '.--',
+    'D': '-..',    'Г': '--.',
+    'E': '.',      'Д': '-..',
+    'F': '..-.',   'Е': '.',
+    'G': '--.',    'Ж': '...-',
+    'H': '....',   'З': '--..',
+    'I': '..',     'И': '..',
+    'J': '.---',   'Й': '.---',
+    'K': '-.-',    'К': '-.-',
+    'L': '.-..',   'Л': '.-..',
+    'M': '--',     'М': '--',
+    'N': '-.',     'Н': '-.',
+    'O': '---',    'О': '---',
+    'P': '.--.',   'П': '.--.',
+    'Q': '--.-',   'Р': '.-.',
+    'R': '.-.',    'С': '...',
+    'S': '...',    'Т': '-',
+    'T': '-',      'У': '..-',
+    'U': '.-',    'Ф': '..-.',
+    'V': '...-',   'Х': '....-',
+    'W': '.--',    'Ц': '-.-.',
+    'X': '-..-',   'Ч': '---.',
+    'Y': '-.--',   'Ш': '----',
+    'Z': '--..',   'Щ': '--.-',
+    '0': '-----',   'Ъ': '--.--',
+    '1': '.----',  'Ы': '-.--',
+    '2': '..--',  'Ь': '-..-',
+    '3': '...--',  'Э': '..-..',
+    '4': '....-',  'Ю': '..--',
+    '5': '.....',  'Я': '.-.-',
+    '6': '-....',
+    '7': '--...',
+    '8': '....-',
+    '9': '----.',
+    '.': '.-.-.-',
+    ',': '--..--',
+    '?': '..--..',
+    "'": '.----.',
+    '!': '-.-.--',
+    '/': '-..-.',
+    '(': '-.--.',
+    ')': '-.--.-',
+    '&': '.-...',
+    ':': '---...',
+    ';': '-.-.-.',
+    '=': '-...-',
+    '+': '.-.-.',
+    '-': '-....-',
+    '_': '..--.-',
+    '"': '.-..-.',
+    '$': '...-..-',
+    '@': '.--.-.',
+    ' ': '/'
+}
+
+def play_sound(duration):
+    """
+    Produces a sound signal of a given duration.
+    """
+    # For Windows
+    if platform.system() == 'Windows':
+        import winsound
+        winsound.Beep(1000, duration)  # Beep at 1000 Hz for 'duration' milliseconds
+    # For Linux/macOS
+    else:
+        import os
+        os.system('printf "\a"')  # Produces a system beep
+
+def text_to_morse(text):
+    """
+    Converts text to Morse code.
+
+    Args:
+        text: Text string.
+
+    Returns:
+        String with Morse code.
+    """
+    morse_code = ''
+    for char in text.upper():
+        if char in morse_code_dict:
+            morse_code += morse_code_dict[char] + ' '
+        else:
+            morse_code += '/ '  # If the character is not found, consider it as a space
+    return morse_code
+
+def morse_to_sound(morse_code):
+    """
+    Plays Morse code as sound signals.
+
+    Args:
+        morse_code: String with Morse code.
+    """
+    for symbol in morse_code:
+        if symbol == '.':
+            play_sound(100)  # Dot duration: 100 milliseconds
+        elif symbol == '-':
+            play_sound(300)  # Dash duration: 300 milliseconds
+        elif symbol == ' ':
+            time.sleep(0.3)  # Pause between characters: 300 milliseconds
+        elif symbol == '/':
+            time.sleep(0.7)  # Pause between words: 700 milliseconds
+
+if __name__ == '__main__':
+    # Get user input
+    text = input("Ingrese texto para convertir a código Morse: ")
+    
+    # Convert text to Morse code
+    morse = text_to_morse(text)
+    print("Código Morse:", morse)
+    
+    # Convert Morse code to sound
+    morse_to_sound(morse)
+</code></pre>
+<h2>4. Tareas</h2>
+<p><strong>Tarea 1:</strong></p>
+<p>Convierta los siguientes números de un sistema a otro:</p>
+<ul>
+<li><code>11011₂</code> a decimal</li>
+<li><code>201₃</code> a decimal</li>
+<li><code>563₇</code> a decimal</li>
+<li><code>2AF₁₆</code> a decimal</li>
+<li><code>45₁₀</code> a binario</li>
+<li><code>34₁₀</code> a ternario</li>
+<li><code>150₁₀</code> a septenario</li>
+<li><code>687₁₀</code> a hexadecimal</li>
+</ul>
+<p><strong>Tarea 2:</strong></p>
+<p>Invente su propio sistema de numeración con una base, por ejemplo, 5 (quinario). Escriba algunos números en este sistema y conviértalos a decimal.</p>
+<p><strong>Tarea 3:</strong></p>
+<p>Implemente funciones para convertir de decimal a binario, ternario, septenario, hexadecimal y viceversa (como en los ejemplos anteriores). Puede organizar estas funciones en una sola clase, por ejemplo <code>NumberConverter</code>.</p>
+<p><strong>Tarea 4:</strong></p>
+<p>Escriba una función para sumar dos números binarios representados como cadenas. (Avanzado).</p>
+<p><strong>Tarea 5:</strong></p>
+<p>Intente convertir un tiempo en segundos, representado como "h:m:s" a sistema decimal y viceversa.</p>
+<p><strong>Tarea 6:</strong></p>
+<p>Escriba una función que tome dos días de la semana y un rango de días (como en el ejemplo anterior), si el rango es menor a una semana, devuelve cuántos días hay entre ellos, si es mayor, devuelve cuántas semanas completas y el resto como días.</p>
+<p><strong>Tarea 7:</strong></p>
+<p>Mejore la función <code>calculate_day_of_week</code> para que maneje correctamente un número negativo de días transcurridos (es decir, cuando contamos los días hacia atrás).</p>
+<h2>5. Material adicional: Días de la semana y sistema septenario</h2>
+<p>Los días de la semana pueden considerarse un ejemplo del uso del sistema septenario, donde cada día es un dígito del 0 al 6. Sin embargo, dado que normalmente no comenzamos a contar los días de la semana desde cero, sino desde el lunes, se puede decir que este es un sistema septenario desplazado.</p>
+<p><strong>Ejemplo de código simple para contar los días de la semana:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+def calculate_day_of_week(start_day: int, days_passed: float) -> int:
+    """
+    Calculates the day of the week after a given number of days.
+
+    Args:
+        start_day: Start day of the week (0 - Monday, 6 - Sunday).
+        days_passed: Number of days passed.
+
+    Returns:
+        Day of the week after the given number of days (0 - Monday, 6 - Sunday).
+    """
+    if not isinstance(start_day, int) or not (0 <= start_day <= 6):
+        raise ValueError("El día de inicio de la semana debe ser un número entero del 0 al 6 (lun-dom)")
+    if not isinstance(days_passed, (int, float)):
+        raise ValueError("El número de días transcurridos debe ser un número")
+    
+    days_passed = int(days_passed)
+    new_day = (start_day + days_passed) % 7
+    return new_day
+
+def day_number_to_name(day_number: int) -> str:
+    """
+    Converts a day of the week number (0-6) to its name.
+
+    Args:
+        day_number: Day of the week number (0 - Monday, 6 - Sunday).
+
+    Returns:
+        Name of the day of the week (string).
+    """
+    days = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
+    return days[day_number]
+
+# Examples:
+start_day = 0  # Monday
+days = 10.5 # One and a half weeks
+new_day = calculate_day_of_week(start_day, days)
+print(f"{days} días después de {day_number_to_name(start_day)}: {day_number_to_name(new_day)}")
+days = 120 # Four months (approximately)
+new_day = calculate_day_of_week(start_day, days)
+print(f"{days} días después de {day_number_to_name(start_day)}: {day_number_to_name(new_day)}")
+
+# can start counting from another day
+start_day = 4  # Friday
+days = 365 # Year
+new_day = calculate_day_of_week(start_day, days)
+print(f"{days} días después de {day_number_to_name(start_day)}: {day_number_to_name(new_day)}")
+</code></pre>
+<p><strong>Explicaciones:</strong></p>
+<ol>
+<li>La función <code>calculate_day_of_week</code> toma el día de inicio de la semana (0-lunes, 6-domingo) y el número de días transcurridos (puede ser fraccionario).</li>
+<li><code>new_day = (start_day + days_passed) % 7</code>: Suma los días y toma el resto de la división por 7, porque hay 7 días en una semana. La operación <code>% 7</code> asegura el "bucle" cuando los días pasan del domingo.</li>
+<li><code>day_number_to_name</code> función auxiliar para una mejor comprensión de los resultados.</li>
+</ol>
+<h2>6. Diagrama</h2>
+<p>Para una comprensión más clara del proceso de conversión de números de un sistema de numeración a otro, puede usar un diagrama. Aquí hay un ejemplo de diagrama que describe el proceso de conversión del sistema decimal a cualquier otro (incluido binario, ternario, septenario, hexadecimal):</p>
+<pre class="line-numbers"><code class="language-mermaid">
+graph TD
+    A[Decimal number] --> B{Division by base}
+    B --> C{Get the remainder}
+    C --> D[Write the remainder]
+    D --> E{Dividend = Quotient}
+    E -- Dividend > 0 --> B
+    E -- Dividend == 0 --> F[Result]
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style F fill:#ccf,stroke:#333,stroke-width:2px
+    classDef plain fill:#ddd,stroke:#333,stroke-width:2px;
+    class B,C,D,E plain;
+</code></pre>
+<p><strong>Leyenda:</strong></p>
+<ol>
+<li><strong>Número decimal:</strong> El número original en el sistema decimal.</li>
+<li><strong>División por la base:</strong> Dividimos el número original por la base del sistema de numeración objetivo (2, 3, 7, 16, etc.).</li>
+<li><strong>Obtener el resto:</strong> Recordamos el resto de la división, ya que será uno de los dígitos en el número del sistema de numeración objetivo.</li>
+<li><strong>Escribir el resto:</strong> El resto se agrega al resultado en orden inverso, es decir, de fin a principio.</li>
+<li><strong>Dividendo = cociente:</strong> Después de eso, pasamos a un nuevo dividendo, que es igual al cociente de la división anterior.</li>
+<li><strong>Comprobar si es 0:</strong> Si nuestro dividendo no es igual a 0, repetimos el bucle, comenzando desde el punto 2.</li>
+<li><strong>Resultado:</strong> Cuando el dividendo es 0, hemos obtenido el resultado: el número en el sistema de numeración objetivo.</li>
+</ol>
+<p>Este diagrama describe el principio general de conversión de números del sistema decimal a cualquier otro. Se puede construir un diagrama similar para convertir de un sistema de numeración arbitrario a decimal (sumando los productos de los dígitos por la base elevada a una potencia).</p>
+<p><strong>Consejos:</strong></p>
+<ul>
+<li>Practique la conversión de sistemas de numeración. Cuanto más practique, mejor comprenderá los principios de los sistemas de numeración.</li>
+<li>Intente crear sus propios sistemas de numeración.</li>
+<li>Use Python para verificar sus soluciones y automatizar las conversiones.</li>
+</ul>

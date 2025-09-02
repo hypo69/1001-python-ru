@@ -1,0 +1,80 @@
+<h2 dir="rtl"><span dir="ltr">CRAPS</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">7</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;קראפס&quot; - זהו משחק מזל בקובייה, שבו השחקן מהמר על תוצאת הטלת שתי קוביות משחק. בסיבוב הראשון השחקן מנצח אם סכום הנקודות על הקוביות שווה ל-<span dir="ltr">7</span> או <span dir="ltr">11</span>, ומפסיד אם הסכום שווה ל-<span dir="ltr">2</span>, <span dir="ltr">3</span> או <span dir="ltr">12</span>. אם סכום הנקודות שווה ל-<span dir="ltr">4</span>, <span dir="ltr">5</span>, <span dir="ltr">6</span>, <span dir="ltr">8</span>, <span dir="ltr">9</span> או <span dir="ltr">10</span>, אז זה הופך ל&quot;מספר היעד&quot; של השחקן, והוא ממשיך להטיל קוביות עד שמספר זה יופיע שוב (במקרה זה השחקן מנצח) או שיופיע <span dir="ltr">7</span> (במקרה זה השחקן מפסיד).</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">בתחילת המשחק השחקן מטיל שתי קוביות.</p></li>
+<li><p dir="rtl">אם סכום הנקודות על הקוביות שווה ל-<span dir="ltr">7</span> או <span dir="ltr">11</span>, השחקן מנצח.</p></li>
+<li><p dir="rtl">אם סכום הנקודות שווה ל-<span dir="ltr">2</span>, <span dir="ltr">3</span> או <span dir="ltr">12</span>, השחקן מפסיד.</p></li>
+<li><p dir="rtl">אם סכום הנקודות שווה ל-<span dir="ltr">4</span>, <span dir="ltr">5</span>, <span dir="ltr">6</span>, <span dir="ltr">8</span>, <span dir="ltr">9</span> או <span dir="ltr">10</span>, אז מספר זה הופך ל&quot;מספר היעד&quot; (<span dir="ltr">point</span>).</p></li>
+<li><p dir="rtl">לאחר קביעת &quot;מספר היעד&quot;, השחקן ממשיך להטיל קוביות עד ש:</p>
+<ul>
+<li><p dir="rtl">יופיע &quot;מספר היעד&quot; שוב, אז השחקן מנצח.</p></li>
+<li><p dir="rtl">יופיע <span dir="ltr">7</span>, אז השחקן מפסיד.</p></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">צור ערכים אקראיים לשתי קוביות (מ-<span dir="ltr">1</span> עד <span dir="ltr">6</span>).</p></li>
+<li><p dir="rtl">חשב את סכום הערכים שהתקבלו.</p></li>
+<li><p dir="rtl">אם הסכום שווה ל-<span dir="ltr">7</span> או <span dir="ltr">11</span>, הצג הודעת ניצחון ועבור לשלב <span dir="ltr">7</span>.</p></li>
+<li><p dir="rtl">אם הסכום שווה ל-<span dir="ltr">2</span>, <span dir="ltr">3</span> או <span dir="ltr">12</span>, הצג הודעת הפסד ועבור לשלב <span dir="ltr">7</span>.</p></li>
+<li><p dir="rtl">שמור את הסכום כ&quot;מספר היעד&quot; (<span dir="ltr">point</span>).</p></li>
+<li><p dir="rtl">התחל לולאה:</p>
+<ol>
+<li><p dir="rtl">צור ערכים אקראיים לשתי קוביות.</p></li>
+<li><p dir="rtl">חשב את סכום הערכים שהתקבלו.</p></li>
+<li><p dir="rtl">אם הסכום שווה ל&quot;מספר היעד&quot;, הצג הודעת ניצחון ועבור לשלב <span dir="ltr">7</span>.</p></li>
+<li><p dir="rtl">אם הסכום שווה ל-<span dir="ltr">7</span>, הצג הודעת הפסד ועבור לשלב <span dir="ltr">7</span>.</p></li>
+<li><p dir="rtl">אחרת, חזור על הלולאה משלב <span dir="ltr">6</span>.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> RollDice1["Generate values for two dice: <code><b>dice1, dice2</b></code>"]
+    RollDice1 --> CalculateSum1["<code><b>sumOfDice = dice1 + dice2</b></code>"]
+    CalculateSum1 --> CheckWin1{"Check: <code><b>sumOfDice == 7 or sumOfDice == 11?</b></code>"}
+    CheckWin1 -- Yes --> OutputWin1["Display message: <b>You won!</b>"]
+    OutputWin1 --> End["End"]
+    CheckWin1 -- No --> CheckLose1{"Check: <code><b>sumOfDice == 2 or sumOfDice == 3 or sumOfDice == 12?</b></code>"}
+    CheckLose1 -- Yes --> OutputLose1["Display message: <b>You lost!</b>"]
+    OutputLose1 --> End
+    CheckLose1 -- No --> SetPoint["<code><b>point = sumOfDice</b></code>"]
+    SetPoint --> LoopStart{"Start loop: as long as not won or lost"}
+    LoopStart --> RollDice2["Generate values for two dice: <code><b>dice1, dice2</b></code>"]
+    RollDice2 --> CalculateSum2["<code><b>sumOfDice = dice1 + dice2</b></code>"]
+     CalculateSum2 --> CheckWin2{"Check: <code><b>sumOfDice == point?</b></code>"}
+    CheckWin2 -- Yes --> OutputWin2["Display message: <b>You won!</b>"]
+    OutputWin2 --> End
+    CheckWin2 -- No --> CheckLose2{"Check: <code><b>sumOfDice == 7?</b></code>"}
+    CheckLose2 -- Yes --> OutputLose2["Display message: <b>You lost!</b>"]
+     OutputLose2 --> End
+    CheckLose2 -- No --> LoopStart
+</code></pre>
+
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">RollDice1</span> - יצירת ערכים אקראיים לשתי קוביות משחק (<span dir="ltr">dice1, dice2</span>) בהטלה הראשונה.</p></li>
+<li><p dir="rtl"><span dir="ltr">CalculateSum1</span> - חישוב סכום ערכי <span dir="ltr">dice1</span> ו-<span dir="ltr">dice2</span> ושמירת התוצאה במשתנה <span dir="ltr">sumOfDice</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckWin1</span> - בדיקה האם <span dir="ltr">sumOfDice</span> שווה ל-<span dir="ltr">7</span> או <span dir="ltr">11</span>. אם כן, השחקן ניצח.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWin1</span> - הצגת הודעה &quot;ניצחת!&quot; וסיום המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckLose1</span> - בדיקה האם <span dir="ltr">sumOfDice</span> שווה ל-<span dir="ltr">2</span>, <span dir="ltr">3</span> או <span dir="ltr">12</span>. אם כן, השחקן הפסיד.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputLose1</span> - הצגת הודעה &quot;הפסדת!&quot; וסיום המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">SetPoint</span> - אם לא ניצח ולא הפסיד בהטלה הראשונה, <span dir="ltr">sumOfDice</span> נשמר במשתנה <span dir="ltr">point</span>, שהופך ל&quot;מספר היעד&quot;.</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת הלולאה הנמשכת עד שהשחקן מנצח או מפסיד.</p></li>
+<li><p dir="rtl"><span dir="ltr">RollDice2</span> - יצירת ערכים אקראיים לשתי קוביות משחק (<span dir="ltr">dice1, dice2</span>) בהטלות הבאות.</p></li>
+<li><p dir="rtl"><span dir="ltr">CalculateSum2</span> - חישוב סכום ערכי <span dir="ltr">dice1</span> ו-<span dir="ltr">dice2</span> ושמירת התוצאה במשתנה <span dir="ltr">sumOfDice</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckWin2</span> - בדיקה האם <span dir="ltr">sumOfDice</span> שווה ל&quot;מספר היעד&quot; <span dir="ltr">point</span>. אם כן, השחקן ניצח.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWin2</span> - הצגת הודעה &quot;ניצחת!&quot; וסיום המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckLose2</span> - בדיקה האם <span dir="ltr">sumOfDice</span> שווה ל-<span dir="ltr">7</span>. אם כן, השחקן הפסיד.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputLose2</span> - הצגת הודעה &quot;הפסדת!&quot; וסיום המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+</ul>

@@ -1,0 +1,185 @@
+<h2 dir="rtl">סינגלטון (Singleton) ב-<code dir="ltr">Python</code></h2>
+<p dir="rtl">ב-<code dir="ltr">Python</code>, סינגלטון – זוהי תבנית עיצוב המבטיחה שלמחלקה יהיה רק מופע אחד, ומספקת נקודת גישה גלובלית למופע זה. זה אומר שבעת ניסיון ליצור אובייקט חדש של מחלקה זו, תמיד תקבל את אותו אובייקט.</p>
+<p dir="rtl">סינגלטונים שימושיים כאשר יש צורך להגביל את מספר המופעים של מחלקה, לדוגמה:</p>
+<ul>
+<li dir="rtl">לניהול חיבור לבסיס נתונים (כדי לא לפתוח חיבורים רבים).</li>
+<li dir="rtl">לאחסון תצורת יישום גלובלית (כדי שכל חלקי היישום ישתמשו באותה תצורה).</li>
+<li dir="rtl">לרישום (כדי שכל ההודעות יגיעו לקובץ אחד).</li>
+</ul>
+<p dir="rtl">כמה דרכים ליישום סינגלטון ב-<code dir="ltr">Python</code>.</p>
+<hr>
+<p dir="rtl"><strong>דרכים ליישום סינגלטון:</strong></p>
+<ol>
+<li dir="rtl"><strong>באמצעות דריסת שיטת <code dir="ltr">__new__</code></strong>
+<ul>
+<li dir="rtl">השיטה <code dir="ltr">__new__</code> אחראית על יצירת מופע של מחלקה. על ידי דריסתה, אוכל לשלוט בתהליך זה.</li>
+<li dir="rtl">בדוגמה זו אשמור את המופע היחיד של המחלקה במשתנה <code dir="ltr">_instance</code>.</li>
+<li dir="rtl">אם המופע עדיין לא נוצר, אצור אותו; אחרת, אחזיר את המופע הקיים.</li>
+<li dir="rtl"><strong>קוד <code dir="ltr">Python</code>:</strong>
+<pre class="line-numbers"><code class="language-python">class Singleton:
+    _instance = None  # שומר את המופע היחיד
+
+    def __new__(cls, *args, **kwargs):
+        """
+        דורס את שיטת __new__ כדי לשלוט ביצירת מופע.
+
+        Args:
+            cls: המחלקה שעבורה נוצר המופע.
+            *args: ארגומנטים מיקומיים לבנאי.
+            **kwargs: ארגומנטים בעלי שם לבנאי.
+
+        Returns:
+            המופע היחיד של המחלקה.
+        """
+        if not cls._instance: # אם המופע עדיין לא נוצר
+            cls._instance = super().__new__(cls, *args, **kwargs) # יוצר מופע חדש
+        return cls._instance # מחזיר את המופע הקיים
+
+# דוגמה לשימוש
+s1 = Singleton()
+s2 = Singleton()
+
+print(s1 is s2)  # יוציא True, מכיוון שזהו אותו אובייקט
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<ol start="2">
+<li dir="rtl"><strong>באמצעות דקורטור</strong>
+<ul>
+<li dir="rtl">דקורטור – זוהי פונקציה המשנה מחלקה.</li>
+<li dir="rtl">בדוגמה זו אצור פונקציית דקורטור <code dir="ltr">singleton</code>, המקבלת מחלקה ומחזירה את גרסתה העטופה.</li>
+<li dir="rtl">בתוך הדקורטור אשמור את מופעי המחלקות במילון <code dir="ltr">instances</code>.</li>
+<li dir="rtl">אם מופע המחלקה עדיין לא נוצר, אצור אותו ואשמור אותו במילון; אחרת, אחזיר את המופע הקיים.</li>
+<li dir="rtl"><strong>קוד <code dir="ltr">Python</code>:</strong>
+<pre class="line-numbers"><code class="language-python">def singleton(cls):
+    """
+    דקורטור ליצירת סינגלטון.
+
+    Args:
+        cls: המחלקה שיש להפוך לסינגלטון.
+
+    Returns:
+        המחלקה שהשתנתה, שהיא סינגלטון.
+    """
+    instances = {} # שומר מופעים
+
+    def wrapper(*args, **kwargs):
+        """
+        פונקציית עטיפה המחזירה את המופע היחיד של המחלקה.
+
+        Args:
+           *args: ארגומנטים מיקומיים לבנאי.
+           **kwargs: ארגומנטים בעלי שם לבנאי.
+
+        Returns:
+            המופע היחיד של המחלקה.
+        """
+        if cls not in instances: # אם המופע עדיין לא נוצר
+            instances[cls] = cls(*args, **kwargs) # יוצר מופע ושומר אותו
+        return instances[cls] # מחזיר את המופע הקיים
+    return wrapper
+
+@singleton # מיישם את הדקורטור על המחלקה
+class MyClass:
+    pass
+
+# דוגמה לשימוש
+obj1 = MyClass()
+obj2 = MyClass()
+
+print(obj1 is obj2)  # יוציא True, מכיוון שזהו אותו אובייקט
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<ol start="3">
+<li dir="rtl"><strong>באמצעות מטא-מחלקה</strong>
+<ul>
+<li dir="rtl">מטא-מחלקה מאפשרת לשלוט ביצירת מחלקות.</li>
+<li dir="rtl">בדוגמה זו אצור מטא-מחלקה <code dir="ltr">SingletonMeta</code>, שתפקח על יצירת מופעים.</li>
+<li dir="rtl">המטא-מחלקה שומרת מופעי מחלקות במילון <code dir="ltr">_instances</code>.</li>
+<li dir="rtl">בעת יצירת מופע חדש, אבדוק אם הוא כבר קיים במילון; אם לא – אצור אותו; אחרת, אחזיר את המופע הקיים.</li>
+<li dir="rtl"><strong>קוד <code dir="ltr">Python</code>:</strong>
+<pre class="line-numbers"><code class="language-python">class SingletonMeta(type):
+    """
+    מטא-מחלקה ליצירת סינגלטון.
+    """
+    _instances = {} # שומר מופעים
+
+    def __call__(cls, *args, **kwargs):
+        """
+        דורס את שיטת __call__ כדי לשלוט ביצירת מופע.
+
+        Args:
+            cls: המחלקה שעבורה נוצר המופע.
+            *args: ארגומנטים מיקומיים לבנאי.
+            **kwargs: ארגומנטים בעלי שם לבנאי.
+
+        Returns:
+            המופע היחיד של המחלקה.
+        """
+        if cls not in cls._instances: # אם המופע עדיין לא נוצר
+            cls._instances[cls] = super().__call__(*args, **kwargs) # יוצר מופע חדש
+        return cls._instances[cls] # מחזיר את המופע הקיים
+
+class Singleton(metaclass=SingletonMeta):
+    """
+    מחלקה שהיא סינגלטון.
+    """
+    pass
+
+# דוגמה לשימוש
+s1 = Singleton()
+s2 = Singleton()
+
+print(s1 is s2)  # יוציא True, מכיוון שזהו אותו אובייקט
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<ol start="4">
+<li dir="rtl"><strong>באמצעות מודול</strong>
+<ul>
+<li dir="rtl">ב-<code dir="ltr">Python</code> מודול הוא סינגלטון בפני עצמו.</li>
+<li dir="rtl">אני יכול ליצור אובייקט במודול, והוא יהיה המופע היחיד.</li>
+<li dir="rtl"><strong>קוד <code dir="ltr">Python</code>:</strong>
+<pre class="line-numbers"><code class="language-python"># קובץ singleton.py
+class Singleton:
+    pass
+
+instance = Singleton()
+</code></pre>
+<pre class="line-numbers"><code class="language-python"># בקובץ אחר
+from singleton import instance
+
+obj1 = instance
+obj2 = instance
+
+print(obj1 is obj2)  # יוציא True, מכיוון שזהו אותו אובייקט
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<p dir="rtl"><strong>יתרונות הסינגלטון:</strong></p>
+<ul>
+<li dir="rtl"><strong>הבטחת מופע יחיד:</strong> סינגלטון מבטיח שלמחלקה יהיה רק מופע אחד. זה שימושי לניהול משאבים שחייבים להיות ייחודיים.</li>
+<li dir="rtl"><strong>גישה גלובלית:</strong> סינגלטון מספק נקודת גישה גלובלית למופע המחלקה, מה שמפשט את השימוש במופע זה בכל חלק בתוכנית.</li>
+</ul>
+<p dir="rtl"><strong>חסרונות הסינגלטון:</strong></p>
+<ul>
+<li dir="rtl"><strong>מצב גלובלי:</strong> סינגלטון יכול להוביל לשימוש במצב גלובלי, מה שעלול לגרום לתופעות לוואי בלתי צפויות ולסבך את הבדיקות.</li>
+<li dir="rtl"><strong>הפרת עקרונות OOP:</strong> סינגלטון יכול להפר את עקרון האחריות היחידה ואת האנקפסולציה.</li>
+</ul>
+<p dir="rtl"><strong>מתי להשתמש בסינגלטון?</strong></p>
+<ul>
+<li dir="rtl">כאשר אתה צריך שאובייקט יתקיים כמופע יחיד (לדוגמה, תצורה, לוגר, חיבור לבסיס נתונים).</li>
+<li dir="rtl">כאשר אתה זקוק לגישה גלובלית לאובייקט זה.</li>
+</ul>

@@ -1,0 +1,122 @@
+<h2 dir="rtl"><span dir="ltr">ANIMAL</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">4</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;<span dir="ltr">ANIMAL</span>&quot; - זהו משחק ניחוש חיות, שבו המחשב בוחר חיה אקראית מתוך רשימה, והשחקן מנסה לנחש אותה, על ידי הזנת ניחושיו. המשחק נמשך עד שהשחקן מנחש את החיה.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">המחשב בוחר חיה אקראית מתוך רשימה מוגדרת מראש.</p></li>
+<li><p dir="rtl">השחקן מזין את ניחושיו לגבי החיה הנסתרת.</p></li>
+<li><p dir="rtl">לאחר כל ניסיון, המחשב מודיע אם השחקן ניחש את החיה או לא.</p></li>
+<li><p dir="rtl">המשחק נמשך עד שהשחקן מנחש את החיה הנסתרת.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">הגדר רשימת חיות.</p></li>
+<li><p dir="rtl">בחר חיה אקראית מהרשימה.</p></li>
+<li><p dir="rtl">התחל לולאה &quot;כל עוד החיה לא נוחשה&quot;:</p>
+<ol>
+<li><p dir="rtl">בקש מהשחקן להזין את שם החיה.</p></li>
+<li><p dir="rtl">אם השם שהוזן תואם לחיה הנסתרת, עבור לשלב <span dir="ltr">4</span>.</p></li>
+<li><p dir="rtl">אחרת, הצג הודעה &quot;לא&quot;.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">הצג הודעה &quot;נכון!&quot;.</p></li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeAnimals["<p align='left'>Initialize animal list:<br><code><b>
+    animals = ['DOG', 'CAT', 'HORSE', 'COW', 'PIG']
+    </b></code></p>"]
+    InitializeAnimals --> ChooseRandomAnimal["Choose a random animal from the list: <code><b>targetAnimal</b></code>"]
+    ChooseRandomAnimal --> LoopStart{"Start loop: until guessed"}
+    LoopStart -- Yes --> InputAnimal["User enters animal name: <code><b>userAnimal</b></code>"]
+    InputAnimal --> CheckAnimal{"Check: <code><b>userAnimal == targetAnimal?</b></code>"}
+    CheckAnimal -- Yes --> OutputWin["Display message: <b>Correct!</b>"]
+    OutputWin --> End["End"]
+    CheckAnimal -- No --> OutputWrong["Display message: <b>No</b>"]
+    OutputWrong --> LoopStart
+    LoopStart -- No --> End
+
+</code></pre>
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeAnimals</span> - אתחול רשימת החיות.</p></li>
+<li><p dir="rtl"><span dir="ltr">ChooseRandomAnimal</span> - בחירת חיה אקראית מהרשימה ושמירתה במשתנה <span dir="ltr">targetAnimal</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת הלולאה, הנמשכת עד שהחיה נוחשה.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputAnimal</span> - בקשת המשתמש להזין את שם החיה ושמירתו במשתנה <span dir="ltr">userAnimal</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckAnimal</span> - בדיקה האם שם החיה שהוזן <span dir="ltr">userAnimal</span> תואם לחיה הנסתרת <span dir="ltr">targetAnimal</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWin</span> - הצגת הודעת ניצחון אם שמות החיות תואמים.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWrong</span> - הצגת הודעה &quot;לא&quot; אם שם החיה שהוזן אינו תואם לחיה הנסתרת.</p></li>
+</ul>
+
+<pre class="line-numbers"><code class="language-python">import random
+
+# List of animals for the game
+animals = ['DOG', 'CAT', 'HORSE', 'COW', 'PIG']
+
+# Choose a random animal from the list
+targetAnimal = random.choice(animals)
+
+# Start the loop until the animal is guessed
+while True:
+    # Ask the user to enter the animal's name
+    userAnimal = input("נחש את החיה (DOG, CAT, HORSE, COW, PIG): ").upper()
+
+    # Check if the user guessed the animal
+    if userAnimal == targetAnimal:
+        print("נכון!") # Display correct message
+        break # End the loop if the animal is guessed
+    else:
+        print("לא") # Display wrong message
+
+</code></pre>
+
+<h3 dir="rtl">הסבר קוד:</h3>
+
+<ol>
+<li><p dir="rtl"><strong>ייבוא מודול <span dir="ltr"><code>random</code></span></strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>import random</code></span>: מייבא את מודול <span dir="ltr"><code>random</code></span>, המשמש לבחירה אקראית של חיה.</p></li>
+</ul>
+</li>
+
+<li><p dir="rtl"><strong>רשימת חיות</strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>animals = ['DOG', 'CAT', 'HORSE', 'COW', 'PIG']</code></span>: יוצר רשימת מחרוזות עם שמות חיות.</p></li>
+</ul>
+</li>
+
+<li><p dir="rtl"><strong>בחירת חיה אקראית</strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>targetAnimal = random.choice(animals)</code></span>: בוחר חיה אקראית מהרשימה <span dir="ltr"><code>animals</code></span> ושומר אותה במשתנה <span dir="ltr"><code>targetAnimal</code></span>.</p></li>
+</ul>
+</li>
+
+<li><p dir="rtl"><strong>לולאת המשחק הראשית <span dir="ltr"><code>while True:</code></span></strong>:</p>
+<ul>
+<li><p dir="rtl">לולאה אינסופית הנמשכת עד שהשחקן מנחש את החיה.</p></li>
+<li><p dir="rtl"><strong>קלט</strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>userAnimal = input("נחש את החיה (DOG, CAT, HORSE, COW, PIG): ").upper()</code></span>: מבקש מהמשתמש להזין את שם החיה וממיר אותו לאותיות גדולות לצורך השוואה ללא תלות ברישיות.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>תנאי ניצחון</strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>if userAnimal == targetAnimal:</code></span>: בודק אם שם החיה שהוזן על ידי המשתמש תואם לחיה הנסתרת.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>print("נכון!")</code></span>: מציג הודעת ניצחון אם החיה נוחשה.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>break</code></span>: מסיים את הלולאה (ואת המשחק) אם החיה נוחשה.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>הודעת תשובה שגויה</strong>:</p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>else:</code></span>: מבוצע אם שם החיה שהוזן אינו תואם לחיה הנסתרת.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>print("לא")</code></span>: מציג הודעה &quot;לא&quot; אם התשובה שגויה.</p></li>
+</ul>
+</li>
+</ol>

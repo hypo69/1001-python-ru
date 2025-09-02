@@ -1,0 +1,176 @@
+<h1><strong>Acey-Ducey Card Game</strong></h1>
+<h2>Description</h2>
+<p>This is a simulation of the Acey-Ducey card game. The player places bets based on the probability that the next card will fall between two already open cards.</p>
+<ul>
+<li><strong>Starting Capital:</strong> The player starts with $100.</li>
+<li><strong>Game Rules:</strong>
+<ol>
+<li>The computer deals two cards.</li>
+<li>The player can decide whether to place a bet or not.</li>
+<li>If a bet is placed, a third card is drawn.</li>
+<li>If the value of the third card falls between the first two cards, the player wins the bet. Otherwise, the bet is lost.</li>
+</ol>
+</li>
+<li>The game ends when the player loses all capital or manually ends it.</li>
+</ul>
+<h2>How the code works</h2>
+<hr>
+<h3><strong>1. Import library</strong></h3>
+<pre class="line-numbers"><code class="language-python">import random
+</code></pre>
+<ul>
+<li><strong>random</strong> – a library for generating random numbers. It is used to shuffle the deck of cards and select random cards.</li>
+</ul>
+<hr>
+<h3><strong>2. Create a deck of cards</strong></h3>
+<pre class="line-numbers"><code class="language-python">def create_deck():
+    ranks = list(range(2, 15))  # Cards from 2 to 14 (Ace = 14)
+    deck = ranks * 4  # 4 suits
+    random.shuffle(deck)
+    return deck
+</code></pre>
+<ul>
+<li><strong>ranks</strong> – a list of card values from 2 to 14 (Ace = 14).</li>
+<li><strong>deck</strong> – created by multiplying the <code>ranks</code> list by 4 to get 4 suits (spades, hearts, diamonds, clubs).</li>
+<li><strong>random.shuffle(deck)</strong> – shuffles the deck of cards.</li>
+<li>The function returns the shuffled deck.</li>
+</ul>
+<hr>
+<h3><strong>3. Display card in readable format</strong></h3>
+<pre class="line-numbers"><code class="language-python">def card_name(value):
+    if value == 11:
+        return "Jack"
+    elif value == 12:
+        return "Queen"
+    elif value == 13:
+        return "King"
+    elif value == 14:
+        return "Ace"
+    else:
+        return str(value)
+</code></pre>
+<ul>
+<li>The function takes the numeric value of the card (from 2 to 14) and returns its text representation.</li>
+<li>For example, 11 → "Jack", 14 → "Ace".</li>
+</ul>
+<hr>
+<h3><strong>4. Main game loop</strong></h3>
+<pre class="line-numbers"><code class="language-python">def play_acey_ducey():
+    print("Welcome to Acey Ducey!")
+    print("Rules: You place a bet, guessing if the next card will be between the two dealt cards.")
+    print("If the card is equal to one of the dealt cards or an Ace, you lose.")
+    print("Enter '0' to skip turn.\n")
+
+    money = 100  # Player's starting balance
+    deck = create_deck()
+</code></pre>
+<ul>
+<li><strong>money</strong> – player's starting balance ($100).</li>
+<li><strong>deck</strong> – a deck of cards is created using the <code>create_deck()</code> function.</li>
+</ul>
+<hr>
+<h3><strong>5. Dealing two cards</strong></h3>
+<pre class="line-numbers"><code class="language-python">while money > 0 and len(deck) >= 3:
+    print(f"Your current balance: ${money}")
+
+    # Deal two cards
+    card1 = deck.pop()
+    card2 = deck.pop()
+    while card1 == card2:  # If cards are the same, draw new ones
+        deck.insert(0, card1)
+        deck.insert(0, card2)
+        card1 = deck.pop()
+        card2 = deck.pop()
+
+    print(f"First card: {card_name(card1)}")
+    print(f"Second card: {card_name(card2)}")
+</code></pre>
+<ul>
+<li><strong>deck.pop()</strong> – extracts the last card from the deck.</li>
+<li><strong>while card1 == card2</strong> – checks if the dealt cards are the same. If they are, it returns them to the top of the deck and draws new ones.</li>
+<li><strong>card_name(card1)</strong> – converts the numeric value of the card to text.</li>
+</ul>
+<hr>
+<h3><strong>6. Determining the range</strong></h3>
+<pre class="line-numbers"><code class="language-python">low_card = min(card1, card2)
+high_card = max(card1, card2)
+</code></pre>
+<ul>
+<li><strong>low_card</strong> – minimum value of the two cards.</li>
+<li><strong>high_card</strong> – maximum value of the two cards.</li>
+</ul>
+<hr>
+<h3><strong>7. Place a bet or skip turn</strong></h3>
+<pre class="line-numbers"><code class="language-python">try:
+    bet = int(input(f"Place your bet (from 0 to {money}) or enter '0' to skip turn: "))
+    if bet < 0 or bet > money:
+        print("Invalid bet. Please try again.")
+        continue
+    if bet == 0:
+        print("You skipped your turn.\n")
+        continue  # Skip turn
+except ValueError:
+    print("Please enter a number.")
+    continue
+</code></pre>
+<ul>
+<li><strong>input()</strong> – prompts the player for a bet.</li>
+<li><strong>try-except</strong> – handles errors if the player entered non-numeric input.</li>
+<li><strong>if bet &lt; 0 or bet > money</strong> – checks if the bet is valid.</li>
+<li><strong>if bet == 0</strong> – if the bet is 0, the player skips the turn.</li>
+</ul>
+<hr>
+<h3><strong>8. Draw next card</strong></h3>
+<pre class="line-numbers"><code class="language-python">next_card = deck.pop()
+print(f"Next card: {card_name(next_card)}")
+</code></pre>
+<ul>
+<li><strong>next_card</strong> – extracts the next card from the deck.</li>
+<li><strong>card_name(next_card)</strong> – converts the card value to text representation.</li>
+</ul>
+<hr>
+<h3><strong>9. Check result</strong></h3>
+<pre class="line-numbers"><code class="language-python">if next_card == card1 or next_card == card2 or next_card == 14:
+    print("You lose!")
+    money -= bet
+elif low_card < next_card < high_card:
+    print("You win!")
+    money += bet
+else:
+    print("You lose!")
+    money -= bet
+</code></pre>
+<ul>
+<li><strong>if next_card == card1 or next_card == card2 or next_card == 14</strong> – if the next card is equal to one of the dealt cards or it's an Ace, the player loses.</li>
+<li><strong>elif low_card < next_card < high_card</strong> – if the next card is between the two dealt cards, the player wins.</li>
+<li><strong>else</strong> – in all other cases, the player loses.</li>
+</ul>
+<hr>
+<h3><strong>10. Game termination</strong></h3>
+<pre class="line-numbers"><code class="language-python">if money <= 0:
+    print("You ran out of money. Game over.")
+else:
+    print(f"Game over. Your final balance: ${money}")
+</code></pre>
+<ul>
+<li>If the player runs out of money, the game ends.</li>
+<li>If the deck runs out of cards, the game also ends.</li>
+</ul>
+<hr>
+<h3><strong>11. Start game</strong></h3>
+<pre class="line-numbers"><code class="language-python">if __name__ == "__main__":
+    play_acey_ducey()
+</code></pre>
+<ul>
+<li>This block starts the game if the file is executed directly (not imported as a module).</li>
+</ul>
+<hr>
+<h3><strong>Key concepts used in the code:</strong></h3>
+<ol>
+<li><strong>Functions</strong> – code is divided into functions for readability and reusability.</li>
+<li><strong>Lists</strong> – the deck of cards is represented as a list.</li>
+<li><strong>Loops</strong> – used to process game turns.</li>
+<li><strong>Conditions</strong> – check game rules.</li>
+<li><strong>Exception handling</strong> – used to handle input errors.</li>
+<li><strong>Random number generation</strong> – for shuffling the deck and selecting cards.</li>
+</code>

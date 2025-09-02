@@ -1,0 +1,151 @@
+<p dir="ltr">מחבר הקוד המקורי:<br>
+<span dir="ltr">https://github.com/Mstislav95/CashFlow_101/blob/main/CashFlow_model.ipynb</span></p>
+
+<p dir="ltr"><span dir="ltr">https://ok4u.club/cashflow101-rules/</span></p>
+
+<p dir="ltr"><span dir="ltr">https://www.youtube.com/watch?v=sG_RWsvYT7k&ab_channel=MstislavEfimov</span></p>
+
+
+<h2 dir="rtl">משחק חלומות: סימולטור איסוף &quot;חלומות&quot;</h2>
+
+<h3 dir="rtl">תיאור</h3>
+
+<p dir="rtl">סימולציה של משחק שבו השחקן נע על לוח המשחק, מטיל שתי קוביות בעלות שישה צדדים. על חלק מהתאים בלוח ממוקמים &quot;חלומות&quot;, שהשחקן יכול &quot;לאסוף&quot;. מטרת המשחק - להבין אילו &quot;חלומות&quot; הם הסבירים ביותר לאיסוף תחת הכללים הנתונים.</p>
+
+<h3 dir="rtl">כללי המשחק</h3>
+
+<ol>
+<li><p dir="rtl">השחקן מתחיל את המשחק במיקום ההתחלתי (נניח שהוא <span dir="ltr">0</span>).</p></li>
+<li><p dir="rtl">בתור אחד, השחקן מטיל שתי קוביות בעלות שישה צדדים ונע מספר תאים השווה לסכום הערכים שהתקבלו.</p></li>
+<li><p dir="rtl">לוח המשחק מכיל <span dir="ltr">48</span> תאים. אם השחקן נע מעבר לתא ה-<span dir="ltr">48</span>, הוא חוזר להתחלה, &quot;מסתובב&quot; על הלוח (לדוגמה, אם המיקום הנוכחי הוא <span dir="ltr">47</span> והתקבל <span dir="ltr">4</span>, המיקום החדש יהיה <span dir="ltr">3</span>).</p></li>
+<li><p dir="rtl">על חלק מהתאים (המצוינים ברשימת <span dir="ltr"><code>dream_numbers</code></span>) נמצאים &quot;חלומות&quot;.</p></li>
+<li><p dir="rtl">אם השחקן נוחת על תא עם &quot;חלום&quot; ועדיין לא ביקר בו באיטרציה הנוכחית, ה&quot;חלום&quot; נחשב שנאסף.</p></li>
+<li><p dir="rtl">המשחק נמשך מספר מהלכים מוגדר (<span dir="ltr"><code>moves</code></span>).</p></li>
+<li><p dir="rtl">המשחק מדומה מספר פעמים מוגדר (<span dir="ltr"><code>num_iterations</code></span>).</p></li>
+<li><p dir="rtl">כתוצאה מפעולת התוכנית, מחושבת תדירות איסוף כל &quot;חלום&quot; וההסתברות לאיסופו.</p></li>
+</ol>
+
+<h3 dir="rtl">תכונות קוד</h3>
+
+<ul>
+<li><p dir="rtl"><strong>מודלים</strong>: הקוד מדמה את תנועת השחקן על לוח המשחק באמצעות הטלות קוביות.</p></li>
+<li><p dir="rtl"><strong>איסוף &quot;חלומות&quot;</strong>: הקוד עוקב מתי השחקן נוחת על תאים עם &quot;חלומות&quot; וסופר את מספרם.</p></li>
+<li><p dir="rtl"><strong>ניתוח</strong>: התוכנית מנתחת את תוצאות הסימולציה ומחשבת את התדירות וההסתברות לאיסוף כל &quot;חלום&quot;.</p></li>
+<li><p dir="rtl"><strong>מחלקה <span dir="ltr"><code>DreamGame</code></span></strong>: הקוד עטוף במחלקה <span dir="ltr"><code>DreamGame</code></span>, מה שהופך אותו למובנה יותר וניתן לשימוש חוזר.</p></li>
+<li><p dir="rtl"><strong>יצירת שמות חלומות</strong>: שמות &quot;חלומות&quot; נוצרים באמצעות מודל <span dir="ltr">Gemini</span>, מה שהופך כל משחק לייחודי.</p></li>
+<li><p dir="rtl"><strong>אופטימיזציה</strong>: הקוד מותאם באמצעות <span dir="ltr"><code>collections.Counter</code></span> לספירת תדירויות וגנרטורים לאיטרציה על סימולציות.</p></li>
+</ul>
+
+<h3 dir="rtl">יכולות</h3>
+
+<ul>
+<li><p dir="rtl"><strong>התאמה אישית של פרמטרים</strong>: ניתן להתאים בקלות את מספר המהלכים למשחק (<span dir="ltr"><code>moves</code></span>) ואת מספר סימולציות המשחק (<span dir="ltr"><code>num_iterations</code></span>).</p></li>
+<li><p dir="rtl"><strong>שמות דינמיים</strong>: שמות &quot;חלומות&quot; נוצרים באופן דינמי באמצעות מודל <span dir="ltr">Gemini</span>, מה שמוסיף גיוון למשחק.</p></li>
+<li><p dir="rtl"><strong>ניתוח הסתברויות</strong>: קבלת ההסתברות לאיסוף כל &quot;חלום&quot; מאפשרת לנתח ולהשוות את זמינותם.</p></li>
+<li><p dir="rtl"><strong>הרחבה</strong>: הקוד ניתן להרחבה בקלות וניתן לשנותו כדי להוסיף מכניקות משחק חדשות.</p></li>
+</ul>
+
+<h3 dir="rtl">פירוק קוד</h3>
+
+<h4 dir="rtl">מחלקה <span dir="ltr"><code>DreamGame</code></span></h4>
+
+<p dir="rtl">המחלקה <span dir="ltr"><code>DreamGame</code></span> עוטפת את כל לוגיקת המשחק.</p>
+
+<h4 dir="rtl"><code>__init__(self, dream_numbers: List[int], moves: int = 3, num_iterations: int = 100_000)</code></h4>
+
+<p dir="rtl">Class constructor, initializes the game:</p>
+
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>dream_numbers</code></span>: List of numbers, representing &quot;dream&quot; locations.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>moves</code></span>: Number of moves per game.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>num_iterations</code></span>: Number of game simulations.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>self.dreams</code></span>: Dictionary, mapping dream numbers to their names. Populated using <span dir="ltr"><code>_generate_dream_names</code></span>.</p></li>
+</ul>
+
+<h4 dir="rtl"><code>_generate_dream_names(self) -> None</code></h4>
+
+<p dir="rtl">Method that generates &quot;dream&quot; names using the Gemini model.</p>
+
+<ul>
+<li><p dir="rtl">Creates a request to the Gemini model to generate a specified number of unique &quot;dream&quot; names.</p></li>
+<li><p dir="rtl">Processes the response and creates a <span dir="ltr"><code>self.dreams</code></span> dictionary, mapping a &quot;dream&quot; number to its name.</p></li>
+<li><p dir="rtl">Raises an error if the model does not return text or cannot generate the required number of names.</p></li>
+</ul>
+
+<h4 dir="rtl"><code>_simulate_game(self) -> Counter[str]</code></h4>
+
+<p dir="rtl">Method that simulates one game:</p>
+
+<ul>
+<li><p dir="rtl">Initializes a <span dir="ltr"><code>dreams_frequency</code></span> counter to track the frequency of &quot;dream&quot; collection.</p></li>
+<li><p dir="rtl">Initializes the <span dir="ltr"><code>square</code></span> variable, representing the player's current position on the board, and <span dir="ltr"><code>visited_dreams</code></span> to track collected dreams.</p></li>
+<li><p dir="rtl">Performs a specified number of moves (<span dir="ltr"><code>moves</code></span>), and moves the player on the game board.</p></li>
+<li><p dir="rtl">If the player lands on a cell with a &quot;dream&quot; and has not yet visited it, increments the counter for that &quot;dream&quot;.</p></li>
+<li><p dir="rtl">Returns a <span dir="ltr"><code>Counter</code></span> object with the frequency of &quot;dream&quot; collection.</p></li>
+</ul>
+
+<h4 dir="rtl"><code>run_experiment(self) -> pd.DataFrame</code></h4>
+
+<p dir="rtl">Method that runs the game simulation multiple times and returns a <span dir="ltr"><code>DataFrame</code></span> with the results:</p>
+
+<ul>
+<li><p dir="rtl">Runs the game simulation a specified number of times (<span dir="ltr"><code>num_iterations</code></span>).</p></li>
+<li><p dir="rtl">Summarizes the frequencies of &quot;dream&quot; collection from each simulation.</p></li>
+<li><p dir="rtl">Converts the results to a <span dir="ltr"><code>DataFrame</code></span>, where the columns are &quot;dream&quot; and &quot;frequency&quot;.</p></li>
+<li><p dir="rtl">Sorts the <span dir="ltr"><code>DataFrame</code></span> in descending order by frequency.</p></li>
+<li><p dir="rtl">Adds a &quot;probability&quot; column, calculated as the ratio of &quot;frequency&quot; to the total number of simulations.</p></li>
+<li><p dir="rtl">Returns a <span dir="ltr"><code>DataFrame</code></span> with the results.</p></li>
+</ul>
+
+<h3 dir="rtl">שימוש</h3>
+
+<p dir="rtl">בסוף הסקריפט נוצר מופע של המחלקה <span dir="ltr"><code>DreamGame</code></span> והניסוי מופעל. התוצאה מודפסת למסך כ-<span dir="ltr">DataFrame</span>.</p>
+
+<pre class="line-numbers"><code class="language-python">if __name__ == '__main__':
+    dream_numbers = [1, 3, 5, 7, 10, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47]
+    game = DreamGame(dream_numbers, moves=3, num_iterations=10_000)
+    df_result = game.run_experiment()
+    print(df_result)
+</code></pre>
+
+<h3 dir="rtl">דרישות</h3>
+
+<ul>
+<li><p dir="rtl"><span dir="ltr">Python 3.6+</span></p></li>
+<li><p dir="rtl">ספריות: <span dir="ltr"><code>pandas</code></span>, <span dir="ltr"><code>google-generativeai</code></span></p></li>
+<li><p dir="rtl">משתנה סביבה <span dir="ltr"><code>GOOGLE_API_KEY</code></span> עם מפתח ה-<span dir="ltr">API</span> של <span dir="ltr">Gemini</span> שלך</p></li>
+</ul>
+
+<h3 dir="rtl">התקנה</h3>
+
+<ol>
+<li><p dir="rtl">התקן <span dir="ltr">Python 3.6+</span></p></li>
+<li><p dir="rtl">התקן ספריות: <span dir="ltr"><code>pip install pandas google-generativeai</code></span></p></li>
+<li><p dir="rtl">הגדר את משתנה הסביבה <span dir="ltr"><code>GOOGLE_API_KEY</code></span> עם מפתח ה-<span dir="ltr">API</span> של <span dir="ltr">Gemini</span> שלך.</p></li>
+<li><p dir="rtl">הפעל את הסקריפט <span dir="ltr"><code>python your_script_name.py</code></span></p></li>
+</ol>
+
+<h3 dir="rtl">דוגמאות שימוש</h3>
+<pre class="line-numbers"><code class="language-python">    dream_numbers = [2,4,8,16,32,44]
+    game = DreamGame(dream_numbers, moves=5, num_iterations=1000)
+    df_result = game.run_experiment()
+    print(df_result)
+</code></pre>
+<p dir="rtl">בדוגמה זו:
+* Game object created
+* 10,000 games simulated with three moves
+* Simulation result displayed as a pandas DataFrame.</p>
+
+<pre class="line-numbers"><code class="language-python">    dream_numbers = [2,4,8,16,32,44]
+    game = DreamGame(dream_numbers, moves=5, num_iterations=1000)
+    df_result = game.run_experiment()
+    print(df_result)
+</code></pre>
+<p dir="rtl">בדוגמה זו:
+* Game object created with different dream numbers
+* 1000 games simulated with five moves
+* Simulation result displayed as a pandas DataFrame.</p>
+
+<h3 dir="rtl">רישיון</h3>
+
+<p dir="ltr">MIT</p>

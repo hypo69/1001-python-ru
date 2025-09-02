@@ -1,0 +1,121 @@
+<table>
+<tr>
+<td>
+<a href='https://github.com/hypo69/hypotez/blob/master/README.MD'>[Root ↑]</a>
+</td>
+<td>
+<a href='https://github.com/hypo69/hypotez/blob/master/src/README.MD'>Code</a>
+</td>
+<td>
+<a href='https://github.com/hypo69/hypotez/blob/master/docs/gemini/out/README.MD'>Documentation</a> 
+</td>
+<td>
+<a href='https://github.com/hypo69/hypotez/blob/master/README.RU.MD'>Русский</a>
+</td>
+</tr>
+</table>
+<h1>Storing Application Settings</h1>
+<h3>1. Storing Passwords and Credentials in KeePass</h3>
+<p>To securely store credentials such as passwords and API keys, use KeePass. Follow these steps:</p>
+<p>1. <strong>Create a KeePass Database</strong>:
+   - Open KeePass and create a new database by selecting <strong>File &gt; New Database</strong>.
+   - Set a strong master password to protect the database.
+   - <strong>Location</strong>: Save the KeePass database file (<code>credentials.kdbx</code>) in the <code>secrets</code> folder of your project:
+     </p><pre><code>root
+├── data
+├── secrets
+│   └── credentials.kdbx  # &lt;-- KeePass database file
+│   └── passowrd.txt
+│   └── &lt;googke api josn kes&gt;.json
+├── src
+└── ...
+
+    - Never share the `credentials.kdbx` file with others. ❗
+    - Ensure the file is stored in a secure location accessible only to you. (The `secrets` folder in the project root is excluded from `git`).
+    - Regularly update your API keys and database passwords.     ```
+</code></pre>
+<p>2. <strong>Create Groups and Entries</strong>:
+   - Your database should contain multiple groups to organize credentials. For example:
+     - <strong>suppliers</strong>
+       - <strong>aliexpress</strong>
+         - Entry for API containing:
+           - <code>api_key</code>: Your Aliexpress API key.
+           - <code>secret</code>: Your Aliexpress secret key.
+           - <code>tracking_id</code>: Tracking ID.
+           - <code>email</code>: Your email address.
+           - <code>password</code>: Your Aliexpress password.
+       - <strong>openai</strong>
+         - Entry for OpenAI API containing:
+           - <code>api_key</code>: Your OpenAI API key.
+       - <strong>discord</strong>
+         - Entry for Discord API containing:
+           - <code>application_id</code>: Discord application ID.
+           - <code>public_key</code>: Public key.
+           - <code>bot_token</code>: Bot token.
+       - <strong>prestashop</strong> and other services with corresponding entries.</p>
+<p>3. <strong>Add Custom Properties</strong>:
+   - When creating entries, add custom properties for storing additional data. For instance, in the Aliexpress entry, add fields for:
+     - <code>tracking_id</code>
+     - <code>username</code>
+     - <code>email</code></p>
+<h3>2. Configuration of the <code>settings.json</code> File</h3>
+<p>The <code>settings.json</code> file stores the main settings for your project. Here's how to configure it:</p>
+<p>1. <strong>Create the <code>settings.json</code> File</strong>:
+   - Create a file named <code>settings.json</code> in the <code>/src</code> directory of your project.</p>
+<p>2. <strong>Example Content of the <code>settings.json</code> File</strong>:
+   </p><pre><code class="language-json">{
+     "google_drive": "H:\\My Drive\\hypo69",  // Path to the Google Drive folder used for storing data.
+     "mode": "debug",                          // Mode of the application: 'debug' for development or 'production' for live mode.
+     "git_user": "hypo69",                    // Username for accessing the Git repository.
+     "git": "hypo"                             // Name of the Git repository.
+   }
+</code></pre>
+<p>3. <strong>Description of the Fields</strong>:
+   - <strong>google_drive</strong>: The path to the directory on your Google Drive where project data will be stored. Ensure this path is correct for your system.
+   - <strong>mode</strong>: Specify the mode of your application. Use <code>debug</code> for testing and <code>production</code> for deployment.
+   - <strong>git_user</strong>: Your username on GitHub or another platform where your repository is hosted.
+   - <strong>git</strong>: The name of your repository that is used for tracking code changes.</p>
+<h3>3. Protecting Sensitive Information</h3>
+<ul>
+<li><strong>Sensitive Data</strong>: The file containing your API keys and passwords is stored in the <code>secrets</code> folder, which is **not included in the Git repository** to prevent unauthorized access. All passwords and API keys should be loaded from KeePass at the start of the program, as described in the code.</li>
+<li><strong>Backup</strong>: Regularly back up your KeePass database and <code>settings.json</code> file to prevent data loss.</li>
+</ul>
+<h2>Reporting a Vulnerability</h2>
+<p>If you find a security vulnerability in our project, please report it by following these steps:</p>
+<p>1. <strong>Email</strong>: Send an email to <a href="mailto:security@example.com">security@example.com</a> with a description of the vulnerability.
+2. <strong>Information to Include</strong>:
+   - A detailed description of the issue
+   - Steps to reproduce the vulnerability
+   - Affected version(s)
+   - Any other relevant information
+   
+3. <strong>Response Time</strong>: You can expect to receive an acknowledgment within 48 hours. We aim to provide updates on the status of the reported vulnerability every week until it's resolved.</p>
+<p>4. <strong>Outcome</strong>: If the vulnerability is confirmed, we will work on a fix and notify you when it’s available. If we determine the report is not a vulnerability, we will inform you of our decision.</p>
+<h2>Supported Versions</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Supported</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.1.x</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>5.0.x</td>
+<td>:x:</td>
+</tr>
+<tr>
+<td>4.0.x</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>&lt; 4.0</td>
+<td>:x:</td>
+</tr>
+</tbody>
+</table>
+<p>Thank you for helping us keep our project secure!</p>

@@ -1,0 +1,77 @@
+<h3 dir="rtl">שם המשחק: <strong><span dir="ltr">Acey-Ducey Card Game</span></strong></h3>
+
+<h4 dir="rtl">תיאור</h4>
+<p dir="rtl">זוהי סימולציה של משחק הקלפים <span dir="ltr">Acey-Ducey</span>. השחקן מציב הימורים על בסיס ההסתברות שהקלף הבא יפול בין שני קלפים שכבר פתוחים.</p>
+
+<ul>
+<li><p dir="rtl"><strong>הון התחלתי:</strong> השחקן מתחיל עם <span dir="ltr">100</span> דולר.</p></li>
+<li><p dir="rtl"><strong>כללי המשחק:</strong></p>
+<ol>
+<li><p dir="rtl">המחשב מחלק שני קלפים.</p></li>
+<li><p dir="rtl">השחקן יכול להחליט אם להמר או לא.</p></li>
+<li><p dir="rtl">אם מבוצע הימור, נפתח קלף שלישי.</p></li>
+<li><p dir="rtl">אם ערך הקלף השלישי נופל בין שני הקלפים הראשונים, השחקן זוכה בהימור. אחרת, ההימור מפסיד.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">המשחק מסתיים כאשר השחקן מאבד את כל הונו או מסיים אותו ידנית.</p></li>
+</ul>
+
+<h4 dir="rtl">יישום</h4>
+
+<p dir="rtl"><strong>נתוני קלט:</strong></p>
+<ul>
+<li><p dir="rtl">קלט משתמש עבור:</p>
+<ul>
+<li><p dir="rtl">גודל הימור התחלתי.</p></li>
+<li><p dir="rtl">החלטה להמר או לדלג.</p></li>
+</ul>
+</li>
+</ul>
+
+<p dir="rtl"><strong>נתוני פלט:</strong></p>
+<ul>
+<li><p dir="rtl">הודעה על ההון הנוכחי של השחקן.</p></li>
+<li><p dir="rtl">מידע על תוצאות ההימור (זכייה/הפסד).</p></li>
+<li><p dir="rtl">מצב קלפים בכל סיבוב.</p></li>
+</ul>
+
+<h4 dir="rtl">הוראות שלב אחר שלב ליישום:</h4>
+
+<ol>
+<li><p dir="rtl"><strong>אתחול המשחק</strong>:</p>
+<ul>
+<li><p dir="rtl">הגדר את ההון ההתחלתי של השחקן (<span dir="ltr">100</span> דולר).</p></li>
+<li><p dir="rtl">הכרז על כללי המשחק.</p></li>
+</ul>
+</li>
+
+<li><p dir="rtl"><strong>לולאת המשחק הראשית</strong>:</p>
+<ul>
+<li><p dir="rtl">יצירת שני קלפים אקראיים (טווח <span dir="ltr">2–14</span>, כאשר <span dir="ltr">11</span> = ג'ק, <span dir="ltr">12</span> = קווין, <span dir="ltr">13</span> = מלך, <span dir="ltr">14</span> = אס).</p></li>
+<li><p dir="rtl">הצגת הקלפים לשחקן.</p></li>
+<li><p dir="rtl">בקשת הימור (ניתן לדלג על הסיבוב על ידי הימור <span dir="ltr">0</span>).</p></li>
+<li><p dir="rtl">בדיקה: ההימור אסור שיעלה על ההון הנוכחי.</p></li>
+</ul>
+</li>
+
+<li><p dir="rtl"><strong>תוצאת הסיבוב</strong>:</p>
+<ul>
+<li><p dir="rtl">יצירת קלף שלישי.</p></li>
+<li><p dir="rtl">בדיקה האם ערכו נופל בטווח שבין שני הקלפים הראשונים.</p></li>
+<li><p dir="rtl">שינוי הון השחקן בהתאם לתוצאה.</p></li>
+</ul>
+</li>
+
+<li><p dir="rtl"><strong>סיום המשחק</strong>:</p>
+<ul>
+<li><p dir="rtl">אם הון השחקן שווה ל-<span dir="ltr">0</span>, המשחק מסתיים עם הודעה מתאימה.</p></li>
+<li><p dir="rtl">הצע לשחקן להתחיל משחק חדש או לצאת.</p></li>
+</ul>
+</li>
+</ol>
+
+<h4 dir="rtl">מגבלות</h4>
+<ul>
+<li><p dir="rtl">כל הקלפים ייחודיים במסגרת סיבוב אחד.</p></li>
+<li><p dir="rtl">תמיכה בפונקציונליות בסיסית של המשחק ללא אפקטים ויזואליים מורכבים.</p></li>
+</ul>

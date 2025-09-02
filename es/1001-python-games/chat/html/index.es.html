@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="title">Chatbot Gemini</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .chat-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+    .chat-window {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #fff;
+    }
+    .message {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+    }
+    .user-message {
+      background-color: #007bff;
+      color: white;
+      text-align: right;
+    }
+    .bot-message {
+      background-color: #e9ecef;
+      color: black;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <button class="btn btn-secondary me-2" onclick="setLocale('en')">English</button>
+            <button class="btn btn-secondary me-2" onclick="setLocale('ru')">Русский</button>
+            <button class="btn btn-secondary me-2" onclick="setLocale('he')">עברית</button>
+              <button class="btn btn-secondary me-2" onclick="setLocale('ua')">Українська</button>
+        </div>
+
+         <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="rulesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Reglas
+              </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="rulesDropdown" id="rules-list">
+                </ul>
+        </div>
+    </div>
+    <div class="chat-container">
+      <h2 class="text-center mb-4" data-i18n="title">Chatbot Gemini</h2>
+      <div class="chat-window" id="chat-window"></div>
+      <div class="input-group">
+        <input type="text" class="form-control" id="message-input" data-i18n="placeholder" placeholder="Introduce tu mensaje...">
+        <button class="btn btn-primary" id="send-button" data-i18n="send">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let currentLocale = 'es'; 
+
+    async function sendMessage() {
+      const messageInput = document.getElementById('message-input');
+      const sendButton = document.getElementById('send-button');
+      const message = messageInput.value.trim();
+
+      if (!message) return;
+
+      addMessage('user', message);
+      messageInput.value = '';
+      sendButton.disabled = true;
+      sendButton.textContent = 'Enviando...'; // Hardcoded for now
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al enviar el mensaje');
+        }
+
+        const data = await response.json();
+        addMessage('bot', data.response);
+      } catch (error) {
+        console.error('Error:', error);
+        addMessage('bot', 'Se produjo un error al enviar el mensaje. Por favor, inténtelo de nuevo.'); // Hardcoded for now
+
+      } finally {
+        sendButton.disabled = false;
+        sendButton.textContent = 'Enviar'; // Hardcoded for now
+
+      }
+    }
+
+    function addMessage(sender, text) {
+      const chatWindow = document.getElementById('chat-window');
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+
+      const time = new Date().toLocaleTimeString();
+      messageElement.innerHTML = `<strong>${sender === 'user' ? 'Tú' : 'Bot'}</strong> (${time}): ${text}`;
+
+      chatWindow.appendChild(messageElement);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    document.getElementById('send-button').addEventListener('click', sendMessage);
+    document.getElementById('message-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    async function setLocale(lang) {
+      currentLocale = lang;
+      try {
+        const response = await fetch(`/locales/${lang}.json`);
+        if (!response.ok) {
+          throw new Error(`No se pudo cargar el archivo de configuración regional para ${lang}`);
+        }
+        const localeData = await response.json();
+        updateText(localeData);
+      } catch (error) {
+        console.error("Error al cargar la configuración regional:", error);
+      }
+    }
+
+     function updateText(localeData) {
+          document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            if (key && localeData[key]) {
+            if(key==="placeholder") element.placeholder = localeData[key];
+            else  element.textContent = localeData[key];
+
+            }
+          });
+            const chatWindow = document.getElementById('chat-window');
+        const userMessages = chatWindow.querySelectorAll('.user-message strong');
+        userMessages.forEach(element =>{
+         element.textContent = localeData.user || "You";
+          })
+         const botMessages = chatWindow.querySelectorAll('.bot-message strong');
+        botMessages.forEach(element =>{
+         element.textContent = localeData.bot || "Bot";
+          })
+      }
+
+
+    setLocale(currentLocale)
+
+    async function loadRules() {
+      try {
+          const response = await fetch('/api/rules');
+           if (!response.ok) {
+              throw new Error('No se pudieron cargar las reglas');
+           }
+          const rules = await response.json();
+           const rulesList = document.getElementById('rules-list');
+            rules.forEach(rule => {
+              const ruleItem = document.createElement('li');
+              const link = document.createElement('a');
+              link.classList.add("dropdown-item")
+              link.href = "#"; // Opcional - configurar el enlace para ver la regla
+              link.textContent = rule.name;
+             //  link.onclick = () => {
+             //     console.log("rule link clicked", rule)
+             //  }
+              ruleItem.appendChild(link);
+              rulesList.appendChild(ruleItem);
+            });
+      } catch (error) {
+          console.error("Error al cargar las reglas:", error);
+          const rulesList = document.getElementById('rules-list');
+          rulesList.innerHTML = `<li><a class="dropdown-item">Error al cargar las reglas</a></li>`
+      }
+
+    }
+
+    loadRules();
+  </script>
+</body>
+</html>

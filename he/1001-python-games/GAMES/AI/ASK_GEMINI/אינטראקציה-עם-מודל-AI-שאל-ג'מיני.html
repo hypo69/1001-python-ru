@@ -1,0 +1,96 @@
+<h3 dir="rtl">שאל את מודל <span dir="ltr">Gemini</span></h3>
+
+<p dir="rtl">לצורך העבודה נדרש מפתח <span dir="ltr">API</span>.</p>
+
+<p dir="rtl">מפתח <span dir="ltr">API</span> למודל ניתן לקבל כאן: <span dir="ltr">[https://aistudio.google.com/](https://aistudio.google.com/)</span></p>
+
+<pre class="line-numbers"><code class="language-python">import google.generativeai as genai
+
+class GoogleGenerativeAI:
+    """
+    Class for interacting with Google Generative AI models.
+    """
+
+    MODELS = [
+        "gemini-1.5-flash-8b",
+        "gemini-2-13b",
+        "gemini-3-20b"
+    ]
+
+    def __init__(self, api_key: str, model_name: str = "gemini-2.0-flash-exp"):
+        """
+        Initializes the GoogleGenerativeAI model.
+
+        Arguments:
+            api_key (str): API key for accessing the generative model.
+            model_name (str, optional): Name of the model to use. Defaults to "gemini-2.0-flash-exp".
+        """
+        self.api_key = api_key
+        genai.configure(api_key=self.api_key)
+        self.model = genai.GenerativeModel(model_name=self.model_name)
+
+    def ask(self, q: str) -> str:
+        """
+        Sends a text query to the model and returns the response.
+
+        Arguments:
+            q (str): The question to be sent to the model.
+
+        Returns:
+            str: Response from the model.
+        """
+        try:
+            response = self.model.generate_content(q)
+            return response.text
+        except Exception as ex:
+            return f"Error: {str(ex)}"
+</code></pre>
+
+<h3 dir="rtl">איך הקוד הזה עובד</h3>
+
+<ol>
+<li><p dir="rtl"><strong>ייבוא ספרייה</strong>: אנו מייבאים את ספריית <span dir="ltr"><code>google.generativeai</code></span>, המספקת ממשק לאינטראקציה עם מודלי <span dir="ltr">Google AI</span>.</p></li>
+
+<li><p dir="rtl"><strong>מחלקה <span dir="ltr"><code>GoogleGenerativeAI</code></span></strong>: מחלקה זו עוטפת את כל הלוגיקה לאינטראקציה עם מודל <span dir="ltr">Gemini</span>. היא מקבלת מפתח <span dir="ltr">API</span> ושם מודל כפרמטרים. כברירת מחדל נעשה שימוש במודל <span dir="ltr"><code>gemini-2.0-flash-exp</code></span>.</p></li>
+
+<li><p dir="rtl"><strong>שיטת <span dir="ltr"><code>__init__</code></span></strong>: בשיטה זו מתבצעת הגדרת המודל. אנו מעבירים את מפתח ה-<span dir="ltr">API</span> ואת שם המודל, ולאחר מכן מאתחלים את אובייקט המודל.</p></li>
+
+<li><p dir="rtl"><strong>שיטת <span dir="ltr"><code>ask</code></span></strong>: שיטה זו שולחת שאילתת טקסט למודל ומחזירה את התשובה. אם משהו משתבש, השיטה תחזיר הודעת שגיאה.</p></li>
+</ol>
+
+<h3 dir="rtl">איך להשתמש?</h3>
+
+<pre class="line-numbers"><code class="language-python">################################################################################
+#                                                                              #
+#             Enter your API key for GEMINI                                       #
+#                                                                              #
+################################################################################
+
+API_KEY: str = input("מפתח API מ-`gemini`: ")
+model = GoogleGenerativeAI(api_key=API_KEY)
+
+q = input("שאלה: ")
+response = model.ask(q)
+print(response)
+</code></pre>
+
+<ol>
+<li><p dir="rtl"><strong>הכנסת מפתח <span dir="ltr">API</span></strong>: תחילה, התוכנית מבקשת מהמשתמש מפתח <span dir="ltr">API</span> לגישה למודל <span dir="ltr">Gemini</span>. מפתח זה ניתן לקבל מאתר <span dir="ltr">[Google AI Studio](https://aistudio.google.com/)</span>.</p></li>
+
+<li><p dir="rtl"><strong>יצירת אובייקט מודל</strong>: אנו יוצרים אובייקט של המחלקה <span dir="ltr"><code>GoogleGenerativeAI</code></span>, ומעבירים לו את מפתח ה-<span dir="ltr">API</span>.</p></li>
+
+<li><p dir="rtl"><strong>הכנסת שאלה</strong>: המשתמש מכניס את השאלה שהוא רוצה לשאול את המודל.</p></li>
+
+<li><p dir="rtl"><strong>קבלת תשובה</strong>: התוכנית שולחת את השאלה למודל ומציגה את התשובה על המסך.</p></li>
+</ol>
+
+<h3 dir="rtl">דוגמה לשימוש</h3>
+
+<p dir="rtl">יש לך מפתח <span dir="ltr">API</span>, ואתה רוצה לשאול את המודל: &quot;איך לשפר את הקוד שלי?&quot;. כך זה ייראה:</p>
+
+<pre class="line-numbers"><code class="language-text">מפתח API מ-`gemini`: המפתח_API_שלך
+שאלה: איך לשפר את הקוד שלי?
+תשובה: כדי לשפר את הקוד שלך, מומלץ לעקוב אחר עקרונות קוד נקי, כגון מתן שמות ברורים והגיוניים למשתנים ולפונקציות, שימוש בהערות להסברת לוגיקה מורכבת, ויישום עקרונות SOLID לתכנון מחלקות ומודולים.
+</code></pre>
+
+<p dir="rtl">הפעל את הקוד <span dir="ltr">[כאן](https://colab.research.google.com/github/hypo69/101_python_computer_games_ru/blob/master/GAMES/AI/ASK_GEMINI/ask_gemini_ru.ipynb)</span></p>

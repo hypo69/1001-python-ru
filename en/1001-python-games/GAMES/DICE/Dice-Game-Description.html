@@ -1,0 +1,36 @@
+<p>DICE:
+=================
+Difficulty: 2
+-----------------
+The game "Dice" is a simple game in which the player rolls two dice, and the computer shows the sum of the rolled values.</p>
+<p>Game rules:
+1. The computer simulates rolling two six-sided dice.
+2. The computer displays the values of each die and their sum.
+-----------------
+Algorithm:
+1. Generate a random number from 1 to 6 for the first die.
+2. Generate a random number from 1 to 6 for the second die.
+3. Calculate the sum of the values of both dice.
+4. Display the value of the first die, the value of the second die, and their sum.
+-----------------
+Flowchart:</p>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> RollDice1["<p align='left'>Roll the first die: 
+    &lt;code&gt;&lt;b&gt;dice1 = random(1, 6)&lt;/b&gt;&lt;/code&gt;</p>"]
+    RollDice1 --> RollDice2["<p align='left'>Roll the second die:
+    &lt;code&gt;&lt;b&gt;dice2 = random(1, 6)&lt;/b&gt;&lt;/code&gt;</p>"]
+    RollDice2 --> CalculateSum["<p align='left'>Calculate the sum:
+    &lt;code&gt;&lt;b&gt;total = dice1 + dice2&lt;/b&gt;&lt;/code&gt;</p>"]
+    CalculateSum --> OutputResults["<p align='left'>Display results:
+    &lt;b&gt;Die 1: &lt;code&gt;{dice1}&lt;/code&gt;&lt;/b&gt;&lt;br&gt;
+    &lt;b&gt;Die 2: &lt;code&gt;{dice2}&lt;/code&gt;&lt;/b&gt;&lt;br&gt;
+    &lt;b&gt;Sum: &lt;code&gt;{total}&lt;/code&gt;&lt;/b&gt;</p>"]
+    OutputResults --> End["End"]
+</code></pre>
+<p>Legend:
+    Start - Program start.
+    RollDice1 - A random number from 1 to 6 is generated, representing the result of the first die roll, and saved to the dice1 variable.
+    RollDice2 - A random number from 1 to 6 is generated, representing the result of the second die roll, and saved to the dice2 variable.
+    CalculateSum - The sum of dice1 and dice2 values is calculated, the result is saved to the total variable.
+    OutputResults - The values of dice1, dice2 and their sum total are displayed on the screen.
+    End - End of program.</p>

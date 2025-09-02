@@ -1,0 +1,243 @@
+<h1>Sistemas de numeración</h1>
+<p>¡Hola! Comencemos nuestra inmersión en el fascinante mundo de los sistemas de numeración. ¡Prepárate, hoy aprenderás muchas cosas nuevas e interesantes!</p>
+<h1>Sistemas de numeración</h1>
+<p><strong>1. Sistema de numeración abstracto</strong></p>
+<p>Imagina que los números son como palabras que se pueden escribir con diferentes "letras". No importa cómo denotemos los números, lo principal es que se cumplan ciertas reglas:</p>
+<ul>
+<li><strong>Base:</strong> Es la cantidad de símbolos (dígitos) únicos que usamos. Denotemos la base como <code>b</code>. Por ejemplo, en el sistema decimal, la base es 10.</li>
+<li><strong>Dígitos:</strong> Son los símbolos que usamos para escribir números. Normalmente son dígitos arábigos (0, 1, 2, 3, ...), pero también se pueden usar otros símbolos, por ejemplo, letras latinas (I, V, X) o incluso frutas (🍎, 🍐, 🍉).</li>
+<li><strong>Posición:</strong> Cada dígito en la representación de un número tiene su propia posición, lo que afecta su valor. Esto significa que el mismo dígito puede tener un valor diferente dependiendo de dónde se encuentre en el número.</li>
+<li><strong>Órdenes:</strong> Cada posición se llama orden (por ejemplo, unidades, decenas, centenas, etc.). En cada posición, el valor del dígito se multiplica por la base elevada a la potencia correspondiente a su número de orden.</li>
+</ul>
+<p><strong>¿Cómo se construye un sistema de numeración?</strong></p>
+<ol>
+<li><strong>Elección de la base:</strong> Elegimos un número entero <code>b</code> que será la base de nuestro sistema.</li>
+<li><strong>Elección de los dígitos:</strong> Necesitamos <code>b</code> dígitos únicos. Normalmente son 0, 1, 2, ..., <code>b-1</code>. Por ejemplo, para el sistema binario (base 2), tenemos los dígitos 0 y 1.</li>
+<li><strong>Escritura de un número:</strong> Un número se escribe como una secuencia de dígitos. El valor de cada dígito se multiplica por la base, elevada a la potencia igual a su posición (comenzando desde 0 a la derecha).</li>
+</ol>
+<p><strong>Fórmula para calcular el valor de un número:</strong></p>
+<p>Si tenemos un número escrito como una secuencia de dígitos <code>dₙ dₙ₋₁ ... d₁ d₀</code>, entonces su valor en el sistema decimal se puede calcular con la fórmula:</p>
+<p><code>valor = dₙ * bⁿ + dₙ₋₁ * bⁿ⁻¹ + ... + d₁ * b¹ + d₀ * b⁰</code></p>
+<p>Donde:</p>
+<ul>
+<li><code>dᵢ</code> - dígito en el i-ésimo orden</li>
+<li><code>b</code> - base del sistema de numeración</li>
+<li><code>i</code> - número de orden (de derecha a izquierda, comenzando desde 0)</li>
+</ul>
+<p><strong>Ejemplo:</strong></p>
+<p>Supongamos que tenemos el número 123 en el sistema decimal (base 10). Según la fórmula:</p>
+<p><code>1 * 10² + 2 * 10¹ + 3 * 10⁰ = 100 + 20 + 3 = 123</code></p>
+<p><strong>Órdenes de numeración (posiciones):</strong></p>
+<p>Los órdenes, como ya hemos dicho, son las posiciones de los dígitos en un número, cada posición tiene su propio peso, que se determina por la base elevada a la potencia de su número ordinal.</p>
+<ul>
+<li><code>d₀</code>: unidades (<code>b⁰</code>)</li>
+<li><code>d₁</code>: <code>b</code> (<code>b¹</code>)</li>
+<li><code>d₂</code>: <code>b²</code>)</li>
+<li><code>d₃</code>: <code>b³</code>)</li>
+<li>y así sucesivamente</li>
+</ul>
+<p><strong>Reglas:</strong></p>
+<ol>
+<li><strong>Rango de dígitos:</strong> Se utilizan dígitos del 0 a <code>b-1</code>.</li>
+<li><strong>Principio posicional:</strong> El valor de un dígito depende de su posición.</li>
+<li><strong>Transición al siguiente orden:</strong> Cuando se alcanza el valor <code>b</code> en un orden, se produce un acarreo al siguiente orden (análogo a cómo después del 9 en el sistema decimal se suma 1 al siguiente orden y se obtiene 10).</li>
+</ol>
+<h2>Ejemplo: Sistema de numeración de frutas</h2>
+<p>Consideremos un ejemplo de un sistema de numeración abstracto con frutas:</p>
+<ul>
+<li>🍎 (manzana)</li>
+<li>🍐 (pera)</li>
+<li>🍉 (melón)</li>
+<li>🧺 (cesta)</li>
+</ul>
+<p><strong>Reglas:</strong></p>
+<ol>
+<li>3 🍎 = 1 🍐</li>
+<li>5 🍐 = 3 🍉</li>
+<li>2 🍉 = 1 🧺</li>
+</ol>
+<p><strong>Representación de números:</strong></p>
+<p>Representaremos la cantidad de frutas como una cadena, donde cada símbolo Unicode corresponde a una fruta. Por ejemplo, "🍎🍎🍎" son 3 manzanas, y "🍉🍉" son 2 melones.</p>
+<p><strong>Operaciones aritméticas:</strong></p>
+<p>Podemos realizar operaciones de suma y resta. Primero, hagamos la suma.</p>
+<p><strong>Código Python:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+
+def normalize_fruits(fruits: str) -> str:
+    """
+    Normalizes a string of fruits, bringing it to its minimum representation,
+    using the fruit exchange rules.
+
+    Args:
+        fruits: String of fruits (🍎, 🍐, 🍉, 🧺).
+
+    Returns:
+        String with the normalized fruit count.
+    """
+    apples = fruits.count('🍎')
+    pears = fruits.count('🍐')
+    melons = fruits.count('🍉')
+    baskets = fruits.count('🧺')
+
+    # Convert apples to pears
+    pears += apples // 3
+    apples %= 3
+
+    # Convert pears to melons
+    melons += (pears * 3) // 5
+    pears %= 5
+
+    # Convert melons to baskets
+    baskets += melons // 2
+    melons %= 2
+
+    # Reassemble the string, first baskets, then melons, pears, apples
+    return (
+        "🧺" * baskets
+        + "🍉" * melons
+        + "🍐" * pears
+        + "🍎" * apples
+    )
+
+def add_fruits(fruits1: str, fruits2: str) -> str:
+    """
+    Sums two fruit strings.
+
+    Args:
+        fruits1: Fruit string.
+        fruits2: Fruit string.
+
+    Returns:
+        String with the sum of fruits.
+    """
+    return normalize_fruits(fruits1 + fruits2)
+
+def sub_fruits(fruits1: str, fruits2: str) -> str:
+    """
+    Subtracts the second fruit string from the first, if possible.
+
+    Args:
+        fruits1: Fruit string, from which we subtract.
+        fruits2: Fruit string, which we subtract.
+
+    Returns:
+        String with the fruit difference or "Cannot subtract", if the result is negative.
+    """
+
+    apples1 = fruits1.count('🍎')
+    pears1 = fruits1.count('🍐')
+    melons1 = fruits1.count('🍉')
+    baskets1 = fruits1.count('🧺')
+
+    apples2 = fruits2.count('🍎')
+    pears2 = fruits2.count('🍐')
+    melons2 = fruits2.count('🍉')
+    baskets2 = fruits2.count('🧺')
+
+
+    # Temporary representation as total number of apples
+    total_apples1 = apples1 + pears1 * 3 + melons1 * 15 // 3 + baskets1 * 30
+    total_apples2 = apples2 + pears2 * 3 + melons2 * 15 // 3 + baskets2 * 30
+
+    if total_apples1 < total_apples2:
+        return "No se puede restar"
+    else:
+        total_apples = total_apples1 - total_apples2
+
+    # Return the normalized representation of the sum of apples
+    result_fruits = ""
+    baskets = total_apples // 30
+    result_fruits += "🧺" * baskets
+    total_apples %= 30
+    melons = (total_apples*3) // 15
+    result_fruits += "🍉" * melons
+    total_apples %= 15
+    pears = total_apples // 3
+    result_fruits += "🍐" * pears
+    total_apples %= 3
+    result_fruits += "🍎" * total_apples
+
+    return normalize_fruits(result_fruits)
+
+# --- Usage examples ---
+
+print("--- Sistemas de numeración ---")
+binary_number = "1011"
+decimal_number = bin_to_dec(binary_number)
+print(f"Binario {binary_number} = Decimal {decimal_number}")
+
+decimal_number = 11
+binary_number = dec_to_bin(decimal_number)
+print(f"Decimal {decimal_number} = Binario {binary_number}")
+
+ternary_number = "210"
+decimal_number = ternary_to_dec(ternary_number)
+print(f"Ternario {ternary_number} = Decimal {decimal_number}")
+
+decimal_number = 21
+ternary_number = dec_to_ternary(decimal_number)
+print(f"Decimal {decimal_number} = Ternario {ternary_number}")
+
+septenary_number = "345"
+decimal_number = septenary_to_dec(septenary_number)
+print(f"Septenario {septenary_number} = Decimal {decimal_number}")
+
+decimal_number = 180
+septenary_number = dec_to_septenary(decimal_number)
+print(f"Decimal {decimal_number} = Septenario {septenary_number}")
+
+hex_number = "2AF"
+decimal_number = hex_to_dec(hex_number)
+print(f"Hexadecimal {hex_number} = Decimal {decimal_number}")
+
+decimal_number = 687
+hex_number = dec_to_hex(decimal_number)
+print(f"Decimal {decimal_number} = Hexadecimal {hex_number}")
+
+print("\n--- Días de la semana ---")
+start_day = 0  # Monday
+days = 10.5 #One and a half weeks
+new_day = calculate_day_of_week(start_day, days)
+print(f"{days} días después de {day_number_to_name(start_day)}: {day_number_to_name(new_day)}")
+days = 120 #Four months (approximately)
+new_day = calculate_day_of_week(start_day, days)
+print(f"{days} días después de {day_number_to_name(start_day)}: {day_number_to_name(new_day)}")
+
+start_day = 4  # Friday
+days = 365 #Year
+new_day = calculate_day_of_week(start_day, days)
+print(f"{days} días después de {day_number_to_name(start_day)}: {day_number_to_name(new_day)}")
+
+print("\n--- Frutas ---")
+fruits1 = "🍎🍎🍎🍎🍎" # 5 apples
+fruits2 = "🍎🍎🍎" # 3 apples
+print(f"{fruits1} + {fruits2} = {add_fruits(fruits1, fruits2)}")
+
+fruits3 = "🍐🍐"  # 2 pears
+fruits4 = "🍎🍎🍎🍎" # 4 apples
+print(f"{fruits3} + {fruits4} = {add_fruits(fruits3, fruits4)}")
+
+fruits5 = "🍉🍉" # 2 melons
+fruits6 = "🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎" # 15 apples
+print(f"{fruits5} + {fruits6} = {add_fruits(fruits5, fruits6)}")
+
+fruits7 = "🧺🧺" # 2 baskets
+fruits8 = "🍉🍉🍉" # 3 melons
+print(f"{fruits7} + {fruits8} = {add_fruits(fruits7, fruits8)}\n")
+
+fruits9 = "🧺🍉🍐🍎" # 1 basket, 1 melon, 1 pear, 1 apple
+fruits10 = "🍉🍐🍎" # 1 melon, 1 pear, 1 apple
+print(f"{fruits9} - {fruits10} = {sub_fruits(fruits9, fruits10)}")
+
+fruits11 = "🧺🍉" # 1 basket, 1 melon
+fruits12 = "🧺🍉🍎🍎🍎" # 1 basket, 1 melon, 3 apples
+print(f"{fruits11} - {fruits12} = {sub_fruits(fruits11, fruits12)}")
+
+fruits13 = "🍉🍉🍉" # 3 melons
+fruits14 = "🍎🍎🍎🍎" # 4 apples
+print(f"{fruits13} - {fruits14} = {sub_fruits(fruits13, fruits14)}")
+
+fruits15 = "🍐🍐🍐🍐🍐" # 5 pears
+fruits16 = "🍉" # 1 melon
+print(f"{fruits15} - {fruits16} = {sub_fruits(fruits15, fruits16)}")
+</code></pre>

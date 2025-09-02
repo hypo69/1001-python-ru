@@ -1,0 +1,295 @@
+<p><strong>What is <code>dataclass</code>?</strong></p>
+<p><code>dataclass</code> is a decorator introduced in Python 3.7, which automatically generates special methods (such as <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code> and others) for classes that primarily serve as data containers. This saves you from writing a lot of repetitive code.</p>
+<p><strong>Why use <code>dataclass</code>?</strong></p>
+<ol>
+<li><strong>Code reduction:</strong> Instead of manually defining <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code>, etc., you simply declare the data fields, and <code>dataclass</code> does the rest.</li>
+<li><strong>Improved readability:</strong> Classes become more concise and understandable, as they focus on data rather than technical implementation.</li>
+<li><strong>Error reduction:</strong> Automatically generated code is generally more reliable than manually written code.</li>
+<li><strong>Accelerated development:</strong> You can create data classes faster without wasting time on routine tasks.</li>
+</ol>
+<p><strong>How to use <code>dataclass</code>?</strong></p>
+<p>To get started, you need to import the <code>dataclass</code> decorator from the <code>dataclasses</code> module:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+</code></pre>
+<p>Then, you mark the class with the <code>@dataclass</code> decorator, and define the data fields as ordinary class variables with type annotations:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+</code></pre>
+<p>In this example, <code>Point</code> is a <code>dataclass</code> that has two fields: <code>x</code> and <code>y</code>, both of integer type. <code>dataclass</code> will automatically create:
+*   An <code>__init__</code> constructor, allowing you to create class instances, for example <code>Point(1, 2)</code>.
+*   <code>__repr__</code>, returning a textual representation of the object, for example <code>Point(x=1, y=2)</code>.
+*   <code>__eq__</code>, allowing you to compare objects, for example <code>Point(1, 2) == Point(1, 2)</code>.</p>
+<p><strong>Simple usage example</strong></p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+# Creating a class instance
+point1 = Point(1, 2)
+point2 = Point(1, 2)
+point3 = Point(3, 4)
+
+# Display
+print(point1) # Output: Point(x=1, y=2)
+print(point1 == point2) # Output: True
+print(point1 == point3) # Output: False
+</code></pre>
+<p><strong><code>dataclass</code> options</strong></p>
+<p><code>dataclass</code> provides several parameters to customize behavior:</p>
+<ul>
+<li><code>init</code>: If <code>True</code> (default), the <code>__init__</code> method is generated. If <code>False</code>, the <code>__init__</code> method is not created.</li>
+<li><code>repr</code>: If <code>True</code> (default), the <code>__repr__</code> method is generated. If <code>False</code>, the <code>__repr__</code> method is not created.</li>
+<li><code>eq</code>: If <code>True</code> (default), the <code>__eq__</code> method is generated. If <code>False</code>, the <code>__eq__</code> method is not created.</li>
+<li><code>order</code>: If <code>True</code>, comparison methods (<code>__lt__</code>, <code>__le__</code>, <code>__gt__</code>, <code>__ge__</code>) are generated. The default value is <code>False</code>.</li>
+<li><code>unsafe_hash</code>: If <code>False</code> (default), the <code>__hash__</code> method is not generated. If <code>True</code>, the <code>__hash__</code> method will be generated, and the <code>dataclass</code> will become hashable.</li>
+<li><code>frozen</code>: If <code>True</code>, class instances will be immutable (read-only). The default value is <code>False</code>.</li>
+</ul>
+<p><strong>Examples of parameter usage</strong><br>1. Disable the <code>__repr__</code> method and make the class immutable</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass(repr=False, frozen=True)
+class Point:
+    x: int
+    y: int
+
+# Creating a class instance
+point1 = Point(1, 2)
+# Display
+print(point1) # Output: &lt;__main__.Point object at 0x000001D8322F6770&gt; (because __repr__ is not defined)
+
+# Modifying an instance will cause an error
+try:
+    point1.x = 10
+except Exception as e:
+    print (e) # Output: cannot assign to field 'x'
+</code></pre>
+<p>2. Define the order, add the hash method, and make the class immutable</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass(order=True, unsafe_hash=True, frozen=True)
+class Point:
+    x: int
+    y: int
+
+# Creating a class instance
+point1 = Point(1, 2)
+point2 = Point(3, 4)
+point3 = Point(1, 2)
+# Display
+print(point1 < point2) # Output: True
+print(point1 == point3) # Output: True
+
+# You can now use the class as a dictionary key
+my_dict = {point1: "first", point2: "second"}
+print(my_dict) # Output: {Point(x=1, y=2): 'first', Point(x=3, y=4): 'second'}
+</code></pre>
+<p><strong>Default values</strong></p>
+<p>You can define default values for fields:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int = 0
+    y: int = 0
+
+# Creating a class instance
+point1 = Point()
+point2 = Point(1, 2)
+
+# Display
+print(point1) # Output: Point(x=0, y=0)
+print(point2) # Output: Point(x=1, y=2)
+</code></pre>
+<p>When creating a class instance, if no value is passed, the default value will be used.</p>
+<p><strong>Using <code>dataclass</code> with mutable types</strong></p>
+<p>Be careful when using mutable data types (lists, dictionaries) as default values. They will only be created once and will be used by all class instances:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass
+from typing import List
+
+@dataclass
+class BadExample:
+    items: List[int] = []
+
+bad1 = BadExample()
+bad2 = BadExample()
+
+bad1.items.append(1)
+print (bad1.items) # Output: [1]
+print (bad2.items) # Output: [1] 
+</code></pre>
+<p>In the example above, changes to <code>bad1.items</code> are also reflected in <code>bad2.items</code>. This happens because both class instances use the same default list.</p>
+<p>To avoid this, use <code>dataclasses.field</code> and <code>default_factory</code>:</p>
+<pre class="line-numbers"><code class="language-python">
+from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class GoodExample:
+    items: List[int] = field(default_factory=list)
+
+good1 = GoodExample()
+good2 = GoodExample()
+
+good1.items.append(1)
+print (good1.items) # Output: [1]
+print (good2.items) # Output: []
+</code></pre>
+<p>In this case, <code>default_factory=list</code> will create a new empty list for each new class instance.</p>
+<p><strong>Diagram</strong></p>
+<p>Here is a diagram showing the main concepts of <code>dataclass</code>:</p>
+<pre class="line-numbers"><code class="language-mermaid">
+classDiagram
+    class DataClass {
+        &lt;&lt;decorator&gt;&gt;
+        +init: bool = True
+        +repr: bool = True
+        +eq: bool = True
+        +order: bool = False
+        +unsafe_hash: bool = False
+        +frozen: bool = False
+        --
+        +__init__(...)
+        +__repr__()
+        +__eq__(...)
+        +__lt__(...)
+        +__le__(...)
+        +__gt__(...)
+        +__ge__(...)
+        +__hash__()
+    }
+    class UserDefinedClass {
+        &lt;&lt;class&gt;&gt;
+        +field1: type
+        +field2: type
+        +field3: type = defaultValue
+        +field4: type = field(default_factory=...)
+    }
+    DataClass &lt;|-- UserDefinedClass
+</code></pre>
+<p>In this diagram:
+*   <code>DataClass</code> represents the <code>@dataclass</code> decorator and its parameters.
+*   <code>UserDefinedClass</code> is the class you declare using the <code>@dataclass</code> decorator.
+*   The arrow from <code>DataClass</code> to <code>UserDefinedClass</code> shows that <code>DataClass</code> is applied to <code>UserDefinedClass</code>.</p>
+<h2><code>dict()</code>, <code>__dir__()</code> and other <code>dataclass</code> features.</h2>
+<ul>
+<li><code>dict()</code> does not work directly with <code>dataclass</code> instances. To convert to a dictionary, you must use manual methods or third-party libraries.</li>
+<li><code>__dir__()</code> returns a list of all attributes and methods of the object, including methods and fields generated by <code>dataclass</code>.</li>
+<li><code>__dataclass_fields__</code> and <code>__dataclass_params__</code> provide metadata about <code>dataclass</code> fields and parameters.</li>
+</ul>
+<p><strong>1. <code>dict()</code> in the context of <code>dataclass</code></strong></p>
+<ul>
+<li><strong>No automatic support:</strong> The built-in <code>dict()</code> function does not work directly with <code>dataclass</code> instances, as with ordinary dictionaries. If you try to call <code>dict(instance_of_dataclass)</code>, you will get a <code>TypeError: cannot convert dictionary update sequence element #0 to a sequence</code> error.</li>
+<li><strong>Conversion to dictionary:</strong> To convert a <code>dataclass</code> instance to a dictionary, you must do it manually or use a third-party library. Here's how you can do it manually:
+<pre class="line-numbers"><code class="language-python">
+     from dataclasses import dataclass
+     
+     @dataclass
+     class Person:
+         name: str
+         age: int
+     
+     person = Person("Alice", 30)
+     
+     # Manual conversion to dictionary
+     person_dict = {field.name: getattr(person, field.name) for field in dataclasses.fields(Person)}
+     print(person_dict)  # Output: {'name': 'Alice', 'age': 30}
+
+     #Alternative :
+     person_dict = person.__dict__
+     print(person_dict) #Output: {'name': 'Alice', 'age': 30}
+</code></pre>
+</li>
+<li><strong>Why?</strong> <code>dataclass</code> is primarily designed to represent data as classes. Although the data is stored as object attributes, <code>dataclass</code> does not automatically make them accessible as a dictionary.</li>
+</ul>
+<p><strong>2. <code>__dir__()</code> in <code>dataclass</code></strong></p>
+<ul>
+<li><strong>Returns attributes:</strong> The <code>__dir__()</code> method returns a list of strings representing the names of the object's attributes and methods. For <code>dataclass</code>, <code>__dir__()</code> will include:
+<ul>
+<li>All defined data fields.</li>
+<li>Automatically generated methods (<code>__init__</code>, <code>__repr__</code>, <code>__eq__</code>, etc., depending on the parameters).</li>
+<li>Any other manually added methods.</li>
+</ul>
+</li>
+<li><strong>Example:</strong>
+<pre class="line-numbers"><code class="language-python">
+      from dataclasses import dataclass
+      
+      @dataclass
+      class Point:
+          x: int
+          y: int
+          
+          def distance(self):
+                return (self.x**2 + self.y**2)**0.5
+      
+      point = Point(1, 2)
+      print(dir(point))
+      #Output:
+      #['__class__', '__dataclass_fields__', '__dataclass_params__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'distance', 'x', 'y']
+
+</code></pre>
+</li>
+<li><strong>Utility:</strong> <code>__dir__()</code> can be useful for introspection - visualizing the available attributes and methods of a <code>dataclass</code> instance.</li>
+</ul>
+<p><strong>3. Other <code>dataclass</code> features</strong></p>
+<ul>
+<li><strong><code>__dataclass_fields__</code>:</strong>
+<ul>
+<li>It is a class attribute that contains a dictionary where the keys are the names of the <code>dataclass</code> fields, and the values are <code>dataclasses.Field</code> objects.</li>
+<li>This attribute allows you to get metadata about the <code>dataclass</code> fields (e.g., type, default value, etc.).</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">
+     from dataclasses import dataclass, fields
+     
+     @dataclass
+     class Point:
+          x: int = 0
+          y: int = 0
+     
+     print(Point.__dataclass_fields__)
+     #Output:
+     #{'x': Field(name='x',type=&lt;class 'int'&gt;,default=0,default_factory=MISSING,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False), 'y': Field(name='y',type=&lt;class 'int'&gt;,default=0,default_factory=MISSING,init=True,repr=True,hash=None,compare=True,metadata=mappingproxy({}),kw_only=False)}
+</code></pre>
+<pre class="line-numbers"><code class="language-python">
+     # Use fields() for the same result
+     for field in fields(Point):
+         print(field.name, field.type, field.default)
+     #Output:
+     #x &lt;class 'int'&gt; 0
+     #y &lt;class 'int'&gt; 0
+</code></pre>
+</li>
+<li><strong><code>__dataclass_params__</code>:</strong>
+<ul>
+<li>It is a class attribute that stores information about <code>dataclass</code> parameters (e.g., <code>init</code>, <code>repr</code>, <code>eq</code>, <code>order</code>, etc.).</li>
+<li>This allows you to access the parameters with which the <code>dataclass</code> was created.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">
+      from dataclasses import dataclass
+      
+      @dataclass(order = True, frozen = True)
+      class Point:
+        x: int
+        y: int
+      print(Point.__dataclass_params__)
+      #Output:
+      #dataclass_params(init=True,repr=True,eq=True,order=True,unsafe_hash=False,frozen=True)
+</code></pre>
+</li>
+<li><strong>Usage with inheritance:</strong> You can create <code>dataclass</code> by inheriting from other <code>dataclass</code>.</li>
+<li><strong>Usage with <code>typing.NamedTuple</code>:</strong> <code>dataclass</code> is a more flexible alternative to <code>typing.NamedTuple</code>, as it allows you to define default values, add custom methods, and make the class mutable or immutable.</li>
+</ul>

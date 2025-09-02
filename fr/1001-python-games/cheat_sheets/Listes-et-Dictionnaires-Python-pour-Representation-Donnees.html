@@ -1,0 +1,84 @@
+<p>Examples of using lists and dictionaries to represent product data. I will break down an abstract product by its characteristics and show how to use a list to represent products of a category.</p>
+<ul>
+<li><strong>Dictionary (<code>dict</code>)</strong> – is an ideal way to represent the <em>characteristics</em> of a single product, where there are "key-value" pairs.</li>
+<li><strong>List (<code>list</code>)</strong> – is an excellent way to represent a <em>set</em> of similar products, where each product can be represented by a dictionary.</li>
+</ul>
+<p><strong>1. Dictionary (<code>dict</code>) to represent product characteristics</strong></p>
+<p>A dictionary to represent the characteristics of a single product. In this case, the dictionary keys will be the names of the characteristics, and the values will be their corresponding values.</p>
+<pre class="line-numbers"><code class="language-python">
+product = {
+    "id": "12345",
+    "name": "Smartphone SuperPhone X",
+    "brand": "SuperTech",
+    "price": 999.99,
+    "color": "Space Gray",
+    "screen_size": 6.7,
+    "storage": "256 GB",
+    "camera": "108 MP",
+    "os": "Android 13",
+    "available": True
+}
+
+print("--- Product Features ---")
+for key, value in product.items():
+    print(f"{key}: {value}")
+
+print("\n--- Accessing Specific Features ---")
+print(f"Name: {product['name']}")
+print(f"Price: ${product['price']}")
+print(f"Available: {'yes' if product['available'] else 'no'}")
+
+</code></pre>
+<p><strong>Code explanation:</strong></p>
+<ul>
+<li><code>product</code> dictionary, where the keys are the names of the product characteristics (id, name, brand, price, etc.), and the values — their corresponding values.</li>
+<li><code>product.items()</code> to iterate over all "key-value" pairs and display them on the screen.</li>
+</ul>
+<p><strong>2. List (<code>list</code>) to represent products of a category</strong></p>
+<p>A list to represent a list of products in a specific category.
+In this case, each element of the list will represent a distinct product, which, in turn, can be represented by a dictionary.</p>
+<pre class="line-numbers"><code class="language-python">
+products = [
+    {
+        "id": "12345",
+        "name": "Smartphone SuperPhone X",
+        "brand": "SuperTech",
+        "price": 999.99,
+        "available": True
+    },
+    {
+        "id": "67890",
+        "name": "Tablet TabPro S",
+        "brand": "TechGenius",
+        "price": 799.99,
+        "available": False
+    },
+    {
+        "id": "13579",
+        "name": "Headphones SoundBeats Pro",
+        "brand": "AudioMax",
+        "price": 199.99,
+        "available": True
+    }
+]
+print("\n--- List of products by category ---")
+
+for product in products:
+   print(f"{product['name']} ({product['brand']}), Price: ${product['price']}, Available: {'Yes' if product['available'] else 'No'}")
+
+print("\n--- Accessing the first product ---")
+
+first_product = products[0]
+print(f"ID: {first_product['id']}, Name: {first_product['name']}")
+
+print("\n--- Displaying only product names ---")
+for product in products:
+  print(f"Name: {product['name']}")
+</code></pre>
+<p><strong>Code explanation:</strong></p>
+<ul>
+<li><code>products</code> list, where each element is a dictionary representing a distinct product.</li>
+<li>I iterated over the list and displayed information about each product, using the dictionary keys to access the product characteristics.</li>
+<li>I showed how to access the first product in the list, using index <code>0</code>.</li>
+<li>I iterated over the list again, and showed how to display only the product names.</li>
+</ul>

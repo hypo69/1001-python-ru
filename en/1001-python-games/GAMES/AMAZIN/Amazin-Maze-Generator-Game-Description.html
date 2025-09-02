@@ -1,0 +1,68 @@
+<h1><strong>Amazin</strong> (Maze Generator)</h1>
+<h4>Description</h4>
+<p>The game is a maze generator that creates a unique maze with a single correct path each time. The player sets the dimensions of the maze, and the program builds it according to the specified parameters.</p>
+<ul>
+<li><strong>Features:</strong>
+<ul>
+<li>The player enters the width and height of the maze.</li>
+<li>The program guarantees a single path through the maze.</li>
+<li>The maze is displayed on the screen.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>Step-by-step instructions for implementation:</h3>
+<h4>1. <strong>Game Initialization</strong></h4>
+<ul>
+<li>Prompt the player to enter the maze dimensions (width and height).</li>
+<li>Check that the entered dimensions are valid (e.g., greater than one).</li>
+</ul>
+<h4>2. <strong>Main Maze Generation Logic</strong></h4>
+<ul>
+<li>Create a matrix of the specified size, representing a grid of cells.</li>
+<li>Use a maze generation algorithm, for example, <em>recursive depth-first search (DFS) algorithm</em>:
+<ul>
+<li>Start from a random initial cell.</li>
+<li>Move to adjacent cells, removing walls between the current and next cell.</li>
+<li>If all neighbors have been visited, backtrack to the previous cell and continue.</li>
+<li>Complete the process when all cells have been visited.</li>
+</ul>
+</li>
+<li>Guarantee a single path through the maze.</li>
+</ul>
+<h4>3. <strong>Maze Display</strong></h4>
+<ul>
+<li>Use symbols for display:
+<ul>
+<li><code>+</code>, <code>-</code>, <code>|</code> for walls.</li>
+<li>Spaces for passages.</li>
+</ul>
+</li>
+<li>Output the generated maze in text format.</li>
+</ul>
+<h4>4. <strong>Additional Features</strong></h4>
+<ul>
+<li>Ability to set a preset size (e.g., 10x10) if the user entered invalid data.</li>
+<li>Warning about excessively large maze sizes to prevent memory overload.</li>
+</ul>
+<hr>
+<h3>Example of program execution</h3>
+<p>1. <strong>Start</strong>:</p>
+<pre class="line-numbers"><code class="language-text">Enter maze width and height:
+> 10 8
+</code></pre>
+<p>2. <strong>Maze Output</strong>:</p>
+<pre class="line-numbers"><code class="language-text">+--+--+--+--+--+--+--+--+--+--+
+|        |        |           |
++  +--+  +  +--+  +  +--+--+  +
+|     |     |     |        |  |
++--+  +  +--+  +  +  +--+  +  +
+|     |        |     |     |  |
++--+--+--+--+--+--+--+--+--+--+
+</code></pre>
+<p>3. <strong>Exit program</strong>:</p>
+<pre class="line-numbers"><code class="language-text">Generate a new maze? (yes/no):
+> no
+Goodbye!
+</code></pre>
+<hr>

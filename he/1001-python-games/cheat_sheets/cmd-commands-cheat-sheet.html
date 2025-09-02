@@ -1,0 +1,623 @@
+<h2 dir="rtl"><strong>1. ניהול קבצים וספריות:</strong></h2>
+<ul dir="rtl">
+<li><strong><span dir="ltr"><code>attrib</code></span></strong>: מציג או משנה תכונות של קובץ או ספרייה (מוסתר, לקריאה בלבד, ארכיון וכו').
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>attrib [+r|-r] [+a|-a] [+s|-s] [+h|-h] [כונן:][נתיב]שם_קובץ</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>+r</code></span>: הגדר תכונה "לקריאה בלבד"</li>
+<li><span dir="ltr"><code>-r</code></span>: הסר תכונה "לקריאה בלבד"</li>
+<li><span dir="ltr"><code>+a</code></span>: הגדר תכונה "ארכיון"</li>
+<li><span dir="ltr"><code>-a</code></span>: הסר תכונה "ארכיון"</li>
+<li><span dir="ltr"><code>+s</code></span>: הגדר תכונה "מערכת"</li>
+<li><span dir="ltr"><code>-s</code></span>: הסר תכונה "מערכת"</li>
+<li><span dir="ltr"><code>+h</code></span>: הגדר תכונה "מוסתר"</li>
+<li><span dir="ltr"><code>-h</code></span>: הסר תכונה "מוסתר"</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>attrib +h myfile.txt</code></span>: הפוך את הקובץ <span dir="ltr"><code>myfile.txt</code></span> למוסתר.</li>
+<li><span dir="ltr"><code>attrib -r myfile.txt</code></span>: הסר את התכונה "לקריאה בלבד" מהקובץ <span dir="ltr"><code>myfile.txt</code></span>.</li>
+<li><span dir="ltr"><code>attrib *.*</code></span>: הצג תכונות של כל הקבצים בספרייה הנוכחית.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>cd</code></span> או <span dir="ltr"><code>chdir</code></span></strong>: משנה את הספרייה הנוכחית.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>cd [נתיב]</code></span> או <span dir="ltr"><code>chdir [נתיב]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>..</code></span>: עבור לספריית האב.</li>
+<li><span dir="ltr"><code>\</code></span>: עבור לשורש הכונן.</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>cd Documents</code></span>: עבור לתיקיית <span dir="ltr"><code>Documents</code></span> בספרייה הנוכחית.</li>
+<li><span dir="ltr"><code>cd C:\Users\User\Downloads</code></span>: עבור לתיקיית <span dir="ltr"><code>Downloads</code></span> בכונן <span dir="ltr">C</span>.</li>
+<li><span dir="ltr"><code>cd ..</code></span>: עבור לספריית האב.</li>
+<li><span dir="ltr"><code>cd \</code></span>: עבור לשורש הכונן הנוכחי.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>copy</code></span></strong>: מעתיק קובץ אחד או יותר.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>copy [קובץ_מקור] [קובץ_יעד]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/a</code></span> - העתק קובץ <span dir="ltr">ASCII</span></li>
+<li><span dir="ltr"><code>/b</code></span> - העתק קובץ בינארי</li>
+<li><span dir="ltr"><code>/v</code></span> - ודא שהקבצים הועתקו כהלכה</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>copy myfile.txt mycopy.txt</code></span>: העתק את הקובץ <span dir="ltr"><code>myfile.txt</code></span> ל-<span dir="ltr"><code>mycopy.txt</code></span>.</li>
+<li><span dir="ltr"><code>copy *.txt C:\Backup</code></span>: העתק את כל הקבצים עם סיומת <span dir="ltr"><code>.txt</code></span> לתיקיית <span dir="ltr"><code>C:\Backup</code></span>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>del</code></span> או <span dir="ltr"><code>erase</code></span></strong>: מוחק קובץ אחד או יותר.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>del [שם_קובץ]</code></span> או <span dir="ltr"><code>erase [שם_קובץ]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/p</code></span>: בקש אישור לפני מחיקת כל קובץ.</li>
+<li><span dir="ltr"><code>/f</code></span>: מחק קבצים "לקריאה בלבד".</li>
+<li><span dir="ltr"><code>/s</code></span>: מחק קבצים מתת-ספריות.</li>
+<li><span dir="ltr"><code>/q</code></span> - מחק קבצים ללא בקשה.</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>del myfile.txt</code></span>: מחק את הקובץ <span dir="ltr"><code>myfile.txt</code></span>.</li>
+<li><span dir="ltr"><code>del *.tmp</code></span>: מחק את כל הקבצים עם סיומת <span dir="ltr"><code>.tmp</code></span>.</li>
+<li><span dir="ltr"><code>del /f /s *.log</code></span> - מחק את כל הקבצים עם סיומת <span dir="ltr">.log</span> בספרייה הנוכחית ובכל תת-הספריות, ללא אישור</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>dir</code></span></strong>: מציג רשימה של קבצים וספריות בספרייה הנוכחית.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>dir [נתיב] [אפשרויות]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/a</code></span>: הצג את כל הקבצים (כולל מוסתרים).</li>
+<li><span dir="ltr"><code>/w</code></span>: הצג את הרשימה בפורמט רחב.</li>
+<li><span dir="ltr"><code>/p</code></span>: הצג את הרשימה עמוד אחר עמוד.</li>
+<li><span dir="ltr"><code>/s</code></span>: הצג קבצים גם מתת-ספריות</li>
+<li><span dir="ltr"><code>/b</code></span> - הצג רק את שם הקובץ</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>dir</code></span>: הצג רשימה של קבצים וספריות בספרייה הנוכחית.</li>
+<li><span dir="ltr"><code>dir C:\Users\User\Documents /a</code></span>: הצג את כל הקבצים בספריית <span dir="ltr"><code>Documents</code></span>.</li>
+<li><span dir="ltr"><code>dir /w</code></span>: הצג רשימה של קבצים וספריות בספרייה הנוכחית בפורמט רחב.</li>
+<li><span dir="ltr"><code>dir /b /s *.txt</code></span>: הצג את כל קבצי <span dir="ltr">*.txt</span> עם נתיב מלא.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>mkdir</code></span> או <span dir="ltr"><code>md</code></span></strong>: יוצר ספרייה חדשה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>mkdir [נתיב]</code></span> או <span dir="ltr"><code>md [נתיב]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>mkdir NewFolder</code></span>: צור תיקייה חדשה <span dir="ltr"><code>NewFolder</code></span> בספרייה הנוכחית.</li>
+<li><span dir="ltr"><code>mkdir C:\Backup</code></span>: צור תיקייה חדשה <span dir="ltr"><code>Backup</code></span> בכונן <span dir="ltr">C</span>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>move</code></span></strong>: מזיז קובץ אחד או יותר או ספריות.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>move [קובץ_מקור] [קובץ_יעד]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>move myfile.txt C:\Documents</code></span>: הזז את הקובץ <span dir="ltr"><code>myfile.txt</code></span> לתיקיית <span dir="ltr"><code>C:\Documents</code></span>.</li>
+<li><span dir="ltr"><code>move dir1 dir2</code></span> - הזז את תיקיית <span dir="ltr"><code>dir1</code></span> לתיקיית <span dir="ltr"><code>dir2</code></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>rd</code></span> או <span dir="ltr"><code>rmdir</code></span></strong>: מוחק ספרייה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>rd [נתיב]</code></span> או <span dir="ltr"><code>rmdir [נתיב]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/s</code></span>: מחק את הספרייה עם כל תת-הספריות שלה.</li>
+<li><span dir="ltr"><code>/q</code></span> - מחק את הספרייה ללא בקשה.</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>rd myfolder</code></span>: מחק תיקייה ריקה <span dir="ltr"><code>myfolder</code></span></li>
+<li><span dir="ltr"><code>rd /s /q myfolder</code></span> - מחק את תיקיית <span dir="ltr"><code>myfolder</code></span> עם כל תוכנה ללא בקשה.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>ren</code></span> או <span dir="ltr"><code>rename</code></span></strong>: משנה שם של קובץ או ספרייה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>ren [שם_ישן] [שם_חדש]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>ren myfile.txt newfile.txt</code></span>: שנה את שם הקובץ <span dir="ltr"><code>myfile.txt</code></span> ל-<span dir="ltr"><code>newfile.txt</code></span>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>type</code></span></strong>: מציג את תוכן קובץ טקסט.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>type [שם_קובץ]</code></span></li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>type myfile.txt</code></span>: הצג את תוכן הקובץ <span dir="ltr"><code>myfile.txt</code></span>.</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>xcopy</code></span></strong>: מעתיק קבצים וספריות (כולל תת-ספריות).
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>xcopy [מקור] [יעד] [אפשרויות]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/s</code></span>: העתק ספריות ותת-ספריות (למעט ריקות).</li>
+<li><span dir="ltr"><code>/e</code></span>: העתק ספריות ותת-ספריות (כולל ריקות).</li>
+<li><span dir="ltr"><code>/i</code></span>: אם היעד אינו קיים, צור אותו.</li>
+<li><span dir="ltr"><code>/y</code></span>: דכא בקשת אישור להחלפה.</li>
+<li><span dir="ltr"><code>/d</code></span> - העתק רק קבצים חדשים</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>xcopy C:\Source D:\Destination /s</code></span>: העתק את ספריית <span dir="ltr"><code>C:\Source</code></span> לכל תת-הספריות בתיקיית <span dir="ltr"><code>D:\Destination</code></span>.</li>
+<li><span dir="ltr"><code>xcopy C:\Source D:\Destination /e /y</code></span>: העתק את ספריית <span dir="ltr"><code>C:\Source</code></span> לכל תת-הספריות בתיקיית <span dir="ltr"><code>D:\Destination</code></span>, כולל ריקות וללא בקשת החלפה.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 dir="rtl"><strong>2. עבודה עם דיסקים:</strong></h2>
+<ul dir="rtl">
+<li><strong><span dir="ltr"><code>diskpart</code></span></strong>: מפעיל כלי עזר לניהול דיסקים (מחיצות, כרכים).
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>diskpart</code></span></li>
+<li><strong>הערות:</strong>
+<ul>
+<li><span dir="ltr"><code>diskpart</code></span> – הוא כלי עזר אינטראקטיבי שיש לו סט פקודות משלו.</li>
+<li>נדרשות הרשאות מנהל מערכת כדי להשתמש בו.</li>
+<li>תוכל ללמוד עוד על השימוש ב-<span dir="ltr"><code>diskpart</code></span> באמצעות פקודת <span dir="ltr"><code>help</code></span> בתוך כלי עזר זה.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>format</code></span></strong>: מפרמט דיסק.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>format [כונן:] [אפשרויות]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/q</code></span> - פרמוט מהיר</li>
+<li><span dir="ltr"><code>/fs:מערכת-קובץ</code></span> - בחר סוג מערכת קבצים (לדוגמה, <span dir="ltr">NTFS</span>, <span dir="ltr">FAT32</span>)</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>format D: /q</code></span>: פרמוט מהיר של כונן <span dir="ltr">D:</span>.</li>
+<li><span dir="ltr"><code>format E: /fs:NTFS</code></span>: פרמוט כונן <span dir="ltr">E:</span> למערכת קבצים <span dir="ltr">NTFS</span>.</li>
+</ul>
+</li>
+<li><strong>אזהרה:</strong> פרמוט דיסק מוחק את כל הנתונים שבו!</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>label</code></span></strong>: מגדיר או משנה תווית דיסק.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>label [כונן:][תווית]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>label D: NewLabel</code></span> - הגדר תווית בכונן <span dir="ltr">D</span> כ-<span dir="ltr">NewLabel</span></li>
+<li><span dir="ltr"><code>label D:</code></span> - נקה תווית מכונן <span dir="ltr">D</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 dir="rtl"><strong>3. ניהול מערכת:</strong></h2>
+<ul dir="rtl">
+<li><strong><span dir="ltr"><code>cls</code></span></strong>: מנקה את מסך שורת הפקודה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>cls</code></span></li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>date</code></span></strong>: מציג או משנה את התאריך הנוכחי.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>date [תאריך_חדש]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>date</code></span>: הצג את התאריך הנוכחי.</li>
+<li><span dir="ltr"><code>date 12-25-2024</code></span>: שנה את התאריך ל-25 בדצמבר 2024.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>exit</code></span></strong>: יוצא משורת הפקודה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>exit</code></span></li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>shutdown</code></span></strong>: מכבה או מפעיל מחדש את המחשב.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>shutdown [אפשרויות]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/s</code></span>: כבה את המחשב.</li>
+<li><span dir="ltr"><code>/r</code></span>: הפעל מחדש את המחשב.</li>
+<li><span dir="ltr"><code>/a</code></span>: בטל כיבוי או הפעלה מחדש.</li>
+<li><span dir="ltr"><code>/t xxx</code></span> - השהיה בשניות לפני כיבוי או הפעלה מחדש</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>shutdown /s /t 60</code></span>: כבה את המחשב תוך 60 שניות.</li>
+<li><span dir="ltr"><code>shutdown /r</code></span>: הפעל מחדש את המחשב.</li>
+<li><span dir="ltr"><code>shutdown /a</code></span>: בטל כיבוי או הפעלה מחדש מתוכננים.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>tasklist</code></span></strong>: מציג רשימה של תהליכים פועלים.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>tasklist [אפשרויות]</code></span></li>
+<li><span dir="ltr"><code>/v</code></span> - מידע נוסף</li>
+<li><span dir="ltr"><code>/fo csv</code></span> - פלט בפורמט <span dir="ltr">CSV</span></li>
+<li><span dir="ltr"><code>/fi "שם_תמונה eq notepad.exe"</code></span> - מצא את כל תהליכי הפנקס רשימות</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>tasklist</code></span>: הצג רשימה של תהליכים פועלים.</li>
+<li><span dir="ltr"><code>tasklist /v</code></span>: הצג רשימה של תהליכים פועלים עם מידע מפורט.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>taskkill</code></span></strong>: מסיים תהליך.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>taskkill [אפשרויות]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/im שם_תמונה</code></span> - סיים תהליך לפי שם</li>
+<li><span dir="ltr"><code>/pid pid</code></span> - סיים תהליך לפי מזהה</li>
+<li><span dir="ltr"><code>/f</code></span> - סיים תהליך בכוח</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>taskkill /im notepad.exe</code></span>: סיים את כל התהליכים עם השם <span dir="ltr"><code>notepad.exe</code></span>.</li>
+<li><span dir="ltr"><code>taskkill /pid 1234</code></span>: סיים תהליך עם מזהה <span dir="ltr">1234</span>.</li>
+<li><span dir="ltr"><code>taskkill /im notepad.exe /f</code></span> - סיים בכוח את כל תהליכי <span dir="ltr"><code>notepad.exe</code></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>time</code></span></strong>: מציג או משנה את השעה הנוכחית.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>time [שעה_חדשה]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>time</code></span>: הצג את השעה הנוכחית.</li>
+<li><span dir="ltr"><code>time 15:30</code></span>: הגדר את השעה ל-15:30.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>ver</code></span></strong>: מציג את גרסת מערכת ההפעלה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>ver</code></span></li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>systeminfo</code></span></strong>: מציג מידע מפורט על המערכת.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>systeminfo</code></span></li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>taskmgr</code></span></strong>: מפעיל את מנהל המשימות.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>taskmgr</code></span></li>
+</ul>
+</li>
+</ul>
+<h2 dir="rtl"><strong>4. רשת:</strong></h2>
+<ul dir="rtl">
+<li><strong><span dir="ltr"><code>ipconfig</code></span></strong>: מציג את תצורת הרשת.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>ipconfig [אפשרויות]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/all</code></span>: הצג מידע מלא על מתאמי רשת.</li>
+<li><span dir="ltr"><code>/release</code></span>: שחרר כתובת <span dir="ltr">IP</span>.</li>
+<li><span dir="ltr"><code>/renew</code></span>: בקש כתובת <span dir="ltr">IP</span> חדשה.</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>ipconfig</code></span>: הצג תצורת רשת בסיסית.</li>
+<li><span dir="ltr"><code>ipconfig /all</code></span>: הצג מידע מלא על כל מתאמי הרשת.</li>
+<li><span dir="ltr"><code>ipconfig /release</code></span> - שחרר כתובת <span dir="ltr">IP</span></li>
+<li><span dir="ltr"><code>ipconfig /renew</code></span> - בקש כתובת <span dir="ltr">IP</span> חדשה</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>ping</code></span></strong>: שולח בקשת הד לחיבור למחשב אחר ברשת.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>ping [שם_מארח_או_כתובת_IP] [אפשרויות]</code></span></li>
+<li><span dir="ltr"><code>-n xxx</code></span> - מספר בקשות</li>
+<li><span dir="ltr"><code>-t</code></span> - פינג ללא הגבלה</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>ping google.com</code></span>: פינג לשרת <span dir="ltr"><code>google.com</code></span>.</li>
+<li><span dir="ltr"><code>ping 192.168.1.100</code></span>: פינג למחשב עם כתובת <span dir="ltr">IP 192.168.1.100</span>.</li>
+<li><span dir="ltr"><code>ping google.com -n 10</code></span> - בצע 10 פינגים</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>tracert</code></span></strong>: מציג את נתיב החבילות למחשב אחר ברשת.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>tracert [שם_מארח_או_כתובת_IP]</code></span></li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>tracert google.com</code></span>: הצג את נתיב החבילות ל-<span dir="ltr"><code>google.com</code></span>.</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>netstat</code></span></strong>: מציג חיבורי רשת.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>netstat [אפשרויות]</code></span></li>
+<li><span dir="ltr"><code>-a</code></span>: מציג את כל החיבורים</li>
+<li><span dir="ltr"><code>-b</code></span>: מציג יישומים שיצרו חיבורים.</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>netstat</code></span> - הצג את כל החיבורים הפעילים</li>
+<li><span dir="ltr"><code>netstat -a -b</code></span> - הצג את כל החיבורים והיישומים הפועלים שפתחו אותם</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>nslookup</code></span></strong>: שולח שאילתות מידע <span dir="ltr">DNS</span>.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>nslookup [שם_מארח]</code></span></li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>nslookup google.com</code></span>: שלח שאילתת מידע <span dir="ltr">DNS</span> עבור <span dir="ltr"><code>google.com</code></span>.</li>
+</ul>
+</li>
+</ul>
+<h2 dir="rtl"><strong>5. פקודות אחרות:</strong></h2>
+<ul dir="rtl">
+<li><strong><span dir="ltr"><code>assoc</code></span></strong>: מציג או משנה שיוכי קבצים.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>assoc [.סיומת]=[סוג_קובץ]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>assoc .txt</code></span>: הצג את סוג הקובץ עבור סיומת <span dir="ltr"><code>.txt</code></span>.</li>
+<li><span dir="ltr"><code>assoc .txt=txtfile</code></span>: הגדר את סוג הקובץ עבור סיומת <span dir="ltr"><code>.txt</code></span> כ-<span dir="ltr"><code>txtfile</code></span>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>call</code></span></strong>: קורא לקובץ אצווה אחד מתוך אחר.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>call [שם_קובץ_אצווה]</code></span></li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>call mybatch.bat</code></span>: קרא לקובץ האצווה <span dir="ltr"><code>mybatch.bat</code></span>.</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>chcp</code></span></strong>: משנה את דף הקוד של הקונסולה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>chcp [מספר_דף_קוד]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>chcp 1251</code></span>: הגדר דף קוד עבור קירילית.</li>
+<li><span dir="ltr"><code>chcp</code></span>: הצג את דף הקוד הנוכחי.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>choice</code></span></strong>: מאפשר למשתמש לבחור מתוך רשימת אפשרויות.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>choice [/c [אפשרויות]] [/n] [/t [שניות]] [/d [אפשרות]] [טקסט]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/c</code></span>: מציין אפשרויות זמינות.</li>
+<li><span dir="ltr"><code>/n</code></span>: מסתיר את רשימת האפשרויות הזמינות.</li>
+<li><span dir="ltr"><code>/t</code></span>: מציין זמן המתנה (בשניות).</li>
+<li><span dir="ltr"><code>/d</code></span>: מציין את אפשרות ברירת המחדל.</li>
+</ul>
+</li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>choice /c yn /t 10 /d n "האם אתה באמת רוצה לצאת?"</code></span></li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>find</code></span></strong>: מחפש מחרוזת טקסט בקובץ.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>find "מחרוזת" [שם_קובץ]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>find "Hello" myfile.txt</code></span> - מחפש את המחרוזת "<span dir="ltr">Hello</span>" בקובץ <span dir="ltr">myfile.txt</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>findstr</code></span></strong>: מחפש מחרוזות טקסט בקבצים (אנלוגי חזק יותר של <span dir="ltr"><code>find</code></span>).
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>findstr [אפשרויות] "מחרוזת" [שם_קובץ]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/i</code></span> - חיפוש ללא תלות ברישיות</li>
+<li><span dir="ltr"><code>/n</code></span> - הצג מספרי שורות</li>
+<li><span dir="ltr"><code>/s</code></span> - חפש בכל תת-הספריות</li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>findstr /i "error" myfile.log</code></span>: מחפש את המחרוזת "<span dir="ltr">error</span>" (ללא תלות ברישיות) ב-<span dir="ltr"><code>myfile.log</code></span>.</li>
+<li><span dir="ltr"><code>findstr /n "error" *.log</code></span> - מחפש את המחרוזת "<span dir="ltr">error</span>" בכל קבצי <span dir="ltr">.log</span>, ומציג מספרי שורות</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>gpupdate</code></span></strong>: מעדכן מדיניות קבוצתית.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>gpupdate [אפשרויות]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/force</code></span> - עדכון כפוי</li>
+</ul>
+</li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>gpupdate /force</code></span> - עדכן בכוח מדיניות קבוצתית</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>help</code></span> או <span dir="ltr"><code>/?</code></span></strong>: מציג עזרה לפקודה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>help [שם_פקודה]</code></span> או <span dir="ltr"><code>[שם_פקודה] /?</code></span></li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>help dir</code></span> או <span dir="ltr"><code>dir /?</code></span>: הצג עזרה לפקודה <span dir="ltr"><code>dir</code></span>.</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>pause</code></span></strong>: משהה ביצוע קובץ אצווה וממתין ללחיצת מקש.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>pause</code></span></li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>path</code></span></strong>: מציג או משנה משתני סביבה <span dir="ltr">PATH</span>
+<ul>
+<li><strong>תחביר</strong>: <span dir="ltr"><code>path [נתיב]</code></span></li>
+<li><strong>דוגמאות</strong>:
+<ul>
+<li><span dir="ltr"><code>path</code></span>: הצג את הערך הנוכחי של משתנה <span dir="ltr">PATH</span></li>
+<li><span dir="ltr"><code>path C:\bin</code></span> - הוסף את תיקיית <span dir="ltr">C:\bin</span> למשתנה <span dir="ltr">PATH</span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>prompt</code></span></strong>: מגדיר את מחרוזת ההנחיה של שורת הפקודה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>prompt [טקסט]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>prompt $p$g</code></span>: הגדר את מחרוזת ההנחיה עבור הנתיב הנוכחי.</li>
+<li><span dir="ltr"><code>prompt MyPrompt&gt;</code></span>: הגדר את מחרוזת ההנחיה <span dir="ltr"><code>MyPrompt&gt;</code></span>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>set</code></span></strong>: מציג, מגדיר או מוחק משתני סביבה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>set [שם=[ערך]]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>set</code></span>: הצג את כל משתני הסביבה.</li>
+<li><span dir="ltr"><code>set myvar=myvalue</code></span>: הגדר את משתנה הסביבה <span dir="ltr"><code>myvar</code></span> ל-<span dir="ltr"><code>myvalue</code></span>.</li>
+<li><span dir="ltr"><code>set myvar=</code></span>: מחק את משתנה הסביבה <span dir="ltr"><code>myvar</code></span>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>start</code></span></strong>: מפעיל תוכנית או פותח קובץ.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>start [שם_תוכנית_או_קובץ] [אפשרויות]</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>start notepad.exe</code></span>: הפעל את פנקס הרשימות.</li>
+<li><span dir="ltr"><code>start myfile.txt</code></span>: פתח את הקובץ <span dir="ltr"><code>myfile.txt</code></span> באמצעות התוכנית המוגדרת כברירת מחדל.</li>
+<li><span dir="ltr"><code>start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" "https://www.google.com"</code></span> - פתח אתר אינטרנט בכרום</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>tree</code></span></strong>: מציג את מבנה הספריות הגרפי.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>tree [כונן:][נתיב] [אפשרויות]</code></span></li>
+<li><strong>אפשרויות:</strong>
+<ul>
+<li><span dir="ltr"><code>/f</code></span>: הצג גם שמות קבצים</li>
+<li><span dir="ltr"><code>/a</code></span> - השתמש בתווי <span dir="ltr">ASCII</span></li>
+</ul>
+</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>tree</code></span> - הצג את מבנה הספרייה הנוכחית</li>
+<li><span dir="ltr"><code>tree /f</code></span> - הצג את מבנה הספרייה הנוכחית עם קבצים</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>where</code></span></strong>: מוצא את מיקום הקובץ.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>where [שם_קובץ]</code></span></li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>where notepad.exe</code></span></li>
+</ul>
+</li>
+</ul>
+<h2 dir="rtl"><strong>6. פקודות לעבודה עם קבצי אצווה:</strong></h2>
+<ul dir="rtl">
+<li><strong><span dir="ltr"><code>echo</code></span></strong>: מציג טקסט על המסך.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>echo [טקסט]</code></span></li>
+<li><span dir="ltr"><code>echo on</code></span> - הפעל הצגת פקודות בעת ביצוע קובץ אצווה</li>
+<li><span dir="ltr"><code>echo off</code></span> - בטל הצגת פקודות בעת ביצוע קובץ אצווה</li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>echo Hello, world!</code></span>: הצג "<span dir="ltr">Hello, world!</span>" על המסך.</li>
+<li><span dir="ltr"><code>echo off</code></span> - בטל פלט פקודות</li>
+<li><span dir="ltr"><code>echo on</code></span> - הפעל פלט פקודות</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>rem</code></span></strong>: מוסיף הערה לקובץ אצווה.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>rem [הערה]</code></span></li>
+<li><strong>דוגמה:</strong> <span dir="ltr"><code>rem This is a comment</code></span></li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>goto</code></span></strong>: קופץ לתווית.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>goto [תווית]</code></span></li>
+<li><strong>דוגמה:</strong>
+<pre class="line-numbers"><code class="language-batch">:start
+echo Hello
+goto end
+echo This will not be displayed
+:end
+echo Goodbye
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>if</code></span></strong>: מבצע לוגיקה מותנית.
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>if [not] condition (פקודה1) else (פקודה2)</code></span></li>
+<li><strong>דוגמאות:</strong>
+<ul>
+<li><span dir="ltr"><code>if exist file.txt echo file exists</code></span> - בדיקת קיום קובץ</li>
+<li><span dir="ltr"><code>if %var%== "text" echo variable has value</code></span> - בדיקת ערך משתנה</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><span dir="ltr"><code>for</code></span></strong>: מבצע פעולת לולאה
+<ul>
+<li><strong>תחביר:</strong> <span dir="ltr"><code>for %%משתנה in (סט) do [פקודה]</code></span></li>
+<li><strong>דוגמה:</strong>
+<pre class="line-numbers"><code class="language-batch">for %%a in (*.txt) do (
+         echo %%a
+         type %%a
+         echo -------------
+        )
+</code></pre>
+<ul>
+<li>הצג את שם כל קובץ <span dir="ltr"><code>.txt</code></span> ותוכנו</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 dir="rtl"><strong>אזהרה:</strong></h2>
+<ul dir="rtl">
+<li>היזהר בעת שימוש בפקודות שיכולות לשנות את המערכת, במיוחד בעת שימוש בהרשאות מנהל מערכת.</li>
+<li>לפני ביצוע פקודת <span dir="ltr"><code>format</code></span>, ודא שבחרת את הכונן הנכון.</li>
+</ul>

@@ -1,0 +1,52 @@
+<h2 dir="rtl"><span dir="ltr">BOMBER</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">5</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;בומבר&quot; - זהו משחק פאזל שבו השחקן מנסה להפיל פצצה על מטרה הממוקמת במרחק שנוצר באופן אקראי. השחקן מזין את זווית ההטלה ואת מרחק ההטלה, והמחשב מחשב את מסלול הפצצה. מטרת המשחק - לפגוע במטרה בצורה מדויקת ככל האפשר.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">המחשב מייצר מרחק מטרה אקראי בטווח של <span dir="ltr">100</span> עד <span dir="ltr">1000</span>.</p></li>
+<li><p dir="rtl">השחקן מזין את זווית הטלת הפצצה ואת מרחק הטלת הפצצה.</p></li>
+<li><p dir="rtl">המחשב מחשב את המרחק שאליו תיפול הפצצה.</p></li>
+<li><p dir="rtl">אם מרחק נפילת הפצצה נמצא בטווח של <span dir="ltr">10</span> יחידות ממרחק המטרה, השחקן מנצח.</p></li>
+<li><p dir="rtl">אם מרחק נפילת הפצצה אינו בטווח, השחקן מפסיד.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">צור מרחק מטרה אקראי בטווח של <span dir="ltr">100</span> עד <span dir="ltr">1000</span> והקצה אותו למשתנה <span dir="ltr"><code>targetDistance</code></span>.</p></li>
+<li><p dir="rtl">בקש מהשחקן את זווית ההטלה של הפצצה במעלות (זווית) ואת מרחק ההטלה (מרחק).</p></li>
+<li><p dir="rtl">המר את הזווית ממעלות לרדיאנים <span dir="ltr"><code>angleInRadians = angle * 3.14159 / 180</code></span>.</p></li>
+<li><p dir="rtl">חשב את מרחק נפילת הפצצה לפי הנוסחה: <span dir="ltr"><code>dropDistance = distance * cos(angleInRadians)</code></span>.</p></li>
+<li><p dir="rtl">חשב את ההפרש בין מרחק נפילת הפצצה למרחק המטרה: <span dir="ltr"><code>distanceDifference = abs(dropDistance - targetDistance)</code></span>.</p></li>
+<li><p dir="rtl">אם הפרש המרחקים קטן או שווה ל-<span dir="ltr">10</span>, הצג הודעת ניצחון.</p></li>
+<li><p dir="rtl">אחרת, הצג הודעת הפסד.</p></li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeTargetDistance["Initialize: <code><b>targetDistance = random(100, 1000)</b></code>"]
+    InitializeTargetDistance --> InputAngleDistance["Input: <code><b>angle, distance</b></code>"]
+    InputAngleDistance --> ConvertAngle["Convert: <code><b>angleInRadians = angle * PI / 180</b></code>"]
+    ConvertAngle --> CalculateDropDistance["Calculate: <code><b>dropDistance = distance * cos(angleInRadians)</b></code>"]
+    CalculateDropDistance --> CalculateDistanceDifference["Calculate: <code><b>distanceDifference = abs(dropDistance - targetDistance)</b></code>"]
+    CalculateDistanceDifference --> CheckDistanceDifference{"Check: <code><b>distanceDifference <= 10</b></code>"}
+    CheckDistanceDifference -- Yes --> OutputWin["Display: <b>Hit the target!</b>"]
+    OutputWin --> End["End"]
+    CheckDistanceDifference -- No --> OutputLose["Display: <b>Missed!</b>"]
+    OutputLose --> End
+</code></pre>
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeTargetDistance</span> - אתחול: נוצר מרחק מטרה אקראי (<span dir="ltr">targetDistance</span>) מ-<span dir="ltr">100</span> עד <span dir="ltr">1000</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputAngleDistance</span> - בקשת המשתמש להזין את זווית ההטלה (<span dir="ltr">angle</span>) ואת מרחק ההטלה (<span dir="ltr">distance</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">ConvertAngle</span> - המרת הזווית ממעלות לרדיאנים (<span dir="ltr">angleInRadians</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">CalculateDropDistance</span> - חישוב מרחק נפילת הפצצה (<span dir="ltr">dropDistance</span>) על בסיס הנתונים שהוזנו.</p></li>
+<li><p dir="rtl"><span dir="ltr">CalculateDistanceDifference</span> - חישוב ההפרש המוחלט בין מרחק נפילת הפצצה (<span dir="ltr">dropDistance</span>) למרחק המטרה (<span dir="ltr">targetDistance</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckDistanceDifference</span> - בדיקה האם הפרש המרחקים נמצא בטווח של <span dir="ltr">10</span> יחידות (<span dir="ltr">distanceDifference &lt;= 10</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWin</span> - הצגת הודעת ניצחון אם ההפרש נמצא בטווח של <span dir="ltr">10</span> יחידות.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputLose</span> - הצגת הודעת הפסד אם ההפרש גדול מ-<span dir="ltr">10</span> יחידות.</p></li>
+</ul>

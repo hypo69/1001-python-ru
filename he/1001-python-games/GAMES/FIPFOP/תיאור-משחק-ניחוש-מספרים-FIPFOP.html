@@ -1,0 +1,118 @@
+<h2 dir="rtl"><span dir="ltr">FIPFOP</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">5</span></p>
+<hr>
+<p dir="rtl">המשחק <span dir="ltr">FIPFOP</span> הוא משחק פאזל שבו השחקן צריך, בתורו, להזין מספרים. מטרת המשחק - להגיע לכך שכל המספרים שהוזנו על ידי המשתמש, בסכום, יתנו את המספר <span dir="ltr">100</span>. המשחק מסתיים כאשר סכום כל המספרים שהוזנו מגיע ל-<span dir="ltr">100</span>.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">השחקן מזין מספרים שלמים, אחד בכל פעם.</p></li>
+<li><p dir="rtl">כל מספר שהוזן מתווסף לסכום הכולל.</p></li>
+<li><p dir="rtl">המשחק מסתיים כאשר הסכום הכולל מגיע ל-<span dir="ltr">100</span>.</p></li>
+<li><p dir="rtl">לאחר סיום המשחק, מוצג המספר הכולל של המספרים שהוזנו (מהלכים).</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">הגדר את הסכום ל-<span dir="ltr">0</span>.</p></li>
+<li><p dir="rtl">הגדר את מונה המהלכים ל-<span dir="ltr">0</span>.</p></li>
+<li><p dir="rtl">התחל לולאה &quot;כל עוד הסכום קטן מ-<span dir="ltr">100</span>&quot;:</p>
+<ol>
+<li><p dir="rtl">בקש מהשחקן להזין מספר.</p></li>
+<li><p dir="rtl">הגדל את מונה המהלכים ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">הוסף את המספר שהוזן לסכום הכולל.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">הצג הודעה &quot;השתמשת ב- {מספר מהלכים} מהלכים&quot;</p></li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeVariables["<p align='left'>Initialize variables:
+    <code><b>
+    totalSum = 0
+    numberOfTurns = 0
+    </b></code></p>"]
+    InitializeVariables --> LoopStart{"Start loop: as long as totalSum < 100"}
+    LoopStart -- Yes --> InputNumber["User enters number: <code><b>userNumber</b></code>"]
+    InputNumber --> IncreaseTurns["<code><b>numberOfTurns = numberOfTurns + 1</b></code>"]
+     IncreaseTurns --> AddNumber["<code><b>totalSum = totalSum + userNumber</b></code>"]
+    AddNumber --> CheckSum{"Check: <code><b>totalSum >= 100?</b></code>"}
+    CheckSum -- Yes --> OutputTurns["Display message: <b>You used <code>{numberOfTurns}</code> turns</b>"]
+    OutputTurns --> End["End"]
+     CheckSum -- No --> LoopStart
+    LoopStart -- No --> End
+</code></pre>
+
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeVariables</span> - אתחול משתנים: <span dir="ltr">totalSum</span> (סכום המספרים שהוזנו) מוגדר ל-<span dir="ltr">0</span>, ו-<span dir="ltr">numberOfTurns</span> (מספר מהלכים) מוגדר ל-<span dir="ltr">0</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת הלולאה, הנמשכת כל עוד <span dir="ltr">totalSum</span> קטן מ-<span dir="ltr">100</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputNumber</span> - בקשת המשתמש להזין מספר ושמירתו במשתנה <span dir="ltr">userNumber</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">IncreaseTurns</span> - הגדלת מונה המהלכים ב-<span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">AddNumber</span> - הוספת המספר שהוזן <span dir="ltr">userNumber</span> לסכום הכולל <span dir="ltr">totalSum</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckSum</span> - בדיקה האם הסכום הכולל <span dir="ltr">totalSum</span> גדול או שווה ל-<span dir="ltr">100</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputTurns</span> - הצגת הודעה על מספר המהלכים שהשתמש בהם המשתמש.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+</ul>
+
+<pre class="line-numbers"><code class="language-python"># Initialize sum and turn counter
+totalSum = 0 # Sum of entered numbers
+numberOfTurns = 0 # Number of turns
+
+# Main game loop
+while totalSum < 100:
+    # Request number input from user
+    try:
+        userNumber = int(input("הכנס מספר: "))
+    except ValueError:
+         print("אנא הכנס מספר שלם.")
+         continue
+    
+    # Increment turn counter
+    numberOfTurns += 1
+    # Add entered number to total sum
+    totalSum += userNumber
+
+# Display message about number of turns
+print(f"השתמשת ב- {numberOfTurns} מהלכים")
+
+
+</code></pre>
+
+<h3 dir="rtl">הסבר קוד:</h3>
+<ol>
+<li><p dir="rtl"><strong>אתחול משתנים:</strong></p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>totalSum = 0</code></span>: מאתחל את המשתנה <span dir="ltr"><code>totalSum</code></span> לאחסון סכום המספרים שהוזנו, מתחיל מ-<span dir="ltr">0</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>numberOfTurns = 0</code></span>: מאתחל את המשתנה <span dir="ltr"><code>numberOfTurns</code></span> לספירת מספר המהלכים, גם מתחיל מ-<span dir="ltr">0</span>.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>לולאה ראשית <span dir="ltr"><code>while totalSum &lt; 100</code></span>:</strong></p>
+<ul>
+<li><p dir="rtl">הלולאה נמשכת כל עוד סכום המספרים שהוזנו (<span dir="ltr"><code>totalSum</code></span>) קטן מ-<span dir="ltr">100</span>.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>קלט משתמש:</strong></p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>try...except ValueError</code></span>: בלוק <span dir="ltr"><code>try-except</code></span> מטפל בשגיאות קלט אפשריות. אם המשתמש יזין קלט שאינו מספר שלם, תוצג הודעת שגיאה.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>userNumber = int(input("הכנס מספר: "))</code></span>: מבקש מהמשתמש להזין מספר וממיר אותו למספר שלם, שומר את התוצאה במשתנה <span dir="ltr"><code>userNumber</code></span>.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>הגדלת מונה מהלכים:</strong></p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>numberOfTurns += 1</code></span>: מגדיל את מונה המהלכים ב-<span dir="ltr">1</span> בכל איטרציה של הלולאה.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>הוספת מספר לסכום:</strong></p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>totalSum += userNumber</code></span>: מוסיף את המספר שהוזן (<span dir="ltr"><code>userNumber</code></span>) לסכום הכולל (<span dir="ltr"><code>totalSum</code></span>).</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>הצגת תוצאה:</strong></p>
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>print(f"השתמשת ב- {numberOfTurns} מהלכים")</code></span>: מציג הודעה על המסך לגבי מספר המהלכים שבוצעו כאשר סכום המספרים הגיע ל-<span dir="ltr">100</span> או יותר.</p></li>
+</ul>
+</li>
+</ol>

@@ -1,0 +1,132 @@
+<h2 dir="rtl">אימון מודל <span dir="ltr">OpenAI</span> לסיווג דפי אינטרנט</h2>
+
+<h3 dir="rtl">מבוא</h3>
+
+<p dir="rtl">אימון מודל <span dir="ltr">OpenAI</span> כדי לקבוע אם דף הוא חנות מקוונת.</p>
+
+<ul>
+<li><p dir="rtl">הכנת נתונים,</p></li>
+<li><p dir="rtl">טוקניזציה של טקסט,</p></li>
+<li><p dir="rtl">שליחת נתונים לאימון</p></li>
+<li><p dir="rtl">בדיקת מודל.</p></li>
+</ul>
+
+<h3 dir="rtl">שלב <span dir="ltr">1</span>: הרשמה והגדרת <span dir="ltr">OpenAI API</span></h3>
+
+<p dir="rtl">כדי להתחיל לעבוד עם <span dir="ltr">OpenAI API</span>, עליך להירשם לפלטפורמת <span dir="ltr">OpenAI</span> ולקבל מפתח <span dir="ltr">API</span>. מפתח זה ישמש לאימות בעת קריאה למתודות <span dir="ltr">API</span>.</p>
+
+<pre class="line-numbers"><code class="language-python">import openai
+
+# API key definition
+openai.api_key = 'your-api-key'
+</code></pre>
+
+<h3 dir="rtl">שלב <span dir="ltr">2</span>: הכנת נתונים</h3>
+
+<p dir="rtl">כדי לאמן את המודל, עליך להכין מערך נתונים שיכיל דוגמאות של דפי אינטרנט, גם חנויות וגם לא חנויות. כל רשומה חייבת לכלול את טקסט הדף ותווית מתאימה (<span dir="ltr"><code>positive</code></span> לחנויות ו-<span dir="ltr"><code>negative</code></span> ללא חנויות).</p>
+
+<p dir="rtl">דוגמה לקובץ <span dir="ltr">JSON</span>:</p>
+
+<pre class="line-numbers"><code class="language-json">[
+    {
+        "text": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;ברוכים הבאים לחנות המקוונת שלנו&lt;/h1&gt;&lt;p&gt;אנו מציעים מגוון רחב של מוצרים במחירים תחרותיים. בקרו בחנות שלנו עוד היום!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
+        "label": "positive"
+    },
+    {
+        "text": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;אודותינו&lt;/h1&gt;&lt;p&gt;אנו ספק מוביל של שירותים איכותיים. צרו קשר לקבלת מידע נוסף.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
+        "label": "negative"
+    }
+]
+</code></pre>
+
+<h3 dir="rtl">שלב <span dir="ltr">3</span>: טוקניזציה של טקסט</h3>
+
+<p dir="rtl">לפני שליחת נתונים למודל <span dir="ltr">OpenAI</span>, יש לבצע טוקניזציה לטקסט. טוקניזציה היא תהליך פירוק טקסט למילים או אסימונים בודדים. בפייתון, ניתן להשתמש בספריות כגון <span dir="ltr">NLTK, spaCy</span> או <span dir="ltr">tokenizers</span> מספריית <span dir="ltr">transformers</span>.</p>
+
+<p dir="rtl">דוגמה לטוקניזציה באמצעות <span dir="ltr">NLTK</span>:</p>
+
+<pre class="line-numbers"><code class="language-python">import nltk
+from nltk.tokenize import word_tokenize
+
+# Example text
+text = "זהו טקסט לדוגמה לטוקניזציה."
+
+# Text tokenization
+tokens = word_tokenize(text)
+tokenized_text = ' '.join(tokens)
+print(tokenized_text)
+</code></pre>
+
+<h3 dir="rtl">שלב <span dir="ltr">4</span>: שליחת נתונים לאימון</h3>
+
+<p dir="rtl">לאחר טוקניזציה של הטקסט, ניתן לשלוח את הנתונים לאימון מודל <span dir="ltr">OpenAI</span>. הנה דוגמת קוד לשליחת נתונים:</p>
+
+<pre class="line-numbers"><code class="language-python">import openai
+
+def train_model(data, positive=True):
+    try:
+        response = openai.Train.create(
+            model="text-davinci-003",
+            documents=[entry["text"] for entry in data],
+            labels=["positive" if positive else "negative"] * len(data),
+            show_progress=True
+        )
+        return response.id
+    except Exception as ex:
+        print("אירעה שגיאה במהלך האימון:", ex)
+        return None
+
+# Example usage
+data = [
+    {"text": "טקסט של דף האינטרנט הראשון...", "label": "positive"},
+    {"text": "טקסט של דף האינטרנט השני...", "label": "negative"}
+]
+
+job_id = train_model(data, positive=True)
+print("מזהה עבודה:", job_id)
+</code></pre>
+
+<h3 dir="rtl">שלב <span dir="ltr">5</span>: בדיקת מודל</h3>
+
+<p dir="rtl">לאחר אימון המודל, יש לבדוק אותו על מערך נתונים לבדיקה. הנה דוגמת קוד לבדיקה:</p>
+
+<pre class="line-numbers"><code class="language-python">def test_model(test_data):
+    try:
+        predictions = []
+        for entry in test_data:
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=entry["text"],
+                max_tokens=1
+            )
+            prediction = response.choices[0].text.strip()
+            predictions.append(prediction)
+        return predictions
+    except Exception as ex:
+        print("אירעה שגיאה במהלך הבדיקה:", ex)
+        return None
+
+# Example usage
+test_data = [
+    {"text": "טקסט של דף אינטרנט לבדיקה...", "label": "positive"},
+    {"text": "טקסט של דף בדיקה אחר...", "label": "negative"}
+]
+
+predictions = test_model(test_data)
+print("חיזויים:", predictions)
+</code></pre>
+
+<h3 dir="rtl">שלב <span dir="ltr">6</span>: טיפול בשגיאות ושיפור מודל</h3>
+
+<p dir="rtl">אם המודל נותן חיזויים שגויים, ניתן לשפר אותו על ידי הוספת נתונים נוספים או שינוי פרמטרי אימון. ניתן גם להשתמש במשוב כדי לנתח שגיאות.</p>
+
+<p dir="rtl">דוגמה לטיפול בשגיאות:</p>
+
+<pre class="line-numbers"><code class="language-python">def handle_errors(predictions, test_data):
+    for pred, entry in zip(predictions, test_data):
+        if pred != entry["label"]:
+            print(f"חיזוי שגוי עבור דף '{entry['name']}': חזוי {pred}, בפועל {entry['label']}")
+
+# Example usage
+handle_errors(predictions, test_data)
+</code></pre>

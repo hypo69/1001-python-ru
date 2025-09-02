@@ -1,0 +1,147 @@
+<h2 dir="rtl">משחק באנר: יצירת באנר טקסטואלי</h2>
+
+<p dir="rtl">התוכנית יוצרת באנר טקסטואלי מהטקסט שהוזן על ידי המשתמש. היא מברכת את המשתמש, מבקשת טקסט ומציגה אותו כבאנר מעוצב. הקוד מדגים עקרונות בסיסיים של עבודה עם פונקציות, קלט-פלט ואופרטורים תנאיים בפייתון.</p>
+
+<hr>
+
+<h2 dir="rtl"><strong>איך התוכנית עובדת</strong></h2>
+
+<p dir="rtl">התוכנית מורכבת משני חלקים עיקריים:</p>
+<ol>
+<li><p dir="rtl"><strong>פונקציה <span dir="ltr"><code>create_banner(text)</code></span></strong> – אחראית על יצירה והצגה של באנר טקסטואלי.</p></li>
+<li><p dir="rtl"><strong>החלק העיקרי של התוכנית</strong> – אינטראקציה עם המשתמש: ברכה, בקשת טקסט ובדיקת קלט.</p></li>
+</ol>
+
+<hr>
+
+<h2 dir="rtl"><strong>קוד התוכנית</strong></h2>
+
+<pre class="line-numbers"><code class="language-python"># Banner game: creating a text banner
+
+# Function to create a banner
+def create_banner(text):
+    """
+    Creates a text banner from the input text.
+    :param text: The string to convert to a banner.
+    :return: None
+    """
+    # Determine banner width (text length + 4 characters for frame)
+    banner_width = len(text) + 4
+
+    # Print top border of banner
+    print("*" * banner_width)
+
+    # Print text with frame
+    print(f"* {text} *")
+
+    # Print bottom border of banner
+    print("*" * banner_width)
+
+# Main part of the program
+if __name__ == "__main__":
+    # User greeting
+    print("ברוך הבא למשחק באנר!")
+    print("הכנס טקסט, ואני אצור עבורך באנר טקסטואלי.")
+
+    # Request text from user
+    user_text = input("הכנס טקסט: ")
+
+    # Check that text is not empty
+    if user_text.strip() == "":
+        print("לא הכנסת טקסט. נסה שוב.")
+    else:
+        # Create and display banner
+        print("\nהבאנר שלך מוכן:")
+        create_banner(user_text)
+</code></pre>
+
+<hr>
+
+<h2 dir="rtl"><strong>תיאור פעולת הקוד</strong></h2>
+
+<h3 dir="rtl">1. פונקציה <span dir="ltr"><code>create_banner(text)</code></span></h3>
+<ul>
+<li><p dir="rtl"><strong>מקבלת:</strong> מחרוזת <span dir="ltr"><code>text</code></span> – הטקסט שיש להמיר לבאנר.</p></li>
+<li><p dir="rtl"><strong>מבצעת:</strong></p>
+<ul>
+<li><p dir="rtl">מחשבת את רוחב הבאנר, מוסיפה <span dir="ltr">4</span> תווים למסגרת (<span dir="ltr"><code>*</code></span> ורווחים).</p></li>
+<li><p dir="rtl">מדפיסה את הגבולות העליונים והתחתונים של הבאנר באמצעות הסימן <span dir="ltr"><code>*</code></span>.</p></li>
+<li><p dir="rtl">מדפיסה את הטקסט מוקף במסגרת.</p></li>
+</ul>
+</li>
+</ul>
+
+<h3 dir="rtl">2. החלק העיקרי של התוכנית</h3>
+<ul>
+<li><p dir="rtl"><strong>מברכת</strong> את המשתמש ומסבירה מה התוכנית עושה.</p></li>
+<li><p dir="rtl"><strong>מבקשת</strong> מהמשתמש טקסט ליצירת באנר.</p></li>
+<li><p dir="rtl"><strong>בודקת</strong> שהטקסט אינו ריק:</p>
+<ul>
+<li><p dir="rtl">אם המשתמש הזין מחרוזת ריקה, התוכנית מדווחת על שגיאה ומבקשת לנסות שוב.</p></li>
+<li><p dir="rtl">אם הוזן טקסט, התוכנית מציגה את הבאנר שנוצר.</p></li>
+</ul>
+</li>
+</ul>
+
+<hr>
+
+<h2 dir="rtl"><strong>דוגמת תוכנית</strong></h2>
+
+<p dir="rtl">אם המשתמש הזין את הטקסט <span dir="ltr"><code>&quot;שלום&quot;</code></span>, התוכנית תציג:</p>
+<pre>
+*********
+* שלום *
+*********
+</pre>
+
+<hr>
+
+
+<h2 dir="rtl"><strong>כיצד המפרש מנתח את הקוד</strong></h2>
+
+<h3 dir="rtl"><strong>סדר ביצוע אופרטורים בפייתון</strong></h3>
+<ul>
+<li><p dir="rtl">פייתון קוראת קוד שורה אחר שורה, מתחילה מלמעלה ויורדת למטה.</p></li>
+<li><p dir="rtl">כל שורה מבוצעת ברצף, אלא אם היא חלק מפונקציה, תנאי או לולאה.</p></li>
+</ul>
+
+<h3 dir="rtl"><strong>הגדרת פונקציות</strong></h3>
+<ul>
+<li><p dir="rtl">פונקציות מוגדרות באמצעות מילת המפתח <span dir="ltr"><code>def</code></span>.</p></li>
+<li><p dir="rtl">הגדרת פונקציה אינה מבצעת את הקוד שלה, אלא רק יוצרת &quot;תבנית&quot; לקריאה עתידית.</p></li>
+</ul>
+
+<h3 dir="rtl"><strong>קריאה לפונקציות</strong></h3>
+<ul>
+<li><p dir="rtl">כאשר פונקציה נקראת, פייתון עוברת להגדרתה ומבצעת את הקוד שבתוכה.</p></li>
+<li><p dir="rtl">לאחר סיום ביצוע הפונקציה, השליטה חוזרת למקום שממנו היא נקראה.</p></li>
+</ul>
+
+<h3 dir="rtl"><strong>אופרטורים תנאיים (<span dir="ltr">if, else</span>)</strong></h3>
+<ul>
+<li><p dir="rtl">אופרטורים תנאיים בודקים תנאי ומבצעים את הקוד שבתוך הבלוק אם התנאי נכון.</p></li>
+<li><p dir="rtl">אם התנאי שגוי, פייתון מדלגת על הבלוק ועוברת לשורה הבאה.</p></li>
+</ul>
+
+<h3 dir="rtl"><strong>לולאות (<span dir="ltr">for, while</span>)</strong></h3>
+<ul>
+<li><p dir="rtl">לולאות מאפשרות לחזור על ביצוע בלוק קוד מספר פעמים.</p></li>
+<li><p dir="rtl">פייתון בודקת את תנאי הלולאה לפני כל איטרציה.</p></li>
+</ul>
+
+<h3 dir="rtl"><strong>אופרטורי השמה (<span dir="ltr">=</span>)</strong></h3>
+<ul>
+<li><p dir="rtl">אופרטורי השמה שומרים ערך במשתנה.</p></li>
+<li><p dir="rtl">זה קורה לפני ביצוע פעולות אחרות, כגון קריאה לפונקציות או אופרטורים תנאיים.</p></li>
+</ul>
+
+<h3 dir="rtl"><strong>ביטויים וחישובים</strong></h3>
+<ul>
+<li><p dir="rtl">ביטויים (לדוגמה, <span dir="ltr"><code>len(text) + 4</code></span>) מחושבים לפני שתוצאתם משמשת בחלקים אחרים של הקוד.</p></li>
+</ul>
+
+<hr>
+
+<h2 dir="rtl"><strong>סיכום</strong></h2>
+
+<p dir="rtl">תוכנית זו מדגימה עקרונות בסיסיים של עבודה עם פונקציות, קלט-פלט ואופרטורים תנאיים בפייתון. היא יכולה להיות שימושית למתחילים ללמוד את השפה ולהבין כיצד פועל מפרש פייתון.</p>

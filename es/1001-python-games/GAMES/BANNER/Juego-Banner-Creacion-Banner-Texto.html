@@ -1,0 +1,139 @@
+# Juego Banner: Creación de banner de texto
+
+    
+El programa crea un banner de texto a partir del texto introducido por el usuario. Saluda al usuario, solicita el texto y lo muestra como un banner formateado.
+El código demuestra los principios básicos de trabajo con funciones, entrada/salida y operadores condicionales en Python.
+
+<hr>
+
+<h2><strong>Cómo funciona el programa</strong></h2>
+
+<p>El programa consta de dos partes principales:
+1. <strong>Función <code>create_banner(text)</code></strong> – responsable de la creación y visualización del banner de texto.
+2. <strong>Parte principal del programa</strong> – interacción con el usuario: saludo, solicitud de texto y validación de entrada.</p>
+
+<hr>
+
+<h2><strong>Código del programa</strong></h2>
+
+<pre class="line-numbers"><code class="language-python">
+# Banner Game: Text banner creation
+
+# Function to create a banner
+def create_banner(text):
+    """
+    Creates a text banner from the entered text.
+    :param text: The string to convert to a banner.
+    :return: None
+    """
+    # Determine banner width (text length + 4 characters for frame)
+    banner_width = len(text) + 4
+
+    # Print top banner border
+    print("*" * banner_width)
+
+    # Print text with a frame
+    print(f"* {text} *")
+
+    # Print bottom banner border
+    print("*" * banner_width)
+
+# Main part of the program
+if __name__ == "__main__":
+    # Greet the user
+    print("¡Bienvenido al juego Banner!")
+    print("Ingrese texto, y crearé un banner de texto para usted.")
+
+    # Prompt user for text
+    user_text = input("Ingrese texto: ")
+
+    # Check that the text is not empty
+    if user_text.strip() == "":
+        print("No ingresó texto. Intente de nuevo.")
+    else:
+        # Create and display the banner
+        print("\nSu banner está listo:")
+        create_banner(user_text)
+</code></pre>
+
+<hr>
+
+<h2><strong>Descripción del funcionamiento del código</strong></h2>
+
+<h3><strong>1. Función <code>create_banner(text)</code></strong></h3>
+<ul>
+<li><strong>Acepta:</strong> la cadena <code>text</code> – el texto a convertir en banner.</li>
+<li><strong>Realiza:</strong>
+<ul>
+<li>Calcula el ancho del banner, agregando 4 caracteres para el marco (<code>*</code> y espacios).</li>
+<li>Imprime los bordes superior e inferior del banner usando el carácter <code>*</code>.</li>
+<li>Imprime el texto rodeado por un marco.</li>
+</ul>
+</li>
+</ul>
+<h3><strong>2. Parte principal del programa</strong></h3>
+<ul>
+<li><strong>Saluda</strong> al usuario y explica lo que hace el programa.</li>
+<li><strong>Solicita</strong> al usuario texto para crear un banner.</li>
+<li><strong>Comprueba</strong> que el texto no esté vacío:
+<ul>
+<li>Si el usuario ingresó una cadena vacía, el programa informa un error y pide que lo intente de nuevo.</li>
+<li>Si se ingresa texto, el programa muestra el banner creado.</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+<h2><strong>Ejemplo de programa</strong></h2>
+
+<p>Si el usuario ingresó el texto <code>"Hola"</code>, el programa mostrará:</p>
+<pre class="line-numbers"><code class="language-text">
+*********
+* Hola *
+*********
+</code></pre>
+
+<hr>
+
+
+<h2><strong>Cómo el intérprete analiza el código</strong></h2>
+
+<h3><strong>Orden de ejecución de operadores en Python</strong></h3>
+<ul>
+<li>Python lee el código línea por línea, comenzando desde arriba y moviéndose hacia abajo.</li>
+<li>Cada línea se ejecuta secuencialmente, a menos que sea parte de una función, condición o bucle.</li>
+</ul>
+<h3><strong>Definición de funciones</strong></h3>
+<ul>
+<li>Las funciones se definen usando la palabra clave <code>def</code>.</li>
+<li>La definición de una función no ejecuta su código, solo crea una "plantilla" para futuras llamadas.</li>
+</ul>
+<h3><strong>Llamadas a funciones</strong></h3>
+<ul>
+<li>Cuando se llama a una función, Python salta a su definición y ejecuta el código dentro de ella.</li>
+<li>Una vez que la función termina de ejecutarse, el control regresa al lugar desde donde fue llamada.</li>
+</ul>
+<h3><strong>Sentencias condicionales (if, else)</strong></h3>
+<ul>
+<li>Las sentencias condicionales verifican una condición y ejecutan el código dentro del bloque si la condición es verdadera.</li>
+<li>Si la condición es falsa, Python omite el bloque y pasa a la siguiente línea.</li>
+</ul>
+<h3><strong>Bucles (for, while)</strong></h3>
+<ul>
+<li>Los bucles permiten repetir la ejecución de un bloque de código varias veces.</li>
+<li>Python verifica la condición del bucle antes de cada iteración.</li>
+</ul>
+<h3><strong>Operadores de asignación (=)</strong></h3>
+<ul>
+<li>Los operadores de asignación almacenan un valor en una variable.</li>
+<li>Esto ocurre antes de que se ejecuten otras operaciones, como llamadas a funciones o sentencias condicionales.</li>
+</ul>
+<h3><strong>Expresiones y cálculos</strong></h3>
+<ul>
+<li>Las expresiones (por ejemplo, <code>len(text) + 4</code>) se evalúan antes de que su resultado se use en otras partes del código.</li>
+</ul>
+<hr>
+
+<h2><strong>Resumen</strong></h2>
+
+<p>Este programa demuestra los principios básicos de trabajo con funciones, entrada/salida y sentencias condicionales en Python. Puede ser útil para principiantes que aprenden el lenguaje y para comprender cómo funciona el intérprete de Python.</p>

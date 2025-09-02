@@ -1,0 +1,151 @@
+<h2><strong>1. Listas</strong></h2>
+<ul>
+<li><strong>Definición:</strong> Las listas en Python son colecciones ordenadas y mutables de elementos. Esto significa que puede agregar, eliminar y cambiar elementos en una lista, y el orden de los elementos importa.</li>
+<li><strong>Representación:</strong> Las listas se crean usando corchetes <code>[]</code>, y los elementos se separan con comas.</li>
+<li><strong>Ejemplos:</strong>
+
+<pre class="line-numbers"><code class="language-python">
+# List creation
+boris_list = ["Boris", "Moscú", 30, "ingeniero"]
+print(f"Creación de una lista: {boris_list}")
+
+# Access by index
+print(f"Elemento en el índice 0: {boris_list[0]}")
+
+# Change an element
+boris_list[2] = 31
+print(f"Cambio de un elemento: {boris_list}")
+
+# Add an element to the end
+boris_list.append("casado")
+print(f"Agregar al final: {boris_list}")
+
+# Insert an element by index
+boris_list.insert(1, "Rusia")
+print(f"Insertar un elemento: {boris_list}")
+
+# Remove an element by value
+boris_list.remove("ingeniero")
+print(f"Eliminar un elemento por valor: {boris_list}")
+
+# Remove an element by index
+del boris_list[2]
+print(f"Eliminar un elemento por índice: {boris_list}")
+
+# Extend a list with another list
+boris_list.extend(["hobby", "pesca"])
+print(f"Extender una lista: {boris_list}")
+
+# Remove an element from the end
+boris_list.pop()
+print(f"Eliminar un elemento del final: {boris_list}")
+
+</code></pre>
+</li>
+</ul>
+<h2>2. Diccionarios</h2>
+<ul>
+<li><strong>Definición:</strong> Los diccionarios en Python son colecciones no ordenadas de elementos, donde cada elemento consta de un par "clave-valor".</li>
+<li><strong>Representación:</strong> Los diccionarios se crean usando llaves <code>{}</code>, y los pares "clave-valor" se separan con dos puntos <code>:</code>.</li>
+<li><strong>Ejemplos:</strong>
+<pre class="line-numbers"><code class="language-python">
+# Dictionary creation
+alice_dict = {"name": "Alice", "age": 25, "city": "Londres", "occupation": "artista"}
+print(f"Creación de un diccionario: {alice_dict}")
+
+# Access by key
+print(f"Valor por clave 'name': {alice_dict['name']}")
+
+# Change a value
+alice_dict["age"] = 26
+print(f"Cambio de un valor: {alice_dict}")
+
+# Add a key-value pair
+alice_dict["hobby"] = "dibujo"
+print(f"Agregar un par: {alice_dict}")
+
+# Remove a pair by key
+del alice_dict["city"]
+print(f"Eliminar un par: {alice_dict}")
+
+# Remove a pair by pop method (with return value)
+hobby = alice_dict.pop("hobby")
+print(f"Eliminar con valor de retorno: {alice_dict}, valor: {hobby}")
+
+# Check for key existence
+print(f"La clave 'name' existe: {'name' in alice_dict}")
+</code></pre>
+</li>
+</ul>
+<h2>3. Tuplas</h2>
+<ul>
+<li><strong>Definición:</strong> Las tuplas en Python son colecciones ordenadas e <strong>inmutables</strong> de elementos.</li>
+<li><strong>Representación:</strong> Las tuplas se crean usando paréntesis <code>()</code>, y los elementos se separan con comas.</li>
+<li><strong>Ejemplos:</strong>
+
+<pre class="line-numbers"><code class="language-python">
+# Tuple creation
+boris_tuple = ("Boris", "Moscú", 30, "ingeniero")
+print(f"Creación de una tupla: {boris_tuple}")
+
+# Access by index
+print(f"Elemento en el índice 2: {boris_tuple[2]}")
+
+# Cannot change an element
+# boris_tuple[0] = "Boris" # This will raise an error: TypeError: 'tuple' object does not support item assignment
+
+# Cannot add an element
+# boris_tuple.append(4) # This will raise an error: AttributeError: 'tuple' object has no attribute 'append'
+
+# Cannot delete an element
+# del boris_tuple[0]  # This will raise an error: TypeError: 'tuple' object doesn't support item deletion
+</code></pre>
+</li>
+</ul>
+<h2>4. SimpleNamespace</h2>
+<ul>
+<li><strong>Definición:</strong> <code>SimpleNamespace</code> del módulo <code>types</code> es una clase simple que permite crear objetos cuyos atributos (propiedades) se pueden establecer tanto en la creación como posteriormente.</li>
+<li><strong>Representación:</strong> Para crear un objeto <code>SimpleNamespace</code>, debe importarlo de <code>types</code> y pasarle argumentos con nombre (o no pasarlos):
+<pre class="line-numbers"><code class="language-python">
+    from types import SimpleNamespace
+
+    alice_namespace = SimpleNamespace(name="Alice", age=25, city="Londres")
+</code></pre>
+</li>
+<li><strong>Características:</strong>
+<ul>
+<li>Permite crear objetos con atributos dinámicos (similar a un diccionario).</li>
+<li>Conveniente para crear objetos simples para el almacenamiento de datos.</li>
+<li>Los atributos son accesibles a través de la notación de puntos, como los objetos normales: <code>alice_namespace.name</code></li>
+<li>A diferencia de los diccionarios, el orden de los atributos se conserva.</li>
+<li>Los campos se pueden cambiar, pero no se pueden agregar nuevos campos.</li>
+</ul>
+</li>
+<li><strong>Ejemplos:</strong>
+<pre class="line-numbers"><code class="language-python">
+from types import SimpleNamespace
+
+# SimpleNamespace creation
+alice_namespace = SimpleNamespace(name="Alice", age=25, city="Londres")
+print(f"Creación de un SimpleNamespace: {alice_namespace}")
+
+# Access an attribute
+print(f"Atributo 'name': {alice_namespace.name}")
+
+# Change an attribute
+alice_namespace.age = 26
+print(f"Cambio de un atributo: {alice_namespace}")
+
+# Cannot add a new attribute
+# alice_namespace.occupation = "artista" # This will raise an error: AttributeError: 'SimpleNamespace' object has no attribute 'occupation'
+
+# Add via setattr
+setattr(alice_namespace, "occupation", "artista")
+print(f"Agregar un atributo: {alice_namespace}")
+
+# Delete via delattr
+delattr(alice_namespace, "city")
+print(f"Eliminar un atributo: {alice_namespace}")
+</code></pre>
+</li>
+</ul>

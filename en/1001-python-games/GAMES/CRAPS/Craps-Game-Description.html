@@ -1,0 +1,67 @@
+<p>CRAPS:
+=================
+Difficulty: 7
+-----------------
+The game "Craps" is a dice game of chance in which the player bets on the outcome of rolling two dice. In the first round, the player wins if the sum of the dice is 7 or 11, and loses if the sum is 2, 3, or 12. If the sum of the dice is 4, 5, 6, 8, 9, or 10, this becomes the player's "point number", and they continue to roll the dice until that number is rolled again (in which case the player wins) or a 7 is rolled (in which case the player loses).</p>
+<p>Game rules:
+1. At the beginning of the game, the player rolls two dice.
+2. If the sum of the dice is 7 or 11, the player wins.
+3. If the sum of the dice is 2, 3, or 12, the player loses.
+4. If the sum of the dice is 4, 5, 6, 8, 9, or 10, that number becomes the "point number".
+5. After establishing the "point number", the player continues to roll the dice until:
+   - the "point number" is rolled again, then the player wins.
+   - a 7 is rolled, then the player loses.
+-----------------
+Algorithm:
+1. Generate random values for two dice (from 1 to 6).
+2. Calculate the sum of the rolled values.
+3. If the sum is 7 or 11, display a win message and go to step 7.
+4. If the sum is 2, 3, or 12, display a loss message and go to step 7.
+5. Save the sum as the "point number".
+6. Start a loop:
+    6.1 Generate random values for two dice.
+    6.2 Calculate the sum of the rolled values.
+    6.3 If the sum is equal to the "point number", display a win message and go to step 7.
+    6.4 If the sum is 7, display a loss message and go to step 7.
+    6.5 Otherwise, repeat the loop from step 6.
+7. End of game.
+-----------------
+Flowchart:</p>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> RollDice1["Generate values for two dice: &lt;code&gt;&lt;b&gt;dice1, dice2&lt;/b&gt;&lt;/code&gt;"]
+    RollDice1 --> CalculateSum1["&lt;code&gt;&lt;b&gt;sumOfDice = dice1 + dice2&lt;/b&gt;&lt;/code&gt;"]
+    CalculateSum1 --> CheckWin1{"Check: &lt;code&gt;&lt;b&gt;sumOfDice == 7 or sumOfDice == 11?&lt;/b&gt;&lt;/code&gt;"}
+    CheckWin1 -- Yes --> OutputWin1["Display message: &lt;b&gt;YOU WIN!&lt;/b&gt;"]
+    OutputWin1 --> End["End"]
+    CheckWin1 -- No --> CheckLose1{"Check: &lt;code&gt;&lt;b&gt;sumOfDice == 2 or sumOfDice == 3 or sumOfDice == 12?&lt;/b&gt;&lt;/code&gt;"}
+    CheckLose1 -- Yes --> OutputLose1["Display message: &lt;b&gt;YOU LOSE!&lt;/b&gt;"]
+    OutputLose1 --> End
+    CheckLose1 -- No --> SetPoint["&lt;code&gt;&lt;b&gt;point = sumOfDice&lt;/b&gt;&lt;/code&gt;"]
+    SetPoint --> LoopStart{"Start loop: while not won or lost"}
+    LoopStart --> RollDice2["Generate values for two dice: &lt;code&gt;&lt;b&gt;dice1, dice2&lt;/b&gt;&lt;/code&gt;"]
+    RollDice2 --> CalculateSum2["&lt;code&gt;&lt;b&gt;sumOfDice = dice1 + dice2&lt;/b&gt;&lt;/code&gt;"]
+     CalculateSum2 --> CheckWin2{"Check: &lt;code&gt;&lt;b&gt;sumOfDice == point?&lt;/b&gt;&lt;/code&gt;"}
+    CheckWin2 -- Yes --> OutputWin2["Display message: &lt;b&gt;YOU WIN!&lt;/b&gt;"]
+    OutputWin2 --> End
+    CheckWin2 -- No --> CheckLose2{"Check: &lt;code&gt;&lt;b&gt;sumOfDice == 7?&lt;/b&gt;&lt;/code&gt;"}
+    CheckLose2 -- Yes --> OutputLose2["Display message: &lt;b&gt;YOU LOSE!&lt;/b&gt;"]
+     OutputLose2 --> End
+    CheckLose2 -- No --> LoopStart
+</code></pre>
+<p>Legend:
+   Start - Program start.
+    RollDice1 - Generate random values for two dice (dice1, dice2) in the first roll.
+    CalculateSum1 - Calculate the sum of dice1 and dice2 values and save the result to sumOfDice variable.
+    CheckWin1 - Check if sumOfDice is 7 or 11. If yes, player wins.
+    OutputWin1 - Display "YOU WIN!" message and end the game.
+    CheckLose1 - Check if sumOfDice is 2, 3, or 12. If yes, player loses.
+    OutputLose1 - Display "YOU LOSE!" message and end the game.
+    SetPoint - If not won or lost in the first roll, sumOfDice is saved to the point variable, which becomes the "point number".
+    LoopStart - Start of the loop that continues until the player wins or loses.
+    RollDice2 - Generate random values for two dice (dice1, dice2) in subsequent rolls.
+    CalculateSum2 - Calculate the sum of dice1 and dice2 values and save the result to sumOfDice variable.
+    CheckWin2 - Check if sumOfDice is equal to the "point number" point. If yes, player wins.
+    OutputWin2 - Display "YOU WIN!" message and end the game.
+    CheckLose2 - Check if sumOfDice is 7. If yes, player loses.
+    OutputLose2 - Display "YOU LOSE!" message and end the game.
+    End - End of program.</p>

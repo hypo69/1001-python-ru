@@ -1,0 +1,42 @@
+<h2 dir="rtl"><span dir="ltr">DICE</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">2</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;קוביות&quot; - זהו משחק פשוט, שבו השחקן מטיל שתי קוביות משחק, והמחשב מציג את סכום הערכים שהתקבלו.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">המחשב מדמה הטלת שתי קוביות משחק בעלות שישה צדדים.</p></li>
+<li><p dir="rtl">המחשב מציג על המסך את ערכי כל קובייה ואת סכומם.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">צור מספר אקראי מ-<span dir="ltr">1</span> עד <span dir="ltr">6</span> עבור הקובייה הראשונה.</p></li>
+<li><p dir="rtl">צור מספר אקראי מ-<span dir="ltr">1</span> עד <span dir="ltr">6</span> עבור הקובייה השנייה.</p></li>
+<li><p dir="rtl">חשב את סכום ערכי שתי הקוביות.</p></li>
+<li><p dir="rtl">הצג על המסך את ערך הקובייה הראשונה, ערך הקובייה השנייה וסכומם.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> RollDice1["<p align='left'>Roll the first die: 
+    <code><b>dice1 = random(1, 6)</b></code></p>"]
+    RollDice1 --> RollDice2["<p align='left'>Roll the second die:
+    <code><b>dice2 = random(1, 6)</b></code></p>"]
+    RollDice2 --> CalculateSum["<p align='left'>Calculate the sum:
+    <code><b>total = dice1 + dice2</b></code></p>"]
+    CalculateSum --> OutputResults["<p align='left'>Display results:
+    <b>Die 1: <code>{dice1}</code></b><br>
+    <b>Die 2: <code>{dice2}</code></b><br>
+    <b>Sum: <code>{total}</code></b></p>"]
+    OutputResults --> End["End"]
+</code></pre>
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">RollDice1</span> - נוצר מספר אקראי מ-<span dir="ltr">1</span> עד <span dir="ltr">6</span>, המייצג את תוצאת הטלת הקובייה הראשונה, ונשמר במשתנה <span dir="ltr">dice1</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">RollDice2</span> - נוצר מספר אקראי מ-<span dir="ltr">1</span> עד <span dir="ltr">6</span>, המייצג את תוצאת הטלת הקובייה השנייה, ונשמר במשתנה <span dir="ltr">dice2</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CalculateSum</span> - מחושב סכום ערכי <span dir="ltr">dice1</span> ו-<span dir="ltr">dice2</span>, התוצאה נשמרת במשתנה <span dir="ltr">total</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputResults</span> - ערכי <span dir="ltr">dice1</span>, <span dir="ltr">dice2</span> וסכומם <span dir="ltr">total</span> מוצגים על המסך.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+</ul>

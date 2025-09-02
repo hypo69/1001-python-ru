@@ -1,0 +1,130 @@
+<h1>Types of Strings in Python</h1>
+<p>In Python, strings are one of the most important and frequently used data types. Here is a brief overview of the different types of strings and their characteristics:</p>
+<hr>
+<h3>1. <strong>Ordinary Strings</strong></h3>
+<p>An ordinary string is created using single <code>&#39;</code> or double <code>&quot;</code> quotes.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s1 = &#39;Hello, world!&#39;
+s2 = &quot;Python is great!&quot;
+</code></pre>
+<p>They are identical, but it is important to be consistent in using a single style.</p>
+<hr>
+<h3>2. <strong>Multiline Strings</strong></h3>
+<p>Multiline strings are enclosed in triple quotes <code>&#39;&#39;&#39;</code> or <code>&quot;&quot;&quot;</code>. They allow you to write text on multiple lines.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s3 = &#39;&#39;&#39;This is a string
+on multiple
+lines.&#39;&#39;&#39;
+</code></pre>
+<hr>
+<h3>3. <strong>f-strings (formatted strings)</strong></h3>
+<p>f-strings (or formatted strings) are used to insert variable values and expressions directly into a string. The character <code>f</code> is added before the string.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+name = &#39;Boris&#39;
+age = 25
+s4 = f&#39;My name is {name}, I am {age} years old.&#39;
+print(s4)  # My name is Boris, I am 25 years old.
+</code></pre>
+<p>The advantage of f-strings is that they are simple and readable.
+In newer versions of Python (starting from <strong>3.8</strong>), a convenient feature has appeared: the use of <code>f&#39;{name=}&#39;</code> in f-strings. This construct displays not only the value of the variable, but also its name, which is particularly useful for debugging.</p>
+<h3>Example of using <code>f&#39;{name=}&#39;</code>:</h3>
+<pre class="line-numbers"><code class="language-python">
+name = &#39;Boris&#39;
+age = 25
+
+# Display the variable name and its value
+print(f&#39;{name=}, {age=}&#39;) 
+# Result: name=&#39;Boris&#39;, age=25
+</code></pre>
+<h3>Features:</h3>
+<ol>
+<li><strong>Automatic display of variable name</strong>:
+<p>Python automatically substitutes the variable name and its value, separating them with <code>=</code>.</p>
+</li>
+<li><strong>Works with expressions</strong>:
+<p>You can use expressions inside an f-string, and they will also be displayed.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+x = 10
+y = 5
+print(f&#39;{x + y=}&#39;)
+# Result: x + y=15
+</code></pre>
+</li>
+<li><strong>Applicable to string functions</strong>:
+<p>You can display the result of methods or operations on strings.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s = &#39;Python&#39;
+print(f&#39;{s.upper()=}&#39;)
+# Result: s.upper()=&#39;PYTHON&#39;
+</code></pre>
+</li>
+</ol>
+<h3>Why it&#39;s useful:</h3>
+<ul>
+<li><strong>Code debugging</strong>: Quickly check the values of variables and expressions.</li>
+<li><strong>Readability</strong>: Clearly see which variable a value belongs to.</li>
+</ul>
+<hr>
+<h3>4. <strong>r-strings (raw strings)</strong></h3>
+<p>r-strings (raw strings) are created by adding the character <code>r</code> before the string. They are used for working with characters that are usually interpreted as special, such as newline characters (<code>\n</code>) or tabs (<code>\t</code>).</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s5 = r&#39;C:\new_folder\test&#39;
+print(s5)  # C:\new_folder\test
+</code></pre>
+<p>Without <code>r</code>, this string would be interpreted with <code>\n</code> replaced by a newline.</p>
+<hr>
+<h3>5. <strong>u-strings (Unicode strings)</strong></h3>
+<p>u-strings were important in Python 2 for working with Unicode, but in Python 3, strings are Unicode by default, so adding <code>u</code> is no longer necessary.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s6 = u&#39;Hello, world!&#39;
+</code></pre>
+<hr>
+<h3>6. <strong>b-strings (byte strings)</strong></h3>
+<p>Byte strings are used for working with binary data. These strings start with <code>b</code>. They do not support Unicode characters, only bytes.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+# Byte string representing the header of a PNG file
+image_bytes = b&#39;\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR&#39;
+
+# Check that the data matches the PNG format
+if image_bytes.startswith(b&#39;\x89PNG&#39;):
+    print(&#39;This is a PNG image.&#39;)
+else:
+    print(&#39;Unknown format.&#39;)
+
+</code></pre>
+<hr>
+<h3>7. <strong>Strings with escaping</strong></h3>
+<p>To include special characters in a string, escape sequences with a backslash (<code>\</code>) are used.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+s8 = &#39;This is a string with quotes: \&#39;single\&#39; and &quot;double&quot;.&#39;
+</code></pre>
+<hr>
+<h3>8. <strong>Combining f-strings and r-strings</strong></h3>
+<p>You can combine string types. For example, f-strings and raw strings:</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+path = &#39;new_folder&#39;
+s9 = fr&#39;C:\{path}\test&#39;
+print(s9)  # C:\new_folder\test
+</code></pre>
+<hr>
+<h3>Summary</h3>
+<p>In Python, strings are flexible and convenient. The choice of string type depends on the task:</p>
+<ul>
+<li>For ordinary text — <code>&#39;</code> or <code>&quot;</code>.</li>
+<li>For multiline text — <code>&#39;&#39;&#39;</code> or <code>&quot;&quot;&quot;</code>.</li>
+<li>For value substitution — <code>f</code>.</li>
+<li>For paths or regular expressions — <code>r</code>.</li>
+<li>For binary data — <code>b</code>.</li>
+</ul>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">To the table of contents</a></p>

@@ -1,0 +1,127 @@
+FIPOWR:
+=================
+Difficulty: 6
+-----------------
+The game "Fibonacci Power" is a mathematical game where the computer chooses a random number in the range of 1 to 100, and the player enters a number.
+The computer raises the randomly chosen number to the power of the Fibonacci number corresponding to the attempt number, and compares it with the user's number.
+The game continues until the numbers are equal.
+Game rules:
+1. The computer chooses a random integer from 1 to 100.
+2. The player enters their number.
+3. The computer calculates the Fibonacci number corresponding to the attempt number, and raises the random number to that power.
+4. Compares the obtained result with the player's number.
+5. The game continues until the numbers are equal.
+-----------------
+Algorithm:
+1. Set the attempt counter to 0.
+2. Generate a random number in the range of 1 to 100.
+3. Start a loop "while player's number is not equal to the number raised to the Fibonacci power":
+    3.1. Increment the attempt counter by 1.
+    3.2. Calculate the Fibonacci number corresponding to the attempt number.
+    3.3. Raise the random number to the power of the Fibonacci number.
+    3.4. Prompt the player for a number.
+    3.5. If the player's number is equal to the calculated number, go to step 4.
+    3.6. If the player's number is not equal to the calculated number, display a message about the current state.
+4. Display message "YOU GOT IT IN {number of attempts} GUESSES!"
+5. End of game.
+-----------------
+Flowchart:
+```mermaid
+flowchart TD
+    Start["Start"] --> InitializeVariables["<p align='left'>Initialize variables:
+    <code><b>
+    numberOfGuesses = 0
+    targetNumber = random(1, 100)
+    </b></code></p>"]
+    InitializeVariables --> LoopStart{"Start loop: while not guessed"}
+    LoopStart -- Yes --> IncreaseGuesses["<code><b>numberOfGuesses = numberOfGuesses + 1</b></code>"]
+    IncreaseGuesses --> CalculateFibonacci["<code><b>fibonacciNumber = fibonacci(numberOfGuesses)</b></code>"]
+     CalculateFibonacci --> CalculatePower["<code><b>poweredNumber = targetNumber ** fibonacciNumber</b></code>"]
+    CalculatePower --> InputGuess["User inputs number: <code><b>userGuess</b></code>"]
+    InputGuess --> CheckGuess{"Check: <code><b>userGuess == poweredNumber?</b></code>"}
+    CheckGuess -- Yes --> OutputWin["Display message: <b>YOU GOT IT IN <code>{numberOfGuesses}</code> GUESSES!</b>"]
+    OutputWin --> End["End"]
+    CheckGuess -- No --> OutputTryAgain["Display message: <b>Try Again!</b>"]
+    OutputTryAgain --> LoopStart
+    LoopStart -- No --> End
+```
+Legend:
+    Start - Program start.
+    InitializeVariables - Initialize variables: numberOfGuesses (number of attempts) is set to 0, and targetNumber (hidden number) is randomly generated from 1 to 100.
+    LoopStart - Start of the loop, which continues until the number is guessed.
+    IncreaseGuesses - Increment the attempt counter by 1.
+    CalculateFibonacci - Calculate the Fibonacci number corresponding to the current attempt.
+    CalculatePower - Raise the hidden number to the power of the Fibonacci number.
+    InputGuess - Prompt the user for a number and save it to the userGuess variable.
+    CheckGuess - Check if the entered number userGuess is equal to the calculated number poweredNumber.
+    OutputWin - Display a win message if the numbers are equal, indicating the number of attempts.
+    End - End of program.
+    OutputTryAgain - Display "Try Again!" message if the entered number is not equal to the calculated number.
+
+
+import random
+
+# Function to calculate the Fibonacci number
+def fibonacci(n):
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, a + b
+        return b
+
+# Initialize attempt counter
+numberOfGuesses = 0
+# Generate a random number from 1 to 100
+targetNumber = random.randint(1, 100)
+
+# Main game loop
+while True:
+    # Increment attempt counter
+    numberOfGuesses += 1
+    # Calculate Fibonacci number for the current attempt
+    fibonacciNumber = fibonacci(numberOfGuesses)
+    # Raise the hidden number to the power of the Fibonacci number
+    poweredNumber = targetNumber ** fibonacciNumber
+
+    # Prompt user for number input
+    try:
+        userGuess = int(input(f"Attempt {numberOfGuesses}: Enter a number: "))
+    except ValueError:
+         print("Please enter an integer.")
+         continue
+
+    # Check if the number is guessed
+    if userGuess == poweredNumber:
+        print(f"CONGRATULATIONS! You guessed the number in {numberOfGuesses} attempts!")
+        break  # End the loop if the number is guessed
+    else:
+         print("Try again!") # Display message to try again
+
+
+Explanation of the code:
+1.  **Import `random` module**:
+   -  `import random`: Imports the `random` module, which is used for generating a random number.
+2.  **`fibonacci(n)` function**:
+    -   Defines the `fibonacci(n)` function, which calculates the n-th Fibonacci number.
+    -   Uses an iterative approach to calculate Fibonacci numbers.
+3.  **Variable initialization**:
+    -   `numberOfGuesses = 0`: Initializes the `numberOfGuesses` variable to count the player's attempts.
+    -   `targetNumber = random.randint(1, 100)`: Generates a random integer in the range of 1 to 100 and saves it to `targetNumber`.
+4. **Main loop `while True:`**:
+    - An infinite loop that continues until the player guesses the number (`break` command will be executed).
+    - `numberOfGuesses += 1`: Increments the attempt counter by 1 on each new loop iteration.
+    - `fibonacciNumber = fibonacci(numberOfGuesses)`: Calls the `fibonacci` function to get the Fibonacci number corresponding to the current attempt.
+    - `poweredNumber = targetNumber ** fibonacciNumber`: Calculates the hidden number raised to the power of the Fibonacci number.
+    - **Input**:
+       - `try...except ValueError`: The try-except block handles possible input errors. If the user enters a non-integer, an error message will be displayed.
+       - `userGuess = int(input(f"Attempt {numberOfGuesses}: Enter a number: "))`: Prompts the user for a number and converts it to an integer, saving the result to `userGuess`.
+    - **Win condition**:
+      -  `if userGuess == poweredNumber:`: Checks if the entered number is equal to the calculated value.
+      -  `print(f"CONGRATULATIONS! You guessed the number in {numberOfGuesses} attempts!")`: Displays a win message and the number of attempts.
+      - `break`: Ends the loop (and the game) if the number is guessed.
+    -  **Hint**:
+       - `else:`: If the number is not guessed, the message "Try again!" is displayed.

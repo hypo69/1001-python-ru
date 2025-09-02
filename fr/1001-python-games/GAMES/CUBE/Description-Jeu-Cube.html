@@ -1,0 +1,55 @@
+<p>CUBE
+=================
+
+Difficulty: 5
+-----------------
+The game "Cube" is a puzzle game where the player must assemble a cube by moving its faces. The cube is represented as a 3x3 matrix, where each cell represents a face of the cube. The player can move the faces of the cube up, down, left, and right. The goal of the game is to assemble the cube by arranging the faces in the correct order.
+Game rules:
+1. The cube is represented as a 3x3 matrix.
+2. The player can move the faces of the cube by entering commands: U (up), D (down), L (left), R (right).
+3. The goal of the game is to assemble the cube by arranging the faces in the correct order.
+4. The initial position of the cube is randomly generated.
+5. The game ends when the cube is assembled, i.e., when all faces are in the correct order.
+-----------------
+Algorithm:
+1. Initialize the cube with random values from 1 to 9 as a 3x3 matrix.
+2. Display the cube on the screen.
+3. Start the game loop:
+    3.1. Ask the player for a command to move a face of the cube (U, D, L, R).
+    3.2. Perform the face movement according to the command:
+       - If the command is "U", shift all rows up.
+       - If the command is "D", shift all rows down.
+       - If the command is "L", shift all columns left.
+       - If the command is "R", shift all columns right.
+    3.3. Display the cube on the screen.
+    3.4. Check if the cube is assembled.
+    3.5. If the cube is assembled, display a win message and end the game.
+    3.6. If the cube is not assembled, return to step 3.1.
+-----------------
+Flowchart:
+<pre class="line-numbers"><code class="language-mermaid">
+flowchart TD
+    Start["Start"] --> InitializeCube["Initialize cube: <code><b>cube = random_cube()</b></code>"]
+    InitializeCube --> DisplayCube["Display cube"]
+    DisplayCube --> GameLoopStart{"Start game loop"}
+    GameLoopStart --> InputMove["Input move: <code><b>move</b></code>"]
+    InputMove --> MoveCube{"Move cube faces: <code><b>cube = move_cube(cube, move)</b></code>"}
+    MoveCube --> DisplayCubeAgain["Display cube"]
+    DisplayCubeAgain --> CheckSolved{"Check: <code><b>is_solved(cube)</b></code>?"}
+    CheckSolved -- Yes --> OutputWin["Display message: <b>YOU SOLVED THE CUBE!</b>"]
+    OutputWin --> End["End"]
+    CheckSolved -- No --> GameLoopStart
+    GameLoopStart -- No --> End
+
+</code></pre>
+<p>Legend:
+    Start - Program start.
+    InitializeCube - Initialization of the cube, creation of a 3x3 matrix with random values from 1 to 9.
+    DisplayCube - Display of the current state of the cube on the screen.
+    GameLoopStart - Start of the game loop, which continues until the cube is assembled.
+    InputMove - Prompts the user for a command to move the cube faces (U, D, L, R).
+    MoveCube - Movement of the cube faces according to the entered command.
+    DisplayCubeAgain - Display of the cube after the move has been made.
+    CheckSolved - Check if the cube is assembled.
+    OutputWin - Display of a win message if the cube is assembled.
+    End - Program end.</p>

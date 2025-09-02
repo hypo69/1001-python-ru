@@ -1,0 +1,66 @@
+<h3>Nombre del juego: <strong>Juego de cartas Acey-Ducey</strong></h3>
+<h4>Descripción</h4>
+<p>Esta es una simulación del juego de cartas Acey-Ducey. El jugador realiza apuestas basándose en la probabilidad de que la siguiente carta caiga entre dos cartas ya abiertas.</p>
+<ul>
+<li><strong>Capital inicial:</strong> El jugador comienza con 100 dólares.</li>
+<li><strong>Reglas del juego:</strong>
+<ol>
+<li>La computadora reparte dos cartas.</li>
+<li>El jugador puede decidir si apostar o no.</li>
+<li>Si se realiza una apuesta, se saca una tercera carta.</li>
+<li>Si el valor de la tercera carta cae entre las dos primeras cartas, el jugador gana la apuesta. De lo contrario, la apuesta se pierde.</li>
+</ol>
+</li>
+<li>El juego termina cuando el jugador pierde todo su capital o lo finaliza manualmente.</li>
+</ul>
+<h4>Implementación</h4>
+<p><strong>Datos de entrada:</strong></p>
+<ul>
+<li>Entrada del usuario para:
+<ul>
+<li>Tamaño de la apuesta inicial.</li>
+<li>Decisión de apostar o pasar.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Datos de salida:</strong></p>
+<ul>
+<li>Mensaje sobre el capital actual del jugador.</li>
+<li>Información sobre los resultados de la apuesta (ganancia/pérdida).</li>
+<li>Estado de las cartas en cada ronda.</li>
+</ul>
+<h4>Instrucciones paso a paso para la implementación:</h4>
+<ol>
+<li><strong>Inicialización del juego</strong>:
+<ul>
+<li>Establecer el capital inicial del jugador (100 dólares).</li>
+<li>Anunciar las reglas del juego.</li>
+</ul>
+</li>
+<li><strong>Bucle principal del juego</strong>:
+<ul>
+<li>Generar dos cartas aleatorias (rango 2–14, donde 11 = Jota, 12 = Reina, 13 = Rey, 14 = As).</li>
+<li>Mostrar las cartas al jugador.</li>
+<li>Solicitar una apuesta (se puede saltar la ronda apostando 0).</li>
+<li>Comprobar: la apuesta no debe exceder el capital actual.</li>
+</ul>
+</li>
+<li><strong>Resultado de la ronda</strong>:
+<ul>
+<li>Generar una tercera carta.</li>
+<li>Comprobar si su valor cae dentro del rango entre las dos primeras cartas.</li>
+<li>Cambiar el capital del jugador según el resultado.</li>
+</ul>
+</li>
+<li><strong>Fin del juego</strong>:
+<ul>
+<li>Si el capital del jugador es 0, el juego termina con un mensaje apropiado.</li>
+<li>Ofrecer al jugador comenzar un nuevo juego o salir.</li>
+</ul>
+</li>
+</ol>
+<h4>Limitaciones</h4>
+<ul>
+<li>Todas las cartas son únicas dentro de una sola ronda.</li>
+<li>Soporte para la funcionalidad básica del juego sin efectos visuales complejos.</li>
+</ul>

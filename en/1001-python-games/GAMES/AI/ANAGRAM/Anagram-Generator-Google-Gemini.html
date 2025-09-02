@@ -1,0 +1,53 @@
+<h1>Anagram Generator using Google Gemini</h1>
+<p>This is a simple code for generating anagrams using Google Gemini's large language model.</p>
+<h2>Description</h2>
+<p>The program takes a set of Russian letters as input and tries to find an existing Russian word composed of these letters (using all or part of them).</p>
+<h2>Anagram Rules</h2>
+<ul>
+<li>Only existing Russian words are used.</li>
+<li>When searching for anagrams, only Russian letters are considered. Digits and other characters are ignored.</li>
+<li>If multiple words can be formed, one of them is returned.</li>
+<li>If no word can be formed from the given letters, the message "No anagrams" is returned.</li>
+</ul>
+<h2>Usage</h2>
+<ol>
+<li><strong>Google Gemini API Key.</strong></li>
+</ol>
+<p>API KEY FOR THE MODEL HERE: <a href="https://aistudio.google.com/">https://aistudio.google.com/</a></p>
+<p>Or you can use mine:</p>
+<p>AIzaSyCprZ9Tr-rB_xFau5zgWsKPM_6W-FmUntk</p>
+<p>I created the key for learning and understanding the code. Do not overload the model!</p>
+<ol start="2">
+<li><strong>Install necessary libraries:</strong></li>
+</ol>
+<pre class="line-numbers"><code class="language-bash">pip install google-generativeai
+</code></pre>
+<ol start="3">
+<li><strong>Run the script:</strong></li>
+</ol>
+<pre class="line-numbers"><code class="language-bash">python anagram_generator.py
+</code></pre>
+<ol start="4">
+<li>The script will ask for the API key. Enter it.</li>
+<li>After that, enter the letters for which you want to find an anagram.</li>
+</ol>
+<h2>Code Explanation</h2>
+<ul>
+<li><code>import google.generativeai as genai</code>: Imports the library for interacting with Gemini.</li>
+<li><code>import re</code>: Imports the library for working with regular expressions (for cleaning input).</li>
+<li>The <code>GoogleGenerativeAI</code> class encapsulates the logic for interacting with the Gemini model.</li>
+<li><code>system_instruction</code>: This is the system prompt (instruction) for Gemini, which explains what is required of it.</li>
+<li><code>re.sub(r"[^а-яА-ЯёЁ]", "", q)</code>: This line removes all characters from the input string <code>q</code> that are not Russian letters. <code>[^а-яА-ЯёЁ]</code> is a regular expression that means "any character <em>not</em> in the range a-z, A-Z, and ёЁ".</li>
+<li>The <code>if not q:</code> check verifies if the string became empty after removing all non-Cyrillic characters.</li>
+<li><code>model.generate_content(q)</code>: Sends the query <code>q</code> to the Gemini model.</li>
+<li><code>try...except</code> exception handling prevents the program from crashing in case of API interaction errors.</li>
+</ul>
+<h2>Usage Example</h2>
+<pre class="line-numbers"><code class="language-text">Enter letters for Gemini to find an anagram: сон
+нос
+Enter letters for Gemini to find an anagram: апельсин
+спаниель
+Enter letters for Gemini to find an anagram: 12345абвг
+абвг
+Enter letters for Gemini to find an anagram: 
+</code></pre>

@@ -1,0 +1,197 @@
+<p>What is Google Colab?</p>
+<p>Google Colab is a cloud platform created by Google for working with interactive Jupyter Notebooks.
+It provides powerful tools for writing and executing Python code, analyzing data, training machine learning models, and collaborating on projects.</p>
+<p>Colab provides access to powerful computing resources, including graphics processing units (GPUs) and tensor processing units (TPUs).
+This allows you to solve complex problems, such as processing large data or training neural networks, without the need to purchase expensive hardware. Colab is built on Jupyter Notebook, providing a convenient interface for working with code, text, and visualizations. You can execute code cells, insert explanatory text, create charts and visualizations directly in your browser. You can use Colab immediately after opening it. There is no need to install additional programs, libraries, or drivers. Everything is already configured for work. You can connect your Google Drive, which allows you to easily upload data, save projects, and access files from anywhere. Colab supports collaboration. You can share your projects with colleagues, edit notebooks simultaneously, and discuss changes in real time.</p>
+<h3>How does Google Colab work?</h3>
+<ul>
+<li>You run a Jupyter notebook in your browser, eliminating the need to install a local environment.</li>
+<li>Code is executed on remote Google servers, and the results are displayed in your notebook.</li>
+<li>Data can be loaded from a local device or from the cloud, such as Google Drive.</li>
+<li>You can use Colab to write Python code, work with machine learning libraries (e.g., TensorFlow, PyTorch), analyze data using Pandas, or create visualizations via Matplotlib and Seaborn.</li>
+</ul>
+<p>What does Google Colab look like?</p>
+<p>The Colab interface consists of several main parts:</p>
+<p>Code cells: These are the cells where you will write and execute your Python code.</p>
+<p>Text cells: Here you can add descriptions, explanations, and notes to your code.</p>
+<p>Menu: At the top there is a menu with various options for working with the notebook (file, edit, view, tools, etc.).</p>
+<p>File manager: On the left there is a file manager panel where you can view files and folders in your Colab environment.</p>
+<p>In Google Colab, you work in a cloud environment,
+where the file system is organized like on a regular computer with folders and files.
+Colab provides tools for navigating, creating, viewing, and editing files.
+You can interact with the file system using <strong>Jupyter magic commands</strong> (starting with <code>%</code>)
+and <strong>bash commands</strong> (starting with <code>!</code>).</p>
+<p><strong>List of main commands:</strong></p>
+<ol>
+<li><strong><code>%pwd</code></strong> (print working directory):
+<ul>
+<li><strong>Description</strong>: Shows the current working directory (where you are currently "located" in the file system).</li>
+<li><strong>Example</strong>: <code>%pwd</code></li>
+<li><strong>Result</strong>: <code>/content</code> (or another current directory)</li>
+</ul>
+</li>
+<li><strong><code>%ls</code></strong> (list):
+<ul>
+<li><strong>Description</strong>: Lists files and folders in the current directory.</li>
+<li><strong>Example</strong>: <code>%ls</code></li>
+<li><strong>Result</strong>: List of files and folders, for example: <code>sample_data/  my_file.txt</code></li>
+</ul>
+</li>
+<li><strong><code>%cd &lt;path&gt;</code></strong> (change directory):
+<ul>
+<li><strong>Description</strong>: Changes to the specified directory.</li>
+<li><strong>Example</strong>: <code>%cd sample_data</code></li>
+<li><strong>Result</strong>: The current working directory changes to <code>/content/sample_data</code></li>
+</ul>
+</li>
+<li><strong><code>!head -&lt;number of lines&gt; &lt;filename&gt;</code></strong>:
+<ul>
+<li><strong>Description</strong>: Displays the first few lines of the specified text file.</li>
+<li><strong>Example</strong>: <code>!head -5 README.md</code></li>
+<li><strong>Result</strong>: The first 5 lines of the <code>README.md</code> file.</li>
+</ul>
+</li>
+<li><strong><code>!cat &lt;filename&gt;</code></strong>:
+<ul>
+<li><strong>Description</strong>: Displays the content of the specified text file.</li>
+<li><strong>Example</strong>: <code>!cat sample_file.txt</code></li>
+<li><strong>Result</strong>: The entire content of the <code>sample_file.txt</code> file.</li>
+</ul>
+</li>
+<li><strong><code>!echo "&lt;text&gt;" &gt; &lt;filename&gt;</code></strong>
+<ul>
+<li><strong>Description:</strong> Creates a new file with the specified name and writes text to it. If the file already exists, it will be overwritten.</li>
+<li><strong>Example:</strong> <code>!echo "This is my new file!" &gt; new_file.txt</code></li>
+<li><strong>Result:</strong> Creates <code>new_file.txt</code> with the content <code>This is my new file!</code>.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Key points:</strong></p>
+<ul>
+<li><strong>Magic commands</strong> (<code>%</code>) - these are special Jupyter commands for working with the Colab environment.</li>
+<li><strong>Bash commands</strong> (<code>!</code>) - these are commands that are executed in the Linux command line.</li>
+<li><strong>File path</strong>: The file path indicates where exactly the file is located in the file system (e.g., <code>/content/sample_data/my_file.txt</code>).</li>
+<li><strong>Current directory</strong>: Your position in the file system (changed by the <code>%cd</code> command).</li>
+</ul>
+<p><strong>Diagram illustrating the command sequence:</strong></p>
+<pre><code class="language-mermaid">
+graph TD
+    A[Start] --> B(pwd: get current directory);
+    B --> C(ls: see current directory contents);
+    C --> D(cd: change current directory);
+    D --> E(head: view beginning of text file);
+     E --> F(cat: view text file contents);
+       F --> G(echo: create or overwrite text file);
+    G --> H(ls: view changed directory contents);
+     H --> I[End];
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+        style I fill:#ccf,stroke:#333,stroke-width:2px
+
+</code></pre>
+<p><strong>Uploading files to Google Colab</strong></p>
+<p>There are several ways to upload files to Colab, and we will look at the most common ones.</p>
+<ol>
+<li><strong>Upload via file manager (GUI)</strong>
+<ul>
+<li><strong>Description:</strong> The easiest way to upload files, especially small ones, is to use the graphical interface of the Colab file manager.</li>
+<li><strong>How to do it:</strong>
+<ol>
+<li>Open the file manager panel on the left (folder icon).</li>
+<li>Click the upload icon (usually a plus sign or an up arrow).</li>
+<li>In the opened window, select the files on your computer that you want to upload.</li>
+<li>Click "Open" or "Upload".</li>
+</ol>
+</li>
+<li><strong>Pros:</strong> Simplicity, clarity, no code required.</li>
+<li><strong>Cons:</strong> Suitable for small files, needs to be done manually.</li>
+</ul>
+</li>
+<li><strong>Upload via Python code (<code>google.colab.files.upload()</code>)</strong>
+<ul>
+<li><strong>Description</strong>: This method allows you to upload files using Python code, which provides more flexibility.</li>
+<li><strong>How to do it:</strong>
+<ol>
+<li>Import the <code>files</code> module from the <code>google.colab</code> library.
+<pre class="line-numbers"><code class="language-python">
+from google.colab import files
+</code></pre>
+</li>
+<li>Call the <code>files.upload()</code> function
+<pre class="line-numbers"><code class="language-python">
+uploaded = files.upload()
+</code></pre>
+</li>
+<li>When you run this code, a dialog box will appear where you can select files to upload.</li>
+</ol>
+</li>
+<li><strong>Pros:</strong> Can be used in code, allows programmatic processing of uploaded files.</li>
+<li><strong>Cons:</strong> Requires writing code, slightly less intuitive than the file manager.</li>
+</ul>
+<p>After executing this code, the uploaded files will be available as an <code>uploaded</code> dictionary, where keys are filenames and values are their content as byte strings.</p>
+<pre class="line-numbers"><code class="language-python">
+# Example of using uploaded files
+for file_name, file_data in uploaded.items():
+   print(f"Файл: {file_name}")
+   # Process file data
+   # For example:
+   # import pandas as pd
+   # df = pd.read_csv(io.BytesIO(file_data))
+   # print(df.head())
+</code></pre>
+</li>
+<li><strong>Cloning a GitHub repository (<code>git clone</code>)</strong>
+<ul>
+<li><strong>Description</strong>: If your files are in a GitHub repository, you can upload them by cloning the repository to Colab.</li>
+<li><strong>How to do it:</strong>
+<ol>
+<li>Use the <code>git clone</code> command with the repository URL.
+<pre class="line-numbers"><code class="language-python">
+!git clone &lt;repository_URL&gt;
+</code></pre>
+For example:
+<pre class="line-numbers"><code class="language-python">
+!git clone https://github.com/username/my_repository.git
+</code></pre>
+</li>
+<li>After cloning the repository, the content will be available in a folder named the same as the repository.</li>
+</ol>
+</li>
+<li><strong>Pros:</strong> Easy to upload all files from a repository, convenient for version-controlled projects.</li>
+<li><strong>Cons:</strong> Only suitable for files in GitHub repositories.</li>
+</ul>
+<div align="center">
+<img src="https://i.ibb.co/7R1QG5Q/colab-git-clone.png" alt="Cloning a GitHub repository in Colab" width="600">
+<p><em>Cloning a GitHub repository in Colab</em></p>
+</div>
+</li>
+<li><strong>Downloading a single file from GitHub</strong>
+<ul>
+<li><strong>Description</strong>: If you only need one or a few files from a GitHub repository, you can download them directly.</li>
+<li><strong>How to do it:</strong>
+<ol>
+<li>Open the desired file in the GitHub repository.</li>
+<li>Click the "View raw" button.</li>
+<li>Copy the URL of this file.</li>
+<li>Use <code>wget</code> or <code>curl</code> to download the file.
+<pre class="line-numbers"><code class="language-python">
+!wget &lt;file_URL&gt;
+</code></pre>
+or
+<pre class="line-numbers"><code class="language-python">
+!curl &lt;file_URL&gt; -o &lt;filename_in_colab&gt;
+</code></pre>
+</li>
+</ol>
+</li>
+<li><strong>Pros</strong>: Easy to download only the necessary files, without cloning the entire repository.</li>
+<li><strong>Cons</strong>: Requires knowing the direct link to the file.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Which method to choose?</strong></p>
+<ul>
+<li>For small files that need to be uploaded quickly and manually, the <strong>file manager</strong> is suitable.</li>
+<li>If you need to programmatically process uploaded files, use <strong><code>files.upload()</code></strong>.</li>
+<li>For uploading entire projects, use <strong><code>git clone</code></strong>.</li>
+<li>For downloading individual files, use <strong><code>wget</code> or <code>curl</code></strong></li>
+</ul>

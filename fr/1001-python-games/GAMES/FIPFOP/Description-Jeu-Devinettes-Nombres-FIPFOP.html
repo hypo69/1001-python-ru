@@ -1,0 +1,108 @@
+<p>FIPFOP :
+=================
+Difficulty: 5
+-----------------
+The game FIPFOP is a puzzle game where the player must, in turn, enter numbers.
+The goal of the game is to make the sum of all numbers entered by the user equal to 100.
+The game ends when the sum of all entered numbers reaches 100.</p>
+<p>Game rules:
+1. The player enters integers, one at a time.
+2. Each entered number is added to the total sum.
+3. The game ends when the total sum reaches 100.
+4. Once the game ends, the total number of entered numbers (moves) is displayed.
+-----------------
+Algorithm:
+1. Set the sum to 0.
+2. Set the moves counter to 0.
+3. Start the loop "as long as the sum is less than 100":
+    3.1 Ask the player to enter a number.
+    3.2 Increase the moves counter by 1.
+    3.3 Add the entered number to the total sum.
+4. Display the message "YOU USED {number of moves} MOVES"
+5. End of game.
+-----------------
+Flowchart:
+<pre class="line-numbers"><code class="language-mermaid">
+flowchart TD
+    Start["Start"] --> InitializeVariables["<p align='left'>Initialize variables:
+    <code><b>
+    totalSum = 0
+    numberOfTurns = 0
+    </b></code></p>"]
+    InitializeVariables --> LoopStart{"Start loop: as long as totalSum &lt; 100"}
+    LoopStart -- Yes --> InputNumber["User enters a number: <code><b>userNumber</b></code>"]
+    InputNumber --> IncreaseTurns["<code><b>numberOfTurns = numberOfTurns + 1</b></code>"]
+     IncreaseTurns --> AddNumber["<code><b>totalSum = totalSum + userNumber</b></code>"]
+    AddNumber --> CheckSum{"Check: <code><b>totalSum >= 100?</b></code>"}
+    CheckSum -- Yes --> OutputTurns["Display message: <b>YOU USED <code>{numberOfTurns}</code> MOVES</b>"]
+    OutputTurns --> End["End"]
+     CheckSum -- No --> LoopStart
+    LoopStart -- No --> End
+</code></pre>
+<p>Legend:
+    Start - Program start.
+    InitializeVariables - Initialization of variables: totalSum (sum of entered numbers) is set to 0, and numberOfTurns (number of moves) is set to 0.
+    LoopStart - Start of the loop, which continues as long as totalSum is less than 100.
+    InputNumber - Prompts the user to enter a number and saves it to the userNumber variable.
+    IncreaseTurns - Increments the moves counter by 1.
+    AddNumber - Adds the entered number userNumber to the total sum totalSum.
+    CheckSum - Checks if the total sum totalSum is greater than or equal to 100.
+    OutputTurns - Displays a message about the number of moves used by the user.
+    End - Program end.</p>
+<pre class="line-numbers"><code class="language-python">
+# Initialization of sum and turn counter
+totalSum = 0 # Sum of entered numbers
+numberOfTurns = 0 # Number of turns
+
+# Main game loop
+while totalSum < 100:
+    # Ask the user for a number
+    try:
+        userNumber = int(input("Enter a number: "))
+    except ValueError:
+         print("Please enter an integer.")
+         continue
+    
+    # Increment the turn counter
+    numberOfTurns += 1
+    # Add the entered number to the total sum
+    totalSum += userNumber
+
+# Display the message about the number of turns
+print(f"YOU USED {numberOfTurns} TURNS")
+
+</code></pre>
+<p>Code explanation:
+1. <strong>Variable Initialization:</strong>
+<ul>
+<li><code>totalSum = 0</code> : Initializes the <code>totalSum</code> variable to store the sum of entered numbers, starting from 0.</li>
+<li><code>numberOfTurns = 0</code> : Initializes the <code>numberOfTurns</code> variable to count the number of moves, also starting from 0.</li>
+</ul>
+</li>
+<li><strong>Main loop <code>while totalSum &lt; 100</code> :</strong>
+<ul>
+<li>The loop continues as long as the sum of entered numbers (<code>totalSum</code>) is less than 100.</li>
+</ul>
+</li>
+<li><strong>User input:</strong>
+<ul>
+<li><code>try...except ValueError</code> : The try-except block handles possible input errors. If the user enters a non-integer value, an error message is displayed.</li>
+<li><code>userNumber = int(input("Enter a number: "))</code> : Prompts the user to enter a number and converts it to an integer, saving the result to the <code>userNumber</code> variable.</li>
+</ul>
+</li>
+<li><strong>Incrementing the moves counter:</strong>
+<ul>
+<li><code>numberOfTurns += 1</code> : Increments the moves counter by 1 at each iteration of the loop.</li>
+</ul>
+</li>
+<li><strong>Adding the number to the sum:</strong>
+<ul>
+<li><code>totalSum += userNumber</code> : Adds the entered number (<code>userNumber</code>) to the total sum (<code>totalSum</code>).</li>
+</ul>
+</li>
+<li><strong>Displaying the result:</strong>
+<ul>
+<li><code>print(f"YOU USED {numberOfTurns} MOVES")</code> : Displays a message on the screen indicating the number of moves made when the sum of the numbers has reached 100 or more.</li>
+</ul>
+</li>
+</ol>

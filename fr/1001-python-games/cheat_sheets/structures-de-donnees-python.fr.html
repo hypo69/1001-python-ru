@@ -1,0 +1,169 @@
+<h2><strong>1. Lists</strong></h2>
+<ul>
+<li>
+<p><strong>Definition:</strong> Lists in Python are ordered and mutable collections of elements. This means that you can add, delete, and modify elements in a list, and the order of elements is important.</p>
+</li>
+<li>
+<p><strong>Representation:</strong> Lists are created using square brackets <code>[]</code>, and elements are separated by commas.</p>
+</li>
+<li>
+<p><strong>Examples:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+    # List creation
+    boris_list = ["Boris", "Moscow", 30, "engineer"]
+    print(f"List creation: {boris_list}")
+
+    # Access by index
+    print(f"Element at index 0: {boris_list[0]}")
+
+    # Modifying an element
+    boris_list[2] = 31
+    print(f"Modifying an element: {boris_list}")
+
+    # Adding an element to the end
+    boris_list.append("married")
+    print(f"Adding to the end: {boris_list}")
+
+    # Inserting an element by index
+    boris_list.insert(1, "Russia")
+    print(f"Inserting an element: {boris_list}")
+
+    # Deleting an element by value
+    boris_list.remove("engineer")
+    print(f"Deleting an element by value: {boris_list}")
+
+    # Deleting an element by index
+    del boris_list[2]
+    print(f"Deleting an element by index: {boris_list}")
+
+    # Extending a list with another list
+    boris_list.extend(["hobby", "fishing"])
+    print(f"Extending a list: {boris_list}")
+
+    # Deleting an element from the end
+    boris_list.pop()
+    print(f"Deleting an element from the end: {boris_list}")
+
+</code></pre>
+</li>
+</ul>
+<h2>2. Dictionaries</h2>
+<ul>
+<li>
+<p><strong>Definition:</strong> Dictionaries in Python are unordered collections of elements, where each element consists of a "key-value" pair.</p>
+</li>
+<li>
+<p><strong>Representation:</strong> Dictionaries are created using curly braces <code>{}</code>, and "key-value" pairs are separated by colons <code>:</code>.</p>
+</li>
+<li>
+<p><strong>Examples:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+    # Dictionary creation
+    alice_dict = {"name": "Alice", "age": 25, "city": "London", "occupation": "artist"}
+    print(f"Dictionary creation: {alice_dict}")
+
+    # Access by key
+    print(f"Value by key 'name': {alice_dict['name']}")
+
+    # Modifying a value
+    alice_dict["age"] = 26
+    print(f"Modifying a value: {alice_dict}")
+
+    # Adding a key-value pair
+    alice_dict["hobby"] = "drawing"
+    print(f"Adding a pair: {alice_dict}")
+
+    # Deleting a pair by key
+    del alice_dict["city"]
+    print(f"Deleting a pair: {alice_dict}")
+
+    # Deleting a pair by the pop method (with return value)
+    hobby = alice_dict.pop("hobby")
+    print(f"Deletion with return value: {alice_dict}, value: {hobby}")
+
+    # Checking for key existence
+    print(f"Existence of key 'name': {'name' in alice_dict}")
+</code></pre>
+</li>
+</ul>
+<h2>3. Tuples</h2>
+<ul>
+<li>
+<p><strong>Definition:</strong> Tuples in Python are ordered and <strong>immutable</strong> collections of elements.</p>
+</li>
+<li>
+<p><strong>Representation:</strong> Tuples are created using parentheses <code>()</code>, and elements are separated by commas.</p>
+</li>
+<li>
+<p><strong>Examples:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+    # Tuple creation
+    boris_tuple = ("Boris", "Moscow", 30, "engineer")
+    print(f"Tuple creation: {boris_tuple}")
+
+    # Access by index
+    print(f"Element at index 2: {boris_tuple[2]}")
+
+    # Cannot modify an element
+    # boris_tuple[0] = "Boris" # This will raise an error: TypeError: 'tuple' object does not support item assignment
+
+    # Cannot add an element
+    # boris_tuple.append(4) # This will raise an error: AttributeError: 'tuple' object has no attribute 'append'
+
+    # Cannot delete an element
+    # del boris_tuple[0]  # This will raise an error: TypeError: 'tuple' object doesn't support item deletion
+</code></pre>
+</li>
+</ul>
+<h2>4. SimpleNamespace</h2>
+<ul>
+<li>
+<p><strong>Definition:</strong> <code>SimpleNamespace</code> from the <code>types</code> module is a simple class that allows creating objects whose attributes (properties) can be defined at creation and later.</p>
+</li>
+<li>
+<p><strong>Representation:</strong> To create a <code>SimpleNamespace</code> object, you need to import it from <code>types</code> and pass it named arguments (or not pass them):</p>
+<pre class="line-numbers"><code class="language-python">
+    from types import SimpleNamespace
+
+    alice_namespace = SimpleNamespace(name="Alice", age=25, city="London")
+</code></pre>
+</li>
+<li>
+<p><strong>Characteristics:</strong></p>
+<ul>
+<li>Allows creating objects with dynamic attributes (similar to a dictionary).</li>
+<li>Convenient for creating simple objects for data storage.</li>
+<li>Attributes are accessible via dot notation, like normal objects: <code>alice_namespace.name</code></li>
+<li>Unlike dictionaries, the order of attributes is preserved.</li>
+<li>Fields can be modified, but new fields cannot be added.</li>
+</ul>
+</li>
+<li>
+<p><strong>Examples:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+    from types import SimpleNamespace
+
+    # SimpleNamespace creation
+    alice_namespace = SimpleNamespace(name="Alice", age=25, city="London")
+    print(f"SimpleNamespace creation: {alice_namespace}")
+
+    # Accessing an attribute
+    print(f"Attribute 'name': {alice_namespace.name}")
+
+    # Modifying an attribute
+    alice_namespace.age = 26
+    print(f"Modifying an attribute: {alice_namespace}")
+
+    # Cannot add a new attribute
+    # alice_namespace.occupation = "artist" # This will raise an error: AttributeError: 'SimpleNamespace' object has no attribute 'occupation'
+
+   # Adding via setattr
+    setattr(alice_namespace, "occupation", "artist")
+    print(f"Adding an attribute: {alice_namespace}")
+
+    # Deleting via delattr
+    delattr(alice_namespace, "city")
+    print(f"Deleting an attribute: {alice_namespace}")
+</code></pre>
+</li>
+</ul>

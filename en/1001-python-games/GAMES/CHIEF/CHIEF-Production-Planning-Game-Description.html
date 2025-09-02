@@ -1,0 +1,73 @@
+<p>CHIEF:
+=================
+Difficulty: 4
+-----------------
+The game "CHIEF" is a game in which the player acts as a factory manager, planning production. The player sets the quantity of each type of product, and the computer determines whether these values meet the required specifications. If not, the player is informed which values were incorrect. The goal of the game is to achieve optimal production by correctly guessing the quantity of products.</p>
+<p>Game rules:
+1. The computer guesses three values in the range of 1 to 10: <code>targetA</code>, <code>targetB</code>, and <code>targetC</code>.
+2. The player enters their guesses for <code>userA</code>, <code>userB</code>, and <code>userC</code>.
+3. The computer checks if the entered values match the guessed ones.
+4. If all three values are guessed correctly, the game ends with a win.
+5. If at least one value does not match, the computer outputs which values were incorrect.
+6. The game continues until the player guesses all three values.
+-----------------
+Algorithm:
+1.  Generate random integers <code>targetA</code>, <code>targetB</code>, and <code>targetC</code> in the range of 1 to 10.
+2.  Start a loop "while not all numbers are guessed":
+    2.1. Prompt the player to enter three integers: <code>userA</code>, <code>userB</code>, and <code>userC</code>.
+    2.2. Initialize the <code>message</code> string as empty.
+    2.3. If <code>userA</code> is not equal to <code>targetA</code>, add "A" to <code>message</code>.
+    2.4. If <code>userB</code> is not equal to <code>targetB</code>, add "B" to <code>message</code>.
+    2.5. If <code>userC</code> is not equal to <code>targetC</code>, add "C" to <code>message</code>.
+    2.6. If <code>message</code> is not empty, display "WRONG ON " and <code>message</code>.
+    2.7. Otherwise, display "YOU GOT IT!".
+3. End of game.
+-----------------
+Flowchart:</p>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeVariables["<p align='left'>Initialize variables:
+    &lt;code&gt;&lt;b&gt;
+    targetA = random(1, 10)
+    targetB = random(1, 10)
+    targetC = random(1, 10)
+    &lt;/b&gt;&lt;/code&gt;</p>"]
+    InitializeVariables --> LoopStart{"Start loop: until guessed"}
+    LoopStart --> InputValues["<p align='left'>User inputs numbers:
+    &lt;code&gt;&lt;b&gt;
+    userA
+    userB
+    userC
+    &lt;/b&gt;&lt;/code&gt;</p>"]
+    InputValues --> InitializeMessage["&lt;code&gt;&lt;b&gt;message = ""&lt;/b&gt;&lt;/code&gt;"]
+    InitializeMessage --> CheckA{"Check: &lt;code&gt;&lt;b&gt;userA == targetA?&lt;/b&gt;&lt;/code&gt;"}
+    CheckA -- No --> AppendA["&lt;code&gt;&lt;b&gt;message = message + 'A'&lt;/b&gt;&lt;/code&gt;"]
+    AppendA --> CheckB{"Check: &lt;code&gt;&lt;b&gt;userB == targetB?&lt;/b&gt;&lt;/code&gt;"}
+    CheckA -- Yes --> CheckB
+    CheckB -- No --> AppendB["&lt;code&gt;&lt;b&gt;message = message + 'B'&lt;/b&gt;&lt;/code&gt;"]
+    AppendB --> CheckC{"Check: &lt;code&gt;&lt;b&gt;userC == targetC?&lt;/b&gt;&lt;/code&gt;"}
+    CheckB -- Yes --> CheckC
+    CheckC -- No --> AppendC["&lt;code&gt;&lt;b&gt;message = message + 'C'&lt;/b&gt;&lt;/code&gt;"]
+    AppendC --> CheckMessage{"Check: &lt;code&gt;&lt;b&gt;message != "" ?&lt;/b&gt;&lt;/code&gt;"}
+    CheckC -- Yes --> CheckMessage
+    CheckMessage -- Yes --> OutputWrong["Display message: &lt;b&gt;WRONG ON {message}&lt;/b&gt;"]
+    OutputWrong --> LoopStart
+    CheckMessage -- No --> OutputWin["Display message: &lt;b&gt;YOU GOT IT!&lt;/b&gt;"]
+    OutputWin --> End["End"]
+    LoopStart -- No --> End
+</code></pre>
+<p>Legend:
+    Start - Program start.
+    InitializeVariables - Initialize variables: <code>targetA</code>, <code>targetB</code>, <code>targetC</code> are randomly generated from 1 to 10.
+    LoopStart - Start of the loop, which continues until the player guesses all numbers.
+    InputValues - Prompt the user for three numbers <code>userA</code>, <code>userB</code>, <code>userC</code>.
+    InitializeMessage - Initialize an empty string <code>message</code>.
+    CheckA - Check if the entered number <code>userA</code> is equal to the hidden number <code>targetA</code>.
+    AppendA - Add 'A' to <code>message</code> if <code>userA</code> is not equal to <code>targetA</code>.
+    CheckB - Check if the entered number <code>userB</code> is equal to the hidden number <code>targetB</code>.
+    AppendB - Add 'B' to <code>message</code> if <code>userB</code> is not equal to <code>targetB</code>.
+    CheckC - Check if the entered number <code>userC</code> is equal to the hidden number <code>targetC</code>.
+    AppendC - Add 'C' to <code>message</code> if <code>userC</code> is not equal to <code>targetC</code>.
+    CheckMessage - Check if the <code>message</code> string is empty.
+    OutputWrong - Display "WRONG ON" message and <code>message</code> content if the string is not empty.
+    OutputWin - Display "YOU GOT IT!" message if the <code>message</code> string is empty.
+    End - End of program.</p>

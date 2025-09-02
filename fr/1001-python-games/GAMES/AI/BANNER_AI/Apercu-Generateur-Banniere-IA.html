@@ -1,0 +1,216 @@
+<h1>AI BANNER</h1>
+<p>The Gemini model returns the response as an ASCII banner based on the instruction given to it.</p>
+<p>The program interacts with the Google Generative AI model to create text banners.
+The user can choose the banner design style and send text to the model for processing.</p>
+<h2>Installing dependencies</h2>
+<p>To run the code on a local machine, you will need to install the Google libraries.</p>
+<pre class="line-numbers"><code class="language-python">
+pip install google
+pip install google-generativeai
+</code></pre>
+<p>I strongly recommend doing all experiments in a virtual environment.</p>
+<h2>Code features in this program</h2>
+<ol>
+<li>Instructions are stored in different files and loaded as needed.</li>
+<li>From this example, I save the model key in an environment variable, which saves me from having to enter the key repeatedly.</li>
+<li>I use absolute paths to files.
+To determine the project root directory, I recursively search upwards for marker files ('pyproject.toml', 'requirements.txt', '.git').
+I store the found directory in the <code>__root__</code> variable. From there, I build the path to the system instructions:
+<pre class="line-numbers"><code class="language-python">
+relative_path: Path = Path('GAMES', 'AI', 'BANNER_AI')  # Relative path to the directory
+base_path: Path = __root__ / relative_path  # Absolute path to the directory using __root__
+</code></pre>
+</li>
+</ol>
+<h3>1. <strong>Importing necessary libraries</strong></h3>
+<pre class="line-numbers"><code class="language-python">
+import google.generativeai as genai  # Import the library for working with Gemini
+import re  # Import the library for working with regular expressions
+from pathlib import Path  # Import for working with file system paths
+from header import __root__  # Import the __root__ object, containing the absolute path to the project root
+from dotenv import load_dotenv, set_key  # Import functions for working with environment variables
+import os  # Import for working with environment variables
+</code></pre>
+<ul>
+<li><strong><code>google.generativeai</code></strong>: Used to interact with the Google Generative AI API.</li>
+<li><strong><code>re</code></strong>: Library for working with regular expressions (not used in this code, but may be useful in the future).</li>
+<li><strong><code>Path</code></strong>: Allows working with file system paths.</li>
+<li><strong><code>__root__</code></strong>: Object containing the absolute path to the project root.</li>
+<li><strong><code>dotenv</code></strong>: Allows loading environment variables from an <code>.env</code> file and saving them.</li>
+<li><strong><code>os</code></strong>: Used for working with environment variables.</li>
+</ul>
+<hr>
+<h3>2. <strong>Loading environment variables</strong></h3>
+<pre class="line-numbers"><code class="language-python">
+load_dotenv()
+</code></pre>
+<ul>
+<li>The <code>load_dotenv()</code> function loads environment variables from the <code>.env</code> file, if it exists.</li>
+</ul>
+<hr>
+<h3>3. <strong><code>GoogleGenerativeAI</code> Class</strong></h3>
+<p>The class is designed to interact with the Google Generative AI model.</p>
+<h4>3.1. <strong>Class attributes</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+MODELS = [
+    'gemini-1.5-flash-8b',
+    'gemini-2-13b',
+    'gemini-3-20b'
+]
+</code></pre>
+<ul>
+<li>List of available Google Generative AI models.</li>
+</ul>
+<h4>3.2. <strong><code>__init__</code> Method</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+def __init__(self, api_key: str, system_instruction: str, model_name: str = 'gemini-2.0-flash-exp'):
+    """
+    Initializes the GoogleGenerativeAI model.
+
+    :param api_key: API key to access Gemini.
+    :type api_key: str
+    :param system_instruction: Instruction for the model (system prompt).
+    :type system_instruction: str
+    :param model_name: Name of the Gemini model to use. Defaults to 'gemini-2.0-flash-exp'.
+    :type model_name: str
+    """
+    self.api_key = api_key
+    self.model_name = model_name
+    genai.configure(api_key=self.api_key)  # Configure the library with the API key
+    self.model = genai.GenerativeModel(model_name=self.model_name, system_instruction=system_instruction)  # Initialize the model with the instruction
+</code></pre>
+<ul>
+<li><strong><code>api_key</code></strong>: API key to access Google Generative AI.</li>
+<li><strong><code>system_instruction</code></strong>: Instruction for the model (e.g., text formatting style).</li>
+<li><strong><code>model_name</code></strong>: Name of the model, defaults to <code>'gemini-2.0-flash-exp'</code>.</li>
+<li><strong><code>genai.configure(api_key=self.api_key)</code></strong>: Library configuration using the API key.</li>
+<li><strong><code>genai.GenerativeModel(...)</code></strong>: Model initialization with specified parameters.</li>
+</ul>
+<h4>3.3. <strong><code>ask</code> Method</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+def ask(self, q: str) -> str:
+    """
+    Sends a request to the model and receives a response.
+
+    :param q: Request text.
+    :type q: str
+    :return: Model response or error message.
+    :rtype: str
+    """
+    try:
+        response = self.model.generate_content(q)  # Send the request to the model
+        return response.text  # Get the text response
+    except Exception as ex:
+        return f'Error: {str(ex)}'  # Handle and get the error
+</code></pre>
+<ul>
+<li><strong><code>q</code></strong>: The text of the request sent to the model.</li>
+<li><strong><code>self.model.generate_content(q)</code></strong>: Sending the request to the model.</li>
+<li><strong><code>response.text</code></strong>: Getting the text response from the model.</li>
+<li><strong><code>except Exception as ex</code></strong>: Error handling and returning an error message.</li>
+</ul>
+<hr>
+<h3>4. <strong>Main program part</strong></h3>
+<pre class="line-numbers"><code class="language-python">
+if __name__ == '__main__':
+</code></pre>
+<ul>
+<li>Checks that the program is running as a standalone script.</li>
+</ul>
+<h4>4.1. <strong>Path definition</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+relative_path: Path = Path('GAMES', 'AI', 'BANNER_AI')  # Relative path to the directory
+base_path: Path = __root__ / relative_path  # Absolute path to the directory using __root__
+</code></pre>
+<ul>
+<li><strong><code>relative_path</code></strong>: Relative path to the directory in the project.</li>
+<li><strong><code>base_path</code></strong>: Absolute path, obtained by combining <code>__root__</code> and <code>relative_path</code>.</li>
+</ul>
+<h4>4.2. <strong>API key reading</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+API_KEY: str = os.getenv('API_KEY')
+if not API_KEY:
+    API_KEY = input('API key not found. Enter the `gemini` API key: ')  # Ask the user for the API key
+    set_key('.env', 'API_KEY', API_KEY)  # Save the key to the .env file
+</code></pre>
+<ul>
+<li><strong><code>os.getenv('API_KEY')</code></strong>: Attempts to get the API key from environment variables.</li>
+<li>If the key is not found, it asks the user for it via <code>input</code>.</li>
+<li><strong><code>set_key('.env', 'API_KEY', API_KEY)</code></strong>: Saves the entered key to the <code>.env</code> file for future use.</li>
+</ul>
+<h4>4.3. <strong>Instructions for the model</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+instructions: dict = {
+    '1': 'system_instruction_asterisk',
+    '2': 'system_instruction_tilde',
+    '3': 'system_instruction_hash',
+}
+</code></pre>
+<ul>
+<li>Dictionary containing the names of the files with instructions for the model.</li>
+</ul>
+<h4>4.4. <strong>User greeting</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+print('Welcome to the Banner game!')
+print('Enter text, and I will create a text banner for you.')
+</code></pre>
+<ul>
+<li>Greets the user and explains the program's functionality.</li>
+</ul>
+<h4>4.5. <strong>Loop for banner style selection</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+while True:
+    print('Select the banner design style:')
+    print('1. Symbol 
+*')
+    print('2. Symbol 
+~')
+    print('3. Symbol 
+#')
+    choice = input('Enter the style number (1, 2 or 3): ')
+</code></pre>
+<ul>
+<li>The user selects the banner design style.</li>
+</ul>
+<h4>4.6. <strong>Reading instructions for the model</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+if choice in ('1', '2', '3'):
+    system_instruction: str = Path(base_path, 'instructions', f'{instructions[choice]}.md').read_text(encoding='UTF-8')  # Read the instruction from the file
+else:
+    print('Invalid choice. Default style 
+*
+ is used')
+    system_instruction: str = Path(base_path, 'instructions', 'system_instruction_asterisk.md').read_text(encoding='UTF-8')  # Read the default instruction
+</code></pre>
+<ul>
+<li>If the choice is valid, read the corresponding instruction from the file.</li>
+<li>If the choice is invalid, use the default instruction.</li>
+</ul>
+<h4>4.7. <strong>Creating a class instance</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+model: GoogleGenerativeAI = GoogleGenerativeAI(api_key=API_KEY, system_instruction=system_instruction)
+</code></pre>
+<ul>
+<li>Create an instance of the <code>GoogleGenerativeAI</code> class with the specified parameters.</li>
+</ul>
+<h4>4.8. <strong>Requesting text from the user</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+user_text: str = input('Enter text for the banner: ')
+</code></pre>
+<ul>
+<li>The user enters the text for the banner.</li>
+</ul>
+<h4>4.9. <strong>Text validation</strong></h4>
+<pre class="line-numbers"><code class="language-python">
+if user_text.strip() == '':
+    print('You did not enter any text. Please try again.')
+else:
+    response = model.ask(user_text)
+    print('
+Your banner is ready:')
+    print(response)
+</code></pre>
+<ul>
+<li>If the text is empty, display an error message.</li>
+<li>If text is entered, send it to the model and display the result.</li>
+</ul>

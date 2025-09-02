@@ -1,0 +1,195 @@
+<h2>Reading Images: Raw Bytes vs Pillow</h2>
+<p>When it comes to working with images in Python, you have two main approaches:</p>
+<ol>
+<li><strong>Reading raw bytes:</strong> Using <code>open()</code> to read the content of an image file as a sequence of bytes.</li>
+<li><strong>Using Pillow:</strong> Using the Pillow library to open and process images.</li>
+</ol>
+<p>Let's examine each approach in detail and discover their differences and when to use which approach.</p>
+<h3>1. Reading raw bytes with <code>open()</code></h3>
+<h4>What is it?</h4>
+<p>When you open an image file in binary mode (<code>"rb"</code>) using <code>open()</code>, you access the file content as a sequence of bytes. This means you get "raw" data, without any interpretation or processing.</p>
+<h4>What does it look like in code?</h4>
+<pre class="line-numbers"><code class="language-python">
+from pathlib import Path
+
+def read_image_bytes_direct(image_path: Path) -> bytes | None:
+    """
+    Reads an image as bytes directly using open().
+
+    Args:
+        image_path: Path to the image file.
+
+    Returns:
+        bytes: Image bytes.
+        None: If an error occurred.
+    """
+    try:
+        with open(image_path, "rb") as image_file:
+            image_data = image_file.read()
+            return image_data
+    except Exception as e:
+        print(f"Error reading file: {e}")
+        return None
+
+
+if __name__ == '__main__':
+    image_path = Path("test.jpg")  # Replace with the path to your image
+
+    if not image_path.is_file():
+        print(f"File {image_path} does not exist")
+    else:
+       image_bytes_direct = read_image_bytes_direct(image_path)
+
+       if image_bytes_direct:
+           print(f"Image read directly, size: {len(image_bytes_direct)} bytes")
+           # You can use image_bytes_direct, for example, to send it over the network
+       else:
+           print("Could not read image.")
+</code></pre>
+<h4>When is it useful?</h4>
+<ul>
+<li><strong>Network data transfer:</strong> When you simply need to transfer image data over a network, without worrying about the format.</li>
+<li><strong>Saving to disk:</strong> When you need to save the file content to disk without modifications.</li>
+<li><strong>Low-level access:</strong> When you need low-level access to file data, and you know how to interpret it yourself.</li>
+</ul>
+<h4>Limitations</h4>
+<ul>
+<li><strong>No format processing:</strong> You only get bytes, without any information about the image format (JPEG, PNG, GIF, etc.).</li>
+<li><strong>No validation:</strong> There is no check if the file is actually an image.</li>
+<li><strong>No metadata:</strong> You do not access image metadata (size, color space, etc.).</li>
+<li><strong>No practical transformations:</strong> You cannot resize, format, or apply other transformations without additional processing.</li>
+</ul>
+<h3>2. Using Pillow for image reading</h3>
+<h4>What is it?</h4>
+<p>Pillow is a powerful library for working with images. It allows you to open images of different formats, get metadata, resize, convert formats, and much more.</p>
+<h4>What does it look like in code?</h4>
+<pre class="line-numbers"><code class="language-python">
+from pathlib import Path
+from PIL import Image
+from io import BytesIO
+
+def read_image_pillow(image_path: Path) -> bytes | None:
+    """
+    Reads an image using Pillow and returns it as JPEG bytes.
+
+    Args:
+        image_path: Path to the image file.
+
+    Returns:
+         bytes: Image bytes in JPEG format.
+         None: If an error occurred.
+    """
+    try:
+        img = Image.open(image_path)
+        img_byte_arr = BytesIO()
+        img.save(img_byte_arr, format="JPEG")
+        return img_byte_arr.getvalue()
+    except Exception as e:
+        print(f"Error reading image with Pillow: {e}")
+        return None
+
+if __name__ == '__main__':
+    image_path = Path("test.jpg") # Replace with the path to your image
+
+    if not image_path.is_file():
+        print(f"File {image_path} does not exist")
+    else:
+        image_bytes_pillow = read_image_pillow(image_path)
+        if image_bytes_pillow:
+           print(f"Image read with Pillow, size: {len(image_bytes_pillow)} bytes")
+           # You can use image_bytes_pillow, for example, to send it to the Gemini model.
+        else:
+           print("Could not read image with Pillow.")
+</code></pre>
+<h4>When is it useful?</h4>
+<ul>
+<li><strong>Working with images:</strong> When you need to work with images, not just bytes.</li>
+<li><strong>Automatic format detection:</strong> Pillow automatically detects the image format.</li>
+<li><strong>Format conversion:</strong> You can easily convert images between different formats (JPEG, PNG, GIF, etc.).</li>
+<li><strong>Resizing:</strong> You can resize the image before processing.</li>
+<li><strong>Metadata:</strong> You can access image metadata (size, color profile, etc.).</li>
+<li><strong>Error handling:</strong> Pillow handles errors when opening corrupted files.</li>
+</ul>
+<h4>Advantages</h4>
+<ul>
+<li><strong>Flexibility:</strong> Pillow offers many features for working with images.</li>
+<li><strong>Reliability:</strong> Pillow checks if the file is a valid image.</li>
+<li><strong>Convenience:</strong> Pillow simplifies the image processing workflow.</li>
+</ul>
+<h3>Comparative table</h3>
+<table>
+<thead>
+<tr>
+<th>Characteristic</th>
+<th><code>open(image_path, "rb")</code></th>
+<th>Pillow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>What it does</strong></td>
+<td>Reads the file as a sequence of bytes</td>
+<td>Opens and processes the image</td>
+</tr>
+<tr>
+<td><strong>Format</strong></td>
+<td>Does not recognize the format</td>
+<td>Automatically detects the format</td>
+</tr>
+<tr>
+<td><strong>Metadata</strong></td>
+<td>No access to metadata</td>
+<td>Provides access to metadata</td>
+</tr>
+<tr>
+<td><strong>Processing</strong></td>
+<td>No processing capabilities</td>
+<td>Resizing, format conversion, etc.</td>
+</tr>
+<tr>
+<td><strong>Validation</strong></td>
+<td>No validation</td>
+<td>Checks if the file is a valid image</td>
+</tr>
+<tr>
+<td><strong>When to use</strong></td>
+<td>Simple byte transfer, low-level access</td>
+<td>Image manipulation, transformations, error handling</td>
+</tr>
+<tr>
+<td><strong>Example</strong></td>
+<td>Network byte transfer, disk saving</td>
+<td>Image preparation for Gemini, web development</td>
+</tr>
+</tbody>
+</table>
+<h3>In the context of Gemini</h3>
+<p>Gemini models expect image data in a specific format (usually JPEG or PNG). Using Pillow ensures that you provide images in the correct format, not just "raw" bytes. In addition, Pillow allows you to resize the image if necessary.</p>
+<h3>Comparison diagram</h3>
+<pre class="line-numbers"><code class="language-mermaid">
+graph TD
+    A[Start: Image read request] --> B{"open(image_path)"};
+    B --> C[Get raw bytes];
+    C --> D[End: Bytes obtained];
+
+    A --> E{"Image.open(image_path) with Pillow"};
+    E --> F{Automatic format detection};
+    F --> G{"Transformations (optional)"};
+    G --> H[Get bytes in desired format];
+    H --> I[End: Bytes obtained];
+
+    
+    
+    style A fill:#D46A6A,stroke:#333,stroke-width:2px
+    style B fill:#D46A6A,stroke:#333,stroke-width:2px
+    style C fill:#D46A6A,stroke:#333,stroke-width:2px
+    style D fill:#D46A6A,stroke:#333,stroke-width:2px
+    style E fill:#D46A6A,stroke:#333,stroke-width:2px
+    style F fill:#D46A6A,stroke:#333,stroke-width:2px
+    style G fill:#D46A6A,stroke:#333,stroke-width:2px
+    style H fill:#D46A6A,stroke:#333,stroke-width:2px
+    style I fill:#D46A6A,stroke:#333,stroke-width:2px
+    
+    linkStyle 0,1,2,3,4 stroke:#333,stroke-width:2px
+</code></pre>
+<p>If you simply need to read a file as bytes, without any processing, <code>open(image_path, "rb")</code> will work. However, for image processing, especially for interacting with APIs that expect images in a specific format, using Pillow is a more reliable and flexible solution.</p>

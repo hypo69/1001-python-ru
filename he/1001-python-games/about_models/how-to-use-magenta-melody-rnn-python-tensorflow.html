@@ -1,0 +1,153 @@
+<h2 dir="rtl">כיצד לחבר ולהשתמש במודל <span dir="ltr">Melody RNN</span> של <span dir="ltr">Magenta</span>, מבוסס על <span dir="ltr">Python</span> ו-<span dir="ltr">TensorFlow</span>.</h2>
+<p dir="rtl">גרסת פייתון <span dir="ltr">3.7</span></p>
+<h3 dir="rtl"><strong>1. התקנת <span dir="ltr">Magenta</span>:</strong></h3>
+<p dir="rtl">ראשית, עליך להתקין את ספריית <span dir="ltr">Magenta</span>. שיטת ההתקנה המומלצת היא באמצעות <span dir="ltr">pip</span>.</p>
+<ul dir="rtl">
+<li><strong>צור סביבה וירטואלית (מומלץ):</strong>
+<pre class="line-numbers"><code class="language-bash">python -m venv venv
+source venv/bin/activate  # Linux/macOS
+vvenv\Scripts\activate  # Windows
+</code></pre>
+</li>
+<li><strong>התקן את <span dir="ltr">Magenta</span>:</strong>
+<pre class="line-numbers"><code class="language-bash">pip install magenta
+</code></pre>
+<ul>
+<li><strong>הערה:</strong> <span dir="ltr">Magenta</span> עשויה לדרוש <span dir="ltr">TensorFlow</span>. אם אין לך אותו, <span dir="ltr">pip</span> יתקין אותו אוטומטית.</li>
+<li><strong>להאצת <span dir="ltr">GPU</span>:</strong> אם יש לך <span dir="ltr">GPU</span> של <span dir="ltr">NVIDIA</span> ו-<span dir="ltr">CUDA</span>, תוכל להתקין את גרסת <span dir="ltr">TensorFlow</span> עם תמיכת <span dir="ltr">GPU</span> (ראה תיעוד <span dir="ltr">TensorFlow</span>).</li>
+</ul>
+</li>
+</ul>
+<h3 dir="rtl"><strong>2. ייבוא מודולים נחוצים:</strong></h3>
+<p dir="rtl">לאחר התקנת <span dir="ltr">Magenta</span>, ייבא את המודולים הנחוצים לסקריפט הפייתון שלך:
+<pre class="line-numbers"><code class="language-python">import os
+import magenta.music as mm
+from magenta.models.melody_rnn import melody_rnn_sequence_generator
+from magenta.common import sequence_example_lib
+</code></pre>
+</p>
+<h3 dir="rtl"><strong>3. טעינת מודל מאומן:</strong></h3>
+<p dir="rtl">מודלי <span dir="ltr">Melody RNN</span> אומנו על מערכי נתונים גדולים וזמינים להורדה. תוכל לבחור אחד מהמודלים שאומנו מראש (לדוגמה, <span dir="ltr"><code>attention_rnn</code></span> או <span dir="ltr"><code>basic_rnn</code></span>).</p>
+<ul dir="rtl">
+<li><strong>אתחול מודל:</strong>
+<pre class="line-numbers"><code class="language-python">model_name = 'attention_rnn'  # או 'basic_rnn'
+melody_rnn = melody_rnn_sequence_generator.MelodyRnnSequenceGenerator(
+        model_name=model_name
+    )
+</code></pre>
+<ul>
+<li>עם האתחול, המודל יטען אוטומטית את המשקולות הנחוצות.</li>
+</ul>
+</li>
+</ul>
+<h3 dir="rtl"><strong>4. יצירת מנגינה:</strong></h3>
+<p dir="rtl">כעת תוכל ליצור מנגינה. לשם כך, השתמש בשיטת <span dir="ltr"><code>generate()</code></span>:</p>
+<pre class="line-numbers"><code class="language-python"># פרמטרי יצירה
+temperature = 1.0  # שולט באקראיות, 1.0 הוא ערך רגיל
+num_steps = 128   # מספר צעדים (אורך) המנגינה
+primer_sequence = None # ניתן להגדיר מנגינת התחלה, אם משאירים None, המודל יתחיל מאפס.
+# יצירת מנגינה
+melody_sequence = melody_rnn.generate(
+    temperature=temperature,
+    steps=num_steps,
+    primer_sequence=primer_sequence
+)
+</code></pre>
+</p>
+<ul dir="rtl">
+<li><span dir="ltr"><code>temperature</code></span>: ככל שהערך גבוה יותר, כך היצירה תהיה אקראית ו"יצירתית" יותר, אך היא עלולה גם להיות פחות קוהרנטית.</li>
+<li><span dir="ltr"><code>steps</code></span>: מגדיר את מספר הצעדים במנגינה שנוצרה.</li>
+<li><span dir="ltr"><code>primer_sequence</code></span>: מגדיר את המנגינה שממנה המודל מתחיל ליצור. אם <span dir="ltr"><code>None</code></span>, המודל יתחיל מאפס.</li>
+</ul>
+<h3 dir="rtl"><strong>5. עבודה עם <span dir="ltr">MIDI</span>:</strong></h3>
+<p dir="rtl">המנגינה שנוצרה מיוצגת כאובייקט <span dir="ltr"><code>Sequence</code></span>, שניתן לשמור בקובץ <span dir="ltr">MIDI</span> או להשתמש בו לעיבוד נוסף:</p>
+<pre class="line-numbers"><code class="language-python"># שמירה ל-MIDI
+output_dir = 'generated_music'
+os.makedirs(output_dir, exist_ok=True)
+midi_file = os.path.join(output_dir, 'generated_melody.mid')
+mm.sequence_proto_to_midi_file(melody_sequence, midi_file)
+
+print(f"המנגינה נשמרה ב: {midi_file}")
+</code></pre>
+</p>
+<h3 dir="rtl"><strong>6. הוספת אקורדים ותופים (כמו בדוגמה):</strong></h3>
+<p dir="rtl">תוכל לשלב את המנגינה שנוצרה עם התקדמויות אקורדים וחלקי תופים, כפי שהוצג בקוד הדוגמה שלך:</p>
+<pre class="line-numbers"><code class="language-python"># אקורדים
+chords = ["C", "G", "Am", "F"] * (num_steps // 4) # יצירת רצף אקורדים, בחזרה
+chord_sequence = mm.ChordSequence(chords)
+melody_with_chords_sequence = mm.sequences_lib.concatenate_sequences(melody_sequence, chord_sequence)
+
+# תופים
+drum_pattern = mm.DrumTrack(
+    [36, 0, 42, 0, 36, 0, 42, 0],
+    start_step=0,
+    steps_per_bar=num_steps//4,
+    steps_per_quarter=4,
+)
+
+music_sequence = mm.sequences_lib.concatenate_sequences(melody_with_chords_sequence, drum_pattern)
+music_sequence.tempos[0].qpm = 120  # הגדרת קצב
+
+# שמירת הרצועה המלאה ל-MIDI
+midi_file_with_chords_and_drums = os.path.join(output_dir, 'full_music.mid')
+mm.sequence_proto_to_midi_file(music_sequence, midi_file_with_chords_and_drums)
+
+print(f"מוזיקה מלאה נשמרה ב: {midi_file_with_chords_and_drums}")
+</code></pre>
+</p>
+<h3 dir="rtl"><strong>דוגמה מלאה:</strong></h3>
+<pre class="line-numbers"><code class="language-python">import os
+import magenta.music as mm
+from magenta.models.melody_rnn import melody_rnn_sequence_generator
+
+# 1. הגדרת פרמטרים
+output_dir = 'generated_music'
+os.makedirs(output_dir, exist_ok=True)
+
+model_name = 'attention_rnn'
+melody_rnn = melody_rnn_sequence_generator.MelodyRnnSequenceGenerator(
+    model_name=model_name
+)
+
+temperature = 1.0
+num_steps = 128
+primer_sequence = None
+# 2. יצירת מנגינה
+melody_sequence = melody_rnn.generate(
+    temperature=temperature,
+    steps=num_steps,
+    primer_sequence=primer_sequence
+)
+
+# 3. הוספת אקורדים
+chords = ["C", "G", "Am", "F"] * (num_steps // 4)
+chord_sequence = mm.ChordSequence(chords)
+melody_with_chords_sequence = mm.sequences_lib.concatenate_sequences(melody_sequence, chord_sequence)
+
+
+# 4. הוספת תופים
+drum_pattern = mm.DrumTrack(
+    [36, 0, 42, 0, 36, 0, 42, 0],
+    start_step=0,
+    steps_per_bar=num_steps // 4,
+    steps_per_quarter=4,
+)
+music_sequence = mm.sequences_lib.concatenate_sequences(melody_with_chords_sequence, drum_pattern)
+music_sequence.tempos[0].qpm = 120
+
+
+# 5. שמירה ל-MIDI
+midi_file_with_chords_and_drums = os.path.join(output_dir, 'full_music.mid')
+mm.sequence_proto_to_midi_file(music_sequence, midi_file_with_chords_and_drums)
+
+print(f"מוזיקה מלאה נשמרה ב: {midi_file_with_chords_and_drums}")
+
+</code></pre>
+<h3 dir="rtl"><strong>טיפים נוספים:</strong></h3>
+<ul dir="rtl">
+<li><strong>התנסה עם פרמטרים:</strong> נסה ערכים שונים עבור <span dir="ltr"><code>temperature</code></span>, <span dir="ltr"><code>num_steps</code></span>.</li>
+<li><strong>טען קבצי <span dir="ltr">MIDI</span> משלך:</strong> תוכל להשתמש במנגינות משלך כהתחלה (<span dir="ltr"><code>primer_sequence</code></span>).</li>
+<li><strong>אמן מודל על הנתונים שלך:</strong> אם אתה רוצה סגנון ספציפי, נסה לאמן מודל על מערך הנתונים שלך.</li>
+<li><strong>עיין בתיעוד של <span dir="ltr">Magenta</span>:</strong> <span dir="ltr">Magenta</span> מספקת תיעוד ודוגמאות טובים.</li>
+<li><strong>הערה:</strong> <span dir="ltr"><code>primer_sequence</code></span> צריך להיות בצורת <span dir="ltr"><code>mm.NoteSequence()</code></span>.</li>
+</ul>

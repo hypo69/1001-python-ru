@@ -1,0 +1,138 @@
+<h1 dir="rtl">מדריך מלא למשתני WP-PageNavi עבור וורדפרס</h1>
+<p dir="rtl">ניווט עמודים הוא חלק חשוב בכל בלוג או אתר חדשות בוורדפרס. אחד הכלים הפופולריים ביותר לניווט נוח בין עמודים הוא התוסף <span dir="ltr"><strong>WP-PageNavi</strong></span>. הוא מאפשר להחליף את הקישורים הסטנדרטיים "קודם / הבא" בפגינציה גמישה ויפה יותר.</p>
+<p dir="rtl">אחת התכונות המרכזיות היא היכולת להתאים אישית את טקסט הקישורים באמצעות <span dir="ltr"><strong>משתנים</strong></span> שמחליפים אוטומטית את מספר העמוד הנוכחי, המספר הכולל של העמודים ומידע אחר.</p>
+<p dir="rtl">במאמר זה, ננתח <span dir="ltr"><strong>את כל המשתנים הזמינים</strong></span>, דוגמאות לשימוש בהם ונראה באמצעות צילומי מסך היכן יש להכניס אותם.</p>
+<hr>
+<h2 dir="rtl">היכן למצוא את הגדרות WP-PageNavi</h2>
+<p dir="rtl">לאחר התקנת התוסף, עבור ללוח הבקרה של וורדפרס:</p>
+<p dir="rtl"><span dir="ltr"><strong>הגדרות ← PageNavi</strong></span></p>
+<p dir="rtl">שם תראה תפריט להתאמה אישית של טקסט הקישורים (דוגמה בצילום המסך למטה):</p>
+<p dir="rtl"><img src="https://github.com/hypo69/1001-python-ru/blob/master/assets/wordpress-pagenavi-guide/a34df3db-dcb3-4815-ac1c-a73c693fce39.png" alt="הגדרות WP-PageNavi בוורדפרס"></p>
+<p dir="rtl">👉 בכל שדה, תוכל להשתמש במשתנים כדי להציג באופן דינמי את העמוד הנוכחי, המספר הכולל של העמודים ואלמנטים ניווט אחרים.</p>
+<hr>
+<h2 dir="rtl">משתני WP-PageNavi זמינים</h2>
+<p dir="rtl">התוסף מספק סט של מצייני מיקום (משתני תבנית) שניתן להשתמש בהם בהגדרות:</p>
+<h3 dir="rtl">🔹 <span dir="ltr">%CURRENT_PAGE%</span></h3>
+<p dir="rtl">מציג את <span dir="ltr"><strong>מספר העמוד הנוכחי</strong></span>.</p>
+<p dir="rtl">דוגמה:</p>
+<pre class="line-numbers"><code class="language-powershell" dir="rtl">
+
+אתה בעמוד <span dir="ltr">%CURRENT_PAGE%</span>
+
+</code></pre>
+<p dir="rtl">👉 אם אתה בעמוד 3, התוצאה תהיה:</p>
+<pre class="line-numbers"><code class="language-powershell" dir="rtl">
+
+אתה בעמוד 3
+
+</code></pre>
+<hr>
+<h3 dir="rtl">🔹 <span dir="ltr">%TOTAL_PAGES%</span></h3>
+<p dir="rtl">מציג את <span dir="ltr"><strong>המספר הכולל של העמודים</strong></span>.</p>
+<p dir="rtl">דוגמה:</p>
+<pre class="line-numbers"><code class="language-powershell" dir="rtl">
+
+סה"כ עמודים: <span dir="ltr">%TOTAL_PAGES%</span>
+
+</code></pre>
+<p dir="rtl">👉 אם ישנם 10 עמודים בסך הכל, הפלט יהיה:</p>
+<pre class="line-numbers"><code class="language-powershell" dir="rtl">
+
+סה"כ עמודים: 10
+
+</code></pre>
+<hr>
+<h3 dir="rtl">🔹 <span dir="ltr">%PAGE_NUMBER%</span></h3>
+<p dir="rtl">משמש להצגת <span dir="ltr"><strong>מספר כל עמוד</strong></span> ברשימה.</p>
+<p dir="rtl">דוגמה:</p>
+<pre class="line-numbers"><code class="language-powershell" dir="rtl">
+
+עמוד <span dir="ltr">%PAGE_NUMBER%</span>
+
+</code></pre>
+<p dir="rtl">👉 בניווט, יופיעו קישורים:</p>
+<pre class="line-numbers"><code class="language-powershell" dir="rtl">
+
+עמוד 1 | עמוד 2 | עמוד 3 | ...
+
+</code></pre>
+<hr>
+<h2 dir="rtl">טבלת משתני WP-PageNavi</h2>
+<table dir="rtl">
+<thead>
+<tr>
+<th>משתנה</th>
+<th>תיאור</th>
+<th>דוגמת הגדרה</th>
+<th>תוצאה (אם עמוד 3 מתוך 10)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span dir="ltr"><strong>%CURRENT_PAGE%</strong></span></td>
+<td>מספר העמוד הנוכחי</td>
+<td><span dir="ltr"><code>אתה כרגע בעמוד %CURRENT_PAGE%</code></span></td>
+<td><span dir="ltr"><code>אתה כרגע בעמוד 3</code></span></td>
+</tr>
+<tr>
+<td><span dir="ltr"><strong>%TOTAL_PAGES%</strong></span></td>
+<td>המספר הכולל של העמודים</td>
+<td><span dir="ltr"><code>סה"כ עמודים: %TOTAL_PAGES%</code></span></td>
+<td><span dir="ltr"><code>סה"כ עמודים: 10</code></span></td>
+</tr>
+<tr>
+<td><span dir="ltr"><strong>%PAGE_NUMBER%</strong></span></td>
+<td>מספר כל עמוד ברשימה</td>
+<td><span dir="ltr"><code>עמוד %PAGE_NUMBER%</code></span></td>
+<td><span dir="ltr"><code>עמוד 1 | עמוד 2 | עמוד 3 …</code></span></td>
+</tr>
+<tr>
+<td><span dir="ltr"><strong>1 (סטטי)</strong></span></td>
+<td>עמוד ראשון (ללא משתנה)</td>
+<td><span dir="ltr"><code>ראשון</code> או <code>עמוד 1</code></span></td>
+<td><span dir="ltr"><code>ראשון</code></span></td>
+</tr>
+<tr>
+<td><span dir="ltr"><strong>%TOTAL_PAGES%</strong></span></td>
+<td>עמוד אחרון</td>
+<td><span dir="ltr"><code>עמוד %TOTAL_PAGES%</code></span></td>
+<td><span dir="ltr"><code>עמוד 10</code></span></td>
+</tr>
+<tr>
+<td><span dir="ltr"><strong>← / → / …</strong></span></td>
+<td>סמלים לחצים וקיצורים</td>
+<td><span dir="ltr"><code>← אחורה</code>, <code>קדימה →</code>, <code>…</code></span></td>
+<td><span dir="ltr"><code>← אחורה | 1 | 2 | 3 | … | 10 | קדימה →</code></span></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 dir="rtl">דוגמה להגדרה מלאה</h2>
+<p dir="rtl">בצילום המסך לעיל, תוכל למלא את השדות באופן הבא:</p>
+<ul dir="rtl">
+<li><span dir="ltr"><strong>Text For Number Of Pages</strong></span>:<br><span dir="ltr"><code>עמוד %CURRENT_PAGE% מתוך %TOTAL_PAGES%</code></span></li>
+<li><span dir="ltr"><strong>Text For Current Page</strong></span>:<br><span dir="ltr"><code>%PAGE_NUMBER%</code></span></li>
+<li><span dir="ltr"><strong>Text For Page</strong></span>:<br><span dir="ltr"><code>%PAGE_NUMBER%</code></span></li>
+<li><span dir="ltr"><strong>Text For First Page</strong></span>:<br><span dir="ltr"><code>ראשון</code></span></li>
+<li><span dir="ltr"><strong>Text For Last Page</strong></span>:<br><span dir="ltr"><code>עמוד %TOTAL_PAGES%</code></span></li>
+<li><span dir="ltr"><strong>Text For Previous Page</strong></span>:<br><span dir="ltr"><code>← אחורה</code></span></li>
+<li><span dir="ltr"><strong>Text For Next Page</strong></span>:<br><span dir="ltr"><code>קדימה →</code></span></li>
+<li><span dir="ltr"><strong>Text For Previous …</strong></span>:<br><span dir="ltr"><code>…</code></span></li>
+<li><span dir="ltr"><strong>Text For Next …</strong></span>:<br><span dir="ltr"><code>…</code></span></li>
+</ul>
+<p dir="rtl">👉 כתוצאה מכך, המבקרים יראו ניווט דומה לזה:</p>
+<pre class="line-numbers"><code class="language-powershell" dir="rtl">
+
+← אחורה | ראשון | 1 | 2 | 3 | … | עמוד 10 | קדימה →
+
+</code></pre>
+<hr>
+<h2 dir="rtl">סיכום</h2>
+<p dir="rtl">משתני <span dir="ltr">WP-PageNavi</span> פשוטים אך מספקים גמישות בהגדרות הניווט:</p>
+<ul dir="rtl">
+<li><span dir="ltr"><code>%CURRENT_PAGE%</code></span> — עמוד נוכחי</li>
+<li><span dir="ltr"><code>%TOTAL_PAGES%</code></span> — סה"כ עמודים</li>
+<li><span dir="ltr"><code>%PAGE_NUMBER%</code></span> — מספר עמוד ספציפי</li>
+</ul>
+<p dir="rtl">עבור העמוד הראשון, השתמש ב-<span dir="ltr"><code>1</code></span>, ועבור העמוד האחרון, השתמש ב-<span dir="ltr"><code>%TOTAL_PAGES%</code></span>.</p>
+<p dir="rtl">הודות להגדרות אלו, תוכל להפוך את ניווט האתר למובן ונוח יותר עבור המבקרים.</p>

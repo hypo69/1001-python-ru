@@ -1,0 +1,104 @@
+<p><strong>Variables in Python: what they are and why they are needed</strong></p>
+<p>Variables are named containers for storing data in computer memory. They allow you to access data by their name, instead of using them directly.</p>
+<p>Example:</p>
+<pre class="line-numbers"><code class="language-python">
+x = 10
+y = 'Hello, world!'
+</code></pre>
+<p>Here <code>x</code> and <code>y</code> are variables. <code>x</code> stores the number 10, and <code>y</code> stores the string 'Hello, world!'.</p>
+<h3><strong>How do variables work in Python?</strong></h3>
+<ol>
+<li><strong>Dynamic typing</strong>:
+<p>In Python, you don't need to specify the type of the variable when you create it — it's done automatically. For example:</p>
+<pre class="line-numbers"><code class="language-python">
+a = 42      # Integer (int)
+b = 3.14    # Floating-point number (float)
+c = 'Text' # String (str)
+</code></pre>
+</li>
+<li><strong>Reference data storage model</strong>:
+<p>Variables in Python are references to objects in memory. For example:</p>
+<pre class="line-numbers"><code class="language-python">
+x = 5
+y = x  # y now also points to object 5
+x = 10 # x now points to another object 10, and y still points to 5
+</code></pre>
+</li>
+</ol>
+<hr>
+<h3><strong>Variable naming rules</strong></h3>
+<ol>
+<li><strong>Mandatory rules</strong>:
+<ul>
+<li>A variable name can consist of letters, numbers, and the <code>_</code> symbol, but cannot start with a number.
+✅ Examples: <code>my_var</code>, <code>_data</code>, <code>var123</code>
+❌ Incorrect: <code>123var</code>, <code>my-var</code></li>
+<li>A variable name is case-sensitive.
+Example: <code>age</code> and <code>Age</code> are different variables.</li>
+</ul>
+</li>
+<li><strong>Recommendations for meaningful names</strong>:
+<ul>
+<li>Use names that reflect the essence of the data.
+❌ Bad: <code>a = 100</code>, <code>b = 'Name'</code>
+✅ Good: <code>salary = 100</code>, <code>username = 'Name'</code></li>
+<li>For names composed of multiple words, use the **snake_case** style:
+Example: <code>user_age</code>, <code>total_cost</code>.</li>
+</ul>
+</li>
+<li><strong>Reserved words</strong>:
+<p>You cannot use Python keywords (e.g., <code>if</code>, <code>for</code>, <code>while</code>) as variable names.</p>
+<p>To see the list of keywords, run:</p>
+<pre class="line-numbers"><code class="language-python">
+   import keyword
+   print(keyword.kwlist)
+</code></pre>
+</li>
+</ol>
+<hr>
+<h3><strong>Characteristics of data type storage</strong></h3>
+<ol>
+<li><strong>Python data types</strong>:
+<ul>
+<li><strong>Numbers</strong>: <code>int</code>, <code>float</code>, <code>complex</code></li>
+<li><strong>Strings</strong>: <code>str</code></li>
+<li><strong>Lists</strong>: <code>list</code></li>
+<li><strong>Tuples</strong>: <code>tuple</code></li>
+<li><strong>Sets</strong>: <code>set</code></li>
+<li><strong>Dictionaries</strong>: <code>dict</code></li>
+</ul>
+</li>
+<li><strong>Mutable and immutable types</strong>:
+<ul>
+<li><strong>Mutable</strong>: <code>list</code>, <code>dict</code>, <code>set</code>.
+Example:
+<pre class="line-numbers"><code class="language-python">
+     lst = [1, 2, 3]
+     lst.append(4)  # The list is modified
+</code></pre>
+</li>
+<li><strong>Immutable</strong>: <code>int</code>, <code>float</code>, <code>str</code>, <code>tuple</code>.
+Example:
+<pre class="line-numbers"><code class="language-python">
+     name = 'Alice'
+     name[0] = 'B'  # Error, strings are immutable
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong><code>type</code> function for type checking</strong>:
+<pre class="line-numbers"><code class="language-python">
+   x = 10
+   print(type(x))  # &lt;class 'int'&gt;
+</code></pre>
+</li>
+</ol>
+<hr>
+<h3><strong>Tips for beginners</strong></h3>
+<ol>
+<li>Use meaningful variable names to make your code understandable.</li>
+<li>Remember that Python does not require variable type declaration, but be careful not to get confused with data types.</li>
+<li>Learn built-in functions for working with variables, such as <code>type()</code>, <code>id()</code>, and modules, such as <code>sys</code>, to better understand how Python manages memory.</li>
+</ol>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">To the table of contents</a></p>

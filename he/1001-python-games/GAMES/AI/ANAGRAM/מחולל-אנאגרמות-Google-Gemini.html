@@ -1,0 +1,67 @@
+<h2 dir="rtl">מחולל אנאגרמות באמצעות <span dir="ltr">Google Gemini</span></h2>
+
+<p dir="rtl">זהו קוד פשוט ליצירת אנאגרמות באמצעות מודל השפה הגדול של <span dir="ltr">Google Gemini</span>.</p>
+
+<h3 dir="rtl">תיאור</h3>
+
+<p dir="rtl">התוכנית מקבלת קבוצת אותיות רוסיות כקלט ומנסה למצוא מילה רוסית קיימת, המורכבת מאותיות אלו (באמצעות כולן או חלקן).</p>
+
+<h3 dir="rtl">כללי אנאגרמות</h3>
+
+<ul>
+<li><p dir="rtl">נעשה שימוש רק במילים רוסיות קיימות.</p></li>
+<li><p dir="rtl">בחיפוש אנאגרמות, נלקחות בחשבון רק אותיות רוסיות. ספרות ותווים אחרים מתעלמים.</p></li>
+<li><p dir="rtl">אם ניתן ליצור מספר מילים, אחת מהן מוחזרת.</p></li>
+<li><p dir="rtl">אם לא ניתן ליצור אף מילה מהאותיות הנתונות, מוחזרת ההודעה &quot;אין אנאגרמות&quot;.</p></li>
+</ul>
+
+<h3 dir="rtl">שימוש</h3>
+
+<ol>
+<li><p dir="rtl"><strong>מפתח <span dir="ltr">API</span> של <span dir="ltr">Google Gemini</span>.</strong></p>
+
+<p dir="rtl">מפתח <span dir="ltr">API</span> למודל כאן: <span dir="ltr">[https://aistudio.google.com/](https://aistudio.google.com/)</span></p>
+
+<p dir="rtl">או שאתה יכול להשתמש בשלי:</p>
+
+<p dir="rtl"><span dir="ltr">AIzaSyCprZ9Tr-rB_xFau5zgWsKPM_6W-FmUntk</span></p>
+
+<p dir="rtl">יצרתי את המפתח ללמידה והבנת הקוד. אל תעמיס על המודל!</p>
+</li>
+<li><p dir="rtl"><strong>התקן ספריות נחוצות:</strong></p>
+
+<pre class="line-numbers"><code class="language-bash">pip install google-generativeai
+</code></pre>
+</li>
+<li><p dir="rtl"><strong>הפעל את הסקריפט:</strong></p>
+
+<pre class="line-numbers"><code class="language-bash">python anagram_generator.py
+</code></pre>
+</li>
+<li><p dir="rtl">הסקריפט יבקש את מפתח ה-<span dir="ltr">API</span>. הזן אותו.</p></li>
+<li><p dir="rtl">לאחר מכן, הזן את האותיות שעבורן ברצונך למצוא אנאגרמה.</p></li>
+</ol>
+
+<h3 dir="rtl">הסבר קוד</h3>
+
+<ul>
+<li><p dir="rtl"><span dir="ltr"><code>import google.generativeai as genai</code></span>: Imports the library for interaction with Gemini.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>import re</code></span>: Imports the library for working with regular expressions (for input cleaning).</p></li>
+<li><p dir="rtl">המחלקת <span dir="ltr"><code>GoogleGenerativeAI</code></span> עוטפת את הלוגיקה לאינטראקציה עם מודל <span dir="ltr">Gemini</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>system_instruction</code></span>: This is the system instruction (command) for Gemini, explaining what is required from it.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>re.sub(r"[^а-яА-ЯёЁ]", "", q)</code></span>: This line removes from the input string <span dir="ltr"><code>q</code></span> all characters that are not Russian letters. <span dir="ltr"><code>[^а-яА-ЯёЁ]</code></span> is a regular expression meaning &quot;any character that is not in the range a-z, A-Z, and ёЁ&quot;.</p></li>
+<li><p dir="rtl">הבדיקה <span dir="ltr"><code>if not q:</code></span> Checks if the string became empty after removing all non-Cyrillic characters.</p></li>
+<li><p dir="rtl"><span dir="ltr"><code>model.generate_content(q)</code></span>: Sends the query <span dir="ltr"><code>q</code></span> to the Gemini model.</p></li>
+<li><p dir="rtl">טיפול בחריגים <span dir="ltr"><code>try...except</code></span> Prevents the program from crashing in case of errors in interaction with the API.</p></li>
+</ul>
+
+<h3 dir="rtl">דוגמה לשימוש</h3>
+
+<pre class="line-numbers"><code class="language-text">הכנס אותיות עבורן Gemini תמצא אנאגרמה: сон
+нос
+הכנס אותיות עבורן Gemini תמצא אנאגרמה: אפלסין
+ספניאל
+הכנס אותיות עבורן Gemini תמצא אנאגרמה: 12345אבגד
+אבגד
+הכנס אותיות עבורן Gemini תמצא אנאגרמה: 
+</code></pre>

@@ -1,0 +1,162 @@
+Cómo conectar y usar el modelo Melody RNN de Magenta, basado en Python y TensorFlow.
+
+Versión de Python 3.7
+
+<strong>1. Instalación de Magenta:</strong>
+
+Primero, debe instalar la biblioteca Magenta. La forma recomendada de instalar es a través de pip.
+
+<ul>
+<li><strong>Cree un entorno virtual (recomendado):</strong>
+<pre class="line-numbers"><code class="language-bash">
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate  # Windows
+</code></pre>
+</li>
+<li><strong>Instale Magenta:</strong>
+<pre class="line-numbers"><code class="language-bash">
+pip install magenta
+</code></pre>
+<ul>
+<li><strong>Nota:</strong> Magenta puede requerir TensorFlow. Si no lo tiene, pip lo instalará automáticamente.</li>
+<li><strong>Para aceleración de GPU:</strong> Si tiene una GPU NVIDIA y CUDA, puede instalar una versión de TensorFlow con soporte para GPU (consulte la documentación de TensorFlow).</li>
+</ul>
+</li>
+</ul>
+<strong>2. Importación de módulos necesarios:</strong>
+
+Después de instalar Magenta, importe los módulos necesarios en su script de Python:
+<pre class="line-numbers"><code class="language-python">
+import os
+import magenta.music as mm
+from magenta.models.melody_rnn import melody_rnn_sequence_generator
+from magenta.common import sequence_example_lib
+</code></pre>
+<p><strong>3. Carga de un modelo entrenado:</strong></p>
+<p>Los modelos Melody RNN están entrenados en grandes conjuntos de datos y están disponibles para descargar. Puede elegir uno de los modelos preentrenados (por ejemplo, <code>attention_rnn</code> o <code>basic_rnn</code>).</p>
+<ul>
+<li><strong>Inicialización del modelo:</strong>
+<pre class="line-numbers"><code class="language-python">
+model_name = 'attention_rnn'  # Or 'basic_rnn'
+melody_rnn = melody_rnn_sequence_generator.MelodyRnnSequenceGenerator(
+    model_name=model_name
+)
+</code></pre>
+<ul>
+<li>Al inicializar, el modelo cargará automáticamente los pesos necesarios.</li>
+</ul>
+</li>
+</ul>
+<p><strong>4. Generación de una melodía:</strong></p>
+<p>Ahora puede generar una melodía. Para ello, utilice el método <code>generate()</code>:</p>
+<pre class="line-numbers"><code class="language-python">
+# Generation parameters
+temperature = 1.0  # Controls randomness, 1.0 - normal value
+num_steps = 128   # Number of steps (length) of the melody
+primer_sequence = None # You can specify a primer melody, if None, the model will start from scratch.
+# Melody creation
+melody_sequence = melody_rnn.generate(
+    temperature=temperature,
+    steps=num_steps,
+    primer_sequence=primer_sequence
+)
+</code></pre>
+<ul>
+<li><code>temperature</code>: Cuanto mayor sea el valor, más aleatoria y "creativa" será la generación, pero también puede volverse menos coherente.</li>
+<li><code>steps</code>: Establece el número de pasos en la melodía generada.</li>
+<li><code>primer_sequence</code>: Establece la melodía a partir de la cual el modelo comienza a generar. Si es <code>None</code>, el modelo comenzará desde cero.</li>
+</ul>
+<p><strong>5. Trabajar con MIDI:</strong></p>
+<p>La melodía generada se representa como un objeto <code>Sequence</code>, que se puede guardar en un archivo MIDI o usar para un procesamiento posterior:</p>
+<pre class="line-numbers"><code class="language-python">
+# Save to MIDI
+output_dir = 'generated_music'
+os.makedirs(output_dir, exist_ok=True)
+midi_file = os.path.join(output_dir, 'generated_melody.mid')
+mm.sequence_proto_to_midi_file(melody_sequence, midi_file)
+
+print(f"Melodía guardada en: {midi_file}")
+</code></pre>
+<p><strong>6. Añadir acordes y batería (como en el ejemplo):</strong></p>
+<p>Puede combinar la melodía generada con progresiones de acordes y partes de batería, como se muestra en su ejemplo de código:</p>
+<pre class="line-numbers"><code class="language-python">
+# Chords
+chords = ["C", "G", "Am", "F"] * (num_steps // 4) # Creation of a chord sequence, by repetition
+chord_sequence = mm.ChordSequence(chords)
+melody_with_chords_sequence = mm.sequences_lib.concatenate_sequences(melody_sequence, chord_sequence)
+
+# Drums
+drum_pattern = mm.DrumTrack(
+    [36, 0, 42, 0, 36, 0, 42, 0],
+    start_step=0,
+    steps_per_bar=num_steps//4,
+    steps_per_quarter=4,
+)
+
+music_sequence = mm.sequences_lib.concatenate_sequences(melody_with_chords_sequence, drum_pattern)
+music_sequence.tempos[0].qpm = 120  # Set the tempo
+
+# Save the full track to MIDI
+midi_file_with_chords_and_drums = os.path.join(output_dir, 'full_music.mid')
+mm.sequence_proto_to_midi_file(music_sequence, midi_file_with_chords_and_drums)
+
+print(f"Música completa guardada en: {midi_file_with_chords_and_drums}")
+</code></pre>
+<p><strong>Ejemplo completo:</strong></p>
+<pre class="line-numbers"><code class="language-python">
+import os
+import magenta.music as mm
+from magenta.models.melody_rnn import melody_rnn_sequence_generator
+
+# 1. Parameter configuration
+output_dir = 'generated_music'
+os.makedirs(output_dir, exist_ok=True)
+
+model_name = 'attention_rnn'
+melody_rnn = melody_rnn_sequence_generator.MelodyRnnSequenceGenerator(
+    model_name=model_name
+)
+
+temperature = 1.0
+num_steps = 128
+primer_sequence = None
+# 2. Melody generation
+melody_sequence = melody_rnn.generate(
+    temperature=temperature,
+    steps=num_steps,
+    primer_sequence=primer_sequence
+)
+
+# 3. Add chords
+chords = ["C", "G", "Am", "F"] * (num_steps // 4)
+chord_sequence = mm.ChordSequence(chords)
+melody_with_chords_sequence = mm.sequences_lib.concatenate_sequences(melody_sequence, chord_sequence)
+
+
+# 4. Add drums
+drum_pattern = mm.DrumTrack(
+    [36, 0, 42, 0, 36, 0, 42, 0],
+    start_step=0,
+    steps_per_bar=num_steps // 4,
+    steps_per_quarter=4,
+)
+music_sequence = mm.sequences_lib.concatenate_sequences(melody_with_chords_sequence, drum_pattern)
+music_sequence.tempos[0].qpm = 120
+
+
+# 5. Save to MIDI
+midi_file_with_chords_and_drums = os.path.join(output_dir, 'full_music.mid')
+mm.sequence_proto_to_midi_file(music_sequence, midi_file_with_chords_and_drums)
+
+print(f"Música completa guardada en: {midi_file_with_chords_and_drums}")
+
+</code></pre>
+<p><strong>Consejos adicionales:</strong></p>
+<ul>
+<li><strong>Experimente con los parámetros:</strong> Pruebe diferentes valores para <code>temperature</code>, <code>num_steps</code>.</li>
+<li><strong>Cargue sus propios archivos MIDI:</strong> Puede usar sus propias melodías como cebador (<code>primer_sequence</code>).</li>
+<li><strong>Entrene el modelo con sus propios datos:</strong> Si desea un estilo específico, intente entrenar el modelo con su propio conjunto de datos.</li>
+<li><strong>Explore la documentación de Magenta:</strong> Magenta proporciona buena documentación y ejemplos.</li>
+<li><strong>Nota:</strong> <code>primer_sequence</code> debe tener la forma de <code>mm.NoteSequence()</code>.</li>
+</ul>

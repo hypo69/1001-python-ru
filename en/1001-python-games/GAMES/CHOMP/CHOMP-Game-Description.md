@@ -1,0 +1,57 @@
+CHOMP:
+=================
+Difficulty: 5
+-----------------
+The game "CHOMP" is a two-player game played on a rectangular board representing a chocolate bar.
+One of the corners (usually the bottom left) represents a poisonous "square". Players take turns breaking off pieces from the bar, making moves. The goal of the game is to force the opponent to eat the poisoned square.
+The player who is forced to eat the poisoned square loses.
+Game rules:
+1. The game board is a rectangular chocolate bar.
+2. One of the corners (bottom left) is considered poisoned.
+3. Players take turns biting off a piece of the chocolate bar.
+4. The player selects a row and column (bites off a piece of chocolate).
+5. All cells to the right and above the selected position are removed.
+6. The goal is to force the opponent to eat the poisoned square.
+7. The player who eats the poisoned square loses.
+-----------------
+Algorithm:
+1.  Game start.
+2.  Prompt the user for the size of the chocolate bar (number of rows and columns).
+3.  Initialize the game board, representing the chocolate bar.
+4.  Start the game loop, until the game ends:
+    4.1.  Display the current state of the board on the screen.
+    4.2.  Prompt the current player for the coordinates of the piece of chocolate to bite off.
+    4.3.  Update the board state by biting off the selected piece.
+    4.4.  Check if the current player has eaten the poisoned square.
+    4.5.  If so, declare the opposite player as the winner and end the game.
+    4.6.  Pass the turn to the next player.
+5. End of game.
+-----------------
+Flowchart:
+```mermaid
+flowchart TD
+    Start["Start"] --> InputBoardSize["Input board size: <code><b>rows</b></code>, <code><b>cols</b></code>"]
+    InputBoardSize --> InitializeBoard["Initialize board: <code><b>board</b></code>"]
+    InitializeBoard --> LoopStart{"Start loop: until game over"}
+    LoopStart --> DisplayBoard["Display board"]
+    DisplayBoard --> InputMove["Player inputs move: <code><b>rowMove</b></code>, <code><b>colMove</b></code>"]
+    InputMove --> UpdateBoard["Update board: <code><b>board</b></code>"]
+    UpdateBoard --> CheckWin{"Check: <code><b>board[0][0] == ' '</b></code>?"}
+    CheckWin -- Yes --> OutputWinner["Display message: <b>Player wins!</b>"]
+    OutputWinner --> End["End"]
+    CheckWin -- No --> SwitchPlayer["Switch player"]
+    SwitchPlayer --> LoopStart
+    LoopStart -- No --> End
+```
+Legend:
+    Start - Game start.
+    InputBoardSize - Prompt for board size (number of rows and columns).
+    InitializeBoard - Initialize game board.
+    LoopStart - Start of game loop, which continues until the game is over.
+    DisplayBoard - Display current board state on screen.
+    InputMove - Prompt current player for coordinates of the chocolate piece to bite off.
+    UpdateBoard - Update board state after player's move.
+    CheckWin - Check if current player has eaten the poisoned square.
+    OutputWinner - Display message about the other player winning.
+    End - End of game.
+    SwitchPlayer - Switch turn to the next player.

@@ -1,0 +1,38 @@
+DICE:
+=================
+Dificultad: 2
+-----------------
+El juego "Dados" es un juego simple en el que el jugador lanza dos dados, y la computadora muestra la suma de los valores obtenidos.
+
+Reglas del juego:
+1.  La computadora simula el lanzamiento de dos dados de seis caras.
+2.  La computadora muestra en pantalla los valores de cada dado y su suma.
+-----------------
+Algoritmo:
+1.  Generar un número aleatorio del 1 al 6 para el primer dado.
+2.  Generar un número aleatorio del 1 al 6 para el segundo dado.
+3.  Calcular la suma de los valores de ambos dados.
+4.  Mostrar en pantalla el valor del primer dado, el valor del segundo dado y su suma.
+-----------------
+Diagrama de flujo:
+<pre class="line-numbers"><code class="language-mermaid">
+flowchart TD
+    Start["Start"] --> RollDice1["<p align='left'>Roll the first die: 
+    <code><b>dice1 = random(1, 6)</b></code></p>"]
+    RollDice1 --> RollDice2["<p align='left'>Roll the second die:
+    <code><b>dice2 = random(1, 6)</b></code></p>"]
+    RollDice2 --> CalculateSum["<p align='left'>Calculate the sum:
+    <code><b>total = dice1 + dice2</b></code></p>"]
+    CalculateSum --> OutputResults["<p align='left'>Display results:
+    <b>Die 1: <code>{dice1}</code></b><br>
+    <b>Die 2: <code>{dice2}</code></b><br>
+    <b>Sum: <code>{total}</code></b></p>"]
+    OutputResults --> End["End"]
+</code></pre>
+Leyenda:
+    Start - Inicio del programa.
+    RollDice1 - Se genera un número aleatorio del 1 al 6, que representa el resultado del lanzamiento del primer dado, y se guarda en la variable dice1.
+    RollDice2 - Se genera un número aleatorio del 1 al 6, que representa el resultado del lanzamiento del segundo dado, y se guarda en la variable dice2.
+    CalculateSum - Se calcula la suma de los valores de dice1 y dice2, el resultado se guarda en la variable total.
+    OutputResults - Se muestran en pantalla los valores de dice1, dice2 y su suma total.
+    End - Fin del programa.

@@ -1,0 +1,105 @@
+**Variables en Python: qué son y para qué sirven**
+
+Las variables son contenedores con nombre para almacenar datos en la memoria de la computadora. Permiten acceder a los datos por su nombre, en lugar de usarlos directamente.
+
+Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+x = 10
+y = '¡Hola, mundo!'
+</code></pre>
+<p>Aquí <code>x</code> e <code>y</code> son variables. <code>x</code> almacena el número 10, e <code>y</code> almacena la cadena '¡Hola, mundo!'.</p>
+<h3><strong>¿Cómo funcionan las variables en Python?</strong></h3>
+<ol>
+<li><strong>Tipado dinámico</strong>:
+En Python no es necesario especificar el tipo de variable al crearla, esto se hace automáticamente. Por ejemplo:
+<pre class="line-numbers"><code class="language-python">
+a = 42      # Integer (int)
+b = 3.14    # Floating-point number (float)
+c = 'Texto' # String (str)
+</code></pre>
+</li>
+<li><strong>Modelo de almacenamiento de datos por referencia</strong>:
+Las variables en Python son referencias a objetos en la memoria. Por ejemplo:
+<pre class="line-numbers"><code class="language-python">
+x = 5
+y = x  # y now also points to object 5
+x = 10 # x now points to another object 10, and y still points to 5
+</code></pre>
+</li>
+</ol>
+<hr>
+<h3><strong>Reglas para nombrar variables</strong></h3>
+<ol>
+<li><strong>Reglas obligatorias</strong>:
+<ul>
+<li>El nombre de una variable puede consistir en letras, dígitos y el símbolo <code>_</code>, pero no puede comenzar con un dígito.
+✅ Ejemplos: <code>my_var</code>, <code>_data</code>, <code>var123</code>
+❌ Incorrecto: <code>123var</code>, <code>my-var</code></li>
+<li>El nombre de una variable distingue entre mayúsculas y minúsculas.
+Ejemplo: <code>age</code> y <code>Age</code> son variables diferentes.</li>
+</ul>
+</li>
+<li><strong>Recomendaciones para nombres significativos</strong>:
+<ul>
+<li>Use nombres que reflejen la esencia de los datos.
+❌ Malo: <code>a = 100</code>, <code>b = 'Nombre'</code>
+✅ Bueno: <code>salary = 100</code>, <code>username = 'Nombre'</code></li>
+<li>Para nombres de varias palabras, use el estilo <strong>snake_case</strong>:
+Ejemplo: <code>user_age</code>, <code>total_cost</code>.</li>
+</ul>
+</li>
+<li><strong>Palabras reservadas</strong>:
+No se pueden usar palabras clave de Python (por ejemplo, <code>if</code>, <code>for</code>, <code>while</code>) como nombres de variables.</li>
+</ol>
+<p>Para ver una lista de palabras clave, ejecute:</p>
+<pre class="line-numbers"><code class="language-python">
+import keyword
+print(keyword.kwlist)
+</code></pre>
+<hr>
+<h3><strong>Características del almacenamiento de tipos de datos</strong></h3>
+<ol>
+<li><strong>Tipos de datos de Python</strong>:
+<ul>
+<li><strong>Números</strong>: <code>int</code>, <code>float</code>, <code>complex</code></li>
+<li><strong>Cadenas</strong>: <code>str</code></li>
+<li><strong>Listas</strong>: <code>list</code></li>
+<li><strong>Tuplas</strong>: <code>tuple</code></li>
+<li><strong>Conjuntos</strong>: <code>set</code></li>
+<li><strong>Diccionarios</strong>: <code>dict</code></li>
+</ul>
+</li>
+<li><strong>Tipos mutables e inmutables</strong>:
+<ul>
+<li><strong>Mutables</strong>: <code>list</code>, <code>dict</code>, <code>set</code>.
+Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+lst = [1, 2, 3]
+lst.append(4)  # The list has been modified
+</code></pre>
+</li>
+<li><strong>Inmutables</strong>: <code>int</code>, <code>float</code>, <code>str</code>, <code>tuple</code>.
+Ejemplo:
+<pre class="line-numbers"><code class="language-python">
+name = 'Alice'
+name[0] = 'B'  # Error, strings are immutable
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong>Función <code>type</code> para verificar el tipo</strong>:
+<pre class="line-numbers"><code class="language-python">
+x = 10
+print(type(x))  # <class 'int'>
+</code></pre>
+</li>
+</ol>
+<hr>
+<h3><strong>Consejos para principiantes</strong></h3>
+<ol>
+<li>Use nombres de variables significativos para que su código sea comprensible.</li>
+<li>Recuerde que Python no requiere la declaración del tipo de variable, pero tenga cuidado de no confundirse con los tipos de datos.</li>
+<li>Aprenda las funciones integradas para trabajar con variables, como <code>type()</code>, <code>id()</code>, y módulos, como <code>sys</code>, para comprender mejor cómo Python gestiona la memoria.</li>
+</ol>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">Al índice</a></p>

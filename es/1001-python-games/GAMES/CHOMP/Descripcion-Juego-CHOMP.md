@@ -1,0 +1,57 @@
+CHOMP:
+=================
+Dificultad: 5
+-----------------
+El juego "CHOMP" es un juego para dos jugadores que utiliza un tablero rectangular, que representa una tableta de chocolate.
+Una de las esquinas (normalmente la inferior izquierda) representa un "cuadrado" venenoso. Los jugadores se turnan para romper trozos de la tableta, realizando movimientos. El objetivo del juego es obligar al oponente a comer el cuadrado envenenado.
+El jugador que se ve obligado a comer el cuadrado envenenado pierde.
+Reglas del juego:
+1. El tablero de juego es una tableta de chocolate rectangular.
+2. Una de las esquinas (inferior izquierda) se considera envenenada.
+3. Los jugadores muerden por turnos un trozo de la tableta de chocolate.
+4. El jugador elige una fila y una columna (muerde un trozo de chocolate).
+5. Todas las celdas a la derecha y encima de la posición seleccionada se eliminan.
+6. El objetivo es obligar al oponente a comer el cuadrado envenenado.
+7. El jugador que come el cuadrado envenenado pierde.
+-----------------
+Algoritmo:
+1.  Inicio del juego.
+2.  Solicitar al usuario el tamaño de la tableta de chocolate (número de filas y columnas).
+3.  Inicializar el tablero de juego, que representa la tableta de chocolate.
+4.  Iniciar el bucle del juego, hasta que el juego termine:
+    4.1.  Mostrar el estado actual del tablero en la pantalla.
+    4.2.  Solicitar al jugador actual las coordenadas del trozo de chocolate a morder.
+    4.3.  Actualizar el estado del tablero, mordiendo el trozo seleccionado.
+    4.4.  Comprobar si el jugador actual ha comido el cuadrado envenenado.
+    4.5.  Si es así, declarar la victoria del jugador contrario y terminar el juego.
+    4.6.  Pasar el turno al siguiente jugador.
+5. Fin del juego.
+-----------------
+Diagrama de flujo:
+```mermaid
+flowchart TD
+    Start["Inicio"] --> InputBoardSize["Introducir tamaño del tablero: <code><b>rows</b></code>, <code><b>cols</b></code>"]
+    InputBoardSize --> InitializeBoard["Inicializar tablero: <code><b>board</b></code>"]
+    InitializeBoard --> LoopStart{"Iniciar bucle: hasta que el juego termine"}
+    LoopStart --> DisplayBoard["Mostrar tablero"]
+    DisplayBoard --> InputMove["Introducir movimiento del jugador: <code><b>rowMove</b></code>, <code><b>colMove</b></code>"]
+    InputMove --> UpdateBoard["Actualizar tablero: <code><b>board</b></code>"]
+    UpdateBoard --> CheckWin{"Comprobar: <code><b>board[0][0] == ' '</b></code>?"}
+    CheckWin -- Sí --> OutputWinner["Mostrar mensaje: <b>¡El jugador gana!</b>"]
+    OutputWinner --> End["Fin"]
+    CheckWin -- No --> SwitchPlayer["Cambiar jugador"]
+    SwitchPlayer --> LoopStart
+    LoopStart -- No --> End
+```
+Leyenda:
+    Start - Inicio del juego.
+    InputBoardSize - Solicitar el tamaño del tablero (número de filas y columnas).
+    InitializeBoard - Inicializar el tablero de juego.
+    LoopStart - Inicio del bucle del juego, que continúa hasta que el juego termina.
+    DisplayBoard - Mostrar el estado actual del tablero en la pantalla.
+    InputMove - Solicitar al jugador actual las coordenadas del trozo de chocolate a morder.
+    UpdateBoard - Actualizar el estado del tablero después del movimiento del jugador.
+    CheckWin - Comprobar si el jugador actual ha comido el cuadrado envenenado.
+    OutputWinner - Mostrar mensaje sobre la victoria del otro jugador.
+    End - Fin del juego.
+    SwitchPlayer - Cambiar el turno al siguiente jugador.

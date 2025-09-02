@@ -1,0 +1,290 @@
+<h2 dir="rtl">דף עזר: התאמה אישית של <span dir="ltr">LLM</span>: הנחיות, כוונון עדין של מודלים, דוגמאות קוד.</h2>
+
+<p dir="rtl">במאמר זה:</p>
+
+<ol>
+<li><p dir="rtl">כיצד נוצר &quot;אפקט הזיכרון&quot; ב-<span dir="ltr">LLM</span> (סקירה קצרה).</p></li>
+<li><p dir="rtl">למה ומתי יש צורך בכוונון עדין (<span dir="ltr">Fine-tuning</span>) של מודל.</p></li>
+<li><p dir="rtl">מתי כוונון עדין אינו הפתרון הטוב ביותר.</p></li>
+<li><p dir="rtl">הכנת נתונים.</p></li>
+<li><p dir="rtl">דוגמאות לכוונון עדין עבור <span dir="ltr"><strong>OpenAI (GPT)</strong></span>, <span dir="ltr"><strong>Google (Gemini)</strong></span> ו-<span dir="ltr"><strong>Anthropic (Claude)</strong></span> (שונה).</p></li>
+</ol>
+
+<h3 dir="rtl">1. כיצד <span dir="ltr">LLM</span> &quot;זוכר&quot; ו&quot;מתאים את עצמו&quot;: אשליית ההקשר</h3>
+
+<p dir="rtl">לפני שמדברים על כוונון עדין, חשוב להבין כיצד <span dir="ltr">LLM</span> מצליח ליצור תחושה של התאמה אישית מלכתחילה. זה חשוב כדי לא למהר לכוונון עדין יקר אם המשימה ניתנת לפתרון בדרכים פשוטות יותר:</p>
+
+<ul>
+<li><p dir="rtl"><strong>דרך חלון ההקשר (זיכרון לטווח קצר):</strong> במסגרת שיחה אחת, אתה שולח למודל לא רק את השאלה החדשה, אלא גם <strong>את כל ההתכתבות הקודמת או חלקה</strong>. המודל מעבד את כל הטקסט הזה כ&quot;הקשר&quot; אחד. בזכות זה הוא &quot;זוכר&quot; שורות קודמות וממשיך את המחשבה. המגבלה כאן היא אורך חלון ההקשר (מספר האסימונים).</p></li>
+<li><p dir="rtl"><strong>יצירת הנחיות מערכת (<span dir="ltr">System Prompt</span>):</strong> ניתן להקצות למודל תפקיד, טון וכללי התנהגות בתחילת כל שיחה. לדוגמה: &quot;אתה מומחה לפייתון, ענה בקצרה.&quot;</p></li>
+<li><p dir="rtl"><strong>הכללת מספר דוגמאות להתנהגות רצויה בבקשה (<span dir="ltr">Few-Shot Learning</span>):</strong> (זוגות קלט/פלט) מאפשרת למודל &quot;ללמוד&quot; תבנית זו ישירות במסגרת הבקשה הנוכחית.</p></li>
+<li><p dir="rtl"><strong>ניהול מצב בצד האפליקציה:</strong> השיטה החזקה ביותר. האפליקציה (הניגשת ל-<span dir="ltr">API</span>) יכולה לאחסן מידע על המשתמש (העדפות, היסטוריה, נתוני פרופיל) ולהוסיף אותו באופן דינמי להנחיה לפני שליחתו למודל.</p></li>
+</ul>
+
+<h3 dir="rtl">2. למה ומתי צריך כוונון עדין</h3>
+
+<p dir="rtl">כוונון עדין הוא תהליך של אימון נוסף של <span dir="ltr">LLM</span> בסיסי שכבר אומן על מערך נתונים ספציפי משלך. זה מאפשר למודל:</p>
+
+<ul>
+<li><p dir="rtl"><strong>להתאים סגנון וטון:</strong> המודל ידבר &quot;בשפה שלך&quot; - בין אם זה מדע קפדני, שיווק ידידותי או סלנג של קהילה מסוימת.</p></li>
+<li><p dir="rtl"><strong>לעקוב אחר הוראות ופורמטים ספציפיים:</strong> אם אתה זקוק לתשובות במבנה <span dir="ltr">JSON</span> מוגדר בקפדנות, או תמיד עם קבוצה מסוימת של שדות.</p></li>
+<li><p dir="rtl"><strong>להבין שפה ספציפית לתחום:</strong> אימון על התיעוד הפנימי שלך או על טקסטים מהתעשייה יעזור למודל להתמודד טוב יותר עם המינוח של הנישה שלך.</p></li>
+<li><p dir="rtl"><strong>לשפר ביצועים במשימות צרות:</strong> עבור סוגים מסוימים של שאילתות (למשל, סיווג ביקורות, יצירת קוד במסגרת ספציפית), כוונון עדין יכול לספק תשובות מדויקות ורלוונטיות יותר מאשר מודל בסיסי.</p></li>
+<li><p dir="rtl"><strong>לקצר את אורך ההנחיות:</strong> אם המודל כבר &quot;יודע&quot; את ההתנהגות הרצויה בזכות הכוונון, אינך צריך להזכיר לו זאת בכל פעם בהנחיה, מה שחוסך אסימונים ומפחית את ההשהיה.</p></li>
+</ul>
+
+<h3 dir="rtl">3. מתי כוונון עדין אינו הפתרון הטוב ביותר</h3>
+
+<p dir="rtl">כוונון עדין הוא כלי רב עוצמה אך לא אוניברסלי. אין להשתמש בו אם:</p>
+
+<ul>
+<li><p dir="rtl"><strong>המודל צריך לגשת לידע חדש:</strong> כוונון עדין משנה את משקולות המודל, אך אינו &quot;טוען&quot; לתוכו עובדות חדשות בזמן אמת. אם המשימה שלך היא לענות על שאלות על בסיס ידע המשתנה ללא הרף (מסמכי חברה, חדשות אחרונות), עדיף להשתמש ב-<span dir="ltr"><strong>Retrieval Augmented Generation (RAG)</strong></span>. כאן, המודל הבסיסי מקבל הקשר מבסיס הנתונים שלך <em>בזמן הבקשה</em>.</p></li>
+<li><p dir="rtl"><strong>משימה פשוטה נפתרת באמצעות הנדסת הנחיות:</strong> התחל תמיד עם הנדסת ההנחיות היעילה ביותר. אם המשימה נפתרת באמצעות הוראות פשוטות ודוגמאות של <span dir="ltr">few-shot</span>, כוונון עדין מיותר ויקר יותר.</p></li>
+<li><p dir="rtl"><strong>אין לך מספיק נתונים באיכות גבוהה:</strong> נתונים גרועים = מודל מכוונן גרוע.</p></li>
+</ul>
+
+<h3 dir="rtl">4. הכנת נתונים.</h3>
+
+<p dir="rtl">האיכות והכמות של הנתונים שלך הן קריטיות. המודל לומד מהדוגמאות שלך, ולכן הן חייבות להיות מדויקות, מגוונות ועקביות.</p>
+
+<ul>
+<li><p dir="rtl"><strong>פורמט:</strong> לרוב <span dir="ltr">JSON Lines (<code>.jsonl</code>)</span> או <span dir="ltr">CSV (<code>.csv</code>)</span>.</p></li>
+<li><p dir="rtl"><strong>מבנה נתונים:</strong> תלוי במשימה.</p>
+<ul>
+<li><p dir="rtl"><strong>כוונון הוראות (<span dir="ltr">Instruction-Response</span>):</strong> מתאים למשימות כלליות כמו &quot;שאלה-תשובה&quot;, פרפרזה, סיכום.</p>
+<pre class="line-numbers"><code class="language-json">{"input_text": "פרפרז את המשפט: 'טכנולוגיית הבינה המלאכותית מתפתחת במהירות.'", "output_text": "בינה מלאכותית מפגינה התקדמות מהירה."} 
+{"input_text": "מהי בירת צרפת?", "output_text": "בירת צרפת היא פריז."} 
+</code></pre>
+</li>
+<li><p dir="rtl"><strong>כוונון צ'אט (<span dir="ltr">Chat Tuning</span>):</strong> אידיאלי לאימון מודל לנהל שיחה בתפקיד או בסגנון מסוים.</p>
+<pre class="line-numbers"><code class="language-json">{"messages": [{"author": "user", "content": "היי! מה תמליץ לארוחת ערב?"}, {"author": "model", "content": "ערב טוב! היום יום מצוין לפסטה קרבונרה, או אם אתה מעדיף משהו קליל, סלט קיסר."} ]}
+{"messages": [{"author": "user", "content": "ספר לי על התכונות החדשות בפייתון 3.12."}, {"author": "model", "content": "פייתון 3.12 הציג f-strings עם הזחה, תחביר חדש לגנריים אוניברסליים וטיפול משופר בשגיאות Unicode."} ]}
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>כמות:</strong> מינימום של <span dir="ltr">100-200</span> דוגמאות איכותיות, אבל ככל שיותר, כן ייטב (אלפים למשימות רציניות).</p></li>
+<li><p dir="rtl"><strong>איכות:</strong> דיוק, עקביות של סגנון, טון ופורמט בכל מערך הנתונים.</p></li>
+</ul>
+
+<h3 dir="rtl">5. מודלים ופלטפורמות</h3>
+
+<h4 dir="rtl">5.1. <span dir="ltr">OpenAI</span></h4>
+
+<p dir="rtl"><span dir="ltr">OpenAI</span> מספקת <span dir="ltr">API</span> פשוט ואינטואיטיבי למדי לכוונון עדין.</p>
+
+<p dir="rtl"><strong>תהליך:</strong></p>
+
+<ol>
+<li><p dir="rtl">הכן נתונים בפורמט <span dir="ltr">JSONL</span>, כאשר כל שורה היא אובייקט עם מערך של <span dir="ltr"><code>messages</code></span> (כמו ב-<span dir="ltr">Chat Completions API</span>).</p></li>
+<li><p dir="rtl">העלה את קובץ הנתונים באמצעות ה-<span dir="ltr">API</span>.</p></li>
+<li><p dir="rtl">צור עבודת כוונון עדין, תוך ציון הקובץ שהועלה והמודל הבסיסי.</p></li>
+<li><p dir="rtl">עקוב אחר ההתקדמות.</p></li>
+<li><p dir="rtl">השתמש במודל החדש והמכוונן לפי המזהה שלו.</p></li>
+</ol>
+
+<p dir="rtl"><strong>דוגמת נתונים (קובץ <span dir="ltr"><code>training_data.jsonl</code></span>):</strong></p>
+
+<pre class="line-numbers"><code class="language-json">{"messages": [{"role": "system", "content": "אתה עוזר תמיכת לקוחות ידידותי של חברת IT."}, {"role": "user", "content": "האינטרנט שלי לא עובד."}, {"role": "assistant", "content": "אוי, אני מצטער על אי הנוחות! בוא ננסה להבין את זה. איך אתה מחובר לאינטרנט - באמצעות Wi-Fi או כבל?"}]}
+{"messages": [{"role": "system", "content": "אתה עוזר תמיכת לקוחות ידידותי של חברת IT."}, {"role": "user", "content": "איך אני יכול לאפס את הסיסמה שלי?"}, {"role": "assistant", "content": "כמובן! כדי לאפס את הסיסמה שלך, אנא עבור לדף הכניסה ולחץ על 'שכחת סיסמה?' מתחת לשדה הקלט. לאחר מכן עקוב אחר ההוראות שעל המסך."}]
+</code></pre>
+
+<p dir="rtl"><strong>דוגמת קוד פייתון:</strong></p>
+
+<p dir="rtl">תחילה, התקן: <span dir="ltr"><code>pip install openai</code></span></p>
+
+<pre class="line-numbers"><code class="language-python">import openai
+from openai import OpenAI
+import os
+
+# Set your OpenAI API key. It is recommended to use an environment variable.
+# os.environ["OPENAI_API_KEY"] = "sk-..."
+client = OpenAI()
+
+# 1. Upload data file
+try:
+    file_response = client.files.create(
+        file=open("training_data.jsonl", "rb"),
+        purpose="fine-tune"
+    )
+    file_id = file_response.id
+    print(f"הקובץ הועלה בהצלחה. מזהה קובץ: {file_id}")
+except openai.APIStatusError as e:
+    print(f"שגיאת העלאת קובץ: {e.status_code} - {e.response}")
+    exit()
+
+# 2. Create fine-tuning job
+try:
+    ft_job_response = client.fine_tuning.jobs.create(
+        training_file=file_id,
+        model="gpt-3.5-turbo" # A specific version can be specified, for example, "gpt-3.5-turbo-0125"
+    )
+    job_id = ft_job_response.id
+    print(f"עבודת כוונון עדין נוצרה. מזהה עבודה: {job_id}")
+    print("עקוב אחר סטטוס העבודה באמצעות ה-API או במגרש המשחקים של OpenAI.")
+except openai.APIStatusError as e:
+    print(f"שגיאה ביצירת עבודה: {e.status_code} - {e.response}")
+    exit()
+
+# Example for tracking status and getting the model name (run after creating the job):
+# # job_id = "ftjob-..." # Replace with your job ID
+# # job_status = client.fine_tuning.jobs.retrieve(job_id)
+# # print(f"סטטוס עבודה נוכחי: {job_status.status}")
+# # if job_status.status == "succeeded":
+# #     fine_tuned_model_name = job_status.fine_tuned_model
+# #     print(f"שם המודל המכוונן: {fine_tuned_model_name}")
+
+# 3. Using the fine-tuned model (after it is ready)
+# # Replace with the actual name of your model, obtained after successful fine-tuning
+# # fine_tuned_model_name = "ft:gpt-3.5-turbo-0125:my-org::abcd123"
+
+# # if 'fine_tuned_model_name' in locals() and fine_tuned_model_name:
+# #     try:
+# #         response = client.chat.completions.create(
+# #             model=fine_tuned_model_name,
+# #             messages=[
+# #                 {"role": "user", "content": "יש לי בעיה עם הכניסה שלי."}
+# #             ]
+# #         )
+# #         print("\nתגובה מהמודל המכוונן:")
+# #         print(response.choices[0].message.content)
+# #     except openai.APIStatusError as e:
+# #         print(f"שגיאה בשימוש במודל: {e.status_code} - {e.response}")
+</code></pre>
+
+<h4 dir="rtl">5.2. <span dir="ltr">Anthropic</span></h4>
+
+<p dir="rtl"><span dir="ltr">Anthropic</span> <strong>אינה מספקת <span dir="ltr">API</span> ציבורי לכוונון עדין של מודלי <span dir="ltr">Claude 3</span> שלה (<span dir="ltr">Opus, Sonnet, Haiku</span>) באותו מובן כמו <span dir="ltr">OpenAI</span> או <span dir="ltr">Google</span>.</strong></p>
+
+<p dir="rtl"><span dir="ltr">Anthropic</span> מתמקדת ביצירת מודלי בסיס חזקים מאוד, שלטענתם, עובדים מצוין עם הנדסת הנחיות מתקדמת ותבניות <span dir="ltr">RAG</span>, וממזערים את הצורך בכוונון עדין ברוב המקרים. עבור לקוחות ארגוניים גדולים או שותפים, ייתכנו תוכניות ליצירת מודלים &quot;מותאמים אישית&quot; או אינטגרציות מיוחדות, אך זו אינה תכונת כוונון עדין זמינה לציבור באמצעות <span dir="ltr">API</span>.</p>
+
+<p dir="rtl">אם אתה עובד עם <span dir="ltr">Claude 3</span>, המיקוד העיקרי שלך צריך להיות על:</p>
+
+<ul>
+<li><p dir="rtl"><strong>הנדסת הנחיות איכותית:</strong> התנסה עם הנחיות מערכת, דוגמאות של <span dir="ltr">few-shot</span> ועיצוב בקשות ברור. <span dir="ltr">Claude</span> ידוע ביכולתו לעקוב בקפדנות אחר הוראות, במיוחד בתגי <span dir="ltr">XML</span>.</p></li>
+<li><p dir="rtl"><strong>מערכות <span dir="ltr">RAG</span>:</strong> השתמש בבסיסי ידע חיצוניים כדי לספק למודל הקשר עדכני.</p></li>
+</ul>
+
+<h4 dir="rtl">5.3. <span dir="ltr">Google (Gemini)</span></h4>
+
+<p dir="rtl"><span dir="ltr">Google</span> מפתחת באופן פעיל יכולות כוונון עדין באמצעות פלטפורמת <span dir="ltr"><strong>Google Cloud Vertex AI</strong></span> שלה. זוהי פלטפורמת <span dir="ltr">ML</span> מלאה המספקת כלים להכנת נתונים, הפעלת עבודות אימון ופריסת מודלים. כוונון עדין זמין עבור משפחת המודלים של <span dir="ltr">Gemini</span>.</p>
+
+<p dir="rtl"><strong>תהליך:</strong></p>
+
+<ol>
+<li><p dir="rtl">הכן נתונים (<span dir="ltr">JSONL</span> או <span dir="ltr">CSV</span>) בפורמט <span dir="ltr"><code>input_text</code></span>/<span dir="ltr"><code>output_text</code></span> (עבור כוונון הוראות) או <span dir="ltr"><code>messages</code></span> (עבור כוונון צ'אט).</p></li>
+<li><p dir="rtl">העלה נתונים ל-<span dir="ltr">Google Cloud Storage (GCS)</span>.</p></li>
+<li><p dir="rtl">צור והפעל עבודת כוונון עדין באמצעות <span dir="ltr">Vertex AI Console</span> או <span dir="ltr">SDK</span>.</p></li>
+<li><p dir="rtl">פרוס את המודל המכוונן לנקודת קצה (<span dir="ltr">Endpoint</span>).</p></li>
+<li><p dir="rtl">השתמש במודל המכוונן דרך נקודת קצה זו.</p></li>
+</ol>
+
+<p dir="rtl"><strong>דוגמת נתונים (קובץ <span dir="ltr"><code>gemini_tuning_data.jsonl</code></span>):</strong></p>
+
+<pre class="line-numbers"><code class="language-json">{"input_text": "סכם את הרעיונות המרכזיים של ספר זה: 'הספר עוסק במסעו של גיבור, המתגבר על מכשולים ומוצא את עצמו.'", "output_text": "הדמות הראשית בספר יוצאת למסע טרנספורמטיבי, מתמודדת עם קשיים וזוכה להכרה עצמית."} 
+{"input_text": "הסבר את עקרון הפעולה של כור היתוך תרמו-גרעיני במילים פשוטות.", "output_text": "כור היתוך תרמו-גרעיני מנסה לשכפל את התהליך המתרחש בשמש: היתוך של גרעיני אטום קלים בטמפרטורות גבוהות מאוד, המשחרר כמות עצומה של אנרגיה."} 
+</code></pre>
+
+<p dir="rtl"><strong>דוגמת קוד פייתון (דורש <span dir="ltr"><code>google-cloud-aiplatform</code></span>):</strong></p>
+
+<p dir="rtl">תחילה, התקן: <span dir="ltr"><code>pip install google-cloud-aiplatform</code></span> ו-<span dir="ltr"><code>pip install google-cloud-storage</code></span></p>
+
+<pre class="line-numbers"><code class="language-python">import os
+from google.cloud import aiplatform
+from google.cloud import storage
+
+# --- Settings ---
+# Replace with your values:
+PROJECT_ID = "your-gcp-project-id"
+REGION = "us-central1"               # Choose a region that supports Gemini and Vertex AI
+BUCKET_NAME = "your-gcs-bucket-for-tuning" # Your GCS bucket name (must be created in advance)
+DATA_FILE_LOCAL_PATH = "gemini_tuning_data.jsonl"
+GCS_DATA_URI = f"gs://{BUCKET_NAME}/{DATA_FILE_LOCAL_PATH}"
+TUNED_MODEL_DISPLAY_NAME = "my-tuned-gemini-model"
+# --- End of settings ---
+
+# Initialize Vertex AI
+aiplatform.init(project=PROJECT_ID, location=REGION)
+
+# 1. Create data file (if not exists)
+with open(DATA_FILE_LOCAL_PATH, "w", encoding="utf-8") as f:
+    f.write('{"input_text": "סכם את הרעיונות המרכזיים של ספר זה: \'הספר עוסק במסעו של גיבור, המתגבר על מכשולים ומוצא את עצמו.\'", "output_text": "הדמות הראשית בספר יוצאת למסע טרנספורמטיבי, מתמודדת עם קשיים וזוכה להכרה עצמית."}\n')
+    f.write('{"input_text": "הסבר את עקרון הפעולה של כור היתוך תרמו-גרעיני במילים פשוטות.", "output_text": "כור היתוך תרמו-גרעיני מנסה לשכפל את התהליך המתרחש בשמש: היתוך של גרעיני אטום קלים בטמפרטורות גבוהות מאוד, המשחרר כמות עצומה של אנרגיה."}\n')
+print(f"קובץ נתונים '{DATA_FILE_LOCAL_PATH}' נוצר.")
+
+
+# 2. Upload data to Google Cloud Storage
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    """Uploads a file to a GCS bucket."""
+    storage_client = storage.Client(project=PROJECT_ID)
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(source_file_name)
+    print(f"קובץ '{source_file_name}' הועלה ל-'gs://{bucket_name}/{destination_blob_name}'.")
+
+try:
+    upload_blob(BUCKET_NAME, DATA_FILE_LOCAL_PATH, DATA_FILE_LOCAL_PATH)
+except Exception as e:
+    print(f"שגיאה בהעלאת קובץ ל-GCS. ודא שהדלי קיים ושיש לך הרשאות: {e}")
+    exit()
+
+# 3. Create and run fine-tuning job
+print(f"\nמתחיל כוונון עדין של המודל '{TUNED_MODEL_DISPLAY_NAME}'...")
+try:
+    # `tune_model` starts the job and returns the fine-tuned model after completion
+    tuned_model = aiplatform.Model.tune_model(
+        model_display_name=TUNED_MODEL_DISPLAY_NAME,
+        source_model_name="gemini-1.0-pro-001", # Base model Gemini Pro
+        training_data_path=GCS_DATA_URI,
+        tuning_method="SUPERVISED_TUNING",
+        train_steps=100, # Number of training steps. The optimal value depends on the data size.
+        # batch_size=16, # Can be specified
+        # learning_rate_multiplier=1.0 # Can be specified
+    )
+    print(f"מודל '{TUNED_MODEL_DISPLAY_NAME}' כוונן בהצלחה. מזהה מודל: {tuned_model.name}")
+    print("תהליך הכוונון העדין יכול לקחת זמן רב.")
+except Exception as e:
+    print(f"שגיאת כוונון עדין. בדוק את היומנים ב-Vertex AI Console: {e}")
+    exit()
+
+# 4. Deploy the fine-tuned model (for use)
+print(f"\nפורס את המודל המכוונן '{TUNED_MODEL_DISPLAY_NAME}' לנקודת קצה...")
+try:
+    endpoint = tuned_model.deploy(
+        machine_type="n1-standard-4", # Machine type for the endpoint. Choose a suitable one.
+        min_replica_count=1,
+        max_replica_count=1
+    )
+    print(f"המודל נפרס לנקודת הקצה: {endpoint.name}")
+    print("הפריסה יכולה גם לקחת מספר דקות.")
+except Exception as e:
+    print(f"שגיאה בפריסת המודל: {e}")
+    exit()
+
+# 5. Using the fine-tuned model
+print("\nבודק את המודל המכוונן...")
+prompt = "ספר לי על היכולות שלך לאחר האימון."
+instances = [{"prompt": prompt}] # For instruction tuning. If chat tuning, then {"messages": [...]} 
+
+try:
+    response = endpoint.predict(instances=instances)
+    print("\nתגובה מהמודל המכוונן:")
+    print(response.predictions[0])
+except Exception as e:
+    print(f"שגיאה בשימוש במודל המכוונן: {e}")
+
+# After finishing the work, don't forget to delete the endpoint and the model to avoid unnecessary costs:
+# endpoint.delete()
+# tuned_model.delete()
+</code></pre>
+
+<h3 dir="rtl">6. המלצות כלליות</h3>
+
+<ul>
+<li><p dir="rtl"><strong>התחל בקטן:</strong> אל תנסה לאמן מודל על אלפי דוגמאות מיד. התחל עם מערך נתונים קטן אך איכותי.</p></li>
+<li><p dir="rtl"><strong>חזור על הפעולה:</strong> כוונון עדין הוא תהליך איטרטיבי. אמן, הערך, התאם את הנתונים או ההיפרפרמטרים, חזור על הפעולה.</p></li>
+<li><p dir="rtl"><strong>ניטור:</strong> עקוב בקפידה אחר מדדי האימון (אובדן) והשתמש במערך נתוני אימות כדי למנוע התאמת יתר.</p></li>
+<li><p dir="rtl"><strong>הערכה:</strong> בדוק תמיד את המודל המכוונן על נתונים שהוא <em>מעולם לא ראה</em> במהלך האימון כדי להעריך את יכולת ההכללה שלו.</p></li>
+<li><p dir="rtl"><strong>עלות:</strong> זכור שכוונון עדין ופריסת נקודות קצה הם שירותים בתשלום. קח זאת בחשבון בתקציב שלך.</p></li>
+<li><p dir="rtl"><strong>תיעוד:</strong> עיין תמיד בתיעוד הרשמי של ספק ה-<span dir="ltr">LLM</span>. ממשקי <span dir="ltr">API</span> ויכולות מתפתחים כל הזמן.</p></li>
+</ul>

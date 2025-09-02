@@ -1,0 +1,138 @@
+<h1>Guía completa de variables WP-PageNavi para WordPress</h1>
+<p>La navegación por páginas es una parte importante de cualquier blog o sitio de noticias de WordPress. Una de las herramientas más populares para una paginación cómoda es el plugin <strong>WP-PageNavi</strong>. Permite reemplazar los enlaces estándar "Anterior / Siguiente" por una paginación más flexible y atractiva.</p>
+<p>Una de las características clave es la capacidad de personalizar el texto de los enlaces utilizando <strong>variables</strong> que sustituyen automáticamente el número de página actual, el número total de páginas y otra información.</p>
+<p>En este artículo, analizaremos <strong>todas las variables disponibles</strong>, ejemplos de su uso y mostraremos con capturas de pantalla dónde insertarlas.</p>
+<hr>
+<h2>Dónde encontrar la configuración de WP-PageNavi</h2>
+<p>Después de instalar el plugin, vaya al panel de administración de WordPress:</p>
+<p><strong>Ajustes → PageNavi</strong></p>
+<p>Allí verá un menú para personalizar el texto de los enlaces (ejemplo en la captura de pantalla a continuación):</p>
+<p><img src="https://github.com/hypo69/1001-python-ru/blob/master/assets/wordpress-pagenavi-guide/a34df3db-dcb3-4815-ac1c-a73c693fce39.png" alt="Configuración de WP-PageNavi en WordPress"></p>
+<p>👉 En cada campo, puede usar variables para mostrar dinámicamente la página actual, el número total de páginas y otros elementos de navegación.</p>
+<hr>
+<h2>Variables WP-PageNavi disponibles</h2>
+<p>El plugin proporciona un conjunto de marcadores de posición (variables de plantilla) que se pueden usar en la configuración:</p>
+<h3>🔹 %CURRENT_PAGE%</h3>
+<p>Muestra el <strong>número de la página actual</strong>.</p>
+<p>Ejemplo:</p>
+<pre class="line-numbers"><code class="language-powershell">
+
+Estás en la página %CURRENT_PAGE%
+
+</code></pre>
+<p>👉 Si estás en la página 3, el resultado será:
+<pre class="line-numbers"><code class="language-powershell">
+
+Estás en la página 3
+
+</code></pre>
+<hr>
+<h3>🔹 %TOTAL_PAGES%</h3>
+<p>Muestra el <strong>número total de páginas</strong>.</p>
+<p>Ejemplo:</p>
+<pre class="line-numbers"><code class="language-powershell">
+
+Total de páginas: %TOTAL_PAGES%
+
+</code></pre>
+<p>👉 Si hay 10 páginas en total, la salida será:
+<pre class="line-numbers"><code class="language-powershell">
+
+Total de páginas: 10
+
+</code></pre>
+<hr>
+<h3>🔹 %PAGE_NUMBER%</h3>
+<p>Se utiliza para mostrar el <strong>número de cada página</strong> en la lista.</p>
+<p>Ejemplo:</p>
+<pre class="line-numbers"><code class="language-powershell">
+
+Página %PAGE_NUMBER%
+
+</code></pre>
+<p>👉 En la navegación, aparecerán los enlaces:
+<pre class="line-numbers"><code class="language-powershell">
+
+Página 1 | Página 2 | Página 3 | ...
+
+</code></pre>
+<hr>
+<h2>Tabla de variables WP-PageNavi</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Descripción</th>
+<th>Ejemplo de configuración</th>
+<th>Resultado (si es la 3ª página de 10)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>%CURRENT_PAGE%</strong></td>
+<td>Número de la página actual</td>
+<td><code>Actualmente estás en la página %CURRENT_PAGE%</code></td>
+<td><code>Actualmente estás en la página 3</code></td>
+</tr>
+<tr>
+<td><strong>%TOTAL_PAGES%</strong></td>
+<td>Número total de páginas</td>
+<td><code>Total de páginas: %TOTAL_PAGES%</code></td>
+<td><code>Total de páginas: 10</code></td>
+</tr>
+<tr>
+<td><strong>%PAGE_NUMBER%</strong></td>
+<td>Número de cada página en la lista</td>
+<td><code>Página %PAGE_NUMBER%</code></td>
+<td><code>Página 1 | Página 2 | Página 3 …</code></td>
+</tr>
+<tr>
+<td><strong>1 (estático)</strong></td>
+<td>Primera página (sin variable)</td>
+<td><code>Primera</code> o <code>Página 1</code></td>
+<td><code>Primera</code></td>
+</tr>
+<tr>
+<td><strong>%TOTAL_PAGES%</strong></td>
+<td>Última página</td>
+<td><code>Página %TOTAL_PAGES%</code></td>
+<td><code>Página 10</code></td>
+</tr>
+<tr>
+<td><strong>← / → / …</strong></td>
+<td>Símbolos para flechas y abreviaturas</td>
+<td><code>← Atrás</code>, <code>Siguiente →</code>, <code>…</code></td>
+<td><code>← Atrás | 1 | 2 | 3 | … | 10 | Siguiente →</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Ejemplo de configuración completa</h2>
+<p>En la captura de pantalla anterior, puede rellenar los campos de la siguiente manera:</p>
+<ul>
+<li><strong>Text For Number Of Pages</strong>:<br><code>Página %CURRENT_PAGE% de %TOTAL_PAGES%</code></li>
+<li><strong>Text For Current Page</strong>:<br><code>%PAGE_NUMBER%</code></li>
+<li><strong>Text For Page</strong>:<br><code>%PAGE_NUMBER%</code></li>
+<li><strong>Text For First Page</strong>:<br><code>Primera</code></li>
+<li><strong>Text For Last Page</strong>:<br><code>Página %TOTAL_PAGES%</code></li>
+<li><strong>Text For Previous Page</strong>:<br><code>← Atrás</code></li>
+<li><strong>Text For Next Page</strong>:<br><code>Siguiente →</code></li>
+<li><strong>Text For Previous …</strong>:<br><code>…</code></li>
+<li><strong>Text For Next …</strong>:<br><code>…</code></li>
+</ul>
+<p>👉 Como resultado, los visitantes verán aproximadamente la siguiente navegación:</p>
+<pre class="line-numbers"><code class="language-powershell">
+
+← Atrás | Primera | 1 | 2 | 3 | … | Página 10 | Siguiente →
+
+</code></pre>
+<hr>
+<h2>Resumen</h2>
+<p>Las variables de WP-PageNavi son simples pero brindan flexibilidad en la configuración de la navegación:</p>
+<ul>
+<li><code>%CURRENT_PAGE%</code> — página actual</li>
+<li><code>%TOTAL_PAGES%</code> — total de páginas</li>
+<li><code>%PAGE_NUMBER%</code> — número de página específico</li>
+</ul>
+<p>Para la primera página, use <code>1</code>, y para la última página, use <code>%TOTAL_PAGES%</code>.</p>
+<p>Gracias a esta configuración, puede hacer que la navegación del sitio web sea más comprensible y conveniente para los visitantes.</p>

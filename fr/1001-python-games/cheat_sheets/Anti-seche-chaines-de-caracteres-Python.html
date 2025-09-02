@@ -1,0 +1,175 @@
+# Python String Cheat Sheet
+
+## 1. Creating Strings
+
+```python
+# Single quotes
+my_string = 'Hello, World!'
+
+# Double quotes
+my_string = "Hello, World!"
+
+# Triple quotes (for multiline strings or docstrings)
+my_multiline_string = """This is a
+multiline string."""
+```
+
+## 2. String Concatenation
+
+```python
+str1 = "Hello"
+str2 = "World"
+
+# Using the + operator
+result = str1 + " " + str2  # Result: "Hello World"
+
+# Using f-strings (formatted string literals) - Python 3.6+
+name = "Alice"
+age = 30
+f_string_result = f"My name is {name} and I am {age} years old." # Result: "My name is Alice and I am 30 years old."
+
+# Using .format() method
+format_result = "My name is {} and I am {} years old.".format(name, age) # Result: "My name is Alice and I am 30 years old."
+
+# Using join() method (efficient for lists of strings)
+words = ["Hello", "World"]
+join_result = " ".join(words) # Result: "Hello World"
+```
+
+## 3. String Length
+
+```python
+my_string = "Python"
+length = len(my_string) # Result: 6
+```
+
+## 4. Accessing Characters (Indexing)
+
+```python
+my_string = "Python"
+
+# Positive indexing (starts from 0)
+first_char = my_string[0] # Result: 'P'
+third_char = my_string[2] # Result: 't'
+
+# Negative indexing (starts from -1 for the last character)
+last_char = my_string[-1] # Result: 'n'
+second_to_last_char = my_string[-2] # Result: 'o'
+```
+
+## 5. Slicing Strings
+
+```python
+my_string = "Programming"
+
+# Slice from index 0 to 3 (exclusive of 3)
+slice1 = my_string[0:4] # Result: "Prog"
+
+# Slice from index 4 to the end
+slice2 = my_string[4:] # Result: "ramming"
+
+# Slice from the beginning to index 6 (exclusive of 6)
+slice3 = my_string[:7] # Result: "Program"
+
+# Slice with step (every second character)
+slice4 = my_string[::2] # Result: "Pormig"
+
+# Reverse a string
+reversed_string = my_string[::-1] # Result: "gnimmargorP"
+```
+
+## 6. String Methods
+
+*   **<code>.lower()</code>**: Converts string to lowercase.
+    ```python
+    text = "Hello World"
+    lower_text = text.lower() # Result: "hello world"
+    ```
+
+*   **<code>.upper()</code>**: Converts string to uppercase.
+    ```python
+    text = "Hello World"
+    upper_text = text.upper() # Result: "HELLO WORLD"
+    ```
+
+*   **<code>.strip()</code>**: Removes leading/trailing whitespace.
+    ```python
+    text = "  Hello World  "
+    stripped_text = text.strip() # Result: "Hello World"
+    ```
+
+*   **<code>.replace(old, new)</code>**: Replaces occurrences of a substring.
+    ```python
+    text = "Hello World"
+    new_text = text.replace("World", "Python") # Result: "Hello Python"
+    ```
+
+*   **<code>.split(separator)</code>**: Splits string into a list of substrings.
+    ```python
+    text = "apple,banana,cherry"
+    fruits = text.split(",") # Result: ['apple', 'banana', 'cherry']
+    ```
+
+*   **<code>.startswith(prefix)</code>**: Checks if string starts with a prefix.
+    ```python
+    text = "Hello World"
+    starts_with_hello = text.startswith("Hello") # Result: True
+    ```
+
+*   **<code>.endswith(suffix)</code>**: Checks if string ends with a suffix.
+    ```python
+    text = "Hello World"
+    ends_with_world = text.endswith("World") # Result: True
+    ```
+
+*   **<code>.find(substring)</code>**: Returns the lowest index of the substring (or -1 if not found).
+    ```python
+    text = "Hello World"
+    index = text.find("World") # Result: 6
+    ```
+
+*   **<code>.count(substring)</code>**: Returns the number of non-overlapping occurrences of substring.
+    ```python
+    text = "banana"
+    count_a = text.count("a") # Result: 3
+    ```
+
+*   **<code>.isdigit()</code>**: Checks if all characters in the string are digits.
+    ```python
+    num_str = "123"
+    is_digit = num_str.isdigit() # Result: True
+    ```
+
+*   **<code>.isalpha()</code>**: Checks if all characters in the string are alphabetic.
+    ```python
+    alpha_str = "Python"
+    is_alpha = alpha_str.isalpha() # Result: True
+    ```
+
+*   **<code>.isalnum()</code>**: Checks if all characters in the string are alphanumeric.
+    ```python
+    alnum_str = "Python123"
+    is_alnum = alnum_str.isalnum() # Result: True
+    ```
+
+## 7. String Formatting (Old Style - % Operator)
+
+```python
+name = "Bob"
+age = 25
+old_format_result = "My name is %s and I am %d years old." % (name, age) # Result: "My name is Bob and I am 25 years old."
+```
+
+## 8. Escape Sequences
+
+*   <code>\n</code>: Newline
+*   <code>\t</code>: Tab
+*   <code>\\</code>: Backslash
+*   <code>\'</code>: Single quote
+*   <code>\"</code>: Double quote
+
+```python
+# Example of escape sequences
+message = "This is a line.\nThis is another line.\tWith a tab." # Result: "This is a line.\nThis is another line.\tWith a tab."
+```
+

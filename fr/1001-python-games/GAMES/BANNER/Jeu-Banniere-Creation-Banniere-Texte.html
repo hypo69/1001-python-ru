@@ -1,0 +1,120 @@
+<h1>Banner Game: Text Banner Creation</h1>
+<p>The program creates a text banner from the text entered by the user. It greets the user, asks for the text, and displays it as a formatted banner.
+The code demonstrates the basic principles of working with functions, input/output, and conditional operators in Python.</p>
+<hr>
+<h2><strong>How the program works</strong></h2>
+<p>The program consists of two main parts:
+1. <strong><code>create_banner(text)</code> function</strong> – responsible for creating and displaying the text banner.
+2. <strong>Main program part</strong> – user interaction: greeting, text request, and input validation.</p>
+<hr>
+<h2><strong>Program Code</strong></h2>
+<pre class="line-numbers"><code class="language-python">
+# Banner Game: Text Banner Creation
+
+# Function to create a banner
+def create_banner(text):
+    """
+    Creates a text banner from the entered text.
+    :param text: The string to convert to a banner.
+    :return: None
+    """
+    # Determine the banner width (text length + 4 characters for the frame)
+    banner_width = len(text) + 4
+
+    # Display the top border of the banner
+    print("*" * banner_width)
+
+    # Display the text with a frame
+    print(f"* {text} *")
+
+    # Display the bottom border of the banner
+    print("*" * banner_width)
+
+# Main program part
+if __name__ == "__main__":
+    # Greet the user
+    print("Welcome to the Banner game!")
+    print("Enter text, and I will create a text banner for you.")
+
+    # Ask the user for text
+    user_text = input("Enter text: ")
+
+    # Check that the text is not empty
+    if user_text.strip() == "":
+        print("You did not enter any text. Please try again.")
+    else:
+        # Create and display the banner
+        print("\nYour banner is ready:")
+        create_banner(user_text)
+</code></pre>
+<hr>
+<h2><strong>Description of code operation</strong></h2>
+<h3>1. <strong><code>create_banner(text)</code> function</strong></h3>
+<ul>
+<li><strong>Accepts:</strong> the string <code>text</code> – the text to convert to a banner.</li>
+<li><strong>Executes:</strong>
+<ul>
+<li>Calculates the banner width, adding 4 characters for the frame (<code>*</code> and spaces).</li>
+<li>Displays the top and bottom borders of the banner using the <code>*</code> character.</li>
+<li>Displays the text surrounded by a frame.</li>
+</ul>
+</li>
+</ul>
+<h3>2. <strong>Main program part</strong></h3>
+<ul>
+<li><strong>Greets</strong> the user and explains what the program does.</li>
+<li><strong>Asks</strong> the user for text to create a banner.</li>
+<li><strong>Checks</strong> that the text is not empty:
+<ul>
+<li>If the user entered an empty string, the program reports an error and asks to try again.</li>
+<li>If text is entered, the program displays the created banner.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2><strong>Program Example</strong></h2>
+<p>If the user entered the text <code>"Hello"</code>, the program will display:</p>
+<pre class="line-numbers"><code class="language-text">
+*********
+* Hello *
+*********
+</code></pre>
+<hr>
+<h2><strong>How the interpreter analyzes the code</strong></h2>
+<h3><strong>Order of operator execution in Python</strong></h3>
+<ul>
+<li>Python reads the code line by line, starting from the top and going down.</li>
+<li>Each line is executed sequentially, unless it is part of a function, condition, or loop.</li>
+</ul>
+<h3><strong>Function definition</strong></h3>
+<ul>
+<li>Functions are defined using the <code>def</code> keyword.</li>
+<li>Defining a function does not execute its code, but only creates a "template" for a future call.</li>
+</ul>
+<h3><strong>Function calls</strong></h3>
+<ul>
+<li>When a function is called, Python goes to its definition and executes the code it contains.</li>
+<li>Once the function finishes executing, control returns to where it was called from.</li>
+</ul>
+<h3><strong>Conditional statements (if, else)</strong></h3>
+<ul>
+<li>Conditional statements check a condition and execute the code inside the block if the condition is true.</li>
+<li>If the condition is false, Python skips the block and goes to the next line.</li>
+</ul>
+<h3><strong>Loops (for, while)</strong></h3>
+<ul>
+<li>Loops allow a block of code to be executed repeatedly.</li>
+<li>Python checks the loop condition before each iteration.</li>
+</ul>
+<h3><strong>Assignment operators (=)</strong></h3>
+<ul>
+<li>Assignment operators store a value in a variable.</li>
+<li>This happens before other operations, such as function calls or conditional statements, are executed.</li>
+</ul>
+<h3><strong>Expressions and calculations</strong></h3>
+<ul>
+<li>Expressions (e.g., <code>len(text) + 4</code>) are evaluated before their result is used in other parts of the code.</li>
+</ul>
+<hr>
+<h2><strong>Summary</strong></h2>
+<p>This program demonstrates the basic principles of working with functions, input/output, and conditional statements in Python. It can be useful for beginners to learn the language and understand how the Python interpreter works.</p>

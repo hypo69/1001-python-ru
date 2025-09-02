@@ -1,0 +1,247 @@
+<h3 dir="rtl"><strong>תרחיש עבור <span dir="ltr">Gemini CLI</span>: משחק החיים</strong></h3>
+
+<h4 dir="rtl"><strong>שלב <span dir="ltr">1</span>: יצירת הוראת מערכת <span dir="ltr"><code>GEMINI.MD</code></span></strong></h4>
+<p dir="rtl">בתיקיית העבודה, צור קובץ <span dir="ltr"><code>GEMINI.md</code></span> והכנס לתוכו את הוראת המערכת. דוגמה להוראה:</p>
+<pre class="line-numbers"><code class="language-markdown">## 📘 Instruction for Python code generation
+
+### 1. General rules
+
+* Use **Python 3.10+**.
+* Ensure **clear, readable, and unambiguous coding style**.
+* **Every function, method, and class** must include:
+
+  * Type hints
+  * Full and correct documentation in `docstring` format (see section 3)
+  * Internal comments (`#`), where needed
+
+---
+
+### 2. Comments
+
+* Comments must be **accurate** and describe **what the code does**, not "what we do".
+* **Do NOT** use personal pronouns: `we do`, `we return`, `we send`, `we go`, etc.
+* **ONLY** use terms like: `extraction`, `execution`, `reading`, `replacement`, `checking`, `sending`, `the function performs`, `the function changes value`, etc.
+
+#### ❌ Example of a wrong comment:
+
+```python
+# Get the parameter value
+```
+
+#### ✅ Example of a correct comment:
+
+```python
+# The function extracts the parameter value
+```
+
+---
+
+### 3. Docstring (documentation format)
+
+Every function/method/class must include a `docstring` in the following format:
+
+```python
+def function(param: str, param1: Optional[str | dict | str] = None) -> dict | None:
+    """
+    Args:
+        param (str): Description of the `param` parameter.
+        param1 (Optional[str | dict | str], optional): Description of the `param1` parameter. Defaults to `None`.
+
+    Returns:
+        dict | None: Description of the return value. Returns a dictionary or `None`.
+
+    Raises:
+        SomeError: Description of the situation where `SomeError` occurs.
+
+    Example:
+        >>> function('param', 'param1')
+        {'param': 'param1'}
+    """
+```
+
+* **All parameters and return values must be described.**
+* The wording must be **concise, accurate, and unambiguous**.
+* Do not omit descriptions of parameters/return values/exceptions.
+
+---
+
+### 4. Type hints
+
+* **All variables, parameters, and return values** must be type-hinted.
+* Use Python 3.10+ syntax: `list[int]`, `dict[str, Any]`, `str | None`, etc.
+* Examples of correct type hints:
+
+#### ✅ Simple types:
+
+```python
+name: str = "John"
+count: int = 42
+flag: bool = True
+```
+
+#### ✅ Collections and complex types:
+
+```python
+from typing import Any, Optional, Callable, TypeAlias
+
+coordinates: tuple[float, float] = (55.75, 37.61)
+metadata: dict[str, Any] = {"debug": True}
+UserId: TypeAlias = int
+```
+
+#### ✅ Functions and methods:
+
+```python
+def get_user_name(user_id: int) -> str:
+    """Returns the user's name by their ID."""
+    ...
+```
+
+#### ✅ Asynchronous functions:
+
+```python
+async def fetch_users() -> AsyncIterator[dict[str, int | str]]:
+    ...
+```
+
+#### ✅ Generic types:
+
+```python
+from typing import TypeVar, Generic
+
+T = TypeVar("T")
+
+class Container(Generic[T]):
+    def __init__(self, value: T) -> None:
+        self.value = value
+
+    def get(self) -> T:
+        return self.value
+```
+
+---
+
+### 5. Other
+
+* Use `default_factory` in `dataclass` for mutable values (`list`, `dict`).
+* For `Optional` values, specify `T | None` (Python 3.10+) or `Optional[T]`.
+* For complex structures - use `TypeAlias`.
+
+---
+
+📌 **Hint**: When generating code, always include type hints, `docstring`, and avoid subjective phrasing in comments. The goal is a precise, reproducible, and formalized code structure as much as possible.
+
+
+</code></pre>
+
+<p dir="rtl">קובץ זה ישמש להגדרת <span dir="ltr">Gemini CLI</span>.</p>
+
+<p dir="rtl">לנוחות, ניצור תיקיית <span dir="ltr"><code>game</code></span>, שתאחסן את קבצי הפרויקט, ותיקיית <span dir="ltr"><code>scenarios</code></span>, שתאחסן תרחישים עבור <span dir="ltr">Gemini CLI</span>.</p>
+
+<p dir="rtl">הקובץ <span dir="ltr"><code>scenarios/life-create-code.md</code></span> יכיל הוראות ליצירת קוד &quot;משחק החיים&quot;, הקובץ <span dir="ltr"><code>scenarios/life-create-test.md</code></span> יכיל הוראות ליצירת בדיקות, והקובץ <span dir="ltr"><code>scenarios/life-create-doc.md</code></span> יכיל הוראות ליצירת תיעוד.</p>
+
+<p dir="rtl"><span dir="ltr">life-create-code.md</span>:</p>
+<pre class="line-numbers"><code class="language-markdown">בתוך תיקיית `game`, צור קובץ `life.py`.
+בתוכו, כתוב את מימוש "משחק החיים" של קונווי בפייתון, תוך שימוש בגישה מונחית עצמים.
+השתמש בספריות: `numpy`, `pygame` (לגרפיקה).
+
+
+דרישות:
+1.  צור מחלקה `Game`.
+2.  ב-`__init__`, המחלקה צריכה לקבל מימדי רשת (רוחב, גובה) וליצור שדה התחלתי אקראי.
+3.  צור מתודה `step()` המעדכנת את מצב המשחק בצעד אחד לפי הכללים:
+    - תא חי עם < 2 שכנים חיים מת (בדידות).
+    - תא חי עם 2 או 3 שכנים חיים שורד.
+    - תא חי עם > 3 שכנים חיים מת (צפיפות יתר).
+    - תא מת עם בדיוק 3 שכנים חיים הופך לחי (לידה).
+4.  צור מתודה `display()` או עקוף את `__str__` כדי להדפיס את השדה לקונסולה. השתמש בתווים, למשל '■' לתא חי ו-' ' לתא מת.
+5.  השתמש בספריית `numpy` לפעולות רשת יעילות.
+6.  בבלוק `if __name__ == '__main__':` הוסף דוגמה שיוצרת משחק ומריצה את הסימולציה בלולאה עם השהיה קטנה בין צעדים.
+7. להדמיית המשחק, השתמש ב-pygame או בספריית גרפיקה אחרת, אם אפשר.
+</code></pre>
+
+<hr>
+
+<p dir="rtl"><span dir="ltr">life-create-test.md</span>:</p>
+<pre class="line-numbers"><code class="language-markdown">בתוך תיקיית `game`, תוך שימוש בהקשר מהקובץ @life.py, צור קובץ עם בדיקות `test_life.py`. השתמש בפריימוורק pytest.
+
+הבדיקה צריכה לבדוק את האבולוציה הנכונה של מתנד "מהבהב" פשוט (שלושה תאים בשורה).
+
+תרחיש בדיקה:
+1.  ייבא את המחלקה `Game` מ-`life`.
+2.  צור פונקציית בדיקה, לדוגמה `test_blinker_oscillation`.
+3.  בתוך הבדיקה, צור מופע `Game` בגודל קבוע (לדוגמה, 5x5).
+4.  הגדר ידנית את המצב ההתחלתי של השדה כך שבמרכז תהיה שורה אופקית של שלושה תאים חיים (מהבהב).
+5.  קרא למתודה `game.step()`.
+6.  באמצעות `assert` ו-`numpy.array_equal`, בדוק שהשדה השתנה לשורה אנכית של שלושה תאים.
+7.  קרא למתודה `game.step()` שוב.
+8.  בדוק שהשדה חזר למצבו האופקי המקורי.
+</code></pre>
+
+<hr>
+
+<p dir="rtl"><span dir="ltr">life-create-doc.md</span>:</p>
+<pre class="line-numbers"><code class="language-markdown">נתח את הקבצים @life.py ו-@test_life.py בתוך תיקיית `game` וצור קובץ תיעוד `doc.md` על בסיסם.
+
+מבנה התיעוד צריך להיות כדלקמן:
+-   **כותרת:** # פרויקט "משחק החיים"
+-   **תיאור קצר:** הסבר מהו הפרויקט הזה (מימוש אוטומט תאי של קונווי).
+-   **מבנה קבצים:** תיאור קצר של מטרת הקבצים `life.py` ו-`test_life.py`.
+-   **כיצד להריץ את הסימולציה:** סעיף עם הפקודה להפעלת הקובץ הראשי (`python life.py`).
+-   **כיצד להריץ בדיקות:** סעיף עם הפקודה להפעלת בדיקות (`pip install pytest numpy`, ולאחר מכן `pytest`).
+</code></pre>
+
+<p dir="rtl">מבנה התיקיות ייראה כך:</p>
+
+<p dir="ltr">![1](assets/gemini_cli_3/1.png)</p>
+
+<h4 dir="rtl"><strong>שלב <span dir="ltr">2</span>: יצירת קוד &quot;משחק החיים&quot;</strong></h4>
+
+<p dir="rtl">הפעל את <span dir="ltr">gemini-cli</span> בטרמינל:</p>
+
+<p dir="ltr">![2](assets/gemini_cli_3/2.png)</p>
+<p dir="rtl">חשוב! ודא שאתה נמצא בתיקייה שבה נמצא קובץ <span dir="ltr"><code>GEMINI.md</code></span>.</p>
+
+<p dir="ltr">![3](assets/gemini_cli_3/3.png)</p>
+
+<p dir="ltr">![4](assets/gemini_cli_3/4.png)</p>
+
+<p dir="rtl">תן הרשאה ליצירת הקובץ:</p>
+<p dir="ltr">![5](assets/gemini_cli_3/5.png)</p>
+
+<p dir="rtl">לאחר מכן, <span dir="ltr">gemini-cli</span> ייצור את הקובץ <span dir="ltr"><code>life.py</code></span> בתיקיית <span dir="ltr"><code>game</code></span>:</p>
+<p dir="ltr">![6](assets/gemini_cli_3/6.png)</p>
+
+<p dir="rtl">המשך:</p>
+<pre class="line-numbers"><code class="language-bash">צור סביבה וירטואלית venv, התקן את התלויות הנדרשות והפעל את קוד המשחק.
+</code></pre>
+
+<p dir="ltr">![7](assets/gemini_cli_3/7.png)</p>
+
+<p dir="rtl">תן את ההרשאות הנדרשות להפעלת סקריפטים</p>
+<p dir="ltr">![8](assets/gemini_cli_3/8.png)</p>
+
+<p dir="ltr">pip</p>
+<p dir="ltr">![9](assets/gemini_cli_3/9.png)</p>
+
+<p dir="rtl">ולבסוף <span dir="ltr">gemini-cli</span> מפעיל את המשחק:</p>
+<p dir="ltr">![10](assets/gemini_cli_3/10.png)</p>
+
+<p dir="rtl">שלב <span dir="ltr">3</span>: יצירת בדיקות</p>
+
+<p dir="ltr">![12](assets/gemini_cli_3/12.png)</p>
+<p dir="ltr">![11](assets/gemini_cli_3/11.png)</p>
+
+<p dir="rtl">שגיאה</p>
+<p dir="ltr">![13](assets/gemini_cli_3/13.png)</p>
+
+<p dir="rtl"><span dir="ltr">gemini-cli</span> מנסה לפתור את הבעיה</p>
+<p dir="ltr">![14](assets/gemini_cli_3/14.png)</p>
+
+<p dir="ltr">![15](assets/gemini_cli_3/15.png)</p>
+
+<p dir="rtl">שלב אחרון - יצירת תיעוד</p>
+<p dir="ltr">![16](assets/gemini_cli_3/16.png)</p>
+
+<p dir="rtl">וואלה! התיעוד נוצר:</p>
+<p dir="ltr">![17](assets/gemini_cli_3/17.png)</p>

@@ -1,0 +1,111 @@
+<p>ANIMAL :
+=================
+Difficulty: 4
+-----------------
+The game "ANIMAL" is an animal guessing game in which the computer selects a random animal from a list, and the player tries to guess it by entering their guesses. The game continues until the player guesses the animal.</p>
+<p>Game rules:
+1. The computer selects a random animal from a predefined list.
+2. The player enters their guesses for the hidden animal.
+3. After each attempt, the computer indicates whether the player guessed the animal or not.
+4. The game continues until the player guesses the hidden animal.
+-----------------
+Algorithm:
+1. Define a list of animals.
+2. Select a random animal from the list.
+3. Start a loop "until the animal is guessed":
+    3.1 Ask the player to enter the animal's name.
+    3.2 If the entered name matches the hidden animal, go to step 4.
+    3.3 Otherwise, display the message "NO".
+4. Display the message "CORRECT ! ".
+5. End of game.
+-----------------
+Flowchart:
+<pre class="line-numbers"><code class="language-mermaid">
+flowchart TD
+    Start["Start"] --> InitializeAnimals["<p align='left'>Initialize animal list:<br><code><b>
+    animals = ['DOG', 'CAT', 'HORSE', 'COW', 'PIG']
+    </b></code></p>"]
+    InitializeAnimals --> ChooseRandomAnimal["Choose a random animal from the list: <code><b>targetAnimal</b></code>"]
+    ChooseRandomAnimal --> LoopStart{"Start loop: until guessed"}
+    LoopStart -- Yes --> InputAnimal["User enters animal name: <code><b>userAnimal</b></code>"]
+    InputAnimal --> CheckAnimal{"Check: <code><b>userAnimal == targetAnimal?</b></code>"}
+    CheckAnimal -- Yes --> OutputWin["Display message: <b>CORRECT !</b>"]
+    OutputWin --> End["End"]
+    CheckAnimal -- No --> OutputWrong["Display message: <b>NO</b>"]
+    OutputWrong --> LoopStart
+    LoopStart -- No --> End
+
+</code></pre>
+<p>Legend:
+    Start - Program start.
+    InitializeAnimals - Initialization of the animal list.
+    ChooseRandomAnimal - Selection of a random animal from the list and saving to the targetAnimal variable.
+    LoopStart - Start of the loop, which continues until the animal is guessed.
+    InputAnimal - Prompts the user to enter the animal's name and saves it to the userAnimal variable.
+    CheckAnimal - Checks if the entered animal name userAnimal matches the hidden animal targetAnimal.
+    OutputWin - Displays a win message if the animal names match.
+    End - Program end.
+    OutputWrong - Displays the message "NO" if the entered animal name does not match the hidden animal.</p>
+<pre class="line-numbers"><code class="language-python">
+import random
+
+# List of animals for the game
+animals = ['DOG', 'CAT', 'HORSE', 'COW', 'PIG']
+
+# Choose a random animal from the list
+targetAnimal = random.choice(animals)
+
+# Start the loop until the animal is guessed
+while True:
+    # Ask the user to enter the animal's name
+    userAnimal = input("Guess the animal (DOG, CAT, HORSE, COW, PIG): ").upper()
+
+    # Check if the user guessed the animal
+    if userAnimal == targetAnimal:
+        print("CORRECT !") # Display the correct message
+        break # End the loop if the animal is guessed
+    else:
+        print("NO") # Display the incorrect message
+
+</code></pre>
+<p>Code explanation:</p>
+<ol>
+<li><strong>Importing the <code>random</code> module</strong> :
+<ul>
+<li><code>import random</code> : Imports the <code>random</code> module, which is used to select an animal at random.</li>
+</ul>
+</li>
+<li><strong>List of animals</strong> :
+<ul>
+<li><code>animals = ['DOG', 'CAT', 'HORSE', 'COW', 'PIG']</code> : Creates a list of strings with animal names.</li>
+</ul>
+</li>
+<li><strong>Random animal selection</strong> :
+<ul>
+<li><code>targetAnimal = random.choice(animals)</code> : Selects a random animal from the <code>animals</code> list and saves it to the <code>targetAnimal</code> variable.</li>
+</ul>
+</li>
+<li><strong>Main game loop <code>while True:</code></strong> :
+<ul>
+<li>An infinite loop that continues until the player guesses the animal.</li>
+<li><strong>Data entry</strong> :
+<ul>
+<li><code>userAnimal = input("Guess the animal (DOG, CAT, HORSE, COW, PIG) : ").upper()</code> : Prompts the user to enter the animal's name and converts it to uppercase for case-insensitive comparison.</li>
+</ul>
+</li>
+<li><strong>Win condition</strong> :
+<ul>
+<li><code>if userAnimal == targetAnimal:</code> : Checks if the animal name entered by the user matches the hidden one.</li>
+<li><code>print("CORRECT !")</code> : Displays a win message if the animal is guessed.</li>
+<li><code>break</code> : Ends the loop (and the game) if the animal is guessed.</li>
+</ul>
+</li>
+<li><strong>Error message</strong> :
+<ul>
+<li><code>else:</code> : Executes if the entered animal name does not match the hidden one.</li>
+<li><code>print("NO")</code> : Displays the message "NO" if the answer is incorrect.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>

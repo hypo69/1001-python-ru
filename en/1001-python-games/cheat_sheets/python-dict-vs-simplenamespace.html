@@ -1,0 +1,222 @@
+<p>Comparison of <code>dict</code> and <code>SimpleNamespace</code> in Python. Features, advantages, when to use which.</p>
+<p>Both allow storing named data, but they do so differently, and each has its own characteristics.</p>
+<h2>1. Dictionaries (<code>dict</code>)</h2>
+<ul>
+<li><strong>A dictionary in Python</strong> – is a data structure that stores "key-value" pairs. Keys must be immutable data types (e.g., strings, numbers, tuples), and values can be anything.</li>
+<li><strong>Creation:</strong> Dictionaries are created using curly braces <code>{}</code> or the <code>dict()</code> function.</li>
+<li><strong>Accessing values:</strong> Values are accessed by key using square brackets <code>[]</code>.</li>
+<li><strong>Modification:</strong> Values can be changed, new "key-value" pairs can be added, and existing ones can be deleted.</li>
+<li><strong>Example:</strong>
+<pre class="line-numbers"><code class="language-python">
+my_dict = {
+    "name": "Alice",
+    "age": 30,
+    "city": "New York"
+}
+
+print(my_dict["name"])  # Will print "Alice"
+
+my_dict["age"] = 31 # changing value
+print(my_dict["age"]) # Will print 31
+my_dict["occupation"] = "Engineer" # Adding new value
+print(my_dict)
+del my_dict["city"] # Deleting value
+print(my_dict)
+</code></pre>
+</li>
+</ul>
+<h2>2. <code>SimpleNamespace</code></h2>
+<ul>
+<li><strong>SimpleNamespace</strong> – is a simple class from the <code>types</code> module that allows accessing values as object attributes. It is good for storing and passing a set of data.</li>
+<li><strong>Creation:</strong> <code>SimpleNamespace</code> is created using the <code>SimpleNamespace()</code> function and passing named arguments.</li>
+<li><strong>Accessing values:</strong> Values are accessed as object attributes using dot notation <code>.</code>.</li>
+<li><strong>Modification:</strong> Values can be changed, new attributes can be added, and existing ones can be deleted.</li>
+<li><strong>Example:</strong>
+<pre class="line-numbers"><code class="language-python">
+from types import SimpleNamespace
+
+my_namespace = SimpleNamespace(
+    name="Bob",
+    age=25,
+    city="London"
+)
+
+print(my_namespace.name)  # Will print "Bob"
+my_namespace.age = 26 # changing value
+print(my_namespace.age) # Will print 26
+my_namespace.occupation = "Doctor" # Adding new value
+print(my_namespace)
+del my_namespace.city # Deleting value
+print(my_namespace)
+</code></pre>
+</li>
+</ul>
+<h2>Comparison of <code>dict</code> and <code>SimpleNamespace</code></h2>
+<table>
+<thead>
+<tr>
+<th>Characteristic</th>
+<th><code>dict</code></th>
+<th><code>SimpleNamespace</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Access to values</strong></td>
+<td><code>my_dict["key"]</code></td>
+<td><code>my_namespace.attribute</code></td>
+</tr>
+<tr>
+<td><strong>Creation</strong></td>
+<td><code>{}</code> or <code>dict()</code></td>
+<td><code>SimpleNamespace()</code></td>
+</tr>
+<tr>
+<td><strong>Keys/attributes</strong></td>
+<td>Keys - any immutable objects</td>
+<td>Attributes - strings, like regular objects</td>
+</tr>
+<tr>
+<td><strong>Mutability</strong></td>
+<td>Mutable</td>
+<td>Mutable</td>
+</tr>
+<tr>
+<td><strong>Convenience</strong></td>
+<td>Flexible, allows iteration over keys and values, dynamic key usage</td>
+<td>Convenient for simple attribute-like access to values, like regular objects</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Data storage and processing</td>
+<td>Data storage and transfer as attributes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>When to use which?</strong></p>
+<ul>
+<li><strong>Use <code>dict</code> when:</strong>
+<ul>
+<li>You have a dynamic set of keys that may change during program execution.</li>
+<li>You need to use dictionary methods for data processing and iteration.</li>
+<li>You are working with data in "key-value" format.</li>
+<li>You need flexibility and dynamism.</li>
+<li>You need keys that are not strings.</li>
+</ul>
+</li>
+<li><strong><code>SimpleNamespace</code>:</strong>
+<ul>
+<li>When you need to create an object to store data and access it as attributes.</li>
+<li>When you have a predefined set of attributes.</li>
+<li>When you want the code to be more readable when accessing attributes (using dot notation instead of square brackets).</li>
+<li>When you need simplicity and convenience when creating objects for data storage.</li>
+<li>When the data structure should not change dynamically.</li>
+</ul>
+</li>
+</ul>
+<h2>Differences between <code>dict</code> and <code>SimpleNamespace</code></h2>
+<table>
+<thead>
+<tr>
+<th>Characteristic</th>
+<th><code>dict</code></th>
+<th><code>SimpleNamespace</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Structure</strong></td>
+<td>Stores "key-value" pairs</td>
+<td>Stores values as object attributes</td>
+</tr>
+<tr>
+<td><strong>Access to values</strong></td>
+<td>Uses square brackets <code>[]</code> and key: <code>my_dict["key"]</code></td>
+<td>Uses dot notation <code>.</code>: <code>my_namespace.attribute</code></td>
+</tr>
+<tr>
+<td><strong>Keys/Attributes</strong></td>
+<td>Keys can be any <em>immutable</em> objects (strings, numbers, tuples)</td>
+<td>Attributes must be strings, like variable names, but are essentially dictionary keys in <code>.attr</code> form</td>
+</tr>
+<tr>
+<td><strong>Flexibility</strong></td>
+<td>Very flexible, supports many methods (<code>keys()</code>, <code>values()</code>, <code>items()</code>)</td>
+<td>Less flexible, no large set of built-in methods</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Storage and processing of arbitrary data</td>
+<td>Storage and transfer of <em>named</em> data as an object, often with a predefined structure</td>
+</tr>
+<tr>
+<td><strong>Representation</strong></td>
+<td>String representation is <code>{"key": "value"}</code></td>
+<td>String representation is <code>namespace(attr="value")</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Advantages of <code>dict</code></h2>
+<ol>
+<li><strong>Key flexibility:</strong> Dictionary keys can be any immutable data type (strings, numbers, tuples). This allows creating dictionaries with complex structures, where keys can be, for example, coordinates of points or or other complex objects.</li>
+<li><strong>Many methods:</strong> Dictionaries provide a rich set of built-in methods for working with data:
+<ul>
+<li><code>keys()</code>: Returns all keys of the dictionary.</li>
+<li><code>values()</code>: Returns all values of the dictionary.</li>
+<li><code>items()</code>: Returns all "key-value" pairs as tuples.</li>
+<li><code>get()</code>: Returns the value for a key or a default value if the key is not found.</li>
+<li><code>pop()</code>: Removes an element by key and returns its value.</li>
+<li>and many others.</li>
+</ul>
+</li>
+<li><strong>Dynamic creation:</strong> Dictionaries can be easily extended by adding new "key-value" pairs during program execution.</li>
+<li><strong>Iteration:</strong> Dictionaries can be conveniently iterated: by keys, by values, or by key-value pairs.</li>
+<li><strong>Convenient for JSON:</strong> Dictionaries have a convenient representation for working with JSON data</li>
+</ol>
+<h2>Advantages of <code>SimpleNamespace</code></h2>
+<ol>
+<li><strong>Access to attributes via dot notation:</strong> Accessing values using dot notation (<code>my_namespace.attribute</code>) is more readable and convenient than using square brackets and keys (<code>my_dict["key"]</code>). This makes the code look more like working with regular objects.</li>
+<li><strong>Convenience when passing data:</strong> <code>SimpleNamespace</code> is convenient to use for passing data to functions or modules when you need to pass a set of related named values. You can pass one object instead of multiple variables.</li>
+<li><strong>Ease of creation:</strong> <code>SimpleNamespace</code> is easy to create by passing named arguments: <code>SimpleNamespace(name="Alice", age=30)</code>.</li>
+<li><strong>Less code:</strong> For simple access to values as object attributes, using <code>SimpleNamespace</code> may require less code than working with dictionaries.</li>
+<li><strong>Predictable structure:</strong> Unlike a dictionary, SimpleNamespace creates an object with specific attributes.</li>
+</ol>
+<p><strong>When to use which:</strong></p>
+<ul>
+<li><strong>Use <code>dict</code> when:</strong>
+<ul>
+<li>You have a dynamic set of keys that may change during program execution.</li>
+<li>You need to use dictionary methods for data processing and iteration.</li>
+<li>You are working with data in "key-value" format.</li>
+<li>You need flexibility and dynamism.</li>
+<li>You need keys that are not strings.</li>
+</ul>
+</li>
+<li><strong>Use <code>SimpleNamespace</code> when:</strong>
+<ul>
+<li>You have a predefined set of named values (attributes).</li>
+<li>You need to pass a set of data as an object.</li>
+<li>You need more readable dot notation for accessing values.</li>
+<li>You need simplicity and convenience when creating objects for data storage.</li>
+<li>When the data structure should not change dynamically.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>You have a function that takes user data.</p>
+<pre class="line-numbers"><code class="language-python">
+from types import SimpleNamespace
+
+def process_user_data_with_dict(user_data: dict):
+    print(f"User: {user_data.get('name', 'Unknown')}, Age: {user_data.get('age', 'Unknown')}")
+
+def process_user_data_with_namespace(user_data: SimpleNamespace):
+     print(f"User: {user_data.name}, Age: {user_data.age}")
+
+user_dict = {"name": "Alice", "age": 30}
+user_namespace = SimpleNamespace(name="Bob", age=25)
+
+process_user_data_with_dict(user_dict)
+process_user_data_with_namespace(user_namespace)
+</code></pre>
+<p>In this example, for <code>dict</code> we use the <code>get</code> method to get values, with a preset value if the key is not found. For <code>SimpleNamespace</code> we access attributes directly, which is more readable.</p>

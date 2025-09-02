@@ -1,0 +1,190 @@
+<h3 dir="rtl"><strong>זמן פולינומי</strong></h3>
+
+<p dir="rtl"><strong>זמן פולינומי</strong> הוא מונח המשמש בתורת הסיבוכיות החישובית לתיאור זמן הריצה של אלגוריתם שגדל כפולינום של גודל הקלט. אם זמן הריצה של אלגוריתם ניתן לביטוי כ-<span dir="ltr"> \(O(n^k)\)</span>, כאשר <span dir="ltr">\(n\)</span> הוא גודל הקלט ו-<span dir="ltr">\(k\)</span> הוא קבוע, אז אלגוריתם כזה רץ בזמן פולינומי.</p>
+
+<h4 dir="rtl"><strong>דוגמאות:</strong></h4>
+<ol>
+<li><p dir="rtl"><strong>מיון רשימה</strong>: אלגוריתמים כמו מיון מיזוג או מיון מהיר רצים ב-<span dir="ltr"> \(O(n \log n)\)</span>, שהוא זמן פולינומי.</p></li>
+<li><p dir="rtl"><strong>מציאת המסלול הקצר ביותר בגרף</strong>: אלגוריתם דייקסטרה רץ ב-<span dir="ltr"> \(O(n^2)\)</span> או <span dir="ltr"> \(O(n \log n)\)</span> בהתאם למימוש, וגם הוא פולינומי.</p></li>
+</ol>
+
+<h4 dir="rtl"><strong>מאפיינים:</strong></h4>
+<ul>
+<li><p dir="rtl">אלגוריתמים שרצים בזמן פולינומי נחשבים <strong>יעילים</strong> ו<strong>ניתנים ליישום מעשי</strong>.</p></li>
+<li><p dir="rtl">בעיות שניתן לפתור בזמן פולינומי שייכות למחלקה <span dir="ltr"><strong>P</strong></span>.</p></li>
+</ul>
+
+<hr>
+
+<h3 dir="rtl"><strong>זמן אקספוננציאלי</strong></h3>
+
+<p dir="rtl"><strong>זמן אקספוננציאלי</strong> הוא זמן הריצה של אלגוריתם שגדל באופן אקספוננציאלי בהתאם לגודל הקלט. אם זמן הריצה ניתן לביטוי כ-<span dir="ltr"> \(O(k^n)\)</span>, כאשר <span dir="ltr">\(n\)</span> הוא גודל הקלט ו-<span dir="ltr">\(k\)</span> הוא קבוע, אז אלגוריתם כזה רץ בזמן אקספוננציאלי.</p>
+
+<h4 dir="rtl"><strong>דוגמאות:</strong></h4>
+<ol>
+<li><p dir="rtl"><strong>בעיית הסוכן הנוסע</strong>: פתרון בשיטת כוח גס של כל המסלולים האפשריים דורש זמן של <span dir="ltr"> \(O(n!)\)</span>, שהוא גרוע יותר מאקספוננציאלי.</p></li>
+<li><p dir="rtl"><strong>מעבר על כל תתי הקבוצות</strong>: אלגוריתם שבודק את כל תתי הקבוצות האפשריות של קבוצה בגודל <span dir="ltr">\(n\)</span> רץ ב-<span dir="ltr"> \(O(2^n)\)</span>.</p></li>
+</ol>
+
+<h4 dir="rtl"><strong>מאפיינים:</strong></h4>
+<ul>
+<li><p dir="rtl">אלגוריתמים שרצים בזמן אקספוננציאלי נחשבים <strong>לא יעילים</strong> עבור קלטים גדולים, מכיוון שזמן הריצה הופך לגדול באופן בלתי מעשי גם עבור <span dir="ltr">\(n\)</span> קטנים יחסית.</p></li>
+<li><p dir="rtl">בעיות שניתן לפתור רק בזמן אקספוננציאלי שייכות לעיתים קרובות למחלקות <span dir="ltr"><strong>NP-קשות</strong></span> או <span dir="ltr"><strong>NP-שלמה</strong></span>.</p></li>
+</ul>
+
+<hr>
+
+<h3 dir="rtl"><strong>השוואה בין זמן פולינומי לזמן אקספוננציאלי</strong></h3>
+
+<table dir="rtl">
+<thead>
+<tr>
+<th><strong>מאפיין</strong></th>
+<th><strong>זמן פולינומי</strong></th>
+<th><strong>זמן אקספוננציאלי</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>גידול זמן ריצה</strong></td>
+<td>איטי (לדוגמה, <span dir="ltr"> \(n^2\)</span>, <span dir="ltr"> \(n^3\)</span>)</td>
+<td>מהיר (לדוגמה, <span dir="ltr"> \(2^n\)</span>, <span dir="ltr"> \(3^n\)</span>)</td>
+</tr>
+<tr>
+<td><strong>דוגמאות לבעיות</strong></td>
+<td>מיון, מציאת המסלול הקצר ביותר</td>
+<td>בעיית הסוכן הנוסע, מעבר על תתי קבוצות</td>
+</tr>
+<tr>
+<td><strong>ישימות מעשית</strong></td>
+<td>יעיל עבור נתונים גדולים</td>
+<td>לא ישים עבור נתונים גדולים</td>
+</tr>
+<tr>
+<td><strong>מחלקת סיבוכיות</strong></td>
+<td><span dir="ltr">P</span></td>
+<td><span dir="ltr">NP</span>-קשה, <span dir="ltr">NP</span>-שלמה</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<h3 dir="rtl"><strong>מדוע זה חשוב?</strong></h3>
+
+<ol>
+<li><p dir="rtl"><strong>זמן פולינומי</strong>:</p>
+<ul>
+<li><p dir="rtl">אלגוריתמים שרצים בזמן פולינומי נחשבים <strong>ישימים מעשית</strong> מכיוון שהם יכולים לעבד כמויות גדולות של נתונים בזמן סביר.</p></li>
+<li><p dir="rtl">בעיות ממחלקת <span dir="ltr"><strong>P</strong></span> (פתירות בזמן פולינומי) הן הבסיס ליישומים רבים במדעי המחשב, כגון עיבוד נתונים, רשתות, קריפטוגרפיה ובינה מלאכותית.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>זמן אקספוננציאלי</strong>:</p>
+<ul>
+<li><p dir="rtl">אלגוריתמים שרצים בזמן אקספוננציאלי הופכים ל<strong>בלתי מעשיים</strong> גם עבור קלטים קטנים יחסית. לדוגמה, עבור <span dir="ltr">\(n = 100\)</span>, <span dir="ltr"> \(2^n\)</span> כבר עולה על מספר האטומים ביקום הנצפה.</p></li>
+<li><p dir="rtl">בעיות שניתן לפתור רק בזמן אקספוננציאלי דורשות לעיתים קרובות שימוש ב<strong>שיטות קירוב</strong>, <strong>היוריסטיקות</strong> או <strong>חישוב מקבילי</strong>.</p></li>
+</ul>
+</li>
+</ol>
+
+<hr>
+
+<h3 dir="rtl"><strong>דוגמה להבנה</strong></h3>
+
+<p dir="rtl">תאר לעצמך שיש לך בעיה ואתה רוצה לפתור אותה עבור <span dir="ltr">\(n = 10\)</span> ו-<span dir="ltr"> \(n = 100\)</span>:</p>
+
+<ul>
+<li><p dir="rtl"><strong>זמן פולינומי (<span dir="ltr"> \(n^2\)</span>)</strong>:</p>
+<ul>
+<li><p dir="rtl">עבור <span dir="ltr">\(n = 10\)</span>: <span dir="ltr"> \(10^2 = 100\)</span> פעולות.</p></li>
+<li><p dir="rtl">עבור <span dir="ltr">\(n = 100\)</span>: <span dir="ltr"> \(100^2 = 10\,000\)</span> פעולות.</p></li>
+</ul>
+</li>
+<li><p dir="rtl"><strong>זמן אקספוננציאלי (<span dir="ltr"> \(2^n\)</span>)</strong>:</p>
+<ul>
+<li><p dir="rtl">עבור <span dir="ltr">\(n = 10\)</span>: <span dir="ltr"> \(2^{10} = 1\,024\)</span> פעולות.</p></li>
+<li><p dir="rtl">עבור <span dir="ltr">\(n = 100\)</span>: <span dir="ltr"> \(2^{100} \approx 1.26 \times 10^{30}\)</span> פעולות.</p></li>
+</ul>
+</li>
+</ul>
+
+<p dir="rtl">כפי שניתן לראות, עבור <span dir="ltr">\(n = 100\)</span> אלגוריתם פולינומי יבצע <span dir="ltr">10,000</span> פעולות, וזה בהחלט אפשרי, בעוד שאלגוריתם אקספוננציאלי ידרוש <span dir="ltr"> \(1.26 \times 10^{30}\)</span> פעולות, וזה כמעט בלתי אפשרי.</p>
+
+<p dir="rtl">כדי לבנות גרפים הממחישים את ההבדל בין זמן פולינומי לזמן אקספוננציאלי, ניתן להשתמש בפונקציות מתמטיות שונות. הנה דוגמאות לפונקציות שניתן להשתמש בהן להדמיה:</p>
+
+<hr>
+
+<h3 dir="rtl"><strong>פונקציות פולינומיות</strong></h3>
+<ol>
+<li><p dir="rtl"><strong>פונקציה לינארית</strong>: <span dir="ltr"> \( f(n) = n \)</span> דוגמה: זמן הריצה של אלגוריתם המעבד כל אלמנט פעם אחת.</p></li>
+<li><p dir="rtl"><strong>פונקציה ריבועית</strong>: <span dir="ltr"> \( f(n) = n^2 \)</span> דוגמה: זמן הריצה של אלגוריתם עם לולאות מקוננות, לדוגמה, מיון בועות.</p></li>
+<li><p dir="rtl"><strong>פונקציה קובית</strong>: <span dir="ltr"> \( f(n) = n^3 \)</span> דוגמה: זמן הריצה של אלגוריתם המעבד נתונים תלת-ממדיים.</p></li>
+<li><p dir="rtl"><strong>פונקציה לוגריתמית</strong>: <span dir="ltr"> \( f(n) = \log n \)</span> דוגמה: זמן הריצה של חיפוש בינארי.</p></li>
+<li><p dir="rtl"><strong>פונקציה לינארית-לוגריתמית</strong>: <span dir="ltr"> \( f(n) = n \log n \)</span> דוגמה: זמן הריצה של מיון מהיר או מיון מיזוג.</p></li>
+</ol>
+
+<hr>
+
+<h3 dir="rtl"><strong>פונקציות אקספוננציאליות</strong></h3>
+<ol>
+<li><p dir="rtl"><strong>פונקציה אקספוננציאלית</strong>: <span dir="ltr"> \( f(n) = 2^n \)</span> דוגמה: זמן הריצה של אלגוריתם המונה את כל תתי הקבוצות של קבוצה.</p></li>
+<li><p dir="rtl"><strong>פונקציה עצרתית</strong>: <span dir="ltr"> \( f(n) = n! \)</span> דוגמה: זמן הריצה של אלגוריתם המונה את כל התמורות (לדוגמה, בעיית הסוכן הנוסע).</p></li>
+<li><p dir="rtl"><strong>פונקציה אקספוננציאלית עם בסיס אחר</strong>: <span dir="ltr"> \( f(n) = 3^n \)</span> דוגמה: זמן הריצה של אלגוריתם החוקר את כל השילובים האפשריים.</p></li>
+</ol>
+
+<hr>
+
+<h3 dir="rtl"><strong>דוגמת קוד לשרטוט גרפים (פייתון, <span dir="ltr"> Matplotlib</span>)</strong></h3>
+
+<pre class="line-numbers"><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+import math # Import standard math module
+
+# Range of n values
+n = np.linspace(1, 20, 100)
+
+# Polynomial functions
+linear = n
+quadratic = n**2
+cubic = n**3
+logarithmic = np.log(n)
+nlogn = n * np.log(n)
+
+# Exponential functions
+exponential = 2**n
+# Factorial is defined only for integers
+factorial = [math.factorial(int(i)) for i in n]
+
+# Plotting the graphs
+plt.figure(figsize=(10, 6))
+
+# Polynomial functions
+plt.plot(n, linear, label='Linear: $f(n) = n$')
+plt.plot(n, quadratic, label='Quadratic: $f(n) = n^2$')
+plt.plot(n, cubic, label='Cubic: $f(n) = n^3$')
+plt.plot(n, logarithmic, label='Logarithmic: $f(n) = \log n$')
+plt.plot(n, nlogn, label='Linearithmic: $f(n) = n \log n$')
+
+# Exponential functions
+plt.plot(n, exponential, label='Exponential: $f(n) = 2^n$')
+plt.plot(n, factorial, label='Factorial: $f(n) = n!$')
+
+# Graph settings
+plt.yscale('log')  # Logarithmic scale for convenience
+plt.xlabel('Input size (n)')
+plt.ylabel('Time complexity')
+plt.title('Comparison of polynomial and exponential time complexity')
+plt.legend()
+plt.grid(True)
+plt.show()
+</code></pre>
+
+<hr>
+<p dir="ltr">![Exponetialy](../assets/exponetialy.png)</p>
+
+<h3 dir="rtl"><strong>מה יראה הגרף?</strong></h3>
+<ul>
+<li><p dir="rtl"><strong>פונקציות פולינומיות</strong> גדלות לאט ונשארות בתחתית הגרף.</p></li>
+<li><p dir="rtl"><strong>פונקציות אקספוננציאליות</strong> גדלות מהר מאוד ומזנקות למעלה גם עבור ערכים קטנים של <span dir="ltr">\(n\)</span>.</p></li>
+<li><p dir="rtl">שימוש ב<strong>סולם לוגריתמי</strong> (על ציר ה-<span dir="ltr">Y</span>) עוזר להמחיש את ההבדל בין פונקציות פולינומיות ואקספוננציאליות, מכיוון שערכיהן שונים בסדרי גודל.</p></li>
+</ul>

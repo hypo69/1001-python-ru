@@ -1,0 +1,64 @@
+<h2 dir="rtl"><span dir="ltr">CHOMP</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">5</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;<span dir="ltr">CHOMP</span>&quot; - זהו משחק לשני שחקנים, שבו משתמשים בלוח מלבני, המייצג טבלת שוקולד. אחת הפינות (בדרך כלל התחתונה השמאלית) מייצגת &quot;ריבוע&quot; רעיל. שחקנים בתורם שוברים חתיכות מהטבלה, ומבצעים מהלכים. מטרת המשחק - לגרום ליריב לאכול את הריבוע המורעל.</p>
+<p dir="rtl">השחקן שנאלץ לאכול את הריבוע המורעל, מפסיד.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">לוח המשחק מייצג טבלת שוקולד מלבנית.</p></li>
+<li><p dir="rtl">אחת הפינות (התחתונה השמאלית) נחשבת מורעלת.</p></li>
+<li><p dir="rtl">שחקנים בתורם נוגסים חלק מטבלת השוקולד.</p></li>
+<li><p dir="rtl">השחקן בוחר שורה ועמודה (נוגס חתיכת שוקולד).</p></li>
+<li><p dir="rtl">כל התאים מימין ומעל המיקום הנבחר נמחקים.</p></li>
+<li><p dir="rtl">המטרה - לגרום ליריב לאכול את הריבוע המורעל.</p></li>
+<li><p dir="rtl">השחקן שאוכל את הריבוע המורעל, מפסיד.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">התחלת המשחק.</p></li>
+<li><p dir="rtl">בקש מהמשתמש את גודל טבלת השוקולד (מספר שורות ועמודות).</p></li>
+<li><p dir="rtl">אתחל את לוח המשחק, המייצג את טבלת השוקולד.</p></li>
+<li><p dir="rtl">התחל את לולאת המשחק, כל עוד המשחק לא נגמר:</p>
+<ol>
+<li><p dir="rtl">הצג את מצב הלוח הנוכחי על המסך.</p></li>
+<li><p dir="rtl">בקש מהשחקן הנוכחי את קואורדינטות חתיכת השוקולד שיש לנגוס.</p></li>
+<li><p dir="rtl">עדכן את מצב הלוח, על ידי נגיסת החתיכה הנבחרת.</p></li>
+<li><p dir="rtl">בדוק האם השחקן הנוכחי אכל את הריבוע המורעל.</p></li>
+<li><p dir="rtl">אם כן, הכרז על ניצחון השחקן הנגדי וסיים את המשחק.</p></li>
+<li><p dir="rtl">העבר את התור לשחקן הבא.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">סיום המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InputBoardSize["Enter board size: <code><b>rows</b></code>, <code><b>cols</b></code>"]
+    InputBoardSize --> InitializeBoard["Initialize board: <code><b>board</b></code>"]
+    InitializeBoard --> LoopStart{"Start loop: as long as game is not over"}
+    LoopStart --> DisplayBoard["Display board"]
+    DisplayBoard --> InputMove["Enter player move: <code><b>rowMove</b></code>, <code><b>colMove</b></code>"]
+    InputMove --> UpdateBoard["Update board: <code><b>board</b></code>"]
+    UpdateBoard --> CheckWin{"Check: <code><b>board[0][0] == ' '</b></code>?"}
+    CheckWin -- Yes --> OutputWinner["Display message: <b>Player won!</b>"]
+    OutputWinner --> End["End"]
+    CheckWin -- No --> SwitchPlayer["Switch player"]
+    SwitchPlayer --> LoopStart
+    LoopStart -- No --> End
+</code></pre>
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputBoardSize</span> - בקשת גודל הלוח (מספר שורות ועמודות).</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeBoard</span> - אתחול לוח המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">LoopStart</span> - התחלת לולאת המשחק, הנמשכת כל עוד המשחק לא נגמר.</p></li>
+<li><p dir="rtl"><span dir="ltr">DisplayBoard</span> - הצגת מצב הלוח הנוכחי על המסך.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputMove</span> - בקשת קואורדינטות חתיכת השוקולד שיש לנגוס מהשחקן הנוכחי.</p></li>
+<li><p dir="rtl"><span dir="ltr">UpdateBoard</span> - עדכון מצב הלוח לאחר מהלך השחקן.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckWin</span> - בדיקה האם השחקן הנוכחי אכל את הריבוע המורעל.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWinner</span> - הצגת הודעה על ניצחון השחקן השני.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">SwitchPlayer</span> - העברת התור לשחקן הבא.</p></li>
+</ul>

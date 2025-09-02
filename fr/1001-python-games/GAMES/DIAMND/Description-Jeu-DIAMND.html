@@ -1,0 +1,66 @@
+<p>DIAMND :
+=================
+Difficulty: 7
+-----------------
+The game DIAMND is a text-based game where the player tries to draw a diamond of stars, by specifying its height.
+The game first asks the user for an odd diamond height. Then, if the entered number is odd, the game constructs a diamond of stars, using spaces to form the correct geometry of the figure. If the entered number is even or less than 1, an error message is displayed.
+Game rules:
+1. The player enters an odd number that determines the height of the diamond.
+2. If an even number or a number less than 1 is entered, the game displays an error message.
+3. If a correct number (odd and greater than 0) is entered, the game displays a diamond of stars of the specified height.
+-----------------
+Algorithm:
+1. Ask the user for the height of the diamond (H).
+2. Check if H is even or less than 1. If yes, display an error message and go to step 1.
+3. If H is odd and greater than 0, then:
+   3.1. Set the <code>space</code> variable to H // 2 (integer division).
+   3.2. Set the <code>stars</code> variable to 1.
+   3.3. Start a loop from 1 to H inclusive:
+      3.3.1. Display <code>space</code> spaces.
+      3.3.2. Display <code>stars</code> asterisks.
+      3.3.3. Display a newline.
+      3.3.4. If the current line number is less than H // 2 + 1:
+          3.3.4.1. Decrease <code>space</code> by 1.
+          3.3.4.2. Increase <code>stars</code> by 2.
+       3.3.5. Otherwise:
+          3.3.5.1. Increase <code>space</code> by 1.
+          3.3.5.2. Decrease <code>stars</code> by 2.
+4. End of game.
+-----------------
+Flowchart:
+<pre class="line-numbers"><code class="language-mermaid">
+flowchart TD
+    Start["Start"] --> InputHeight["Input diamond height (height)"]
+    InputHeight --> CheckHeight{"Check: <code><b>height</b></code> is odd and > 0 ?"}
+    CheckHeight -- No --> OutputError["Display message: <b>Enter an odd number greater than 0</b>"]
+    OutputError --> InputHeight
+    CheckHeight -- Yes --> InitializeVars["<p align='left'>Initialize variables: 
+    <code><b>
+    spaces = height // 2 <br>
+    stars = 1
+    </b></code></p>"]
+    InitializeVars --> LoopStart{"Start loop: from 1 to <code><b>height</b></code>"}
+    LoopStart -- Yes --> OutputSpaces["Display <code><b>spaces</b></code> spaces"]
+    OutputSpaces --> OutputStars["Display <code><b>stars</b></code> asterisks"]
+     OutputStars --> OutputNewline["Display a newline"]
+     OutputNewline --> CheckRow{"Check: current line <= <code><b>height // 2 + 1</b></code>"}
+     CheckRow -- Yes --> DecreaseSpaceIncreaseStars["<code><b>spaces = spaces - 1<br> stars = stars + 2</b></code>"]
+     DecreaseSpaceIncreaseStars --> LoopStart
+     CheckRow -- No --> IncreaseSpaceDecreaseStars["<code><b>spaces = spaces + 1<br> stars = stars - 2</b></code>"]
+     IncreaseSpaceDecreaseStars --> LoopStart
+     LoopStart -- No --> End["End"]
+</code></pre>
+<p>Legend:
+    Start - Program start.
+    InputHeight - Prompts the user to enter the diamond height and saves the value to the <code>height</code> variable.
+    CheckHeight - Checks if the entered height is an odd number greater than 0.
+    OutputError - Displays an error message if the height does not meet the condition.
+    InitializeVars - Initializes variables: <code>spaces</code> (number of spaces) is set to <code>height // 2</code>, and <code>stars</code> (number of asterisks) is set to 1.
+    LoopStart - Start of the loop, which repeats <code>height</code> times.
+    OutputSpaces - Displays <code>spaces</code> spaces.
+    OutputStars - Displays <code>stars</code> asterisks.
+    OutputNewline - Displays a newline character.
+    CheckRow - Checks if the current line is less than or equal to the middle of the diamond (<code>height // 2 + 1</code>).
+    DecreaseSpaceIncreaseStars - Decreases the number of spaces <code>spaces</code> by 1 and increases the number of asterisks <code>stars</code> by 2.
+    IncreaseSpaceDecreaseStars - Increases the number of spaces <code>spaces</code> by 1 and decreases the number of asterisks <code>stars</code> by 2.
+    End - Program end.</p>

@@ -1,0 +1,69 @@
+<h1>Importing Modules in Python</h1>
+<p>Importing libraries in Python allows you to use external or custom modules and functions, defined in other files or libraries. This helps organize code, improve its readability, and avoid duplication.</p>
+<h3>What is a module?</h3>
+<p>A module in Python is simply a file with the <code>.py</code> extension, which contains code (functions, classes, variables, etc.). When you want to use code from another module, you need to import it into the current file.</p>
+<h3>External and internal modules</h3>
+<ol>
+<li><strong>External modules</strong> — these are modules that are not part of the Python standard library and must be installed separately. For example, modules for working with web servers, data processing, or machine learning, such as <code>numpy</code>, <code>requests</code>, and others.</li>
+<li><strong>Internal modules</strong> — these are modules that are already included in the Python standard library. For example, modules for working with files, time, mathematical operations: <code>os</code>, <code>math</code>, <code>datetime</code>.</li>
+</ol>
+<h3>Installing external modules with pip</h3>
+<p>To install an external module, we use the <code>pip</code> command — it's a Python package management tool. For example, to install the <code>requests</code> library, you need to run the following command in the terminal:</p>
+<pre class="line-numbers"><code class="language-bash">
+pip install requests
+</code></pre>
+<p>This command will download and install the library in your project.</p>
+<h3>Importing modules</h3>
+<p>When you want to use a module in Python, you need to import it:</p>
+<ol>
+<li><strong>Import the entire module</strong>:
+<pre class="line-numbers"><code class="language-python">
+   import os
+</code></pre>
+<p>After that, you can use all the functions and variables of the module, for example:</p>
+<pre class="line-numbers"><code class="language-python">
+   os.listdir()  # lists files in the directory
+</code></pre>
+</li>
+<li><strong>Import specific elements from a module</strong>:
+<pre class="line-numbers"><code class="language-python">
+   from math import sqrt
+</code></pre>
+<p>Now, you can use the <code>sqrt</code> function without needing to refer to the <code>math</code> module.</p>
+</li>
+<li><strong>Import with an alias</strong>:
+<pre class="line-numbers"><code class="language-python">
+   import pandas as pd
+</code></pre>
+<p>In this case, to use the functions of the <code>pandas</code> library, you will write <code>pd</code>, and not the full name <code>pandas</code>.</p>
+</li>
+</ol>
+<h3>Importing your own modules</h3>
+<p>If you write multiple files in the same project, you can create your own modules. For example, if you have a <code>utils.py</code> file with useful functions, you can import it into other files like this:</p>
+<pre class="line-numbers"><code class="language-python">
+import utils
+</code></pre>
+<p>Or import a specific function:</p>
+<pre class="line-numbers"><code class="language-python">
+from utils import my_function
+</code></pre>
+<h3>Why create a module and import it into other parts of the project?</h3>
+<ol>
+<li><strong>Code organization</strong>: Separating logic into different modules helps avoid clutter in a large project. For example, you can create a module for working with data, another for handling requests, and a third for the interface.</li>
+<li><strong>Code reuse</strong>: When logic is separated into modules, it can be used in different parts of the project. This reduces code duplication and facilitates maintenance.</li>
+<li><strong>Readability and maintainability</strong>: When the code is separated into modules, other developers (or yourself in the future) will be able to understand and maintain the project more easily.</li>
+</ol>
+<p>Example:</p>
+<pre class="line-numbers"><code class="language-python">
+# utils.py
+def greet(name):
+    return f"Hello, {name}!"
+    
+# main.py
+from utils import greet
+
+print(greet("Alice"))
+</code></pre>
+<p>In this example, the <code>greet</code> function is defined in one module (<code>utils.py</code>), but used in another (<code>main.py</code>), which improves the structure and makes the code more modular and easier to modify.</p>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">To the table of contents</a></p>

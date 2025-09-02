@@ -1,0 +1,326 @@
+<p dir="rtl"><strong>מדריך פקודות <span dir="ltr">PowerShell</span></strong></p>
+<h3 dir="rtl">1. יסודות ניווט ועבודה עם קבצים וספריות</h3>
+<ul>
+<li dir="rtl"><strong><code dir="ltr">Get-ChildItem</code> (או <code dir="ltr">gci</code>, <code dir="ltr">ls</code>, <code dir="ltr">dir</code>)</strong>: מקבל רשימה של קבצים ותתי-ספריות במיקום שצוין.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Get-ChildItem [נתיב] [פרמטרים]</code></li>
+<li dir="rtl"><strong>פרמטרים עיקריים:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">-Path</code>: מציין את הנתיב לספרייה.</li>
+<li dir="rtl"><code dir="ltr">-Include</code>: מסנן לפי שם קובץ (עם תווים כלליים <code dir="ltr">*</code> ו-<code dir="ltr">?</code>).</li>
+<li dir="rtl"><code dir="ltr">-Exclude</code>: מוציא קבצים לפי שם.</li>
+<li dir="rtl"><code dir="ltr">-Recurse</code>: מציג קבצים ותיקיות בכל תתי-הספריות.</li>
+<li dir="rtl"><code dir="ltr">-Force</code>: הצג קבצים מוסתרים.</li>
+<li dir="rtl"><code dir="ltr">-File</code>: הצג קבצים בלבד.</li>
+<li dir="rtl"><code dir="ltr">-Directory</code>: הצג תיקיות בלבד.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Get-ChildItem</code>: רשימת קבצים ותיקיות בספרייה הנוכחית.</li>
+<li dir="rtl"><code dir="ltr">Get-ChildItem -Path C:\Users\User\Documents</code>: רשימת קבצים ותיקיות ב-<code dir="ltr">C:\Users\User\Documents</code>.</li>
+<li dir="rtl"><code dir="ltr">Get-ChildItem -Include *.txt</code>: רשימת קבצי טקסט בלבד בספרייה הנוכחית.</li>
+<li dir="rtl"><code dir="ltr">Get-ChildItem -Path C:\ -Recurse -Directory</code>: הצג את כל הספריות בכונן <code dir="ltr">C</code>.</li>
+<li dir="rtl"><code dir="ltr">Get-ChildItem -Force</code>: הצג את כל הקבצים, כולל מוסתרים.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Set-Location</code> (או <code dir="ltr">sl</code>, <code dir="ltr">cd</code>)</strong>: משנה את הספרייה הנוכחית.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Set-Location [נתיב]</code></li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Set-Location C:\Windows</code>: עבור לספריית <code dir="ltr">C:\Windows</code>.</li>
+<li dir="rtl"><code dir="ltr">Set-Location ..</code>: עבור לספריית האב.</li>
+<li dir="rtl"><code dir="ltr">Set-Location /</code> - עבור לשורש הכונן.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">New-Item</code></strong>: יוצר קובץ או ספרייה חדשים.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">New-Item -Path [נתיב] -ItemType [סוג] -Name [שם]</code></li>
+<li dir="rtl"><strong>פרמטרים עיקריים:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">-ItemType</code>: <code dir="ltr">file</code> או <code dir="ltr">directory</code>.</li>
+<li dir="rtl"><code dir="ltr">-Name</code>: שם הפריט החדש.</li>
+<li dir="rtl"><code dir="ltr">-Value</code>: תוכן הקובץ.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">New-Item -ItemType directory -Name NewFolder</code>: צור תיקייה <code dir="ltr">NewFolder</code>.</li>
+<li dir="rtl"><code dir="ltr">New-Item -ItemType file -Name myfile.txt</code>: צור קובץ ריק <code dir="ltr">myfile.txt</code>.</li>
+<li dir="rtl"><code dir="ltr">New-Item -ItemType file -Name myfile.txt -Value "Hello, world!"</code>: צור קובץ <code dir="ltr">myfile.txt</code> עם תוכן.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Remove-Item</code> (או <code dir="ltr">rm</code>, <code dir="ltr">del</code>, <code dir="ltr">erase</code>)</strong>: מוחק קבצים וספריות.
+<ul>
+<li dir="rtl"><strong>תחביר:</strong> <code dir="ltr">Remove-Item [נתיב] [פרמטרים]</code></li>
+<li dir="rtl"><strong>פרמטרים עיקריים:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">-Recurse</code>: מחק את כל תתי-הספריות.</li>
+<li dir="rtl"><code dir="ltr">-Force</code>: מחיקה כפויה (כולל קבצים "לקריאה בלבד" וספריות).</li>
+<li dir="rtl"><code dir="ltr">-Confirm</code> - בקש אישור לכל מחיקה.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Remove-Item myfile.txt</code>: מחק את הקובץ <code dir="ltr">myfile.txt</code>.</li>
+<li dir="rtl"><code dir="ltr">Remove-Item -Path C:\Temp -Recurse -Force</code>: מחק את תיקיית <code dir="ltr">C:\Temp</code> עם כל התיקיות והקבצים המקוננים.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Copy-Item</code></strong>: מעתיק קבצים וספריות.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Copy-Item [נתיב_מקור] [נתיב_יעד] [פרמטרים]</code></li>
+<li dir="rtl"><strong>פרמטרים עיקריים:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">-Recurse</code>: העתק את כל תתי-הספריות.</li>
+<li dir="rtl"><code dir="ltr">-Force</code>: דרוס קבצים קיימים ללא בקשה.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Copy-Item -Path myfile.txt -Destination mycopy.txt</code>: העתק את הקובץ <code dir="ltr">myfile.txt</code> ל-<code dir="ltr">mycopy.txt</code>.</li>
+<li dir="rtl"><code dir="ltr">Copy-Item -Path C:\Source -Destination D:\Backup -Recurse</code>: העתק את תיקיית <code dir="ltr">C:\Source</code> לכל תתי-הספריות בתיקיית <code dir="ltr">D:\Backup</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Move-Item</code></strong>: מעביר קבצים וספריות.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Move-Item [נתיב_מקור] [נתיב_יעד] [פרמטרים]</code></li>
+<li dir="rtl"><code dir="ltr">-Force</code> - העבר בכוח ודרוס.</li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Move-Item -Path myfile.txt -Destination D:\Documents</code>: העבר את הקובץ <code dir="ltr">myfile.txt</code> לתיקיית <code dir="ltr">D:\Documents</code>.</li>
+<li dir="rtl"><code dir="ltr">Move-Item -Path "C:\MyFolder" -Destination "D:\" -Force</code>: העבר את תיקיית <code dir="ltr">C:\MyFolder</code> ל-<code dir="ltr">D:\</code> בכוח, גם אם קיימת שם תיקייה באותו שם.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Rename-Item</code></strong>: משנה שם של קובץ או ספרייה.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Rename-Item -Path [נתיב] -NewName [שם_חדש]</code></li>
+<li dir="rtl"><strong>דוגמה:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Rename-Item -Path myfile.txt -NewName newfile.txt</code>: שנה את שם הקובץ <code dir="ltr">myfile.txt</code> ל-<code dir="ltr">newfile.txt</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Get-Content</code> (או <code dir="ltr">gc</code>)</strong>: מציג או מקבל את תוכן הקובץ.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Get-Content [נתיב]</code></li>
+<li dir="rtl"><strong>דוגמה:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Get-Content myfile.txt</code>: הצג את תוכן הקובץ <code dir="ltr">myfile.txt</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Set-Content</code></strong>: מחליף או יוצר את תוכן הקובץ.
+<ul>
+<li dir="rtl"><strong>תחביר:</strong> <code dir="ltr">Set-Content [נתיב] [פרמטרים]</code></li>
+<li dir="rtl"><code dir="ltr">-value</code> - טקסט לכתיבה.</li>
+<li dir="rtl"><strong>דוגמה:</strong> <code dir="ltr">Set-Content myfile.txt "טקסט חדש"</code> - החלף את תוכן הקובץ <code dir="ltr">myfile.txt</code>.</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Add-Content</code></strong>: מוסיף תוכן לסוף הקובץ.
+<ul>
+<li dir="rtl"><strong>תחביר:</strong> <code dir="ltr">Add-Content [נתיב] [פרמטרים]</code></li>
+<li dir="rtl"><code dir="ltr">-value</code> - טקסט להוספה.</li>
+<li dir="rtl"><strong>דוגמה:</strong> <code dir="ltr">Add-Content myfile.txt "טקסט נוסף"</code> - הוסף טקסט לסוף <code dir="ltr">myfile.txt</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 dir="rtl">2. ניהול תהליכים:</h3>
+<ul>
+<li dir="rtl"><strong><code dir="ltr">Get-Process</code> (או <code dir="ltr">gps</code>)</strong>: מקבל רשימה של תהליכים פועלים.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Get-Process [פרמטרים]</code></li>
+<li dir="rtl"><strong>פרמטרים עיקריים:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">-Name</code>: סנן לפי שם תהליך.</li>
+<li dir="rtl"><code dir="ltr">-Id</code>: סנן לפי מזהה תהליך.</li>
+<li dir="rtl"><code dir="ltr">-IncludeUserName</code>: הצג את המשתמש שהפעיל את התהליך.</li>
+</ul>
+</li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Get-Process</code>: רשימת כל התהליכים הפועלים.</li>
+<li dir="rtl"><code dir="ltr">Get-Process -Name notepad</code>: רשימת תהליכים בשם <code dir="ltr">notepad</code>.</li>
+<li dir="rtl"><code dir="ltr">Get-Process -IncludeUserName</code>: רשימת כל התהליכים הפועלים עם משתמשים.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Stop-Process</code></strong>: מסיים תהליך.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Stop-Process [פרמטרים]</code></li>
+<li dir="rtl"><code dir="ltr">-Id</code> - ציין מזהה תהליך.</li>
+<li dir="rtl"><code dir="ltr">-Name</code> - ציין שם תהליך.</li>
+<li dir="rtl"><code dir="ltr">-Force</code> - סיים תהליך בכוח.</li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Stop-Process -Name notepad</code>: סיים את כל תהליכי <code dir="ltr">notepad</code>.</li>
+<li dir="rtl"><code dir="ltr">Stop-Process -Id 1234</code> : סיים תהליך עם מזהה 1234.</li>
+<li dir="rtl"><code dir="ltr">Stop-Process -Name chrome -Force</code> : סיים בכוח את כל תהליכי <code dir="ltr">chrome</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 dir="rtl">3. ניהול שירותים:</h3>
+<ul>
+<li dir="rtl"><strong><code dir="ltr">Get-Service</code></strong>: מקבל רשימה של שירותים.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Get-Service [פרמטרים]</code></li>
+<li dir="rtl"><strong>פרמטרים עיקריים:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">-Name</code>: הצג רק שירותים עם השם שצוין.</li>
+<li dir="rtl"><code dir="ltr">-DisplayName</code>: הצג רק שירותים עם השם המוצג שצוין.</li>
+<li dir="rtl"><code dir="ltr">-Status</code>: סנן לפי סטטוס (<span dir="ltr">Running, Stopped</span>).</li>
+</ul>
+</li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Get-Service</code>: רשימת כל השירותים.</li>
+<li dir="rtl"><code dir="ltr">Get-Service -Name Spooler</code>: הצג את שירות <span dir="ltr">Spooler</span>.</li>
+<li dir="rtl"><code dir="ltr">Get-Service -Status Running</code>: הצג שירותים פועלים.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Start-Service</code></strong>: מפעיל שירות.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Start-Service [שם_שירות]</code></li>
+<li dir="rtl"><strong>דוגמה:</strong> <code dir="ltr">Start-Service Spooler</code> - הפעל את שירות <span dir="ltr">Spooler</span>.</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Stop-Service</code></strong>: עוצר שירות.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Stop-Service [שם_שירות]</code></li>
+<li dir="rtl"><code dir="ltr">-Force</code> - עצור שירות בכוח.</li>
+<li dir="rtl"><strong>דוגמה:</strong> <code dir="ltr">Stop-Service Spooler</code>: עצור את שירות <span dir="ltr">Spooler</span>.</li>
+<li dir="rtl"><code dir="ltr">Stop-Service Spooler -Force</code> - עצור את שירות <span dir="ltr">Spooler</span> בכוח.</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Restart-Service</code></strong>: מפעיל מחדש שירות.
+<ul>
+<li dir="rtl"><strong>תחביר:</strong> <code dir="ltr">Restart-Service [שם_שירות]</code></li>
+<li dir="rtl"><strong>דוגמה:</strong> <code dir="ltr">Restart-Service Spooler</code> - הפעל מחדש את שירות <span dir="ltr">Spooler</span>.</li>
+</ul>
+</li>
+</ul>
+<h3 dir="rtl">4. עבודה עם רשת</h3>
+<ul>
+<li dir="rtl"><strong><code dir="ltr">Test-NetConnection</code></strong>: בודק חיבור רשת.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Test-NetConnection [שם_מארח_או_כתובת_IP] [פרמטרים]</code></li>
+<li dir="rtl"><code dir="ltr">-Port</code> - מספר פורט.</li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Test-NetConnection google.com</code>: בדוק חיבור ל-<code dir="ltr">google.com</code>.</li>
+<li dir="rtl"><code dir="ltr">Test-NetConnection google.com -Port 80</code>: בדוק חיבור ל-<code dir="ltr">google.com</code> בפורט 80.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Get-NetIPConfiguration</code></strong>: מקבל תצורת רשת.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Get-NetIPConfiguration</code></li>
+<li dir="rtl"><strong>דוגמה:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Get-NetIPConfiguration</code>: הצג תצורת רשת.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Resolve-DnsName</code></strong>: שולח שאילתת מידע <span dir="ltr">DNS</span>.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Resolve-DnsName [שם_מארח]</code></li>
+<li dir="rtl"><strong>דוגמה:</strong> <code dir="ltr">Resolve-DnsName google.com</code>: שלח שאילתת מידע <span dir="ltr">DNS</span> עבור <code dir="ltr">google.com</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 dir="rtl">5. עבודה עם הרישום</h3>
+<ul>
+<li dir="rtl"><strong><code dir="ltr">Get-ItemProperty</code></strong>: מקבל ערך מאפיין מהרישום.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Get-ItemProperty -Path [נתיב_ברישום]</code></li>
+<li dir="rtl"><strong>דוגמה:</strong> <code dir="ltr">Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"</code></li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Set-ItemProperty</code></strong>: מגדיר ערך מאפיין ברישום.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Set-ItemProperty -Path [נתיב_ברישום] -Name [שם_מאפיין] -Value [ערך]</code></li>
+<li dir="rtl"><strong>דוגמה:</strong> <code dir="ltr">Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -Value "C:\image.jpg"</code></li>
+</ul>
+</li>
+</ul>
+<h3 dir="rtl">6. אחר</h3>
+<ul>
+<li dir="rtl"><strong><code dir="ltr">Clear-Host</code></strong>: מנקה את מסך הקונסולה.
+<ul>
+<li dir="rtl"><strong>תחביר:</strong> <code dir="ltr">Clear-Host</code></li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Get-Date</code></strong>: מקבל את התאריך והשעה הנוכחיים.
+<ul>
+<li dir="rtl"><strong>תחביר:</strong> <code dir="ltr">Get-Date</code></li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Start-Process</code></strong>: מפעיל תוכנית או פותח קובץ.
+<ul>
+<li dir="rtl"><strong>תחביר:</strong> <code dir="ltr">Start-Process [שם_תוכנית_או_קובץ] [אפשרויות]</code></li>
+<li dir="rtl"><strong>דוגמאות:</strong>
+<ul>
+<li dir="rtl"><code dir="ltr">Start-Process notepad.exe</code>: הפעל את פנקס הרשימות.</li>
+<li dir="rtl"><code dir="ltr">Start-Process myfile.txt</code>: פתח את הקובץ <code dir="ltr">myfile.txt</code> באמצעות התוכנית המוגדרת כברירת מחדל.</li>
+<li dir="rtl"><code dir="ltr">Start-Process -FilePath "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "https://www.google.com"</code> - פתח אתר אינטרנט בכרום.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Get-Help</code></strong>: מציג עזרה עבור פקודה.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Get-Help [שם_פקודה]</code></li>
+<li dir="rtl"><strong>דוגמה:</strong> <code dir="ltr">Get-Help Get-Process</code>: הצג עזרה עבור הפקודה <code dir="ltr">Get-Process</code>.</li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Exit</code></strong>: מסיים את סשן <span dir="ltr">PowerShell</span>.
+<ul>
+<li dir="rtl"><strong>תחביר:</strong> <code dir="ltr">Exit</code></li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Get-Variable</code></strong>: מציג משתנים נוכחיים.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Get-Variable</code></li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Get-Alias</code></strong>: מציג כינויים לפקודות.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Get-Alias</code></li>
+</ul>
+</li>
+<li dir="rtl"><strong><code dir="ltr">Set-Alias</code></strong>: יוצר כינוי לפקודה.
+<ul>
+<li dir="rtl"><strong>תחביר</strong>: <code dir="ltr">Set-Alias [שם_כינוי] [שם_פקודה]</code></li>
+<li dir="rtl"><strong>דוגמה</strong>: <code dir="ltr">Set-Alias gci Get-ChildItem</code></li>
+</ul>
+</li>
+</ul>
+<p dir="rtl"><strong>הערות:</strong></p>
+<ul>
+<li dir="rtl">פקודות <span dir="ltr">PowerShell</span> (<span dir="ltr">cmdlets</span>) בדרך כלל בעלות צורה של <code dir="ltr">פועל-שם עצם</code> (לדוגמה, <code dir="ltr">Get-Process</code>, <code dir="ltr">Set-Location</code>).</li>
+<li dir="rtl"><span dir="ltr">PowerShell</span> אינו רגיש לרישיות, כך שתוכל לכתוב פקודות כ-<code dir="ltr">Get-ChildItem</code> או <code dir="ltr">get-childitem</code>.</li>
+<li dir="rtl"><span dir="ltr">PowerShell</span> עובד עם אובייקטים, כך שתוכל להשתמש באופרטור <code dir="ltr">|</code> כדי להעביר את הפלט של פקודה אחת לקלט של אחרת (לדוגמה, <code dir="ltr">Get-Process | Sort-Object -Property CPU</code>).</li>
+<li dir="rtl">פקודות רבות תומכות בשימוש בתווים כלליים (<code dir="ltr">*</code>) לעבודה עם מספר קבצים (לדוגמה <code dir="ltr">Get-ChildItem *.txt</code>).</li>
+<li dir="rtl">עבור עבודה עם פקודות מסוימות נדרשות הרשאות מנהל מערכת.</li>
+</ul>

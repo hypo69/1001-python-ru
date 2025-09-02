@@ -1,0 +1,202 @@
+<h2 dir="rtl"><strong>משחק קלפים <span dir="ltr">Acey-Ducey</span></strong></h2>
+
+<h3 dir="rtl">תיאור</h3>
+<p dir="rtl">זוהי סימולציה של משחק הקלפים <span dir="ltr">Acey-Ducey</span>. השחקן מציב הימורים על בסיס ההסתברות שהקלף הבא יפול בין שני קלפים שכבר פתוחים.</p>
+
+<ul>
+<li><p dir="rtl"><strong>הון התחלתי:</strong> השחקן מתחיל עם <span dir="ltr">100</span> דולר.</p></li>
+<li><p dir="rtl"><strong>כללי המשחק:</strong></p>
+<ol>
+<li><p dir="rtl">המחשב מחלק שני קלפים.</p></li>
+<li><p dir="rtl">השחקן יכול להחליט אם להמר או לא.</p></li>
+<li><p dir="rtl">אם מבוצע הימור, נפתח קלף שלישי.</p></li>
+<li><p dir="rtl">אם ערך הקלף השלישי נופל בין שני הקלפים הראשונים, השחקן זוכה בהימור. אחרת, ההימור מפסיד.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">המשחק מסתיים כאשר השחקן מאבד את כל הונו או מסיים אותו ידנית.</p></li>
+</ul>
+
+<h3 dir="rtl">איך הקוד עובד</h3>
+<hr>
+
+<h4 dir="rtl"><strong>1. ייבוא ספרייה</strong></h4>
+<pre class="line-numbers"><code class="language-python">import random
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">random</span></strong> – ספרייה ליצירת מספרים אקראיים. היא משמשת לערבוב חפיסת הקלפים ובחירת קלפים אקראיים.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>2. יצירת חפיסת קלפים</strong></h4>
+<pre class="line-numbers"><code class="language-python">def create_deck():
+    ranks = list(range(2, 15))  # Cards from 2 to 14 (Ace = 14)
+    deck = ranks * 4  # 4 suits
+    random.shuffle(deck)
+    return deck
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">ranks</span></strong> – רשימת ערכי קלפים מ-<span dir="ltr">2</span> עד <span dir="ltr">14</span> (אס = <span dir="ltr">14</span>).</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">deck</span></strong> – נוצר על ידי הכפלת רשימת <span dir="ltr"><code>ranks</code></span> ב-<span dir="ltr">4</span> כדי לקבל <span dir="ltr">4</span> סדרות (עלים, לבבות, יהלומים, תלתנים).</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">random.shuffle(deck)</span></strong> – מערבב את חפיסת הקלפים.</p></li>
+<li><p dir="rtl">הפונקציה מחזירה את החפיסה המעורבבת.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>3. הצגת קלף בפורמט קריא</strong></h4>
+<pre class="line-numbers"><code class="language-python">def card_name(value):
+    if value == 11:
+        return "נסיך"
+    elif value == 12:
+        return "מלכה"
+    elif value == 13:
+        return "מלך"
+    elif value == 14:
+        return "אס"
+    else:
+        return str(value)
+</code></pre>
+<ul>
+<li><p dir="rtl">הפונקציה מקבלת את הערך המספרי של הקלף (מ-<span dir="ltr">2</span> עד <span dir="ltr">14</span>) ומחזירה את הייצוג הטקסטואלי שלו.</p></li>
+<li><p dir="rtl">לדוגמה, <span dir="ltr">11</span> ← &quot;נסיך&quot;, <span dir="ltr">14</span> ← &quot;אס&quot;.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>4. לולאת המשחק הראשית</strong></h4>
+<pre class="line-numbers"><code class="language-python">def play_acey_ducey():
+    print("ברוך הבא למשחק Acey Ducey!")
+    print("כללים: אתה מציב הימור, מנחש אם הקלף הבא יהיה בין שני הקלפים הפתוחים.")
+    print("אם הקלף שווה לאחד מהקלפים הפתוחים או אס, אתה מפסיד.")
+    print("הכנס '0' כדי לדלג על התור.\n")
+
+    money = 100  # Player's starting balance
+    deck = create_deck()
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">money</span></strong> – יתרת פתיחה של השחקן (<span dir="ltr">100</span> דולר).</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">deck</span></strong> – נוצרת חפיסת קלפים באמצעות הפונקציה <span dir="ltr"><code>create_deck()</code></span>.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>5. חלוקת שני קלפים</strong></h4>
+<pre class="line-numbers"><code class="language-python">while money > 0 and len(deck) >= 3:
+    print(f"היתרה הנוכחית שלך: ${money}")
+
+    # Dealing two cards
+    card1 = deck.pop()
+    card2 = deck.pop()
+    while card1 == card2:  # If the cards are identical, draw new ones
+        deck.insert(0, card1)
+        deck.insert(0, card2)
+        card1 = deck.pop()
+        card2 = deck.pop()
+
+    print(f"קלף ראשון: {card_name(card1)}")
+    print(f"קלף שני: {card_name(card2)}")
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">deck.pop()</span></strong> – מוציא את הקלף האחרון מהחפיסה.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">while card1 == card2</span></strong> – בודק אם הקלפים שנחלקו זהים. אם כן, מחזיר אותם לראש החפיסה ושולף חדשים.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">card_name(card1)</span></strong> – ממיר את הערך המספרי של הקלף לטקסט.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>6. קביעת הטווח</strong></h4>
+<pre class="line-numbers"><code class="language-python">low_card = min(card1, card2)
+high_card = max(card1, card2)
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">low_card</span></strong> – הערך המינימלי מבין שני הקלפים.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">high_card</span></strong> – הערך המקסימלי מבין שני הקלפים.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>7. הצב הימור או דלג על התור</strong></h4>
+<pre class="line-numbers"><code class="language-python">try:
+    bet = int(input(f"הצב את הימורך (מ-0 עד {money}) או הכנס '0' כדי לדלג על התור: "))
+    if bet < 0 or bet > money:
+        print("הימור לא חוקי. נסה שוב.")
+        continue
+    if bet == 0:
+        print("דילגת על התור.\n")
+        continue  # Skip turn
+except ValueError:
+    print("אנא הכנס מספר.")
+    continue
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">input()</span></strong> – מבקש מהשחקן הימור.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">try-except</span></strong> – מטפל בשגיאות אם השחקן הכניס קלט לא מספרי.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">if bet &lt; 0 or bet &gt; money</span></strong> – בודק שההימור תקין.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">if bet == 0</span></strong> – אם ההימור הוא <span dir="ltr">0</span>, השחקן מדלג על התור.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>8. שלוף קלף הבא</strong></h4>
+<pre class="line-numbers"><code class="language-python">next_card = deck.pop()
+print(f"קלף הבא: {card_name(next_card)}")
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">next_card</span></strong> – מוציא את הקלף הבא מהחפיסה.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">card_name(next_card)</span></strong> – ממיר את ערך הקלף לייצוג טקסטואלי.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>9. בדוק תוצאה</strong></h4>
+<pre class="line-numbers"><code class="language-python">if next_card == card1 or next_card == card2 or next_card == 14:
+    print("הפסדת!")
+    money -= bet
+elif low_card < next_card < high_card:
+    print("ניצחת!")
+    money += bet
+else:
+    print("הפסדת!")
+    money -= bet
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">if next_card == card1 or next_card == card2 or next_card == 14</span></strong> – אם הקלף הבא שווה לאחד מהקלפים הפתוחים או שהוא אס, השחקן מפסיד.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">elif low_card &lt; next_card &lt; high_card</span></strong> – אם הקלף הבא נמצא בין שני הקלפים הפתוחים, השחקן מנצח.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">else</span></strong> – בכל שאר המקרים, השחקן מפסיד.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>10. סיום המשחק</strong></h4>
+<pre class="line-numbers"><code class="language-python">if money <= 0:
+    print("נגמר לך הכסף. המשחק נגמר.")
+else:
+    print(f"המשחק נגמר. היתרה הסופית שלך: ${money}")
+</code></pre>
+<ul>
+<li><p dir="rtl">אם לשחקן נגמר הכסף, המשחק מסתיים.</p></li>
+<li><p dir="rtl">אם חפיסת הקלפים נגמרה, המשחק גם מסתיים.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>11. הפעלת המשחק</strong></h4>
+<pre class="line-numbers"><code class="language-python">if __name__ == "__main__":
+    play_acey_ducey()
+</code></pre>
+<ul>
+<li><p dir="rtl">בלוק זה מפעיל את המשחק אם הקובץ מבוצע ישירות (ולא מיובא כמודול).</p></li>
+</ul>
+
+<hr>
+
+<h3 dir="rtl"><strong>מושגי מפתח ששימשו בקוד:</strong></h3>
+<ol dir="rtl">
+<li><p dir="rtl"><strong>פונקציות</strong> – קוד מחולק לפונקציות לנוחות קריאה ושימוש חוזר.</p></li>
+<li><p dir="rtl"><strong>רשימות</strong> – חפיסת הקלפים מיוצגת כרשימה.</p></li>
+<li><p dir="rtl"><strong>לולאות</strong> – משמשות לעיבוד מהלכי משחק.</p></li>
+<li><p dir="rtl"><strong>תנאים</strong> – בודקים את כללי המשחק.</p></li>
+<li><p dir="rtl"><strong>טיפול בחריגים</strong> – משמש לטיפול בשגיאות קלט.</p></li>
+<li><p dir="rtl"><strong>יצירת מספרים אקראיים</strong> – לערבוב החפיסה ובחירת קלפים.</p></li>
+</ol>

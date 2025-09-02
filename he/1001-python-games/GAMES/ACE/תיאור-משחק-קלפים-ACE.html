@@ -1,0 +1,100 @@
+<h2 dir="rtl"><span dir="ltr">ACE</span>:</h2>
+<p dir="rtl">קושי: <span dir="ltr">7</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;<span dir="ltr">ACE</span>&quot; הוא משחק שבו שני שחקנים מושכים בתורם קלפים מחפיסה ומנסים לצבור יותר נקודות. אס נחשב לנקודה אחת, קלפים מ-<span dir="ltr">2</span> עד <span dir="ltr">10</span> נחשבים לפי ערכם הנקוב, וג'ק, קווין ומלך נחשבים ל-<span dir="ltr">10</span>. השחקן עם יותר נקודות מנצח. המשחק נמשך עד שמספר מסוים של סיבובים משוחקים.</p>
+
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol dir="rtl">
+<li><p dir="rtl">שני שחקנים משחקים.</p></li>
+<li><p dir="rtl">שחקנים מושכים בתורם קלפים מהחפיסה.</p></li>
+<li><p dir="rtl">לכל קלף יש מספר נקודות מסוים: אס - <span dir="ltr">1</span>, קלפים מ-<span dir="ltr">2</span> עד <span dir="ltr">10</span> - לפי ערכם הנקוב, ג'ק, קווין ומלך - <span dir="ltr">10</span>.</p></li>
+<li><p dir="rtl">כל שחקן מנסה לצבור כמה שיותר נקודות בסיבוב.</p></li>
+<li><p dir="rtl">בסוף הסיבוב, ציוני השחקנים מושווים.</p></li>
+<li><p dir="rtl">המשחק מורכב ממספר מסוים של סיבובים.</p></li>
+<li><p dir="rtl">השחקן עם יותר נקודות בכל הסיבובים מוכרז כמנצח המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol dir="rtl">
+<li><p dir="rtl">אתחל את ציוני שחקן <span dir="ltr">1</span> ושחקן <span dir="ltr">2</span> לאפס.</p></li>
+<li><p dir="rtl">בקש את מספר הסיבובים.</p></li>
+<li><p dir="rtl">התחל לולאה עבור מספר הסיבובים:</p>
+<ol>
+<li><p dir="rtl">שחקן <span dir="ltr">1</span> מושך קלף.</p></li>
+<li><p dir="rtl">הצג את קלף שחקן <span dir="ltr">1</span> ונקודות הקלף.</p></li>
+<li><p dir="rtl">הוסף את נקודות הקלף לציון הכולל של שחקן <span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">שחקן <span dir="ltr">2</span> מושך קלף.</p></li>
+<li><p dir="rtl">הצג את קלף שחקן <span dir="ltr">2</span> ונקודות הקלף.</p></li>
+<li><p dir="rtl">הוסף את נקודות הקלף לציון הכולל של שחקן <span dir="ltr">2</span>.</p></li>
+<li><p dir="rtl">אם ציון שחקן <span dir="ltr">1</span> גדול מציון שחקן <span dir="ltr">2</span>, הצג &quot;<span dir="ltr">PLAYER 1 WINS THE ROUND</span>&quot;.</p></li>
+<li><p dir="rtl">אם ציון שחקן <span dir="ltr">2</span> גדול מציון שחקן <span dir="ltr">1</span>, הצג &quot;<span dir="ltr">PLAYER 2 WINS THE ROUND</span>&quot;.</p></li>
+<li><p dir="rtl">אם ציון שחקן <span dir="ltr">1</span> שווה לציון שחקן <span dir="ltr">2</span>, הצג &quot;<span dir="ltr">TIE GAME THIS ROUND</span>&quot;.</p></li>
+</ol>
+</li>
+<li><p dir="rtl">הצג את הציון הכולל של שחקן <span dir="ltr">1</span>.</p></li>
+<li><p dir="rtl">הצג את הציון הכולל של שחקן <span dir="ltr">2</span>.</p></li>
+<li><p dir="rtl">אם הציון הכולל של שחקן <span dir="ltr">1</span> גדול מהציון הכולל של שחקן <span dir="ltr">2</span>, הצג &quot;<span dir="ltr">PLAYER 1 WINS THE GAME</span>&quot;.</p></li>
+<li><p dir="rtl">אם הציון הכולל של שחקן <span dir="ltr">2</span> גדול מהציון הכולל של שחקן <span dir="ltr">1</span>, הצג &quot;<span dir="ltr">PLAYER 2 WINS THE GAME</span>&quot;.</p></li>
+<li><p dir="rtl">אם הציון הכולל של שחקן <span dir="ltr">1</span> שווה לציון הכולל של שחקן <span dir="ltr">2</span>, הצג &quot;<span dir="ltr">TIE GAME</span>&quot;.</p></li>
+<li><p dir="rtl">סוף המשחק.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeScores["<p align='left'>Initialize variables:<br><code><b>player1Score = 0</b></code><br><code><b>player2Score = 0</b></code></p>"]
+    InitializeScores --> InputRounds["Enter number of rounds: <code><b>numberOfRounds</b></code>"]
+    InputRounds --> RoundLoopStart{"Start rounds loop"}
+    RoundLoopStart -- Yes --> Player1DrawsCard["Player 1 draws card: <code><b>card1, card1Value</b></code>"]
+    Player1DrawsCard --> OutputPlayer1Card["Display Player 1 card and points: <code><b>card1, card1Value</b></code>"]
+    OutputPlayer1Card --> UpdatePlayer1Score["<code><b>player1Score = player1Score + card1Value</b></code>"]
+    UpdatePlayer1Score --> Player2DrawsCard["Player 2 draws card: <code><b>card2, card2Value</b></code>"]
+    Player2DrawsCard --> OutputPlayer2Card["Display Player 2 card and points: <code><b>card2, card2Value</b></code>"]
+    OutputPlayer2Card --> UpdatePlayer2Score["<code><b>player2Score = player2Score + card2Value</b></code>"]
+    UpdatePlayer2Score --> CompareScores{"Compare round scores: <code><b>card1Value > card2Value?</b></code>"}
+    CompareScores -- Yes --> OutputPlayer1RoundWin["Display: <b>PLAYER 1 WINS THE ROUND</b>"]
+    CompareScores -- No --> CompareScores2{"Compare round scores: <code><b>card2Value > card1Value?</b></code>"}
+    CompareScores2 -- Yes --> OutputPlayer2RoundWin["Display: <b>PLAYER 2 WINS THE ROUND</b>"]
+    CompareScores2 -- No --> OutputTieRound["Display: <b>TIE GAME THIS ROUND</b>"]
+    OutputPlayer1RoundWin --> RoundLoopEnd
+    OutputPlayer2RoundWin --> RoundLoopEnd
+    OutputTieRound --> RoundLoopEnd
+     RoundLoopEnd --> RoundLoopStart {"Start rounds loop"}
+
+    RoundLoopStart -- No --> OutputTotalPlayer1Score["Display total score of Player 1: <code><b>player1Score</b></code>"]
+    OutputTotalPlayer1Score --> OutputTotalPlayer2Score["Display total score of Player 2: <code><b>player2Score</b></code>"]
+    OutputTotalPlayer2Score --> CompareTotalScores{"Compare total scores: <code><b>player1Score > player2Score?</b></code>"}
+    CompareTotalScores -- Yes --> OutputPlayer1GameWin["Display: <b>PLAYER 1 WINS THE GAME</b>"]
+    CompareTotalScores -- No --> CompareTotalScores2{"Compare total scores: <code><b>player2Score > player1Score?</b></code>"}
+     CompareTotalScores2 -- Yes --> OutputPlayer2GameWin["Display: <b>PLAYER 2 WINS THE GAME</b>"]
+    CompareTotalScores2 -- No --> OutputTieGame["Display: <b>TIE GAME</b>"]
+    OutputPlayer1GameWin --> End["End"]
+    OutputPlayer2GameWin --> End
+    OutputTieGame --> End
+</code></pre>
+<h4 dir="rtl">מקרא</h4>
+<ul dir="rtl">
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeScores</span> - אתחול משתני ציוני שחקן <span dir="ltr">1</span> ושחקן <span dir="ltr">2</span> לאפס.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputRounds</span> - בקשת מספר הסיבובים <span dir="ltr">numberOfRounds</span> מהמשתמש עבור המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">RoundLoopStart</span> - התחלת לולאה עבור כל סיבוב במשחק. הלולאה מבוצעת <span dir="ltr">numberOfRounds</span> פעמים.</p></li>
+<li><p dir="rtl"><span dir="ltr">Player1DrawsCard</span> - שחקן <span dir="ltr">1</span> מושך קלף <span dir="ltr">card1</span> וערכו <span dir="ltr">card1Value</span> נקבע.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputPlayer1Card</span> - הצגת מידע על קלף שחקן <span dir="ltr">1</span> <span dir="ltr">card1</span> וערכו <span dir="ltr">card1Value</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">UpdatePlayer1Score</span> - עדכון הציון הכולל של שחקן <span dir="ltr">1</span>, על ידי הוספת <span dir="ltr">card1Value</span> ל-<span dir="ltr">player1Score</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">Player2DrawsCard</span> - שחקן <span dir="ltr">2</span> מושך קלף <span dir="ltr">card2</span> וערכו <span dir="ltr">card2Value</span> נקבע.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputPlayer2Card</span> - הצגת מידע על קלף שחקן <span dir="ltr">2</span> <span dir="ltr">card2</span> וערכו <span dir="ltr">card2Value</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">UpdatePlayer2Score</span> - עדכון הציון הכולל של שחקן <span dir="ltr">2</span>, על ידי הוספת <span dir="ltr">card2Value</span> ל-<span dir="ltr">player2Score</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CompareScores</span> - השוואת ערכי קלפים <span dir="ltr">card1Value</span> ו-<span dir="ltr">card2Value</span> לקביעת מנצח הסיבוב.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputPlayer1RoundWin</span> - הצגת הודעה על ניצחון שחקן <span dir="ltr">1</span> בסיבוב.</p></li>
+<li><p dir="rtl"><span dir="ltr">CompareScores2</span> - השוואת ערכי קלפים <span dir="ltr">card2Value</span> ו-<span dir="ltr">card1Value</span> לקביעת מנצח הסיבוב.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputPlayer2RoundWin</span> - הצגת הודעה על ניצחון שחקן <span dir="ltr">2</span> בסיבוב.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputTieRound</span> - הצגת הודעה על תיקו בסיבוב.</p></li>
+<li><p dir="rtl"><span dir="ltr">RoundLoopEnd</span> - סיום לולאת הסיבובים.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputTotalPlayer1Score</span> - הצגת הציון הכולל של שחקן <span dir="ltr">1</span> <span dir="ltr">player1Score</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputTotalPlayer2Score</span> - הצגת הציון הכולל של שחקן <span dir="ltr">2</span> <span dir="ltr">player2Score</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">CompareTotalScores</span> - השוואת ציונים כוללים של שחקנים <span dir="ltr">player1Score</span> ו-<span dir="ltr">player2Score</span> לקביעת מנצח המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputPlayer1GameWin</span> - הצגת הודעה על ניצחון שחקן <span dir="ltr">1</span> במשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">CompareTotalScores2</span> - השוואת ציונים כוללים של שחקנים <span dir="ltr">player2Score</span> ו-<span dir="ltr">player1Score</span> לקביעת מנצח המשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputPlayer2GameWin</span> - הצגת הודעה על ניצחון שחקן <span dir="ltr">2</span> במשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputTieGame</span> - הצגת הודעה על תיקו במשחק.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+</ul>

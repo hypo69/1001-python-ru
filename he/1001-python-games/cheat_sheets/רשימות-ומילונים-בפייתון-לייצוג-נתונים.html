@@ -1,0 +1,81 @@
+<p dir="rtl">דוגמאות לשימוש ברשימות ומילונים לייצוג נתוני מוצרים. אפרק מוצר מופשט לפי מאפיינים ואראה כיצד להשתמש ברשימה לייצוג מוצרים בקטגוריה.</p>
+<ul>
+<li dir="rtl"><strong>מילון (<code dir="ltr">dict</code>)</strong> – זוהי דרך אידיאלית לייצג <em>המאפיינים</em> של מוצר בודד, כאשר ישנם זוגות "מפתח-ערך".</li>
+<li dir="rtl"><strong>רשימה (<code dir="ltr">list</code>)</strong> – זוהי דרך מצוינת לייצג <em>אוסף</em> של מוצרים מאותו סוג, כאשר כל מוצר יכול להיות מיוצג על ידי מילון.</li>
+</ul>
+<h3 dir="rtl">1. מילון (<code dir="ltr">dict</code>) לייצוג מאפייני מוצר</h3>
+<p dir="rtl">מילון לייצוג מאפייני מוצר בודד. במקרה זה, מפתחות המילון יהיו שמות המאפיינים, והערכים יהיו הערכים המתאימים להם.</p>
+<pre class="line-numbers"><code class="language-python">product = {
+    "id": "12345",
+    "name": "סמארטפון SuperPhone X",
+    "brand": "SuperTech",
+    "price": 999.99,
+    "color": "Space Gray",
+    "screen_size": 6.7,
+    "storage": "256 GB",
+    "camera": "108 MP",
+    "os": "Android 13",
+    "available": True
+}
+
+print("--- מאפייני מוצר ---")
+for key, value in product.items():
+    print(f"{key}: {value}")
+
+print("\n--- גישה למאפיינים ספציפיים ---")
+print(f"שם: {product['name']}")
+print(f"מחיר: ${product['price']}")
+print(f"זמין: {'כן' if product['available'] else 'לא'}")
+</code></pre>
+<p dir="rtl"><strong>הסבר קוד:</strong></p>
+<ul>
+<li dir="rtl">מילון <code dir="ltr">product</code>, שבו המפתחות הם שמות מאפייני המוצר (<span dir="ltr">id, name, brand, price</span> וכו'), והערכים הם הערכים המתאימים להם.</li>
+<li dir="rtl"><code dir="ltr">product.items()</code> לאיטרציה על כל זוגות "מפתח-ערך" והדפסתם למסך.</li>
+</ul>
+<h3 dir="rtl">2. רשימה (<code dir="ltr">list</code>) לייצוג מוצרים בקטגוריה</h3>
+<p dir="rtl">רשימה לייצוג רשימת מוצרים בקטגוריה ספציפית.
+במקרה זה, כל אלמנט ברשימה ייצג מוצר נפרד, אשר, בתורו, יכול להיות מיוצג על ידי מילון.</p>
+<pre class="line-numbers"><code class="language-python">products = [
+    {
+        "id": "12345",
+        "name": "סמארטפון SuperPhone X",
+        "brand": "SuperTech",
+        "price": 999.99,
+        "available": True
+    },
+    {
+        "id": "67890",
+        "name": "טאבלט TabPro S",
+        "brand": "TechGenius",
+        "price": 799.99,
+        "available": False
+    },
+    {
+        "id": "13579",
+        "name": "אוזניות SoundBeats Pro",
+        "brand": "AudioMax",
+        "price": 199.99,
+        "available": True
+    }
+]
+print("\n--- רשימת מוצרים בקטגוריה ---")
+
+for product in products:
+   print(f"{product['name']} ({product['brand']}), מחיר: ${product['price']}, זמין: {'כן' if product['available'] else 'לא'}")
+
+print("\n--- גישה למוצר הראשון ---")
+
+first_product = products[0]
+print(f"מזהה: {first_product['id']}, שם: {first_product['name']}")
+
+print("\n--- הצגת שמות מוצרים בלבד ---")
+for product in products:
+  print(f"שם: {product['name']}")
+</code></pre>
+<p dir="rtl"><strong>הסבר קוד:</strong></p>
+<ul>
+<li dir="rtl">רשימת <code dir="ltr">products</code>, שבה כל אלמנט הוא מילון המייצג מוצר נפרד.</li>
+<li dir="rtl">עברתי על הרשימה והדפסתי מידע על כל מוצר, תוך שימוש במפתחות המילון לגישה למאפייני המוצר.</li>
+<li dir="rtl">הראיתי כיצד לגשת למוצר הראשון ברשימה, באמצעות אינדקס <code dir="ltr">0</code>.</li>
+<li dir="rtl">עברתי על הרשימה שוב, והראיתי כיצד ניתן להציג רק שמות מוצרים.</li>
+</ul>

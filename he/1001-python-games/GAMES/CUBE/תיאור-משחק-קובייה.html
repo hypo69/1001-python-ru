@@ -1,0 +1,65 @@
+<h2 dir="rtl"><span dir="ltr">CUBE</span></h2>
+<p dir="rtl">קושי: <span dir="ltr">5</span></p>
+<hr>
+<p dir="rtl">המשחק &quot;קובייה&quot; - זהו משחק פאזל, שבו השחקן צריך להרכיב קובייה, על ידי הזזת פאותיה. הקובייה מיוצגת כמטריצה <span dir="ltr">3x3</span>, שבה כל תא מייצג פאה של הקובייה. השחקן יכול להזיז את פאות הקובייה למעלה, למטה, שמאלה וימינה. מטרת המשחק - להרכיב את הקובייה, על ידי סידור הפאות בסדר הנכון.</p>
+<h3 dir="rtl">כללי המשחק:</h3>
+<ol>
+<li><p dir="rtl">הקובייה מיוצגת כמטריצה <span dir="ltr">3x3</span>.</p></li>
+<li><p dir="rtl">השחקן יכול להזיז את פאות הקובייה, על ידי הזנת פקודות: <span dir="ltr">U</span> (למעלה), <span dir="ltr">D</span> (למטה), <span dir="ltr">L</span> (שמאלה), <span dir="ltr">R</span> (ימינה).</p></li>
+<li><p dir="rtl">מטרת המשחק - להרכיב את הקובייה, על ידי סידור הפאות בסדר הנכון.</p></li>
+<li><p dir="rtl">מיקום התחלתי של הקובייה נוצר באופן אקראי.</p></li>
+<li><p dir="rtl">המשחק מסתיים כאשר הקובייה מורכבת, כלומר כאשר כל הפאות מסודרות בסדר הנכון.</p></li>
+</ol>
+<hr>
+<h3 dir="rtl">אלגוריתם:</h3>
+<ol>
+<li><p dir="rtl">אתחל את הקובייה בערכים אקראיים מ-<span dir="ltr">1</span> עד <span dir="ltr">9</span> כמטריצה <span dir="ltr">3x3</span>.</p></li>
+<li><p dir="rtl">הצג את הקובייה על המסך.</p></li>
+<li><p dir="rtl">התחל את לולאת המשחק:</p>
+<ol>
+<li><p dir="rtl">בקש מהשחקן להזין פקודה להזזת פאת הקובייה (<span dir="ltr">U, D, L, R</span>).</p></li>
+<li><p dir="rtl">בצע את הזזת הפאה בהתאם לפקודה:</p>
+<ul>
+<li><p dir="rtl">אם הפקודה היא &quot;<span dir="ltr">U</span>&quot;, הזז את כל השורות למעלה.</p></li>
+<li><p dir="rtl">אם הפקודה היא &quot;<span dir="ltr">D</span>&quot;, הזז את כל השורות למטה.</p></li>
+<li><p dir="rtl">אם הפקודה היא &quot;<span dir="ltr">L</span>&quot;, הזז את כל העמודות שמאלה.</p></li>
+<li><p dir="rtl">אם הפקודה היא &quot;<span dir="ltr">R</span>&quot;, הזז את כל העמודות ימינה.</p></li>
+</ul>
+</li>
+<li><p dir="rtl">הצג את הקובייה על המסך.</p></li>
+<li><p dir="rtl">בדוק אם הקובייה הורכבה.</p></li>
+<li><p dir="rtl">אם הקובייה הורכבה, הצג הודעת ניצחון וסיים את המשחק.</p></li>
+<li><p dir="rtl">אם הקובייה לא הורכבה, חזור לשלב <span dir="ltr">3.1</span>.</p></li>
+</ol>
+</li>
+</ol>
+<hr>
+<h3 dir="rtl">תרשים זרימה:</h3>
+<pre class="line-numbers"><code class="language-mermaid">flowchart TD
+    Start["Start"] --> InitializeCube["Initialize cube: <code><b>cube = random_cube()</b></code>"]
+    InitializeCube --> DisplayCube["Display cube"]
+    DisplayCube --> GameLoopStart{"Start game loop"}
+    GameLoopStart --> InputMove["Enter move: <code><b>move</b></code>"]
+    InputMove --> MoveCube{"Move cube faces: <code><b>cube = move_cube(cube, move)</b></code>"}
+    MoveCube --> DisplayCubeAgain["Display cube"]
+    DisplayCubeAgain --> CheckSolved{"Check: <code><b>is_solved(cube)</b></code>?"}
+    CheckSolved -- Yes --> OutputWin["Display message: <b>You solved the cube!</b>"]
+    OutputWin --> End["End"]
+    CheckSolved -- No --> GameLoopStart
+    GameLoopStart -- No --> End
+
+</code></pre>
+
+<h4 dir="rtl">מקרא:</h4>
+<ul>
+<li><p dir="rtl"><span dir="ltr">Start</span> - התחלת התוכנית.</p></li>
+<li><p dir="rtl"><span dir="ltr">InitializeCube</span> - אתחול הקובייה, יצירת מטריצה <span dir="ltr">3x3</span> עם ערכים אקראיים מ-<span dir="ltr">1</span> עד <span dir="ltr">9</span>.</p></li>
+<li><p dir="rtl"><span dir="ltr">DisplayCube</span> - הצגת מצב הקובייה הנוכחי על המסך.</p></li>
+<li><p dir="rtl"><span dir="ltr">GameLoopStart</span> - התחלת לולאת המשחק, הנמשכת עד שהקובייה מורכבת.</p></li>
+<li><p dir="rtl"><span dir="ltr">InputMove</span> - בקשת המשתמש להזין פקודה להזזת פאות הקובייה (<span dir="ltr">U, D, L, R</span>).</p></li>
+<li><p dir="rtl"><span dir="ltr">MoveCube</span> - הזזת פאות הקובייה בהתאם לפקודה שהוזנה.</p></li>
+<li><p dir="rtl"><span dir="ltr">DisplayCubeAgain</span> - הצגת הקובייה לאחר המהלך שבוצע.</p></li>
+<li><p dir="rtl"><span dir="ltr">CheckSolved</span> - בדיקה האם הקובייה הורכבה.</p></li>
+<li><p dir="rtl"><span dir="ltr">OutputWin</span> - הצגת הודעת ניצחון אם הקובייה הורכבה.</p></li>
+<li><p dir="rtl"><span dir="ltr">End</span> - סיום התוכנית.</p></li>
+</ul>

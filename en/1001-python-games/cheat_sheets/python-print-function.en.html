@@ -1,0 +1,100 @@
+<h1>The <code>print()</code> function</h1>
+<p>The <code>print()</code> function in Python is used to output information to the console. It is one of the simplest and most frequently used functions, especially for debugging and displaying data. Let's look at the main aspects of its operation.</p>
+<h2>Syntax</h2>
+<pre class="line-numbers"><code class="language-python">print(*objects, sep=' ', end='\n', file=sys.stdout, flush=False)
+</code></pre>
+<h3>Parameters:</h3>
+<ol>
+<li><strong><code>*objects</code></strong>:
+   <ul>
+<li>A list of objects to output. You can pass one or more values, separated by commas.</li>
+<li>Example:
+     <pre class="line-numbers"><code class="language-python">print('Hello', 'world')
+</code></pre>
+     Result: <code>Hello world</code></li>
+</ul>
+</li>
+<li><strong><code>sep</code></strong> (default <code>' '</code>):
+   <ul>
+<li>The separator between objects, if multiple are passed.</li>
+<li>Example:
+     <pre class="line-numbers"><code class="language-python">print('Hello', 'world', sep=' - ')
+</code></pre>
+     Result: <code>Hello - world</code></li>
+</ul>
+</li>
+<li><strong><code>end</code></strong> (default <code>'\n'</code>):
+   <ul>
+<li>Specifies what will be added at the end of the line. By default, it's a newline character.</li>
+<li>Example:
+     <pre class="line-numbers"><code class="language-python">print('Hello', end='!')
+</code></pre>
+     Result: <code>Hello!</code></li>
+</ul>
+</li>
+<li><strong><code>file</code></strong>:
+   <ul>
+<li>The stream to which the output will be directed (by default <code>sys.stdout</code> — standard output).</li>
+<li>Example:
+     <pre class="line-numbers"><code class="language-python">with open('output.txt', 'w') as f:
+         print('Hello, file!', file=f)
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong><code>flush</code></strong> (default <code>False</code>):
+   <ul>
+<li>If set to <code>True</code>, it forces the output buffer to be flushed.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>Usage Examples</h2>
+<h3>Simple string</h3>
+<pre class="line-numbers"><code class="language-python">print('Hello, world!')
+</code></pre>
+<p>Result: <code>Hello, world!</code></p>
+<h3>Outputting multiple values</h3>
+<pre class="line-numbers"><code class="language-python">name = 'Anna'
+age = 25
+print('Name:', name, ', Age:', age)
+</code></pre>
+<p>Result: <code>Name: Anna , Age: 25</code></p>
+<h3>Customizing the separator</h3>
+<pre class="line-numbers"><code class="language-python">print(1, 2, 3, sep=' -> ')
+</code></pre>
+<p>Result: <code>1 -> 2 -> 3</code></p>
+<h3>Customizing the end of the line</h3>
+<pre class="line-numbers"><code class="language-python">for i in range(3):
+    print(i, end=' ')
+</code></pre>
+<p>Result: <code>0 1 2</code></p>
+<h3>Using f-strings with variable name output</h3>
+<p>Starting from Python 3.8, you can use f-strings to output variable values with their names in the <code>name=value</code> format. This is convenient for debugging, as it allows you to immediately see which variable and what value is being output.</p>
+<pre class="line-numbers"><code class="language-python">name = 'Ivan'
+age = 30
+print(f'{name=}, {age=}')
+</code></pre>
+<p>Result: <code>name='Ivan', age=30</code></p>
+<hr>
+<h2>Useful tips for beginners</h2>
+<ol>
+<li><strong>Debugging code</strong>:
+   Use <code>print()</code> to check variable values:
+   <pre class="line-numbers"><code class="language-python">x = 10
+   y = 20
+   print('Sum:', x + y)
+</code></pre>
+</li>
+<li><strong>Formatted output</strong>:
+   For outputting strings with substituted values, it's better to use formatting:
+   <pre class="line-numbers"><code class="language-python">name = 'Ivan'
+age = 30
+print(f'My name is {name}, I am {age} years old.')
+</code></pre>
+</li>
+<li><strong>Logging</strong>:
+   In large projects, it's better to use the <code>logging</code> module for output management, but at the initial stage, <code>print()</code> helps to quickly output data.</li>
+</ol>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">To Table of Contents</a></p>

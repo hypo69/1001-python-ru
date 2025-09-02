@@ -1,0 +1,383 @@
+<h2>Dataclasses: When Python Meets Structured Data (With New Named Examples)</h2>
+<p>In Python, when you need a class to store data, you usually have to write boilerplate code for <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code>, and other magic methods. The <code>dataclasses</code> module, introduced in Python 3.7, aims to solve this problem by providing a <code>@dataclass</code> decorator that automatically generates these methods for you.</p>
+<h3>What is a Dataclass?</h3>
+<p>A <code>dataclass</code> is a class that, as the name suggests, is primarily intended for storing data. It provides the following key benefits:</p>
+<ul>
+<li><strong>Less boilerplate code:</strong> Automatically generates <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code>, <code>__hash__</code> (under certain conditions), and other methods based on the type annotations of your fields.</li>
+<li><strong>Readability:</strong> The code becomes more concise and focused on defining the data structure.</li>
+<li><strong>Introspection:</strong> Dataclass fields are easy to introspect (check) using functions from the same <code>dataclasses</code> module.</li>
+<li><strong>Performance (with <code>slots=True</code>):</strong> Can consume less memory and be faster in accessing attributes.</li>
+</ul>
+<h3>Basic Usage</h3>
+<p>Let's start with a simple example. Suppose we need a class to represent a point in 2D space.</p>
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+# Creating an instance
+p1 = Point(10, 20)
+print(p1) # Point(x=10, y=20) - automatically generated __repr__
+
+# Comparing instances - automatically generated __eq__
+p2 = Point(10, 20)
+p3 = Point(30, 40)
+print(p1 == p2) # True
+print(p1 == p3) # False
+</code></pre>
+<p>As you can see, we didn't have to write <code>__init__</code> or <code>__repr__</code>. Everything worked "out of the box".</p>
+<h3><code>@dataclass</code> Decorator Parameters</h3>
+<p>The <code>@dataclass</code> decorator accepts several parameters that allow you to customize the generated behavior.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass(
+    init=True,         # Whether to generate __init__ (default True)
+    repr=True,         # Whether to generate __repr__ (default True)
+    eq=True,           # Whether to generate __eq__ (default True)
+    order=False,       # Whether to generate __lt__, __le__, __gt__, __ge__ (default False)
+    unsafe_hash=False, # Whether to generate __hash__ (default False)
+    frozen=False,      # Whether to make instances immutable (default False)
+    match_args=True,   # Whether to include the class in the structural pattern matching mechanism (Python 3.10+, default True)
+    kw_only=False,     # Whether to make all fields keyword-only arguments in __init__ (Python 3.10+, default False)
+    slots=False        # Whether to use __slots__ to save memory (Python 3.10+, default False)
+)
+class MyDataClass:
+    # ...
+</code></pre>
+<p>Let's consider the most important of them, including those that were in your request:</p>
+<h4><code>init=True</code> (Default)</h4>
+<p>If <code>True</code>, then <code>dataclass</code> will generate the <code>__init__</code> method. If you have your own <code>__init__</code>, and you leave <code>init=True</code>, then your <code>__init__</code> will be called, but the fields defined in the dataclass will not be initialized through it automatically. Usually, if you write your own <code>__init__</code>, you set <code>init=False</code> to avoid conflicts and have full control over initialization.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass(init=False)
+class CustomPersonInit:
+    name: str
+    age: int
+
+    def __init__(self, name: str, age: int, welcome_message: str = "Hello!"):
+        self.name = name
+        self.age = age
+        print(welcome_message)
+
+alice = CustomPersonInit("Alice", 30) # Prints "Hello!"
+print(alice) # CustomPersonInit(name='Alice', age=30) - repr still works
+</code></pre>
+<h4><code>repr=True</code> (Default)</h4>
+<p>If <code>True</code>, it will generate a <code>__repr__</code> method that provides a convenient string representation of the object, useful for debugging.</p>
+<h4><code>eq=True</code> (Default)</h4>
+<p>If <code>True</code>, it will generate an <code>__eq__</code> method that allows you to compare two instances of a class for equality by checking the equality of all their fields.</p>
+<h4><code>order=False</code></h4>
+<p>If <code>True</code>, then <code>dataclass</code> will generate the <code>__lt__</code>, <code>__le__</code>, <code>__gt__</code>, <code>__ge__</code> methods. This allows you to compare instances for "less than", "greater than", etc. The comparison is done in the order the fields are declared. For <code>order=True</code> to work, <code>eq=True</code> must also be set.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass(order=True)
+class Person:
+    name: str
+    age: int
+
+alice = Person("Alice", 30)
+boris = Person("Boris", 25)
+victor = Person("Victor", 35) # Let's add Victor
+galina = Person("Galina", 30)
+alice_older = Person("Alice", 35)
+
+
+print(f"Alice ({alice.age}) > Boris ({boris.age})? {alice > boris}") # False (since 'Alice' < 'Boris' by name) -> the comparison is done lexicographically on the tuple (name, age). ('Alice', 30) < ('Boris', 25) is True. So `>` will be False.
+# Explanation: ('Alice', 30) > ('Boris', 25) -> False, because 'Alice' < 'Boris'.
+print(f"Alice ({alice.age}) < Alice_older ({alice_older.age})? {alice < alice_older}") # True (because name is the same, but age 30 < 35)
+print(f"Galina ({galina.age}) == Alice ({alice.age})? {galina == alice}") # False (different names)
+</code></pre>
+<p><strong>Important note:</strong> The order of the fields matters for <code>order=True</code>.</p>
+<h4><code>unsafe_hash=False</code></h4>
+<p>If <code>True</code>, it will generate a <code>__hash__</code> method. Dataclasses are not hashable by default if they are mutable (<code>frozen=False</code>), because hashable objects must be immutable. If you are sure that your mutable dataclass will only be used in contexts where its hash will not change (which is risky!), you can set <code>unsafe_hash=True</code>.
+Much more often, <code>__hash__</code> is generated automatically if:</p>
+<ol>
+<li><code>frozen=True</code>.</li>
+<li><code>frozen=False</code>, but <code>eq=True</code> and all fields are also hashable.</li>
+</ol>
+<pre class="line-numbers"><code class="language-python">@dataclass(frozen=True) # Frozen dataclasses are hashable
+class ImmutablePoint:
+    x: int
+    y: int
+
+p = ImmutablePoint(1, 2)
+print(hash(p)) # Works
+
+@dataclass(unsafe_hash=True) # Risky if the object is mutable
+class MutableButHashable:
+    value: int
+
+m = MutableButHashable(5)
+print(hash(m))
+m.value = 10
+print(hash(m)) # The hash has changed, which can lead to problems when used in a set/dict
+</code></pre>
+<h4><code>frozen=False</code></h4>
+<p>If <code>True</code>, instances of the class become immutable. After creating an object, you will not be able to change the values of its fields. This is useful for creating immutable objects that are easier to use in multi-threaded applications or as dictionary keys (if they are hashable).</p>
+<pre class="line-numbers"><code class="language-python">@dataclass(frozen=True)
+class Coordinate:
+    lat: float
+    lon: float
+
+c = Coordinate(10.0, 20.0)
+# c.lat = 15.0 # AttributeError: cannot assign to field 'lat'
+</code></pre>
+<h4><code>kw_only=False</code> (Python 3.10+)</h4>
+<p>If <code>True</code>, <strong>all</strong> fields in <code>__init__</code> become <strong>keyword-only</strong> arguments. This means that you must pass the values of the fields by name, not by position. This improves readability and prevents errors, especially when the class has many fields or they may have the same types.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass(kw_only=True)
+class UserConfig:
+    username: str
+    email: str
+    is_active: bool = True
+    theme: str = "dark"
+
+# user1 = UserConfig("alice_ivanova", "alice@example.com") # TypeError: __init__() takes 0 positional arguments but 3 were given
+user1 = UserConfig(username="alice_ivanova", email="alice@example.com")
+print(user1)
+
+# You can override this behavior for a specific field using field(kw_only=False)
+@dataclass(kw_only=True)
+class MixedConfig:
+    # Mandatory positional-only (not dataclass-style)
+    # The `id` field will not be kw_only, although the class is specified as kw_only=True
+    id: int = field(kw_only=False)
+    name: str = field(kw_only=False)
+
+    # The remaining fields are kw_only
+    email: str
+    age: int = 0
+
+# Note that id and name are passed positionally, and email is passed by name
+mixed_config = MixedConfig(123, "Boris", email="boris@example.com")
+print(mixed_config)
+# mixed_config_fail = MixedConfig(id=123, name="Victor", email="viktor@example.com") # Error, id and name would be positional
+# This scenario is less typical, kw_only is usually applied to the entire class
+</code></pre>
+<p><strong>Note:</strong> <code>field(kw_only=False)</code> on a field overrides <code>kw_only=True</code> at the class level, making that specific field positional. However, most often, <code>kw_only=True</code> is used for the entire class. The main use of <code>field(kw_only=True)</code> is when you have a regular dataclass (<code>kw_only=False</code> by default), but you want to make <em>some</em> fields keyword-only.</p>
+<h4><code>slots=False</code> (Python 3.10+)</h4>
+<p>If <code>True</code>, <code>dataclass</code> will generate <code>__slots__</code> for your class. <code>__slots__</code> is a special attribute that allows Python to allocate a fixed amount of memory for class instances, instead of using a dynamic <code>__dict__</code> to store attributes.</p>
+<p><strong>Advantages of <code>slots=True</code>:</strong></p>
+<ul>
+<li><strong>Memory savings:</strong> Significantly reduces the amount of memory consumed by each instance. This is especially important for applications that create millions of objects.</li>
+<li><strong>Faster attribute access:</strong> Accessing attributes via <code>__slots__</code> can be slightly faster, as Python does not need to look them up in a dictionary.</li>
+</ul>
+<p><strong>Disadvantages of <code>slots=True</code>:</strong></p>
+<ul>
+<li><strong>Cannot add new attributes "on the fly":</strong> You will not be able to assign an attribute that was not declared in the dataclass (or in the <code>__slots__</code> of a parent class).</li>
+<li><strong>Difficulties with multiple inheritance:</strong> It can be difficult to use <code>__slots__</code> with multiple inheritance, especially if some parent classes do not use <code>__slots__</code> or use them differently.</li>
+<li><strong>Does not have <code>__dict__</code>:</strong> Instances will not have a <code>__dict__</code> attribute unless it has been explicitly added to <code>__slots__</code> or a parent class.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">import sys
+
+@dataclass
+class RegularPoint:
+    x: int
+    y: int
+
+@dataclass(slots=True)
+class SlottedPoint:
+    x: int
+    y: int
+
+rp = RegularPoint(1, 2)
+sp = SlottedPoint(1, 2)
+
+print(f"Size of RegularPoint: {sys.getsizeof(rp)} bytes")
+# Approximately 56 bytes on Python 3.10+ (may vary)
+# print(rp.__dict__) # {'x': 1, 'y': 2} - has __dict__
+
+print(f"Size of SlottedPoint: {sys.getsizeof(sp)} bytes")
+# Approximately 32 bytes on Python 3.10+ (may vary) - significantly smaller
+# print(sp.__dict__) # AttributeError: 'SlottedPoint' object has no attribute '__dict__'
+
+# Attempt to add a new attribute to a slotted dataclass
+try:
+    sp.z = 30
+except AttributeError as e:
+    print(f"Error when adding a new attribute: {e}")
+</code></pre>
+<p><strong>When to use <code>slots=True</code>?</strong>
+When you are creating a very large number of instances of the same class, and memory saving is a priority. This is a great optimization, but it has its trade-offs.</p>
+<h3>The <code>field()</code> Function: Detailed Field Configuration</h3>
+<p>In addition to class-level parameters, you can configure each field individually using the <code>field()</code> function from the <code>dataclasses</code> module. This is especially useful when you need more complex logic for fields than just a type annotation.</p>
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass, field
+from typing import List, Dict, Any
+import uuid # For generating IDs
+
+@dataclass
+class Product:
+    id: str = field(default_factory=lambda: "prod-" + str(uuid.uuid4())[:8], init=False) # Not initialized via __init__, generated automatically
+    name: str
+    price: float = field(compare=False, metadata={'unit': 'USD', 'min_value': 0.0}) # Does not participate in comparison, has metadata
+    tags: List[str] = field(default_factory=list, repr=False) # Uses a factory for a list, not displayed in repr
+    description: str = field(default="No description available") # Regular default value
+    details: Dict[str, Any] = field(default_factory=dict, hash=False) # Does not participate in hashing
+
+p = Product(name="Laptop", price=1200.0, tags=["electronics", "tech"])
+print(p)
+# Product(id='prod-...', name='Laptop', price=1200.0, description='No description available', details={})
+# Note that 'tags' is not in the repr, and 'id' was generated automatically.
+
+p2 = Product(name="Laptop", price=1500.0, tags=["electronics", "tech"])
+print(f"p == p2? {p == p2}") # True, because price does not participate in comparison (compare=False)
+
+# p3 = Product(name="Desktop PC", price=1000.0, details={"cpu": "Intel"})
+# print(hash(p3)) # TypeError: unhashable type: 'dict' (due to details: hash=False)
+# If frozen=True, and details were not hash=False, then the dict would need to be immutable.
+</code></pre>
+<p>Let's consider the <code>field()</code> parameters:</p>
+<ul>
+<li><strong><code>default</code></strong>: A regular default value for the field.
+<pre class="line-numbers"><code class="language-python">value: int = field(default=0)
+</code></pre>
+</li>
+<li><strong><code>default_factory</code></strong>: A function with no arguments that will be called to get the default value for the field. <strong>Be sure to use <code>default_factory</code> for mutable default values (lists, dictionaries, objects) to avoid problems with shared state between instances!</strong>
+<pre class="line-numbers"><code class="language-python">items: List[str] = field(default_factory=list)
+</code></pre>
+</li>
+<li><strong><code>init</code></strong>: If <code>True</code> (default), the field will be included in the generated <code>__init__</code> method. If <code>False</code>, the field will not be an argument in the constructor, and you must either provide a <code>default</code> / <code>default_factory</code> for it, or initialize it in <code>__post_init__</code>.
+<pre class="line-numbers"><code class="language-python">import time
+timestamp: float = field(init=False, default_factory=time.time)
+</code></pre>
+</li>
+<li><strong><code>repr</code></strong>: If <code>True</code> (default), the field will be included in the generated <code>__repr__</code> method. Useful for hiding large or sensitive data.
+<pre class="line-numbers"><code class="language-python">password: str = field(repr=False)
+</code></pre>
+</li>
+<li><strong><code>compare</code></strong>: If <code>True</code> (default), the field will be included in the generated <code>__eq__</code> and <code>__order__</code> methods. If <code>False</code>, it will not affect the comparison of objects.
+<pre class="line-numbers"><code class="language-python">version: str = field(compare=False)
+</code></pre>
+</li>
+<li><strong><code>hash</code></strong>: If <code>True</code> (default), the field will be included in the generated <code>__hash__</code> method. If <code>False</code>, it will not affect the hash of the object. If the class is <code>frozen=True</code>, but any field has <code>hash=False</code>, then the class will not be able to generate its <code>__hash__</code> and will become unhashable.
+<pre class="line-numbers"><code class="language-python">config: Dict[str, Any] = field(hash=False, default_factory=dict)
+</code></pre>
+</li>
+<li><strong><code>metadata</code></strong>: A dictionary for storing arbitrary data associated with the field. <code>dataclasses</code> ignore this data, but it can be used by external tools (e.g., for validation, serialization, documentation generation).
+<pre class="line-numbers"><code class="language-python">user_id: int = field(metadata={'help': 'Unique user identifier', 'validator': 'positive_int'})
+</code></pre>
+</li>
+<li><strong><code>kw_only</code></strong>: (Python 3.10+) If <code>True</code>, this specific field becomes a keyword-only argument in <code>__init__</code>. If <code>False</code>, it becomes positional. This allows you to mix positional and keyword-only arguments when the class's <code>kw_only</code> is <code>False</code> by default.
+<pre class="line-numbers"><code class="language-python">@dataclass
+class FlexibleParams:
+    mandatory_pos: str # Positional
+    optional_kw: int = field(default=0, kw_only=True) # Keyword-only
+
+fp1 = FlexibleParams("mandatory", optional_kw=100)
+# fp2 = FlexibleParams("mandatory", 200) # TypeError: __init__() takes 1 positional argument but 2 were given (optional_kw)
+</code></pre>
+</li>
+</ul>
+<h3>The <code>fields()</code> Function: Dataclass Introspection</h3>
+<p>The <code>fields()</code> function from the <code>dataclasses</code> module allows you to get information about the fields of a dataclass or its instance. It returns a tuple of <code>Field</code> objects.</p>
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass, field, fields
+from typing import List
+
+@dataclass
+class Book:
+    title: str
+    author: str = field(metadata={'display_name': 'Author', 'max_length': 100})
+    pages: int = field(default=0, metadata={'min_value': 1})
+    tags: List[str] = field(default_factory=list, repr=False)
+
+# Get information about the fields of the Book class
+book_fields = fields(Book)
+
+for f in book_fields:
+    print(f"Field name: {f.name}")
+    print(f"Field type: {f.type}")
+    print(f"Default value: {f.default}")
+    print(f"Uses default_factory: {f.default_factory is not None}")
+    print(f"Included in init: {f.init}")
+    print(f"Included in repr: {f.repr}")
+    print(f"Included in compare: {f.compare}")
+    print(f"Included in hash: {f.hash}")
+    print(f"Metadata: {f.metadata}")
+    print(f"Keyword-only: {f.kw_only}") # For Python 3.10+
+    print("-" * 20)
+
+# Access the metadata of a specific field:
+author_field_info = next(f for f in book_fields if f.name == 'author')
+print(f"Display name for author: {author_field_info.metadata.get('display_name')}")
+</code></pre>
+<p>The <code>Field</code> object has the following attributes: <code>name</code>, <code>type</code>, <code>default</code>, <code>default_factory</code>, <code>init</code>, <code>repr</code>, <code>hash</code>, <code>compare</code>, <code>metadata</code>, <code>kw_only</code>.</p>
+<h3>The <code>__post_init__</code> Method</h3>
+<p>Sometimes you need additional logic after the automatic <code>__init__</code> of a dataclass has finished initializing the fields. For this, you can define a <code>__post_init__</code> method. It will be called immediately after <code>__init__</code>.</p>
+<p>This is useful for:</p>
+<ul>
+<li>Data validation.</li>
+<li>Calculating derived fields based on already initialized ones.</li>
+<li>Executing any other logic that depends on fully initialized fields.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">import datetime
+
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    email: str = field(init=False) # This field will not be included in the __init__ parameters
+    created_at: datetime.datetime = field(default_factory=datetime.datetime.now, init=False)
+
+    def __post_init__(self):
+        print(f"--- __post_init__ started for {self.first_name} {self.last_name} ---")
+        # Validation
+        if not self.first_name or not self.last_name:
+            raise ValueError("First name and last name cannot be empty.")
+        # Calculation of a derived field
+        self.email = f"{self.first_name.lower()}.{self.last_name.lower()}@example.com"
+        print(f"User {self.first_name} {self.last_name} created with email: {self.email}")
+        print(f"Creation time: {self.created_at}")
+        print(f"--- __post_init__ finished ---")
+
+alice_ivanova = User("Alice", "Ivanova")
+print("
+Object created:")
+print(alice_ivanova)
+
+print("
+")
+
+try:
+    victor_no_last_name = User("Victor", "")
+except ValueError as e:
+    print(f"Error creating user: {e}")
+</code></pre>
+<h3>Dataclass Inheritance</h3>
+<p>Dataclasses support inheritance. Fields from base classes are included in child classes.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass
+class Vehicle:
+    make: str
+    model: str
+
+@dataclass
+class Car(Vehicle):
+    num_doors: int
+    is_electric: bool = False
+
+@dataclass
+class ElectricCar(Car):
+    battery_kwh: float
+
+alices_car = Car("Toyota", "Camry", 4)
+print(alices_car) # Car(make='Toyota', model='Camry', num_doors=4, is_electric=False)
+
+boris_car = ElectricCar("Tesla", "Model 3", 4, True, 75.0)
+print(boris_car) # ElectricCar(make='Tesla', model='Model 3', num_doors=4, is_electric=True, battery_kwh=75.0)
+</code></pre>
+<p><strong>Features of inheritance with <code>slots=True</code>:</strong></p>
+<ul>
+<li>If the parent class uses <code>__slots__</code>, the child class must also use <code>__slots__</code> to get the memory savings.</li>
+<li>The child class must define its own <code>__slots__</code> for its new fields.</li>
+<li>If the child class does not define <code>__slots__</code>, it will have a <code>__dict__</code> in addition to the parent's slots.</li>
+</ul>
+<h3>When to use Dataclasses?</h3>
+<ul>
+<li><strong>Data container classes:</strong> When the main purpose of the class is to store data, and you need automatic <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code>.</li>
+<li><strong>Immutable objects:</strong> When you need objects whose state should not change after creation (<code>frozen=True</code>).</li>
+<li><strong>Configurations:</strong> To define the structure of configuration parameters.</li>
+<li><strong>Data Transfer Objects (DTOs):</strong> To transfer structured data between parts of an application.</li>
+<li><strong>Simple business logic:</strong> When the class methods mainly operate on the data of the class itself, do not have complex internal state or side effects.</li>
+</ul>
+<h3>When NOT to use Dataclasses?</h3>
+<ul>
+<li><strong>Classes with rich behavior:</strong> When a class has complex business logic, many methods that interact with external systems, or complex internal state, it is better to use a regular class.</li>
+<li><strong>OR-mapping (ORM) models:</strong> Although dataclasses can be part of an ORM, they do not replace full-fledged ORM models, which often require specific methods for working with a database, lazy loading, etc.</li>
+<li><strong>Polymorphism and deep inheritance hierarchy:</strong> If you have a complex class hierarchy with deep polymorphism and behavior overriding, regular classes may be more flexible.</li>
+</ul>
+<h3>Conclusion</h3>
+<p><code>dataclasses</code> are a powerful and convenient addition to Python that greatly simplifies the creation of data-oriented classes. They help to write cleaner, more readable, and maintainable code, and options like <code>slots=True</code> and <code>kw_only=True</code> provide additional opportunities for performance optimization and improving the ergonomics of your code's API. Don't forget about <code>field()</code> for detailed configuration of each field and <code>fields()</code> for introspection!</p>

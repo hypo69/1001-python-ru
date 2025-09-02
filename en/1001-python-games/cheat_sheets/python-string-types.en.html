@@ -1,0 +1,115 @@
+<p>In Python, strings are one of the most important and frequently used data types. Here's a brief overview of different string types and their features:</p>
+<hr>
+<h3>1. <strong>Regular strings</strong></h3>
+<p>A regular string is created using single <code>&#39;</code> or double quotes <code>&quot;</code>.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">s1 = &#39;Hello, world!&#39;
+s2 = &quot;Python is cool!&quot;
+</code></pre>
+<p>They are identical, but it&#39;s important to be consistent in using one style.</p>
+<hr>
+<h3>2. <strong>Multi-line strings</strong></h3>
+<p>Multi-line strings are enclosed in triple quotes <code>&#39;&#39;&#39;</code> or <code>&quot;&quot;&quot;</code>. They allow you to write text on multiple lines.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">s3 = &#39;&#39;&#39;This is a string
+on multiple
+lines.&#39;&#39;&#39;
+</code></pre>
+<hr>
+<h3>3. <strong>f-strings (formatted strings)</strong></h3>
+<p>f-strings (or formatted strings) are used to embed variable values and expressions directly into a string. The <code>f</code> character is added before the string.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">name = &#39;Boris&#39;
+age = 25
+s4 = f&#39;My name is {name}, I am {age} years old.&#39;
+print(s4)  # My name is Boris, I am 25 years old.
+</code></pre>
+<p>The advantage of f-strings is that they are simple and readable.
+In newer versions of Python (starting from <strong>3.8</strong>), a convenient feature appeared: using <code>f&#39;{name=}&#39;</code> in f-strings. This construct outputs not only the variable&#39;s value but also its name, which is especially useful for debugging.</p>
+<h3>Example of using <code>f&#39;{name=}&#39;</code>:</h3>
+<pre class="line-numbers"><code class="language-python">name = &#39;Boris&#39;
+age = 25
+
+# Output variable name and its value
+print(f&#39;{name=}, {age=}&#39;)
+# Result: name=&#39;Boris&#39;, age=25
+</code></pre>
+<h3>Features:</h3>
+<ol>
+<li><strong>Automatic variable name display</strong>:
+   Python automatically substitutes the variable name and its value, separated by <code>=</code>.</li>
+<li><strong>Works with expressions</strong>:
+   You can use expressions inside an f-string, and they will also be displayed.</li>
+</ol>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">x = 10
+y = 5
+print(f&#39;{x + y=}&#39;)
+# Result: x + y=15
+</code></pre>
+<p>3. <strong>Applicable to string functions</strong>:
+   You can output the result of methods or operations on strings.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">s = &#39;Python&#39;
+print(f&#39;{s.upper()=}&#39;)
+# Result: s.upper()=&#39;PYTHON&#39;
+</code></pre>
+<h3>Why this is useful:</h3>
+<ul>
+<li><strong>Code debugging</strong>: Quickly check variable and expression values.</li>
+<li><strong>Readability</strong>: Clearly see which variable a value belongs to.</li>
+</ul>
+<hr>
+<h3>4. <strong>r-strings (raw strings)</strong></h3>
+<p>r-strings (raw strings) are created by adding the <code>r</code> character before the string. They are used for working with characters that are usually interpreted as special, such as newline characters (<code>\n</code>) or tabs (<code>\t</code>).</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">s5 = r&#39;C:\new_folder\test&#39;
+print(s5)  # C:\new_folder\test
+</code></pre>
+<p>Without <code>r</code>, this string would be interpreted with <code>\n</code> replaced by a newline.</p>
+<hr>
+<h3>5. <strong>u-strings (Unicode strings)</strong></h3>
+<p>u-strings were important in Python 2 for working with Unicode, but in Python 3, strings are Unicode by default, so adding <code>u</code> is no longer necessary.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">s6 = u&#39;Hello, world!&#39;
+</code></pre>
+<hr>
+<h3>6. <strong>b-strings (byte strings)</strong></h3>
+<p>Byte strings are used for working with binary data. Such strings start with <code>b</code>. They do not support Unicode characters, only bytes.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python"># Byte string representing a PNG file header
+image_bytes = b&#39;\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR&#39;
+
+# Check that the data matches the PNG format
+if image_bytes.startswith(b&#39;\x89PNG&#39;):
+    print(&#39;This is a PNG image.&#39;)
+else:
+    print(&#39;Unknown format.&#39;)
+</code></pre>
+<hr>
+<h3>7. <strong>Strings with escaping</strong></h3>
+<p>To include special characters in a string, escape sequences with a backslash (<code>\</code>) are used.</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">s8 = &#39;This is a string with quotes: &#39;single&#39; and &quot;double&quot;.&#39;
+</code></pre>
+<hr>
+<h3>8. <strong>Combination of f-strings and r-strings</strong></h3>
+<p>You can combine string types. For example, f-strings and raw strings: 
+
+</p>
+<p><strong>Example:</strong></p>
+<pre class="line-numbers"><code class="language-python">path = &#39;new_folder&#39;
+s9 = fr&#39;C:\{path}\test&#39;
+print(s9)  # C:\new_folder\test
+</code></pre>
+<hr>
+<h3>Summary</h3>
+<p>In Python, strings are flexible and convenient. The choice of string type depends on the task: 
+- For regular text — <code>&#39;</code> or <code>&quot;</code>.
+- For multi-line text — <code>&#39;&#39;&#39;</code> or <code>&quot;&quot;&quot;</code>.
+- For value substitution — <code>f</code>.
+- For paths or regular expressions — <code>r</code>.
+- For binary data — <code>b</code>.
+</p>
+<hr>
+<p><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">To Table of Contents</a></p>

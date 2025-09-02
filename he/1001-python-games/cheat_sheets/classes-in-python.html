@@ -1,0 +1,157 @@
+<h1 dir="rtl">מחלקות ב-<span dir="ltr">`python`</span></h1>
+<p dir="rtl">מחלקות הן אחד המנגנונים העיקריים של תכנות מונחה עצמים (<span dir="ltr">OOP</span>) בפייתון. מחלקה יכולה להיחשב כ"תבנית" או "שרטוט" ליצירת אובייקטים בעלי תכונות (נתונים) ושיטות (פונקציות). אובייקטים שנוצרו על בסיס מחלקה נקראים מופעים (אינסטנסים) של המחלקה. מחלקות מאפשרות לבנות קוד, לשפר את יכולת השימוש החוזר בו ולהקל על תחזוקתו.</p>
+<h3 dir="rtl">מבנה המחלקה</h3>
+<pre class="line-numbers"><code class="language-python">class ClassName:
+    # תכונות המחלקה
+    def __init__(self, param1, param2):
+        # בנאי (מאותחל) המחלקה
+        self.param1 = param1
+        self.param2 = param2
+
+    # שיטות המחלקה
+    def method(self):
+        return f'{self.param1} ו {self.param2}'
+</code></pre>
+<ol dir="rtl">
+<li><strong>בנאי</strong> (<span dir="ltr"><code>__init__</code></span>):
+הבנאי <span dir="ltr"><code>__init__</code></span> הוא שיטה מיוחדת הנקראת אוטומטית בעת יצירת אובייקט חדש. הוא משמש לאתחול תכונות האובייקט.</li>
+</ol>
+<ul dir="rtl">
+<li><span dir="ltr"><code>self</code></span>: פרמטר המהווה הפניה למופע הנוכחי של המחלקה. בפייתון חובה להעביר אותו כפרמטר הראשון בכל שיטות המחלקה (הוא אינו מועבר בעת קריאה לשיטה).</li>
+<li>תכונות, כגון <span dir="ltr"><code>param1</code></span> ו-<span dir="ltr"><code>param2</code></span>, מוקצות לאובייקט באמצעות <span dir="ltr"><code>self</code></span>. תכונות אלו יכולות לשמש לאחר מכן על ידי שיטות אחרות של המחלקה.</li>
+</ul>
+<ol dir="rtl" start="2">
+<li><strong>תכונות המחלקה</strong>:
+תכונות הן משתנים השייכים לאובייקטים של מחלקה זו. הן מוגדרות בתוך הבנאי (<span dir="ltr"><code>__init__</code></span>) וניתן לגשת אליהן באמצעות הפניה לאובייקט.</li>
+<li><strong>שיטות המחלקה</strong>:
+שיטות הן פונקציות שיכולות לתפעל את תכונות האובייקט. שיטות יכולות להשתמש בנתוני האובייקט, לשנות אותם או לבצע פעולות אחרות.</li>
+</ol>
+<h3 dir="rtl">יצירת אובייקט מחלקה</h3>
+<p dir="rtl">לאחר הגדרת מחלקה, ניתן ליצור אובייקטים של מחלקה זו. אובייקטים הם מופעים של המחלקה.</p>
+<pre class="line-numbers"><code class="language-python">class Car:
+    def __init__(self, make, model, year):
+        self.make = make
+        self.model = model
+        self.year = year
+
+    def description(self):
+        return f'{self.year} {self.make} {self.model}'
+
+# יצירת אובייקט
+my_car = Car('Toyota', 'Corolla', 2020)
+print(my_car.description())  # פלט: 2020 Toyota Corolla
+</code></pre>
+<ul dir="rtl">
+<li>בדוגמה זו, יצרנו אובייקט <span dir="ltr"><code>my_car</code></span> של המחלקה <span dir="ltr"><code>Car</code></span>. בעת יצירת האובייקט, מועברים ערכים עבור התכונות <span dir="ltr"><code>make</code></span>, <span dir="ltr"><code>model</code></span> ו-<span dir="ltr"><code>year</code></span>, הנשמרים באובייקט.</li>
+<li>השיטה <span dir="ltr"><code>description()</code></span> מאפשרת לקבל ייצוג מחרוזתי של המכונית.</li>
+</ul>
+<h3 dir="rtl">סוגי שיטות</h3>
+<ol dir="rtl">
+<li><strong>שיטות מופע</strong>: אלו הן שיטות רגילות הפועלות על מופעים של המחלקה. הן מקבלות הפניה לאובייקט כפרמטר הראשון (בדרך כלל <span dir="ltr"><code>self</code></span>).</li>
+</ol>
+<p dir="rtl">דוגמה:
+<pre class="line-numbers"><code class="language-python">   def method(self):
+       pass
+</code></pre>
+</p>
+<ol dir="rtl" start="2">
+<li><strong>שיטות מחלקה</strong>: שיטות המקבלות את המחלקה עצמה כפרמטר הראשון. לתיאור שיטות כאלה משתמשים בדקורטור <span dir="ltr"><code>@classmethod</code></span>. הן יכולות לשנות את מצב המחלקה עצמה, ולא את המופעים הבודדים שלה.</li>
+</ol>
+<p dir="rtl">דוגמה:
+<pre class="line-numbers"><code class="language-python">   class MyClass:
+       @classmethod
+       def class_method(cls):
+           pass
+</code></pre>
+</p>
+<ol dir="rtl" start="3">
+<li><strong>שיטות סטטיות</strong>: אלו הן שיטות שאינן משתמשות ב-<span dir="ltr"><code>self</code></span> או ב-<span dir="ltr"><code>cls</code></span> (כלומר, אין להן גישה לא למופע ולא למחלקה). שיטות סטטיות מוכרזות באמצעות הדקורטור <span dir="ltr"><code>@staticmethod</code></span>. הן יכולות להיות שימושיות כאשר שיטה אינה תלויה במצב האובייקט או המחלקה, אך קשורה ללוגיקה השייכת למחלקה.</li>
+</ol>
+<p dir="rtl">דוגמה:
+<pre class="line-numbers"><code class="language-python">   class MyClass:
+       @staticmethod
+       def static_method():
+           pass
+</code></pre>
+</p>
+<h3 dir="rtl">ירושה</h3>
+<p dir="rtl">אחד העקרונות המרכזיים של <span dir="ltr">OOP</span> הוא <strong>ירושה</strong>. מחלקה יכולה לרשת התנהגות של מחלקה אחרת, להרחיב או לשנות את הפונקציונליות שלה. זה מאפשר שימוש חוזר בקוד, תוך הימנעות מכפילויות.</p>
+<pre class="line-numbers"><code class="language-python">class Animal:
+    def speak(self):
+        return 'קול של חיה'
+
+class Dog(Animal):  # המחלקה Dog יורשת מהמחלקה Animal
+    def speak(self):
+        return 'האו'
+
+# יצירת אובייקטים
+dog = Dog()
+print(dog.speak())  # פלט: האו
+</code></pre>
+<ul dir="rtl">
+<li>המחלקה <span dir="ltr"><code>Dog</code></span> יורשת את השיטה <span dir="ltr"><code>speak</code></span> מהמחלקה <span dir="ltr"><code>Animal</code></span>, אך דורסת אותה כדי להחזיר את המחרוזת 'האו'.</li>
+</ul>
+<h3 dir="rtl">פולימורפיזם</h3>
+<p dir="rtl"><strong>פולימורפיזם</strong> פירושו היכולת של אובייקטים ממחלקות שונות להשתמש באותן שיטות עם יישום שונה. בפייתון זה אפשרי בזכות ירושה ודריסת שיטות.</p>
+<pre class="line-numbers"><code class="language-python">class Cat(Animal):
+    def speak(self):
+        return 'מיאו'
+
+# יצירת אובייקטים
+cat = Cat()
+print(cat.speak())  # פלט: מיאו
+</code></pre>
+<p dir="rtl">כאן, <span dir="ltr"><code>Cat</code></span> גם דורסת את השיטה <span dir="ltr"><code>speak</code></span>, אך מחזירה ערך אחר. זה מאפשר לקרוא לשיטה <span dir="ltr"><code>speak</code></span> ללא קשר לסוג האובייקט.</p>
+<h3 dir="rtl">אנקפסולציה</h3>
+<p dir="rtl"><strong>אנקפסולציה</strong> מאפשרת להסתיר פרטי יישום פנימיים ולספק גישה לנתונים באמצעות שיטות ציבוריות. זה עוזר למנוע שימוש לא נכון בנתונים.</p>
+<pre class="line-numbers"><code class="language-python">class Car:
+    def __init__(self, make, model):
+        self._make = make  # תכונה מוגנת
+        self._model = model
+
+    def get_make(self):
+        return self._make
+
+    def set_make(self, make):
+        self._make = make
+
+# יצירת אובייקט
+my_car = Car('Toyota', 'Corolla')
+print(my_car.get_make())  # פלט: Toyota
+my_car.set_make('Honda')
+print(my_car.get_make())  # פלט: Honda
+</code></pre>
+<p dir="rtl">כאן, התכונות <span dir="ltr"><code>_make</code></span> ו-<span dir="ltr"><code>_model</code></span> מוגנות (בדרך כלל בפייתון, קו תחתון מציין שתכונות אלו לא אמורות לשמש ישירות מחוץ למחלקה), אך ניתן לגשת אליהן ולשנות אותן באמצעות השיטות <span dir="ltr"><code>get_make</code></span> ו-<span dir="ltr"><code>set_make</code></span>.</p>
+<h3 dir="rtl">תכונות נוספות של מחלקות</h3>
+<ol dir="rtl">
+<li><strong>דסטרוקטור</strong> (<span dir="ltr"><code>__del__</code></span>):
+שיטה מיוחדת הנקראת כאשר אובייקט נהרס (לדוגמה, בעת יציאה מתחום). היא יכולה לשמש לשחרור משאבים.</li>
+</ol>
+<p dir="rtl">דוגמה:
+<pre class="line-numbers"><code class="language-python">   class MyClass:
+       def __del__(self):
+           print("אובייקט נהרס")
+
+   obj = MyClass()
+   del obj  # האובייקט ייהרס והשיטה __del__ תיקרא
+</code></pre>
+</p>
+<ol dir="rtl" start="2">
+<li><strong>שיטות קסם</strong>: 
+   אלו הן שיטות מיוחדות עם שני קווים תחתונים (לדוגמה, <span dir="ltr"><code>__init__</code></span>, <span dir="ltr"><code>__str__</code></span>, <span dir="ltr"><code>__repr__</code></span>, <span dir="ltr"><code>__eq__</code></span>). הן מאפשרות לדרוס את ההתנהגות הסטנדרטית של פעולות כגון יצירת אובייקטים, השוואה, ייצוג אובייקטים כמחרוזות וכו'.</li>
+</ol>
+<p dir="rtl">דוגמה:
+<pre class="line-numbers"><code class="language-python">   class Point:
+       def __init__(self, x, y):
+           self.x = x
+           self.y = y
+
+       def __repr__(self):
+           return f'Point({self.x}, {self.y})'
+
+   p = Point(3, 4)
+   print(p)  # פלט: Point(3, 4)
+</code></pre>
+</p>
+<hr>
+<p dir="rtl"><a href="https://github.com/hypo69/101_python_computer_games_ru/blob/master/cheat_sheets#readme">לתוכן העניינים</a></p>

@@ -1,0 +1,162 @@
+# Conjuntos en Python
+
+<strong>1. Introducción: ¿Qué son los conjuntos?</strong>
+
+En informática y matemáticas, los conjuntos son una forma de representar colecciones de elementos únicos. Es importante entender que:
+
+<ul>
+<li><strong>Unicidad:</strong> Cada elemento de un conjunto debe ser único. No se permiten duplicados.</li>
+<li><strong>Desordenado:</strong> El orden de los elementos en un conjunto no importa.</li>
+</ul>
+<p><strong>2. Conjuntos y frutas</strong></p>
+<p>Imaginaremos que solo tenemos las frutas mismas:</p>
+<ul>
+<li>🍎 (manzana)</li>
+<li>🍐 (pera)</li>
+<li>🍉 (melón)</li>
+<li>🧺 (cesta)</li>
+</ul>
+<p>Es importante que:</p>
+<ol>
+<li><strong>No hay <em>frutas idénticas</em> en el conjunto:</strong> Si hay una manzana en el conjunto, no habrá otra manzana idéntica. Cada fruta es única en su conjunto.</li>
+<li><strong>El orden de las frutas no importa:</strong> Si hay una manzana y una pera en el conjunto, es lo mismo que si hubiera una pera y una manzana. El orden no importa.</li>
+</ol>
+<p>Por ejemplo, <code>{🍎, 🍐, 🍉}</code> es un conjunto que contiene una manzana, una pera y un melón.</p>
+<p><strong>3. ¿Por qué los conjuntos requieren elementos únicos?</strong></p>
+<ul>
+<li>Los conjuntos están diseñados para rastrear la <em>presencia</em> de elementos, no su <em>cantidad</em>.</li>
+<li>La unicidad de los elementos simplifica la realización de operaciones en conjuntos.</li>
+<li>Los conjuntos se utilizan para eliminar la redundancia de datos.</li>
+</ul>
+<p><strong>4. Operaciones en conjuntos (conjuntos de frutas):</strong></p>
+<ol>
+<li><strong>Unión: "Reunir todas las frutas en un solo conjunto"</strong>
+<ul>
+<li>Combinar dos conjuntos de frutas, reuniendo todas las frutas en un nuevo conjunto. Si hay frutas idénticas en ambos conjuntos, el nuevo conjunto solo tendrá una de esas frutas.</li>
+<li>Si el conjunto A tiene {🍎, 🍐}, y el conjunto B tiene {🍐, 🍉}, entonces el conjunto A ∪ B será {🍎, 🍐, 🍉}.</li>
+</ul>
+</li>
+<li><strong>Intersección: "Encontrar frutas comunes"</strong>
+<ul>
+<li>Encontrar <em>solo</em> aquellas frutas que están tanto en el conjunto A como en el conjunto B.</li>
+<li>Si el conjunto A tiene {🍎, 🍐}, y el conjunto B tiene {🍐, 🍉}, entonces el conjunto A ∩ B solo será {🍐}.</li>
+</ul>
+</li>
+<li><strong>Diferencia: "Frutas que están en un conjunto pero no en otro"</strong>
+<ul>
+<li>Encontrar <em>solo</em> aquellas frutas que están en el conjunto A, pero no en el conjunto B.</li>
+<li>Si el conjunto A tiene {🍎, 🍐}, y el conjunto B tiene {🍐, 🍉}, entonces el conjunto A - B será {🍎}, y el conjunto B - A será {🍉}.</li>
+</ul>
+</li>
+<li><strong>Diferencia simétrica: "Frutas que solo están en uno de los conjuntos"</strong>
+<ul>
+<li>Encontrar <em>todas</em> las frutas que están en el conjunto A o en el conjunto B, pero no en ambos simultáneamente.</li>
+<li>Si el conjunto A tiene {🍎, 🍐}, y el conjunto B tiene {🍐, 🍉}, entonces el conjunto A ^ B será {🍎, 🍉}.</li>
+</ul>
+</li>
+<li><strong>Subconjunto: "¿Están todas las frutas de un conjunto en otro?"</strong>
+<ul>
+<li>Comprobar si el conjunto A es un subconjunto del conjunto B. Esto significa que todas las frutas del conjunto A también están en el conjunto B.</li>
+<li><strong>Ejemplo:</strong> Si el conjunto A tiene {🍎, 🍐}, y el conjunto B tiene {🍎, 🍐, 🍉}, entonces A <= B.</li>
+</ul>
+</li>
+<li><strong>Superconjunto: "¿Un conjunto contiene todas las frutas de otro?"</strong>
+<ul>
+<li>Comprobar si el conjunto A es un superconjunto del conjunto B. Esto significa que todas las frutas del conjunto B también están en el conjunto A.</li>
+<li>Si el conjunto A tiene {🍎, 🍐, 🍉}, y el conjunto B tiene {🍎, 🍐}, entonces A >= B.</li>
+</ul>
+</li>
+</ol>
+<pre class="line-numbers"><code class="language-python">
+from typing import Set
+
+def create_fruit_set(fruit_string: str) -> Set[str]:
+    """
+    Creates a set of fruits from a string.
+
+    Args:
+        fruit_string: String of fruits (🍎, 🍐, 🍉, 🧺).
+
+    Returns:
+        A set of unique fruits.
+    """
+    if not all(fruit in ["🍎", "🍐", "🍉", "🧺"] for fruit in fruit_string):
+        raise ValueError("La cadena solo puede contener los símbolos 🍎, 🍐, 🍉, 🧺")
+    return set(fruit_string)  # Use set() to create a set
+
+def display_set(fruit_set: Set[str]) -> str:
+  """
+  Converts a set of fruits into a string for display.
+
+    Args:
+        fruit_set: Set of fruits.
+
+    Returns:
+        String to display.
+  """
+  return "{" + ", ".join(fruit_set) + "}"
+
+
+# Create fruit sets
+fruits_set_A = create_fruit_set("🍎🍐")  # Set A: {🍎, 🍐}
+fruits_set_B = create_fruit_set("🍐🍉")  # Set B: {🍐, 🍉}
+fruits_set_C = create_fruit_set("🍎🍐🍉")  # Set C: {🍎, 🍐, 🍉}
+fruits_set_D = create_fruit_set("🧺")  # Set D: {🧺}
+
+# Display sets
+print(f"Conjunto A: {display_set(fruits_set_A)}")
+print(f"Conjunto B: {display_set(fruits_set_B)}")
+print(f"Conjunto C: {display_set(fruits_set_C)}")
+print(f"Conjunto D: {display_set(fruits_set_D)}")
+
+# Set union
+union_result = fruits_set_A | fruits_set_B
+print(f"A ∪ B: {display_set(union_result)}")  # Result: {🍎, 🍐, 🍉}
+
+# Set intersection
+intersection_result = fruits_set_A & fruits_set_B
+print(f"A ∩ B: {display_set(intersection_result)}")  # Result: {🍐}
+
+# Set difference
+difference_result_AB = fruits_set_A - fruits_set_B
+print(f"A - B: {display_set(difference_result_AB)}")  # Result: {🍎}
+difference_result_BA = fruits_set_B - fruits_set_A
+print(f"B - A: {display_set(difference_result_BA)}")  # Result: {🍉}
+
+# Symmetric difference of sets
+symmetric_difference_result = fruits_set_A ^ fruits_set_B
+print(f"A ^ B: {display_set(symmetric_difference_result)}")  # Result: {🍎, 🍉}
+
+# Subset
+subset_result1 = fruits_set_A <= fruits_set_C
+print(f"A <= C: {subset_result1}")  # Result: True (A is a subset of C)
+subset_result2 = fruits_set_A <= fruits_set_B
+print(f"A <= B: {subset_result2}") # Result: False (A is not a subset of B)
+
+# Superset
+superset_result1 = fruits_set_C >= fruits_set_A
+print(f"C >= A: {superset_result1}")  # Result: True (C is a superset of A)
+superset_result2 = fruits_set_B >= fruits_set_A
+print(f"B >= A: {superset_result2}")  # Result: False (B is not a superset of A)
+
+# Check for element presence
+print(f"🍎 en A: {'🍎' in fruits_set_A}")  # Result: True
+print(f"🍉 en A: {'🍉' in fruits_set_A}")  # Result: False
+</code></pre>
+<ul>
+<li><strong><code>create_fruit_set(fruit_string)</code>:</strong> Esta función crea un conjunto a partir de una cadena de frutas.
+<ul>
+<li><code>set(fruit_string)</code> convierte la cadena en un conjunto, eliminando duplicados y haciendo que el orden de los elementos sea irrelevante.</li>
+<li>Comprobamos que la cadena solo contenga caracteres Unicode permitidos.</li>
+</ul>
+</li>
+<li><strong><code>display_set(fruit_set)</code>:</strong> Esta función se utiliza para convertir un conjunto en una cadena legible para la salida.</li>
+<li><strong>Ejemplos:</strong> Creamos varios conjuntos y les aplicamos varias operaciones. Los resultados de cada operación se imprimen en la pantalla.</li>
+</ul>
+<p><strong>5. Tareas de práctica:</strong></p>
+<ol>
+<li>Cree sus propios conjuntos de frutas y pruebe todas las operaciones en ellos.</li>
+<li>Implemente una función <code>is_disjoint(set1, set2)</code> que verifique si dos conjuntos son disjuntos (intersección = conjunto vacío).</li>
+<li>Implemente una función <code>power_set(fruit_set)</code> que devuelva el conjunto de todos los subconjuntos de un conjunto dado.</li>
+<li>Intente aplicar conjuntos para resolver un problema real. Por ejemplo, tiene dos listas de invitados para una fiesta, encuentre los invitados que están en ambas listas, los invitados que están solo en la primera lista, etc.</li>
+</ol>

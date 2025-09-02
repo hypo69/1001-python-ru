@@ -1,0 +1,56 @@
+CUBE
+=================
+
+Dificultad: 5
+-----------------
+El juego "Cubo" es un juego de rompecabezas donde el jugador debe armar un cubo moviendo sus caras. El cubo se representa como una matriz de 3x3, donde cada celda representa una cara del cubo. El jugador puede mover las caras del cubo hacia arriba, abajo, izquierda y derecha. El objetivo del juego es armar el cubo, colocando las caras en el orden correcto.
+Reglas del juego:
+1. El cubo se representa como una matriz de 3x3.
+2. El jugador puede mover las caras del cubo, ingresando comandos: U (arriba), D (abajo), L (izquierda), R (derecha).
+3. El objetivo del juego es armar el cubo, colocando las caras en el orden correcto.
+4. La posición inicial del cubo se genera aleatoriamente.
+5. El juego termina cuando el cubo está armado, es decir, cuando todas las caras están en el orden correcto.
+-----------------
+Algoritmo:
+1. Inicializar el cubo con valores aleatorios del 1 al 9 como una matriz de 3x3.
+2. Mostrar el cubo en pantalla.
+3. Iniciar el bucle del juego:
+    3.1. Solicitar al jugador que ingrese un comando para mover una cara del cubo (U, D, L, R).
+    3.2. Realizar el movimiento de la cara de acuerdo con el comando:
+       - Si el comando es "U", desplazar todas las filas hacia arriba.
+       - Si el comando es "D", desplazar todas las filas hacia abajo.
+       - Si el comando es "L", desplazar todas las columnas hacia la izquierda.
+       - Si el comando es "R", desplazar todas las columnas hacia la derecha.
+    3.3. Mostrar el cubo en pantalla.
+    3.4. Comprobar si el cubo está armado.
+    3.5. Si el cubo está armado, mostrar un mensaje de victoria y terminar el juego.
+    3.6. Si el cubo no está armado, volver al paso 3.1.
+-----------------
+Diagrama de flujo:
+```mermaid
+flowchart TD
+    Start["Inicio"] --> InitializeCube["Inicializar cubo: <code><b>cube = random_cube()</b></code>"]
+    InitializeCube --> DisplayCube["Mostrar cubo"]
+    DisplayCube --> GameLoopStart{"Iniciar bucle del juego"}
+    GameLoopStart --> InputMove["Ingresar movimiento: <code><b>move</b></code>"]
+    InputMove --> MoveCube{"Mover caras del cubo: <code><b>cube = move_cube(cube, move)</b></code>"}
+    MoveCube --> DisplayCubeAgain["Mostrar cubo"]
+    DisplayCubeAgain --> CheckSolved{"Comprobar: <code><b>is_solved(cube)</b></code>?"}
+    CheckSolved -- Sí --> OutputWin["Mostrar mensaje: <b>¡HAS RESUELTO EL CUBO!</b>"]
+    OutputWin --> End["Fin"]
+    CheckSolved -- No --> GameLoopStart
+    GameLoopStart -- No --> End
+
+```
+
+Leyenda:
+    Start - Inicio del programa.
+    InitializeCube - Inicialización del cubo, creación de una matriz de 3x3 con valores aleatorios del 1 al 9.
+    DisplayCube - Mostrar el estado actual del cubo en pantalla.
+    GameLoopStart - Inicio del bucle del juego, que continúa hasta que el cubo esté armado.
+    InputMove - Solicitar al usuario que ingrese un comando para mover las caras del cubo (U, D, L, R).
+    MoveCube - Mover las caras del cubo de acuerdo con el comando ingresado.
+    DisplayCubeAgain - Mostrar el cubo después del movimiento realizado.
+    CheckSolved - Comprobar si el cubo está armado.
+    OutputWin - Mostrar un mensaje de victoria si el cubo está armado.
+    End - Fin del programa.

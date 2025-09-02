@@ -1,0 +1,233 @@
+<p dir="rtl">הקוד מייצג מחלקה <span dir="ltr"><code>FakeDataGenerator</code></span>, המיועדת ליצירת נתונים מזויפים (אקראיים), כגון שמות, כתובות, מספרי טלפון, כתובות אימייל ואחרים. מחלקה זו יכולה להיות שימושית לבדיקות, מילוי מסדי נתונים, יצירת נתוני הדגמה ומשימות אחרות, שבהן נדרשת יצירת ערכים אקראיים.</p>
+
+<hr>
+
+<h3 dir="rtl"><strong>תיאור פעולת הקוד</strong></h3>
+
+<h4 dir="rtl"><strong>1. ייבוא ספריות</strong></h4>
+<pre class="line-numbers"><code class="language-python">import random
+import string
+from typing import List, Optional
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong><span dir="ltr">random</span></strong> – Used for generating random numbers, selecting random elements from lists, and other random operations.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">string</span></strong> – מספק קבוצת תווים (לדוגמה, אותיות, ספרות), שניתן להשתמש בהם ליצירת מחרוזות.</p></li>
+<li><p dir="rtl"><strong><span dir="ltr">typing</span></strong> – משמש להערות טיפוסים, כדי לשפר את קריאות הקוד ותחזוקתו.</p></li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl"><strong>2. מחלקה <span dir="ltr"><code>FakeDataGenerator</code></span></strong></h4>
+<p dir="rtl">המחלקה מכילה קבוצת שיטות ליצירת סוגי נתונים שונים.</p>
+
+<h5 dir="rtl"><strong>תכונות מחלקה</strong></h5>
+<pre class="line-numbers"><code class="language-python">first_names = ['John', 'Jane', 'Alice', 'Bob', 'Charlie', 'Diana']
+last_names = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia']
+cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix']
+streets = ['Main St', 'Elm St', '2nd Ave', 'Park Blvd', 'Oak Dr']
+domains = ['example.com', 'mail.com', 'test.org', 'website.net']
+</code></pre>
+<ul>
+<li><p dir="rtl">תכונות אלו הן רשימות עם ערכים מוגדרים מראש, המשמשים ליצירת נתונים אקראיים.</p></li>
+</ul>
+
+<hr>
+
+<h5 dir="rtl"><strong>שיטות מחלקה</strong></h5>
+
+<h6 dir="rtl">1. <span dir="ltr"><code>random_name()</code></span></h6>
+<pre class="line-numbers"><code class="language-python">def random_name(self) -> str:
+    """
+    Generates a random full name.
+
+    Returns:
+        str: Full name, composed of random first and last names.
+    """
+    first_name = random.choice(self.first_names)
+    last_name = random.choice(self.last_names)
+    return f'{first_name} {last_name}'
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong>תיאור:</strong> יוצר שם מלא אקראי, המורכב משם פרטי ושם משפחה אקראיים.</p></li>
+<li><p dir="rtl"><strong>איך עובד:</strong></p>
+<ul>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.choice()</code></span> לבחירת שם פרטי אקראי מרשימת <span dir="ltr"><code>first_names</code></span>.</p></li>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.choice()</code></span> לבחירת שם משפחה אקראי מרשימת <span dir="ltr"><code>last_names</code></span>.</p></li>
+<li><p dir="rtl">מחזיר מחרוזת בפורמט &quot;שם פרטי שם משפחה&quot;.</p></li>
+</ul>
+</li>
+</ul>
+
+<hr>
+
+<h6 dir="rtl">2. <span dir="ltr"><code>random_email()</code></span></h6>
+<pre class="line-numbers"><code class="language-python">def random_email(self) -> str:
+    """
+    Generates a random email address.
+
+    Returns:
+        str: Email address in `first.last@domain` format.
+    """
+    first_name = random.choice(self.first_names).lower()
+    last_name = random.choice(self.last_names).lower()
+    domain = random.choice(self.domains)
+    return f'{first_name}.{last_name}@{domain}'
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong>תיאור:</strong> יוצר כתובת אימייל אקראית.</p></li>
+<li><p dir="rtl"><strong>איך עובד:</strong></p>
+<ul>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.choice()</code></span> לבחירת שם פרטי ושם משפחה אקראיים.</p></li>
+<li><p dir="rtl">ממיר את השם הפרטי ושם המשפחה שנבחרו לאותיות קטנות באמצעות <span dir="ltr"><code>.lower()</code></span>.</p></li>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.choice()</code></span> לבחירת דומיין אקראי מרשימת <span dir="ltr"><code>domains</code></span>.</p></li>
+<li><p dir="rtl">מחזיר מחרוזת בפורמט &quot;שם.משפחה@דומיין&quot;.</p></li>
+</ul>
+</li>
+</ul>
+
+<hr>
+
+<h6 dir="rtl">3. <span dir="ltr"><code>random_phone()</code></span></h6>
+<pre class="line-numbers"><code class="language-python">def random_phone(self) -> str:
+    """
+    Generates a random phone number in `+1-XXX-XXX-XXXX` format.
+
+    Returns:
+        str: Phone number.
+    """
+    return f'+1-{random.randint(100, 999)}-{random.randint(100, 999)}-{random.randint(1000, 9999)}'
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong>תיאור:</strong> יוצר מספר טלפון אקראי בפורמט &quot;+1-XXX-XXX-XXXX&quot;.</p></li>
+<li><p dir="rtl"><strong>איך עובד:</strong></p>
+<ul>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.randint()</code></span> ליצירת מספרים אקראיים בטווחים נתונים.</p></li>
+<li><p dir="rtl">מעצב את המחרוזת בהתאם לתבנית הנתונה.</p></li>
+</ul>
+</li>
+</ul>
+
+<hr>
+
+<h6 dir="rtl">4. <span dir="ltr"><code>random_address()</code></span></h6>
+<pre class="line-numbers"><code class="language-python">def random_address(self) -> str:
+    """
+    Generates a random address.
+
+    Returns:
+        str: Address in `street, city` format.
+    """
+    street = random.choice(self.streets)
+    city = random.choice(self.cities)
+    house_number = random.randint(1, 9999)
+    return f'{house_number} {street}, {city}'
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong>תיאור:</strong> יוצר כתובת אקראית.</p></li>
+<li><p dir="rtl"><strong>איך עובד:</strong></p>
+<ul>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.choice()</code></span> לבחירת רחוב ועיר אקראיים.</p></li>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.randint()</code></span> ליצירת מספר בית אקראי.</p></li>
+<li><p dir="rtl">מחזיר מחרוזת בפורמט &quot;מספר_בית רחוב, עיר&quot;.</p></li>
+</ul>
+</li>
+</ul>
+
+<hr>
+
+<h6 dir="rtl">5. <span dir="ltr"><code>random_string()</code></span></h6>
+<pre class="line-numbers"><code class="language-python">def random_string(self, length: int = 10) -> str:
+    """
+    Generates a random string of given length.
+
+    Args:
+        length (int, optional): Length of the string. Defaults to 10.
+
+    Returns:
+        str: Random string, containing letters and digits.
+    """
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong>תיאור:</strong> יוצר מחרוזת אקראית באורך נתון, המורכבת מאותיות וספרות.</p></li>
+<li><p dir="rtl"><strong>איך עובד:</strong></p>
+<ul>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.choices()</code></span> לבחירת תווים אקראיים מהמחרוזת <span dir="ltr"><code>string.ascii_letters + string.digits</code></span>.</p></li>
+<li><p dir="rtl">מחבר את התווים שנבחרו למחרוזת באמצעות <span dir="ltr"><code>''.join()</code></span>.</p></li>
+</ul>
+</li>
+</ul>
+
+<hr>
+
+<h6 dir="rtl">6. <span dir="ltr"><code>random_int()</code></span></h6>
+<pre class="line-numbers"><code class="language-python">def random_int(self, min_value: int = 0, max_value: int = 100) -> int:
+    """
+    Generates a random integer within a given range.
+
+    Args:
+        min_value (int, optional): Minimum value. Defaults to 0.
+        max_value (int, optional): Maximum value. Defaults to 100.
+
+    Returns:
+        int: Random integer.
+    """
+    return random.randint(min_value, max_value)
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong>תיאור:</strong> יוצר מספר שלם אקראי בטווח נתון.</p></li>
+<li><p dir="rtl"><strong>איך עובד:</strong></p>
+<ul>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.randint()</code></span> ליצירת מספר אקראי בטווח שצוין.</p></li>
+</ul>
+</li>
+</ul>
+
+<hr>
+
+<h6 dir="rtl">7. <span dir="ltr"><code>random_choice()</code></span></h6>
+<pre class="line-numbers"><code class="language-python">def random_choice(self, options: List[str]) -> str:
+    """
+    Selects a random element from a list.
+
+    Args:
+        options (List[str]): List of values to choose from.
+
+    Returns:
+        str: Random element from the list.
+    """
+    return random.choice(options)
+</code></pre>
+<ul>
+<li><p dir="rtl"><strong>תיאור:</strong> בוחר אלמנט אקראי מהרשימה שהועברה.</p></li>
+<li><p dir="rtl"><strong>איך עובד:</strong></p>
+<ul>
+<li><p dir="rtl">משתמש ב-<span dir="ltr"><code>random.choice()</code></span> לבחירת אלמנט אקראי מרשימת <span dir="ltr"><code>options</code></span>.</p></li>
+</ul>
+</li>
+</ul>
+
+<hr>
+
+<h4 dir="rtl">3. דוגמה לשימוש</h4>
+<pre class="line-numbers"><code class="language-python">if __name__ == '__main__':
+    faker = FakeDataGenerator()
+
+    print(f'שם: {faker.random_name()}')
+    print(f'אימייל: {faker.random_email()}')
+    print(f'טלפון: {faker.random_phone()}')
+    print(f'כתובת: {faker.random_address()}')
+    print(f'מחרוזת אקראית: {faker.random_string(12)}')
+    print(f'מספר שלם אקראי: {faker.random_int(50, 150)}')
+    print(f'בחירה אקראית: {faker.random_choice(["אפשרות1", "אפשרות2", "אפשרות3"])}')
+</code></pre>
+<ul>
+<li><p dir="rtl">נוצר מופע של המחלקה <span dir="ltr"><code>FakeDataGenerator</code></span>.</p></li>
+<li><p dir="rtl">נקראות שיטות המחלקה ליצירת סוגי נתונים שונים.</p></li>
+<li><p dir="rtl">התוצאות מודפסות למסך.</p></li>
+</ul>
+
+<hr>
+
+<h3 dir="rtl"><strong>סיכום</strong></h3>
+<p dir="rtl">המחלקה <span dir="ltr"><code>FakeDataGenerator</code></span> מספקת ממשק נוח ליצירת נתונים אקראיים, כגון שמות, כתובות אימייל, מספרי טלפון, כתובות ואחרים. מחלקה זו ניתנת להרחבה ליצירת סוגי נתונים נוספים או להתאמה אישית לשימוש בפרויקטים ספציפיים.</p>

@@ -1,0 +1,166 @@
+<h1>How to fix SSLCertVerificationError in Python</h1>
+<p>Have you encountered the error <code>SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed</code> when trying to make an HTTPS request in Python using <code>requests</code> or <code>urllib3</code>?
+In this article, I will show you how to diagnose and fix this problem.</p>
+<p>The error means that Python could not verify the SSL/TLS certificate of the website you are connecting to because it could not find a trusted root certificate in its store.</p>
+<h2>Step 1: Diagnose the problem with OpenSSL (recommended)</h2>
+<p>Before modifying the Python code, check the SSL connection using the <code>openssl</code> utility. This will help you understand if the problem is specific to Python or related to system settings or the server itself.</p>
+<ol>
+<li><strong>Install OpenSSL</strong> if you don't have it (often pre-installed on Linux/macOS; for Windows, download it from the <a href="https://www.openssl.org/source/">official website</a> or use package managers like Chocolatey/Scoop).</li>
+<li><strong>Run the command</strong> in your terminal (command line), replacing <code>&lt;hostname&gt;</code> with the site address (without <code>https://</code>) and <code>&lt;port&gt;</code> with the port (usually 443 for HTTPS):</li>
+</ol>
+<pre class="line-numbers"><code class="language-bash">
+    openssl s_client -connect &lt;hostname&gt;:&lt;port&gt; -showcerts
+
+    # Example for rosstat.gov.ru :
+    openssl s_client -connect rosstat.gov.ru:443 -showcerts
+</code></pre>
+<ol>
+<li><strong>Analyze the output:</strong> Pay attention to the <code>Verify return code</code> line. If it contains an error like <code>unable to get local issuer certificate</code> (code 20) or <code>certificate verify failed</code> (code 21), this confirms a trust issue with the certificate at the system level or the store that OpenSSL uses.</li>
+</ol>
+<h2>Step 2: Choose a resolution method</h2>
+<p>There are several ways to fix the <code>SSLCertVerificationError</code>. Choose the one that best suits your situation.</p>
+<h3>Method 1: Disable SSL verification (quick, but NOT SECURE)</h3>
+<p>This method completely disables certificate verification. Use it <strong>only</strong> for temporary testing, single-use scripts, and <strong>only</strong> for sites you absolutely trust.</p>
+<p>⚠️ <strong>Warning:</strong> Disabling verification makes your connection vulnerable to man-in-the-middle (MITM) attacks. <strong>Never use <code>verify=False</code> in production code or when working with sensitive data!</strong></p>
+<pre class="line-numbers"><code class="language-python">
+import requests
+import urllib3
+
+url = "https://rosstat.gov.ru/storage/mediabank/tab5_v01.xlsx" # Example URL
+
+# Disable SSL verification
+try:
+    # Suppress warnings about insecure requests (optional)
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+    response = requests.get(url, verify=False)
+    response.raise_for_status() # Check for HTTP errors (4xx, 5xx)
+
+    # Your code to process the response, for example, save a file
+    with open("downloaded_file.xlsx", "wb") as f:
+        f.write(response.content)
+    print("File downloaded successfully (with SSL verification disabled).")
+
+except requests.exceptions.RequestException as e:
+    print(f"Error downloading file: {e}")
+
+finally:
+    # Important: If you have disabled warnings globally,
+    # you may want to re-enable them after the request is complete,
+    # although this is usually not necessary if the script terminates.
+    # import warnings
+    # warnings.simplefilter('default', urllib3.exceptions.InsecureRequestWarning)
+    pass
+</code></pre>
+<h3>Method 2: Install/Update certificates for Python (platform-dependent)</h3>
+<p>Python may come with scripts to install or update the root certificate bundle from the <code>certifi</code> package.</p>
+<ul>
+<li><strong>On macOS:</strong>
+<ol>
+<li>Go to the Python installation folder (usually <code>/Applications/Python &lt;version&gt;/</code>).</li>
+<li>Find and double-click the <code>Install Certificates.command</code> file. It will install/update <code>certifi</code> and link the standard <code>ssl</code> module to these certificates.</li>
+</ol>
+</li>
+<li><strong>On Windows:</strong>
+<ol>
+<li>Sometimes, during Python installation, an <code>install_certificates.bat</code> script is created. Look for it in the <code>Scripts</code> directory inside the Python installation folder (e.g., <code>C:\Users\&lt;username&gt;\AppData\Local\Programs\Python\Python&lt;version&gt;\Scripts\</code>).</li>
+<li>If you find it, run it.</li>
+<li>If the script is not there, this method will probably not work. Use method 3.</li>
+</ol>
+</li>
+</ul>
+<h3>Method 3: Directly use the <code>certifi</code> package (recommended, cross-platform)</h3>
+<p>This is the most reliable way to explicitly tell Python which set of root certificates to use.</p>
+<ol>
+<li><strong>Install <code>certifi</code>:</strong>
+<pre class="line-numbers"><code class="language-bash">
+
+pip install --upgrade certifi
+</code></pre>
+</li>
+<li><strong>Use <code>certifi</code> in your code:</strong> Pass the path to the <code>certifi</code> certificate file to the <code>verify</code> parameter of the <code>requests.get()</code> function.</li>
+</ol>
+<pre class="line-numbers"><code class="language-python">
+    import requests
+    import certifi
+
+    url = "https://rosstat.gov.ru/storage/mediabank/tab5_v01.xlsx" # Example URL
+
+    try:
+        # Explicitly specify to use certifi certificates
+        response = requests.get(url, verify=certifi.where())
+        response.raise_for_status()
+
+        # Your code to process the response
+        with open("downloaded_file_certifi.xlsx", "wb") as f:
+            f.write(response.content)
+        print("File downloaded successfully using certifi certificates.")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error downloading file: {e}")
+</code></pre>
+<p>Even if <code>requests</code> may use <code>certifi</code> by default, explicitly specifying <code>verify=certifi.where()</code> ensures this behavior.</p>
+<h3>Method 4: Use system stores or environment variables (advanced)</h3>
+<p>Python's <code>ssl</code> module can also look for certificates in system stores or in paths specified in environment variables. This is useful, for example, in corporate environments with their own Certificate Authorities (CAs).</p>
+<ol>
+<li><strong>System stores:</strong>
+<ul>
+<li><strong>Linux/macOS:</strong> Python often automatically uses system certificates (e.g., from <code>/etc/ssl/certs/</code>). Make sure your system has up-to-date root certificates (<code>sudo apt update &amp;&amp; sudo apt install ca-certificates</code> for Debian/Ubuntu, <code>sudo yum update ca-certificates</code> for CentOS/RHEL).</li>
+<li><strong>Windows:</strong> Python <em>may</em> try to use Windows' system store, but this does not always work reliably without additional packages (e.g., <code>python-certifi-win32</code>). It is recommended to use <code>certifi</code> (method 3).</li>
+</ul>
+</li>
+<li><strong>Environment variables:</strong> You can explicitly specify the path to a file or directory with certificates:
+<ul>
+<li><code>SSL_CERT_FILE</code>: Specify the path to a <em>file</em> (in PEM format) containing all trusted root certificates.</li>
+<li><code>SSL_CERT_DIR</code>: Specify the path to a <em>directory</em> where each certificate is in a separate PEM file with a hash-based name (use OpenSSL's <code>c_rehash</code> to prepare the directory).</li>
+</ul>
+</li>
+</ol>
+<p><strong>How to set environment variables:</strong></p>
+<ul>
+<li><strong>Linux/macOS (temporary, for the current session):</strong>
+<pre class="line-numbers"><code class="language-bash">
+        export SSL_CERT_FILE=/path/to/your/ca-bundle.pem
+        python your_script.py
+</code></pre>
+</li>
+<li><strong>Windows (cmd, temporary):</strong>
+<pre class="line-numbers"><code class="language-cmd">
+        set SSL_CERT_FILE=C:\path\to\your\ca-bundle.pem
+        python your_script.py
+</code></pre>
+</li>
+<li><strong>Windows (PowerShell, temporary):</strong>
+<pre class="line-numbers"><code class="language-powershell">
+        $env:SSL_CERT_FILE = "C:\path\to\your\ca-bundle.pem"
+        python your_script.py
+</code></pre>
+</li>
+</ul>
+<p>To add your own Certificate Authority (e.g., corporate), you need to add its certificate to the <code>SSL_CERT_FILE</code> file or the <code>SSL_CERT_DIR</code> directory.</p>
+<h2>Step 3 (Bonus): How to create a self-signed certificate for local development</h2>
+<p>If you are developing a local web server (API, website) and want to test it via HTTPS, you will need an SSL certificate. Since you do not have a public domain to obtain a certificate from an ordinary Certificate Authority, you can create a <em>self-signed</em> certificate.</p>
+<p><strong>Using OpenSSL (cross-platform):</strong></p>
+<ol>
+<li><strong>Run the command:</strong> This command will create a private key (<code>key.pem</code>) and the certificate itself (<code>cert.pem</code>), valid for 10 years, for <code>localhost</code>.</li>
+</ol>
+<pre class="line-numbers"><code class="language-bash">
+    openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/CN=localhost" -addext "subjectAltName = DNS:localhost,IP:127.0.0.1"
+</code></pre>
+<ul>
+<li><code>-nodes</code>: Creates a key without password protection (convenient for development).</li>
+<li><code>-subj "/CN=localhost"</code>: Sets the common name.</li>
+<li><code>-addext "subjectAltName = ..."</code>: Adds subject alternative names (important for modern browsers and clients).</li>
+</ul>
+<ol>
+<li><strong>Use <code>key.pem</code> and <code>cert.pem</code></strong> in your local web server settings (Flask, Django, Node.js, etc.) to enable HTTPS.</li>
+</ol>
+<p><strong>Using PowerShell (Windows 10/11):</strong></p>
+<ol>
+<li><strong>Run the command in PowerShell (with administrator rights):</strong> This command will create a certificate and place it in the computer's certificate store.</li>
+</ol>
+<pre class="line-numbers"><code class="language-powershell">
+    New-SelfSignedCertificate -DnsName "localhost", "127.0.0.1" -CertStoreLocation "cert:\LocalMachine\My" -NotAfter (Get-Date).AddYears(5) -FriendlyName "My Localhost Dev Cert"
+</code></pre>
+<p>You may need to export this certificate from the store (<code>certlm.msc</code>) to <code>.pfx</code> or <code>.pem</code> files for use by your web server.</p>
+<p><strong>Note:</strong> Browsers and HTTP clients (including Python's <code>requests</code> by default) will not trust self-signed certificates. When accessing such a server, you will receive a warning or an SSL error. For testing, you will either need to add this certificate to your system/browser's trusted root certificates, or use <code>verify=False</code> (for <code>requests</code>), or specify the path to your <code>cert.pem</code> via <code>verify='/path/to/cert.pem'</code>.</p>
