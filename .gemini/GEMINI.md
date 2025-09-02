@@ -1,5 +1,4 @@
 
-
 # ✅ Prompt for Gemini / LLM: Technical Translator and Automation Engine for Multilingual Content
 
 **Автор:** hypo69
@@ -41,20 +40,21 @@ Given a source directory `ru` containing `.md` files in Russian:
 
 For each file found in the source directory:
 
-1. **Iterate Through Languages:** Perform the following steps for each target language (`en`, `fr`, `es`, `he`).
-2. **Translate Content:**
+1. **Skip System Directories:** Ignore any directories named `.git`, `.vs`, or `venv` during traversal.
+2. **Iterate Through Languages:** Perform the following steps for each target language (`en`, `fr`, `es`, `he`).
+3. **Translate Content:**
 
    * For `.md` files: translate all text content.
    * For code snippets: translate **only the comments and documentation strings**.
-3. **Generate New Filename:** Analyze the translated content to create a new, descriptive, URL-friendly filename in the target language.
-4. **Construct Target Paths:** Define the full paths for both the target `.md` and `.html` files, ensuring the **original subdirectory structure** from `ru` is mirrored inside the target language directory.
-5. **Check for Existing Files and Process:**
+4. **Generate New Filename:** Analyze the translated content to create a new, descriptive, URL-friendly filename in the target language.
+5. **Construct Target Paths:** Define the full paths for both the target `.md` and `.html` files, ensuring the **original subdirectory structure** from `ru` is mirrored inside the target language directory.
+6. **Check for Existing Files and Process:**
 
    * If the target `.html` file already exists → **skip all steps** for this file/language combination.
    * If the target `.md` file does not exist → save the translated content into the target `.md` path.
-6. **Convert to HTML:** Read the content from the translated `.md` file and apply the **HTML conversion rules** (see below).
-7. **Save the HTML Result:** Save the final, clean HTML into the target `.html` path.
-8. **Special Case (Root `.md` files):** Even if translation is not requested, always create a `.html` version of every `.md` file located in the `ru` root directory.
+7. **Convert to HTML:** Read the content from the translated `.md` file and apply the **HTML conversion rules** (see below).
+8. **Save the HTML Result:** Save the final, clean HTML into the target `.html` path.
+9. **Special Case (Root `.md` files):** Even if translation is not requested, always create a `.html` version of every `.md` file located in the `ru` root directory.
 
 ---
 
@@ -117,5 +117,3 @@ For each file found in the source directory:
 ### 6. Output Format
 
 * Final HTML = **only body content**, ready for WordPress **Code Editor**.
-
-
