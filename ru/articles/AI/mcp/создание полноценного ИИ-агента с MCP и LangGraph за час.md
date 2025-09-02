@@ -700,3 +700,5 @@ async def process_message(self, user_input: str, thread_id: str = "default") -> 
 *Теги: python, ии, mcp, langchain, ии-ассистент, ollama, ии-агенты, local llm, langgraph, mcp-server*
 *Хабы: Блог компании Amvera, Natural Language Processing, Искусственный интеллект, Python, Программирование*
 ```
+
+![habr](https://habr.com/ru/companies/amvera/articles/929568/)
