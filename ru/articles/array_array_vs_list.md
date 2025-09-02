@@ -1,0 +1,1 @@
+Пост [переeхал](python/array_array_vs_list.md)

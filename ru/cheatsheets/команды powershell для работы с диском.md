@@ -1,0 +1,1 @@
+# [Страница перехала. Нажми на меня 🔳 ](https://github.com/hypo69/The-Philosophy-of-PowerShell-ru/blob/master/articles/%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%8B%20powershell%20%D0%B4%D0%BB%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B%20%D1%81%20%D0%B4%D0%B8%D1%81%D0%BA%D0%BE%D0%BC.md)
