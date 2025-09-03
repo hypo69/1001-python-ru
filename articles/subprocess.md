@@ -1,1 +1,0 @@
-Пост [переeхал](python/subprocess.md)

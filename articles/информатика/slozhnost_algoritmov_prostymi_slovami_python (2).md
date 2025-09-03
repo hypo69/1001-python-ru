@@ -1,1 +1,0 @@
-Статья [переехала](информатика/slozhnost_algoritmov_prostymi_slovami_python.md)

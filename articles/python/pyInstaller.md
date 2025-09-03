@@ -1,1 +1,0 @@
-https://www.geeksforgeeks.org/python/convert-python-script-to-exe-file/

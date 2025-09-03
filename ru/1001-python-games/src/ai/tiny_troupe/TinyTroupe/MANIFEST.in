@@ -1,4 +1,0 @@
-recursive-include tinytroupe *.ini
-recursive-include tinytroupe *.py
-recursive-include tinytroupe *.md *.mustache
-recursive-include tinytroupe *.json

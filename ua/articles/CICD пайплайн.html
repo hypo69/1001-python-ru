@@ -1,0 +1,407 @@
+<p>🚀 <strong>CI/CD: Від основ до Production на GCP з GitHub Actions – Повний посібник з прикладами</strong> 🚀</p>
+<p>Привіт, розробники! У цій статті я розповім про CI/CD – концепцію.</p>
+<h2>Що таке CI/CD пайплайн у контексті програмування?</h2>
+<p><strong>CI/CD пайплайн (Continuous Integration / Continuous Delivery або Continuous Deployment)</strong> — це автоматизований процес, який дозволяє розробникам швидко та надійно доставляти зміни в коді в робоче середовище (продакшн).</p>
+<p>Давайте розберемо ключові поняття:</p>
+<p>🔧 <strong>CI — Continuous Integration (Безперервна інтеграція)</strong><br>
+Це практика, при якій розробники часто вносять зміни в загальну кодову базу. Кожна така зміна автоматично:
+*   <strong>Збирається</strong> (build)
+*   <strong>Тестується</strong> (юніт-тести, інтеграційні тести)
+*   <strong>Перевіряється на відповідність стандартам</strong> (лінтинг, статичний аналіз)
+</p>
+<p>👉 <strong>Мета CI:</strong> Виявляти помилки на найранішому етапі, до того як вони зламають щось важливе або потраплять у реліз.</p>
+<p>🚀 <strong>CD — Continuous Delivery (Безперервна доставка) або Continuous Deployment (Безперервне розгортання)</strong><br>
+Тут є два варіанти:
+</p>
+<p>✅ <strong>Continuous Delivery (Безперервна доставка)</strong><br>
+Після успішного проходження етапу CI, зміни автоматично:
+*   Проходять додаткові тести (наприклад, E2E – end-to-end тести)
+*   Потрапляють на staging (тестовий) сервер
+</p>
+<p>👉 <strong>Але деплой у продакшн все ще вимагає ручного підтвердження.</strong> Це дає команді контроль над тим, <em>коли</em> саме зміни побачать користувачі.</p>
+<p>🤖 <strong>Continuous Deployment (Безперервний деплой)</strong><br>
+Це наступний крок після Continuous Delivery. Тут деплой у продакшн відбувається <strong>повністю автоматично</strong>, якщо всі попередні етапи пайплайну (збірка, всі тести) пройшли успішно. Це найпросунутіший рівень автоматизації.</p>
+<h2>🔄 З чого зазвичай складається CI/CD пайплайн?</h2>
+<p>Типовий пайплайн включає наступні етапи:</p>
+<ol>
+<li><strong>Checkout</strong> — Клонування останньої версії коду з репозиторію.</li>
+<li><strong>Build</strong> — Збірка проекту (компіляція, збірка артефактів, Docker-образів).</li>
+<li><strong>Test</strong> — Запуск різних видів тестів (юніт, інтеграційні, E2E).</li>
+<li><strong>Lint/Code Quality</strong> — Перевірка коду на відповідність стилю та потенційні помилки за допомогою статичних аналізаторів.</li>
+<li><strong>Deploy</strong> — Розгортання програми (на staging або production сервер).</li>
+<li><strong>Notify</strong> — Надсилання сповіщень про статус пайплайну команді (наприклад, у Slack, Email).</li>
+</ol>
+<h2>🛠 Популярні інструменти для CI/CD:</h2>
+<ul>
+<li><strong>GitHub Actions</strong> (наш фокус сьогодні!)</li>
+<li>GitLab CI/CD</li>
+<li>Jenkins</li>
+<li>CircleCI</li>
+<li>Bitbucket Pipelines</li>
+<li>Azure DevOps</li>
+<li>TeamCity</li>
+</ul>
+<h2>🧠 Навіщо взагалі потрібен CI/CD?</h2>
+<ul>
+<li><strong>Зменшує людський фактор:</strong> Автоматизація виключає помилки, пов'язані з ручними операціями.</li>
+<li><strong>Швидке виявлення багів:</strong> Помилки знаходяться раніше, їх простіше та дешевше виправити.</li>
+<li><strong>Автоматизація рутинних завдань:</strong> Розробники витрачають менше часу на збірку та деплой, більше – на код.</li>
+<li><strong>Покращення якості коду:</strong> Постійні перевірки та тести підвищують загальну планку якості.</li>
+<li><strong>Швидка доставка фіч користувачам:</strong> Нові можливості доходять до кінцевого користувача швидше та частіше.</li>
+</ul>
+<h2>📦 Прості приклади CI/CD з GitHub Actions</h2>
+<p>Давайте подивимося на базові пайплайни для популярних технологій. Всі приклади використовують GitHub Actions і зберігаються в директорії `.github/workflows/` вашого проекту.</p>
+<h3>🐍 CI/CD для Python (з `pytest` та `flake8`)</h3>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/python-ci.yml
+name: Python CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' # Вкажіть вашу версію
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt # Переконайтеся, що у вас є requirements.txt
+          pip install flake8 pytest
+
+      - name: Lint with flake8
+        run: |
+          # Перевіряємо код у папках src та tests (адаптуйте під свій проект)
+          flake8 src tests
+
+      - name: Run tests
+        run: |
+          pytest
+</code></pre>
+<h3>🌐 CI/CD для Node.js (з `npm test` та `eslint`)</h3>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/node-ci.yml
+name: Node.js CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x] # Вкажіть вашу версію Node.js
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install # або npm ci для більш передбачуваної установки
+
+      - name: Lint with ESLint
+        run: npx eslint . # Переконайтеся, що ESLint налаштований у проекті
+
+      - name: Run tests
+        run: npm test
+</code></pre>
+<h3>🐳 CI/CD для Docker (збірка та пуш у Docker Hub)</h3>
+<p>Для цього прикладу вам знадобляться секрети `DOCKER_USERNAME` та `DOCKER_PASSWORD` (або токен) у налаштуваннях вашого GitHub репозиторію (`Settings -> Secrets and variables -> Actions`).</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/docker-ci.yml
+name: Docker CI/CD
+
+on:
+  push:
+    branches: [ main ] # Запускаємо тільки для main гілки
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        # Замініть myapp на назву вашої програми
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:latest .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+</code></pre>
+<h2>🚚 Деплой на популярні платформи</h2>
+<p>Тепер, коли у нас є зібрані та протестовані артефакти (наприклад, Docker-образ), давайте подивимося, як їх можна розгорнути.</p>
+<h3>🟣 Деплой на Heroku</h3>
+<p><strong>🔐 Секрети GitHub:</strong> `HEROKU_API_KEY`, `HEROKU_APP_NAME`.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-heroku.yml
+name: Deploy to Heroku
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Login to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku auth:token
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+          git push heroku main -f # Будьте обережні з -f (force push)
+</code></pre>
+<p>Якщо ви деплоїте Docker-образ на Heroku:</p>
+<pre class="line-numbers"><code class="language-yaml"># ... (кроки build та login to Docker Hub/GHCR з попередніх прикладів) ...
+# deploy:
+#   name: Deploy to Heroku
+#   needs: build # Залежить від джоба збірки образу
+#   runs-on: ubuntu-latest
+#   steps:
+#     # ...
+#     - name: Login to Heroku container registry
+#       run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
+#     - name: Tag image for Heroku
+#       # Припускаємо, що образ зібраний як ghcr.io/username/repo/myapp:latest
+#       run: docker tag ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+#     - name: Push image to Heroku
+#       run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+#     - name: Release Heroku App
+#       env:
+#         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+#       run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+</code></pre>
+<h3>🟨 Деплой на AWS (наприклад, статика в S3)</h3>
+<p><strong>🔐 Секрети GitHub:</strong> `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET_NAME`.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-aws-s3.yml
+name: Deploy Static Site to AWS S3
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Sync files to S3
+        # Замініть ./public на шлях до ваших статичних файлів
+        run: aws s3 sync ./public s3://${{ secrets.S3_BUCKET_NAME }} --delete
+</code></pre>
+<p>Для деплою на **AWS Elastic Beanstalk** зазвичай використовується EB CLI, пайплайн буде схожий, але з командами `eb deploy`.
+</p>
+<h3>🔵 Деплой на Google Cloud Platform (GCP App Engine)</h3>
+<p><strong>🔐 Секрети GitHub:</strong> `GCP_CREDENTIALS` (JSON ключ сервіс-акаунту), `GCP_PROJECT_ID`.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-gcp-app-engine.yml
+name: Deploy to GCP App Engine
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+          export_default_credentials: true
+      - name: Deploy to App Engine
+        # Переконайтеся, що у вас є app.yaml у корені проекту
+        run: gcloud app deploy --quiet
+</code></pre>
+<h3>🟪 Деплой на Render.com</h3>
+<p>Render часто автоматично деплоїть при push у GitHub, якщо репозиторій підключений. Але для ручного тригера (або як частина більш складного пайплайну) можна використовувати Deploy Hook.<br>
+<strong>🔐 Секрети GitHub:</strong> `RENDER_DEPLOY_HOOK` (URL, отриманий з налаштувань сервісу в Render).</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-render.yml
+name: Trigger Render Deploy
+
+on:
+  workflow_dispatch: # Ручний запуск з UI GitHub
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+</code></pre>
+<h2>🌟 Просунутий CI/CD: Build Docker → Push у GHCR → Staging/Production на GCP Cloud Run</h2>
+<p>А тепер вишенька на торті! Зберемо просунутий пайплайн:
+1.  Збірка Docker-образу.
+2.  Публікація образу в GitHub Container Registry (ghcr.io).
+3.  Автоматичний деплой у **staging** середовище на GCP Cloud Run.
+4.  Деплой у **production** середовище на GCP Cloud Run **після ручного підтвердження**.
+</p>
+<p>Для цього нам знадобиться кілька файлів воркфлоу.</p>
+<p><strong>Необхідні секрети GitHub:</strong></p>
+<ul>
+<li>`GCP_PROJECT_ID`: ID вашого проекту в GCP.</li>
+<li>`GCP_CREDENTIALS`: JSON-ключ сервіс-акаунту GCP з правами на деплой у Cloud Run та доступ до GHCR (якщо потрібно). Зазвичай `GITHUB_TOKEN` достатньо для доступу до GHCR з Actions.</li>
+<li>`GCP_REGION`: Регіон для Cloud Run (наприклад, `europe-west1`).</li>
+</ul>
+<h3>1. Збірка та публікація Docker-образу в GHCR</h3>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/build.yml
+name: Build & Push to GHCR
+
+on:
+  push:
+    branches: [main] # Запускаємо при пуші в main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read      # Для checkout
+      packages: write     # Для пушу в GHCR
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest
+          # Можна додати тегування за SHA коміту для унікальності:
+          # tags: |
+          #   ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest
+          #   ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:${{ github.sha }}
+</code></pre>
+<ul>
+<li>`github.repository_owner`: Власник репозиторію (ваш username або організації).</li>
+<li>`github.event.repository.name`: Назва репозиторію.</li>
+<li>`myapp`: Назва вашої програми/образу.</li>
+</ul>
+<h3>2. Автоматичний деплой у Staging (GCP Cloud Run)</h3>
+<p>Цей воркфлоу буде запускатися автоматично після успішного завершення `build.yml`.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-staging.yml
+name: Deploy to GCP Cloud Run (Staging)
+
+on:
+  workflow_run:
+    workflows: ["Build & Push to GHCR"] # Назва воркфлоу збірки
+    types:
+      - completed
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    # Запускаємо тільки якщо воркфлоу збірки завершився успішно
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    # Використовуємо GitHub Environments для staging (опціонально, але хороша практика)
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url }} # URL буде доступний після деплою
+
+    steps:
+      - uses: actions/checkout@v3 # Потрібен, якщо використовуєте конфігурації з репозиторію
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Staging)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-staging' # Назва вашого staging сервісу в Cloud Run
+          region: '${{ secrets.GCP_REGION }}'
+          # Використовуємо образ, який був запушений в build.yml
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest'
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed' # Дозволяємо неаутентифікований доступ для прикладу
+</code></pre>
+<h3>3. Деплой у Production з ручним підтвердженням (GCP Cloud Run)</h3>
+<p>Цей воркфлоу запускається вручну через UI GitHub Actions.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-prod.yml
+name: Deploy to GCP Cloud Run (Production)
+
+on:
+  workflow_dispatch: # Дозволяє ручний запуск
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Production)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-production' # Назва вашого production сервісу
+          region: '${{ secrets.GCP_REGION }}'
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest' # Використовуємо той самий 'latest' образ
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed'
+          # Для production можна додати --no-traffic і потім поступово перемикати трафік
+          # traffic:
+          #   latest: true
+          #   percent: 100
+</code></pre>
+<p><strong>Важливі моменти цього просунутого пайплайну:</strong></p>
+<ul>
+<li><strong>GitHub Container Registry (ghcr.io):</strong> Ми використовуємо його для зберігання Docker-образів. Це зручно, оскільки він тісно інтегрований з GitHub Actions.</li>
+<li><strong>`workflow_run`:** Дозволяє запускати один воркфлоу (деплой на staging) по завершенні іншого (збірка).</li>
+<li><strong>`workflow_dispatch`:** Дає можливість ручного запуску воркфлоу (деплой на production), що забезпечує контроль.</li>
+<li><strong>GitHub Environments:** Дозволяють налаштувати правила захисту для production (наприклад, вимагати схвалення від певних рев'юерів) та зберігати специфічні для середовища секрети.</li>
+<li><strong>GCP Cloud Run:** Відмінний serverless-варіант для запуску контейнеризованих програм.</li>
+</ul>
+<h3>🔐 Безпека – це важливо!</h3>
+<ul>
+<li><strong>Використовуйте GitHub Secrets:** Ніколи не зберігайте токени, паролі, ключі API безпосередньо в YAML-файлах. Використовуйте `Settings -> Secrets and variables -> Actions` у вашому репозиторії.</li>
+<li><strong>Мінімальні привілеї:** Для сервіс-акаунтів (наприклад, GCP) надавайте лише ті права, які дійсно необхідні для виконання завдань CI/CD.</li>
+<li><strong>Ізолюйте середовища:** Staging та Production повинні бути максимально ізольовані. Різні проекти/акаунти в хмарних провайдерах – хороша практика.</li>
+<li><strong>Захист гілок:** Налаштуйте захист для `main` (або `master`) гілки, щоб пушити в неї можна було лише через Pull Request з обов'язковими перевірками CI.</li>
+</ul>
