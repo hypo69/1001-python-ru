@@ -1,1 +1,1 @@
-Article [déplacé](python/certificat_ssl_en_python.md)
+Article [déplacé](fixing-ssl-certificate-errors-in-python.fr.md)

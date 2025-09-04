@@ -1,1 +1,1 @@
-פוסט [הועבר](python/subprocess.md)
+פוסט [הועבר](python-subprocess-guide.he.md)

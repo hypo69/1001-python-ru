@@ -1,1 +1,1 @@
-Publicación [movida](python/certificado_ssl_en_python.md)
+Publicación [movida](solucionar-errores-de-certificado-ssl-en-python.es.md)

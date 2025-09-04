@@ -1,1 +1,1 @@
-פוסט [הועבר](python/תעודת_ssl_בפייתון.md)
+פוסט [הועבר](fixing-ssl-certificate-errors-in-python.he.md)

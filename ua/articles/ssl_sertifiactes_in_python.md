@@ -1,1 +1,1 @@
-Пост [переїхав](python/ssl_сертифікат_у_python.md)
+Пост [переїхав](fixing-ssl-certificate-errors-in-python.ua.md)

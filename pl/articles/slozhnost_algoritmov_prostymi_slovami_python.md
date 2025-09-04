@@ -1,1 +1,1 @@
-Artykuł [przeniesiony](информатика/zlozonosc_algorytmow_prostymi_slowami_python.md)
+Artykuł [przeniesiony](algorithm-complexity-in-simple-terms-python.pl.md)

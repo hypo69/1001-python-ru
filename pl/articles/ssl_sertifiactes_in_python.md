@@ -1,1 +1,1 @@
-Post [przeniesiony](python/certyfikat_ssl_w_pythonie.md)
+Post [przeniesiony](fixing-ssl-certificate-errors-in-python.pl.md)

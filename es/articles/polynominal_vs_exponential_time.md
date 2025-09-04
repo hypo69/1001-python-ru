@@ -1,1 +1,1 @@
-Artículo [movido](информатика/tiempo_polinomial_y_exponencial_de_ejecucion.md)
+Artículo [movido](polynomial-vs-exponential-time.es.md)

@@ -1,1 +1,1 @@
-Пост [переїхав](python/subprocess.md)
+Пост [переїхав](python-subprocess-guide.ua.md)

@@ -1,0 +1,1 @@
+Articolo [spostato](python-subprocess-guide.it.md)

@@ -1,1 +1,1 @@
-Post [przeniesiony](python/subprocess.md)
+Post [przeniesiony](python-subprocess-guide.pl.md)

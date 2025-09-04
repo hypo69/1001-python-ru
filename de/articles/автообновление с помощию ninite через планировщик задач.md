@@ -1,0 +1,1 @@
+Artikel [verschoben](automatische-programm-updates-mit-ninite-und-windows-aufgabenplanung.de.md)

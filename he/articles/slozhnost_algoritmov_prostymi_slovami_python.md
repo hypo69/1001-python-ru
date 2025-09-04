@@ -1,1 +1,1 @@
-מאמר [הועבר](информатика/מורכבות_אלגוריתמים_במילים_פשוטות_פייתון.md)
+מאמר [הועבר](algorithm-complexity-in-simple-terms-python.he.md)

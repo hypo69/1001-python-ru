@@ -1,1 +1,1 @@
-Publicación [movida](python/subprocess.md)
+Publicación [movida](guia-del-modulo-subprocess-en-python.es.md)

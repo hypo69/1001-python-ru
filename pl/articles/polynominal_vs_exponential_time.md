@@ -1,1 +1,1 @@
-Artykuł [przeniesiony](информатика/wielomianowy_i_wykladniczy_czas_wykonania.md)
+Artykuł [przeniesiony](polynomial-vs-exponential-time.pl.md)

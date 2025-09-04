@@ -1,0 +1,1 @@
+Beitrag [verschoben](python-subprocess-guide.de.md)

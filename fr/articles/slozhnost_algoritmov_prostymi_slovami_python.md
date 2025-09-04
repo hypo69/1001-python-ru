@@ -1,1 +1,1 @@
-Article [déplacé](информатика/complexite_algorithmique_en_termes_simples_python.md)
+Article [déplacé](complexite-algorithmique-en-termes-simples-python.fr.md)

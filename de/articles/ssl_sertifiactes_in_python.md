@@ -1,0 +1,1 @@
+Beitrag [verschoben](fixing-ssl-certificate-errors-in-python.de.md)

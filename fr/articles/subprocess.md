@@ -1,1 +1,1 @@
-Article [déplacé](python/subprocess.md)
+Article [déplacé](guide-du-module-subprocess-en-python.fr.md)

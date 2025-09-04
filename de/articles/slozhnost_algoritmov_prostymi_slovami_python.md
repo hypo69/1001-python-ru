@@ -1,0 +1,1 @@
+Artikel [verschoben](algorithm-complexity-in-simple-terms-python.de.md)

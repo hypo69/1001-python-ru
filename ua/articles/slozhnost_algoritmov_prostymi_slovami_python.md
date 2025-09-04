@@ -1,1 +1,1 @@
-Стаття [переїхала](інформатика/складність_алгоритмів_простими_словами_python.md)
+Стаття [переїхала](algorithm-complexity-in-simple-terms-python.ua.md)
