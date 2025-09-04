@@ -1,0 +1,254 @@
+<h2>Aide-mémoire. Personnalisation des LLM: prompts, réglage fin des modèles, exemples de code.</h2>
+<p>Dans cet article:</p>
+<ol>
+<li>Comment l&#x27;effet m&#xe9;moire est cr&#xe9;&#xe9; dans les LLM (bref aper&#xe7;u).</li>
+<li>Pourquoi et quand le r&#xe9;glage fin (Fine-tuning) d&#x27;un mod&#xe8;le est n&#xe9;cessaire.</li>
+<li>Quand le r&#xe9;glage fin n&#x27;est pas la meilleure solution.</li>
+<li>Pr&#xe9;paration des donn&#xe9;es.</li>
+<li>Exemples de r&#xe9;glage fin pour <strong>OpenAI (GPT)</strong>, <strong>Google (Gemini)</strong> et <strong>Anthropic (Claude)</strong> (diff&#xe8;re).</li>
+</ol>
+<h3>1. Comment les LLM "se souviennent" et "s&#x27;adaptent": L&#x27;illusion du contexte</h3>
+<p>Avant de parler du r&#xe9;glage fin, il est important de comprendre comment les LLM parviennent g&#xe9;n&#xe9;ralement &#xe0; cr&#xe9;er un sentiment de personnalisation.
+Ceci est important pour ne pas se lancer dans un r&#xe9;glage fin co&#xfb;teux si la t&#xe2;che peut &#xea;tre r&#xe9;solue par des m&#xe9;thodes plus simples:</p>
+<ul>
+<li>Via la <strong>Fen&#xea;tre de Contexte (M&#xe9;moire &#xe0; Court Terme):</strong> Dans le cadre d&#x27;un seul dialogue, vous envoyez au mod&#xe8;le non seulement une nouvelle question, mais aussi <strong>tout ou partie de la correspondance pr&#xe9;c&#xe9;dente</strong>. Le mod&#xe8;le traite tout ce texte comme un "contexte" unique. C&#x27;est gr&#xe2;ce &#xe0; cela qu&#x27;il "se souvient" des remarques pr&#xe9;c&#xe9;dentes et poursuit la pens&#xe9;e. La limitation ici est la longueur de la fen&#xea;tre de contexte (nombre de jetons).</li>
+<li>Composition des <strong>Instructions Syst&#xe8;me (System Prompt):</strong> Vous pouvez d&#xe9;finir le r&#xf4;le, le ton et les r&#xe8;gles de comportement du mod&#xe8;le au d&#xe9;but de chaque dialogue. Par exemple: "Tu es un expert Python, r&#xe9;ponds bri&#xe8;vement."</li>
+<li>Inclusion de plusieurs exemples du comportement souhait&#xe9; dans la requ&#xea;te <strong>Apprentissage en Quelques Exemples (Few-Shot Learning):</strong> (paires entr&#xe9;e/sortie) permet au mod&#xe8;le d&#x27;"apprendre" ce mod&#xe8;le directement dans la requ&#xea;te actuelle.</li>
+<li><strong>Gestion de l&#x27;&#xe9;tat c&#xf4;t&#xe9; application:</strong> Le moyen le plus puissant. L&#x27;application (qui acc&#xe8;de &#xe0; l&#x27;API) peut stocker des informations sur l&#x27;utilisateur (pr&#xe9;f&#xe9;rences, historique, donn&#xe9;es de profil) et les ajouter dynamiquement au prompt avant de l&#x27;envoyer au mod&#xe8;le.</li>
+</ul>
+<h3>2.</h3>
+<p>Le r&#xe9;glage fin est le processus de formation suppl&#xe9;mentaire d&#x27;un LLM de base d&#xe9;j&#xe0; pr&#xe9;par&#xe9; sur votre propre ensemble de donn&#xe9;es sp&#xe9;cifique. Cela permet au mod&#xe8;le de:</p>
+<ul>
+<li><strong>Adapter le style et le ton:</strong> Le mod&#xe8;le parlera "votre langue" – qu&#x27;il s&#x27;agisse d&#x27;un langage scientifique strict, d&#x27;un marketing amical ou de l&#x27;argot d&#x27;une communaut&#xe9; sp&#xe9;cifique.</li>
+<li><strong>Suivre des instructions et des formats sp&#xe9;cifiques:</strong> Si vous avez besoin de r&#xe9;ponses dans une structure JSON strictement d&#xe9;finie, ou toujours avec un ensemble de champs sp&#xe9;cifique.</li>
+<li><strong>Comprendre le langage sp&#xe9;cifique au domaine:</strong> La formation sur votre documentation interne ou vos textes industriels aidera le mod&#xe8;le &#xe0; mieux g&#xe9;rer la terminologie de votre niche.</li>
+<li><strong>Am&#xe9;liorer les performances sur des t&#xe2;ches sp&#xe9;cifiques:</strong> Pour certains types de requ&#xea;tes (par exemple, la classification des sentiments, la g&#xe9;n&#xe9;ration de code dans un framework sp&#xe9;cifique), le r&#xe9;glage fin peut fournir des r&#xe9;ponses plus pr&#xe9;cises et pertinentes que le mod&#xe8;le de base.</li>
+<li><strong>R&#xe9;duire la longueur des prompts:</strong> Si le mod&#xe8;le "conna&#xee;t" d&#xe9;j&#xe0; le comportement souhait&#xe9; gr&#xe2;ce au r&#xe9;glage, vous n&#x27;avez pas besoin de le lui rappeler &#xe0; chaque fois dans le prompt, ce qui &#xe9;conomise des jetons et r&#xe9;duit la latence.</li>
+</ul>
+<h3>3.</h3>
+<p>Le r&#xe9;glage fin est un outil puissant mais non universel. Vous ne devriez pas l&#x27;utiliser si:</p>
+<ul>
+<li><strong>Le mod&#xe8;le doit acc&#xe9;der &#xe0; de nouvelles connaissances:</strong> Le r&#xe9;glage fin modifie les poids du mod&#xe8;le, mais il ne "charge" pas de nouveaux faits en temps r&#xe9;el. Si votre t&#xe2;che est de r&#xe9;pondre &#xe0; des questions bas&#xe9;es sur une base de connaissances en constante &#xe9;volution (documents d&#x27;entreprise, derni&#xe8;res nouvelles), il est pr&#xe9;f&#xe9;rable d&#x27;utiliser la <strong>G&#xe9;n&#xe9;ration Augment&#xe9;e par R&#xe9;cup&#xe9;ration (RAG)</strong>. Ici, le mod&#xe8;le de base obtient le contexte de votre base de donn&#xe9;es <em>pendant l'ex&#xe9;cution de la requ&#xea;te</em>.</li>
+<li><strong>Une t&#xe2;che simple peut &#xea;tre r&#xe9;solue par l'ing&#xe9;nierie de prompts:</strong> Commencez toujours par l'ing&#xe9;nierie de prompts la plus efficace. Si la t&#xe2;che peut &#xea;tre r&#xe9;solue avec des instructions simples et des exemples en quelques coups, le r&#xe9;glage fin est redondant et plus co&#xfb;teux.</li>
+<li><strong>Vous ne disposez pas de suffisamment de donn&#xe9;es de haute qualit&#xe9;:</strong> De mauvaises donn&#xe9;es = un mod&#xe8;le mal r&#xe9;gl&#xe9;.</li>
+</ul>
+<h3>4. Pr&#xe9;paration des donn&#xe9;es.</h3>
+<p>La qualit&#xe9; et la quantit&#xe9; de vos donn&#xe9;es sont d&#x27;une importance capitale. Le mod&#xe8;le apprend de vos exemples, ils doivent donc &#xea;tre pr&#xe9;cis, diversifi&#xe9;s et coh&#xe9;rents.</p>
+<ul>
+<li><strong>Format:</strong> Le plus souvent JSON Lines (<code>.jsonl</code>) ou CSV (<code>.csv</code>).</li>
+<li><strong>Structure des donn&#xe9;es:</strong> D&#xe9;pend de la t&#xe2;che.
+<ul>
+<li><strong>R&#xe9;glage d&#x27;instructions (Instruction Tuning - Instruction-R&#xe9;ponse):</strong> Convient aux t&#xe2;ches g&#xe9;n&#xe9;ralis&#xe9;es telles que les questions-r&#xe9;ponses, la reformulation, la synth&#xe8;se.
+<pre class="line-numbers"><code class="language-json">{"input_text": "Reformulez la phrase : 'La technologie de l&#x27;IA se d&#xe9;veloppe rapidement.'", "output_text": "L&#x27;intelligence artificielle progresse rapidement."} 
+{"input_text": "Nommez la capitale de la France.", "output_text": "La capitale de la France est Paris."} 
+</code></pre>
+</li>
+<li><strong>R&#xe9;glage de chat (Chat Tuning - Chat):</strong> Id&#xe9;al pour entra&#xee;ner le mod&#xe8;le &#xe0; mener un dialogue dans un r&#xf4;le ou un style sp&#xe9;cifique.
+<pre class="line-numbers"><code class="language-json">{"messages": [{"author": "user", "content": "Salut ! Que me recommandez-vous pour le dîner ?"}, {"author": "model", "content": "Bonsoir ! Aujourd&#x27;hui est un excellent jour pour des p&#xe2;tes Carbonara, ou, si vous pr&#xe9;f&#xe9;rez quelque chose de l&#xe9;ger, une salade C&#xe9;sar."}]} 
+{"messages": [{"author": "user", "content": "Parlez-moi des nouvelles fonctionnalit&#xe9;s de Python 3.12."}, {"author": "model", "content": "Python 3.12 a introduit les f-strings avec indentation, une nouvelle syntaxe pour les g&#xe9;n&#xe9;riques universels et une meilleure gestion des erreurs Unicode."} ]} 
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong>Quantit&#xe9;:</strong> Minimum 100-200 exemples de haute qualit&#xe9;, mais plus il y en a, mieux c&#x27;est (des milliers pour des t&#xe2;ches s&#xe9;rieuses).</li>
+<li><strong>Qualit&#xe9;:</strong> Pr&#xe9;cision, coh&#xe9;rence du style, du ton et du format dans l&#x27;ensemble des donn&#xe9;es.</li>
+</ul>
+<h3>5. Mod&#xe8;les et plateformes</h3>
+<h4>5.1. OpenAI</h4>
+<p>OpenAI fournit une API assez simple et intuitive pour le r&#xe9;glage fin.</p>
+<p><strong>Processus:</strong></p>
+<ol>
+<li>Pr&#xe9;parez les donn&#xe9;es au format JSONL, o&#xf9; chaque ligne est un objet avec un tableau de <code>messages</code> (comme dans l&#x27;API Chat Completions).</li>
+<li>T&#xe9;l&#xe9;chargez le fichier de donn&#xe9;es via l&#x27;API.</li>
+<li>Cr&#xe9;ez une t&#xe2;che de r&#xe9;glage fin, en sp&#xe9;cifiant le fichier t&#xe9;l&#xe9;charg&#xe9; et le mod&#xe8;le de base.</li>
+<li>Surveillez la progression.</li>
+<li>Utilisez le nouveau mod&#xe8;le r&#xe9;gl&#xe9; par son ID.</li>
+</ol>
+<p><strong>Exemple de donn&#xe9;es (fichier <code>training_data.jsonl</code>):</strong></p>
+<pre class="line-numbers"><code class="language-json">{"messages": [{"role": "system", "content": "Vous êtes un assistant amical pour le support client d&#x27;une entreprise informatique."}, {"role": "user", "content": "Mon internet ne fonctionne pas."}, {"role": "assistant", "content": "Oh, je m&#x27;excuse pour le d&#xe9;sagr&#xe9;ment ! Essayons de comprendre. Comment &#xea;tes-vous connect&#xe9; &#xe0; internet – via Wi-Fi ou par c&#xe2;ble ?"}]} 
+{"messages": [{"role": "system", "content": "Vous êtes un assistant amical pour le support client d&#x27;une entreprise informatique."}, {"role": "user", "content": "Comment puis-je r&#xe9;initialiser mon mot de passe ?"}, {"role": "assistant", "content": "Bien s&#xfbr; ! Pour r&#xe9;initialiser votre mot de passe, veuillez vous rendre sur la page de connexion et cliquer sur 'Mot de passe oubli&#xe9; ?' sous le champ de saisie. Suivez ensuite les instructions &#xe0; l&#x27;&#xe9;cran."} ]} 
+</code></pre>
+<p><strong>Exemple de code Python:</strong></p>
+<p>Installez au pr&#xe9;alable : <code>pip install openai</code></p>
+<pre class="line-numbers"><code class="language-python">import openai
+from openai import OpenAI
+import os
+
+# D&#xe9;finissez votre cl&#xe9; API OpenAI. Il est recommand&#xe9; d&#x27;utiliser une variable d&#x27;environnement.
+# os.environ["OPENAI_API_KEY"] = "sk-..."
+client = OpenAI()
+
+# 1. T&#xe9;l&#xe9;charger le fichier de donn&#xe9;es
+try:
+    file_response = client.files.create(
+        file=open("training_data.jsonl", "rb"),
+        purpose="fine-tune"
+    )
+    file_id = file_response.id
+    print(f"Fichier t&#xe9;l&#xe9;charg&#xe9; avec succ&#xe8;s. ID du fichier : {file_id}")
+except openai.APIStatusError as e:
+    print(f"Erreur de t&#xe9;l&#xe9;chargement du fichier : {e.status_code} - {e.response}")
+    exit()
+
+# 2. Cr&#xe9;er une t&#xe2;che de r&#xe9;glage fin
+try:
+    ft_job_response = client.fine_tuning.jobs.create(
+        training_file=file_id,
+        model="gpt-3.5-turbo" # Vous pouvez sp&#xe9;cifier une version sp&#xe9;cifique, par exemple, "gpt-3.5-turbo-0125"
+    )
+    job_id = ft_job_response.id
+    print(f"T&#xe2;che de r&#xe9;glage fin cr&#xe9;&#xe9;e. ID de la t&#xe2;che : {job_id}")
+    print("Surveillez l&#x27;&#xe9;tat de la t&#xe2;che via l&#x27;API ou dans OpenAI Playground.")
+except openai.APIStatusError as e:
+    print(f"Erreur de cr&#xe9;ation de la t&#xe2;che : {e.status_code} - {e.response}")
+    exit()
+
+# Exemple de surveillance de l&#x27;&#xe9;tat et d&#x27;obtention du nom du mod&#xe8;le (&#xe0; ex&#xe9;cuter apr&#xe8;s la cr&#xe9;ation de la t&#xe2;che) :
+# # job_id = "ftjob-..." # Remplacez par l&#x27;ID de votre t&#xe2;che
+# # job_status = client.fine_tuning.jobs.retrieve(job_id)
+# # print(f"&#201;tat actuel de la t&#xe2;che : {job_status.status}")
+# # if job_status.status == "succeeded":
+# #     fine_tuned_model_name = job_status.fine_tuned_model
+# #     print(f"Nom du mod&#xe8;le r&#xe9;gl&#xe9; : {fine_tuned_model_name}")
+
+# 3. Utilisation du mod&#xe8;le r&#xe9;gl&#xe9; (une fois qu&#x27;il est pr&#xea;t)
+# # Remplacez par le nom r&#xe9;el de votre mod&#xe8;le, obtenu apr&#xe8;s un r&#xe9;glage fin r&#xe9;ussi
+# # fine_tuned_model_name = "ft:gpt-3.5-turbo-0125:my-org::abcd123"
+
+# # if 'fine_tuned_model_name' in locals() and fine_tuned_model_name:
+# #     try:
+# #         response = client.chat.completions.create(
+# #             model=fine_tuned_model_name,
+# #             messages=[
+# #                 {"role": "user", "content": "J&#x27;ai un probl&#xe8;me de connexion."} 
+# #             ]
+# #         )
+# #         print("\nR&#xe9;ponse du mod&#xe8;le r&#xe9;gl&#xe9; :")
+# #         print(response.choices[0].message.content)
+# #     except openai.APIStatusError as e:
+# #         print(f"Erreur lors de l&#x27;utilisation du mod&#xe8;le : {e.status_code} - {e.response}")
+</code></pre>
+<h4>5.2. Anthropic</h4>
+<p>Anthropic <strong>ne fournit pas d&#x27;API publique pour le r&#xe9;glage fin de ses mod&#xe8;les Claude 3 (Opus, Sonnet, Haiku) dans le m&#xea;me sens qu&#x27;OpenAI ou Google.</strong></p>
+<p>Anthropic se concentre sur la cr&#xe9;ation de mod&#xe8;les de base tr&#xe8;s puissants qui, selon eux, fonctionnent parfaitement avec l&#x27;ing&#xe9;nierie de prompts avanc&#xe9;e et les mod&#xe8;les RAG, minimisant le besoin de r&#xe9;glage fin dans la plupart des cas.
+Pour les grands clients d&#x27;entreprise ou les partenaires, il peut exister des programmes pour cr&#xe9;er "custom" mod&#xe8;les ou int&#xe9;grations sp&#xe9;cialis&#xe9;es, mais ce n&#x27;est pas une fonction de r&#xe9;glage fin disponible publiquement via l&#x27;API.</p>
+<p>If you are working with Claude 3, your primary focus should be on:</p>
+<ul>
+<li><strong>High-quality prompt engineering:</strong> Experiment with system instructions, few-shot examples, clear request formatting. Claude is known for its ability to strictly follow instructions, especially in XML tags.</li>
+<li><strong>RAG systems:</strong> Use external knowledge bases to provide the model with relevant context.</li>
+</ul>
+<h4>5.3. Google (Gemini)</h4>
+<p>Google d&#xe9;veloppe activement les capacit&#xe9;s de r&#xe9;glage fin via sa plateforme <strong>Google Cloud Vertex AI</strong>.
+This is a full-fledged ML platform that provides tools for data preparation, running training jobs, and deploying models.
+Fine-tuning is available for the Gemini family of models.</p>
+<p><strong>Process:</strong></p>
+<ol>
+<li>Prepare data (JSONL or CSV) in <code>input_text</code>/<code>output_text</code> format (for instruction tuning) or <code>messages</code> (for chat tuning).</li>
+<li>Upload data to Google Cloud Storage (GCS).</li>
+<li>Create and run a fine-tuning job via the Vertex AI Console or SDK.</li>
+<li>Deploy the fine-tuned model to an Endpoint.</li>
+<li>Use the fine-tuned model via this Endpoint.</li>
+</ol>
+<p><strong>Example data (file <code>gemini_tuning_data.jsonl</code>):</strong></p>
+<pre class="line-numbers"><code class="language-json">{"input_text": "R&#xe9;sumez les id&#xe9;es principales de ce livre : 'Le livre raconte le voyage d&#x27;un h&#xe9;ros qui surmonte les obstacles et se trouve lui-m&#xea;me.'", "output_text": "Le personnage principal du livre se lance dans un voyage transformateur, faisant face &#xe0; des d&#xe9;fis et acqu&#xe9;rant la d&#xe9;couverte de soi."} 
+{"input_text": "Expliquez le principe d&#x27;un r&#xe9;acteur thermonucl&#xe9;aire en termes simples.", "output_text": "Un r&#xe9;acteur thermonucl&#xe9;aire tente de reproduire le processus qui se produit sur le Soleil : la fusion de noyaux atomiques l&#xe9;gers &#xe0; tr&#xe8;s hautes temp&#xe9;ratures, lib&#xe9;rant d&#x27;&#xe9;normes quantit&#xe9;s d&#x27;&#xe9;nergie."} 
+</code></pre>
+<p><strong>Example Python code (n&#xe9;cessite <code>google-cloud-aiplatform</code>):</strong></p>
+<p>Installez au pr&#xe9;alable : <code>pip install google-cloud-aiplatform</code> et <code>pip install google-cloud-storage</code></p>
+<pre class="line-numbers"><code class="language-python">import os
+from google.cloud import aiplatform
+from google.cloud import storage
+
+# --- Param&#xe8;tres ---
+# REMPLACEZ par vos valeurs :
+PROJECT_ID = "your-gcp-project-id"
+REGION = "us-central1"               # Choisissez une r&#xe9;gion qui prend en charge Gemini et Vertex AI
+BUCKET_NAME = "your-gcs-bucket-for-tuning" # Nom de votre bucket GCS (doit &#xea;tre cr&#xe9;&#xe9; au pr&#xe9;alable)
+DATA_FILE_LOCAL_PATH = "gemini_tuning_data.jsonl"
+GCS_DATA_URI = f"gs://{BUCKET_NAME}/{DATA_FILE_LOCAL_PATH}"
+TUNED_MODEL_DISPLAY_NAME = "my-tuned-gemini-model"
+# --- Fin des param&#xe8;tres ---
+
+# Initialiser Vertex AI
+aiplatform.init(project=PROJECT_ID, location=REGION)
+
+# 1. Cr&#xe9;er le fichier de donn&#xe9;es (s&#x27;il n&#x27;existe pas)
+with open(DATA_FILE_LOCAL_PATH, "w", encoding="utf-8") as f:
+    f.write('{"input_text": "R&#xe9;sumez les id&#xe9;es principales de ce livre : \'Le livre raconte le voyage d&#x27;un h&#xe9;ros qui surmonte les obstacles et se trouve lui-m&#xea;me.\'", "output_text": "Le personnage principal du livre se lance dans un voyage transformateur, faisant face &#xe0; des d&#xe9;fis et acqu&#xe9;rant la d&#xe9;couverte de soi."}\n')
+    f.write('{"input_text": "Expliquez le principe d&#x27;un r&#xe9;acteur thermonucl&#xe9;aire en termes simples.", "output_text": "Un r&#xe9;acteur thermonucl&#xe9;aire tente de reproduire le processus qui se produit sur le Soleil : la fusion de noyaux atomiques l&#xe9;gers &#xe0; tr&#xe8;s hautes temp&#xe9;ratures, lib&#xe9;rant d&#x27;&#xe9;normes quantit&#xe9;s d&#x27;&#xe9;nergie."}')
+print(f"Fichier de donn&#xe9;es '{DATA_FILE_LOCAL_PATH}' cr&#xe9;&#xe9;.")
+
+
+# 2. T&#xe9;l&#xe9;charger les donn&#xe9;es vers Google Cloud Storage
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    """T&#xe9;l&#xe9;charge un fichier vers un bucket GCS."""
+    storage_client = storage.Client(project=PROJECT_ID)
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(source_file_name)
+    print(f"Fichier '{source_file_name}' t&#xe9;l&#xe9;charg&#xe9; vers 'gs://{bucket_name}/{destination_blob_name}'.")
+
+try:
+    upload_blob(BUCKET_NAME, DATA_FILE_LOCAL_PATH, DATA_FILE_LOCAL_PATH)
+except Exception as e:
+    print(f"Erreur lors du t&#xe9;l&#xe9;chargement du fichier vers GCS. Assurez-vous que le bucket existe et que vous avez les autorisations : {e}")
+    exit()
+
+# 3. Cr&#xe9;er et ex&#xe9;cuter une t&#xe2;che de r&#xe9;glage fin
+print(f"\nD&#xe9;marrage du r&#xe9;glage fin du mod&#xe8;le '{TUNED_MODEL_DISPLAY_NAME}'...")
+try:
+    # `tune_model` d&#xe9;marre la t&#xe2;che et renvoie le mod&#xe8;le r&#xe9;gl&#xe9; une fois termin&#xe9;
+    tuned_model = aiplatform.Model.tune_model(
+        model_display_name=TUNED_MODEL_DISPLAY_NAME,
+        source_model_name="gemini-1.0-pro-001", # Mod&#xe8;le de base Gemini Pro
+        training_data_path=GCS_DATA_URI,
+        tuning_method="SUPERVISED_TUNING",
+        train_steps=100, # Nombre d&#x27;&#xe9;tapes d&#x27;entra&#xee;nement. La valeur optimale d&#xe9;pend de la taille des donn&#xe9;es.
+        # batch_size=16, # Peut &#xea;tre sp&#xe9;cifi&#xe9;
+        # learning_rate_multiplier=1.0 # Peut &#xea;tre sp&#xe9;cifi&#xe9;
+    )
+    print(f"Mod&#xe8;le '{TUNED_MODEL_DISPLAY_NAME}' r&#xe9;gl&#xe9; avec succ&#xe8;s. ID du mod&#xe8;le : {tuned_model.name}")
+    print("Le processus de r&#xe9;glage fin peut prendre un temps consid&#xe9;rable.")
+except Exception as e:
+    print(f"Erreur de r&#xe9;glage fin. V&#xe9;rifiez les journaux dans la console Vertex AI : {e}")
+    exit()
+
+# 4. D&#xe9;ployer le mod&#xe8;le r&#xe9;gl&#xe9; (pour utilisation)
+print(f"\nD&#xe9;ploiement du mod&#xe8;le r&#xe9;gl&#xe9; '{TUNED_MODEL_DISPLAY_NAME}' sur le point de terminaison...")
+try:
+    endpoint = tuned_model.deploy(
+        machine_type="n1-standard-4", # Type de machine pour le point de terminaison. Choisissez le plus appropri&#xe9;.
+        min_replica_count=1,
+        max_replica_count=1
+    )
+    print(f"Mod&#xe8;le d&#xe9;ploy&#xe9; sur le point de terminaison : {endpoint.name}")
+    print("Le d&#xe9;ploiement peut &#xe9;galement prendre plusieurs minutes.")
+except Exception as e:
+    print(f"Erreur lors du d&#xe9;ploiement du mod&#xe8;le : {e}")
+    exit()
+
+# 5. Utiliser le mod&#xe8;le r&#xe9;gl&#xe9;
+print("\nTest du mod&#xe8;le r&#xe9;gl&#xe9;...")
+prompt = "Parlez-moi de vos capacit&#xe9;s apr&#xe8;s l&#x27;entra&#xee;nement."
+instances = [{"prompt": prompt}] # Pour le r&#xe9;glage d&#x27;instructions. Si r&#xe9;glage de chat, alors {"messages": [...]}
+
+try:
+    response = endpoint.predict(instances=instances)
+    print("\nR&#xe9;ponse du mod&#xe8;le r&#xe9;gl&#xe9; :")
+    print(response.predictions[0])
+except Exception as e:
+    print(f"Erreur lors de l&#x27;utilisation du mod&#xe8;le r&#xe9;gl&#xe9; : {e}")
+
+# Apr&#xe8;s avoir termin&#xe9;, n&#x27;oubliez pas de supprimer le point de terminaison et le mod&#xe8;le pour &#xe9;viter les co&#xfb;ts inutiles :
+# # endpoint.delete()
+# # tuned_model.delete()
+</code></pre>
+<h3>6. Recommandations g&#xe9;n&#xe9;rales</h3>
+<ul>
+<li><strong>Commencez petit :</strong> N&#x27;essayez pas d&#x27;entra&#xee;ner le mod&#xe8;le sur des milliers d&#x27;exemples tout de suite. Commencez par un ensemble de donn&#xe9;es petit mais de haute qualit&#xe9;.</li>
+<li><strong>It&#xe9;rez :</strong> Le r&#xe9;glage fin est un processus it&#xe9;ratif. Entra&#xee;nez, &#xe9;valuez, ajustez les donn&#xe9;es ou les hyperparam&#xe8;tres, r&#xe9;p&#xe9;tez.</li>
+<li><strong>Surveillance :</strong> Surveillez attentivement les m&#xe9;triques d&#x27;entra&#xee;nement (perte) et utilisez un ensemble de donn&#xe9;es de validation pour &#xe9;viter le surapprentissage.</li>
+<li><strong>&#201;valuation :</strong> Testez toujours le mod&#xe8;le r&#xe9;gl&#xe9; sur des donn&#xe9;es qu&#x27;il n&#x27;a *jamais vues* pendant l&#x27;entra&#xee;nement pour &#xe9;valuer sa capacit&#xe9; de g&#xe9;n&#xe9;ralisation.</li>
+<li><strong>Co&#xfb;t :</strong> N&#x27;oubliez pas que le r&#xe9;glage fin et le d&#xe9;ploiement des points de terminaison sont payants. Tenez-en compte dans votre budget.</li>
+<li><strong>Documentation :</strong> R&#xe9;f&#xe9;rez-vous toujours &#xe0; la documentation officielle du fournisseur de LLM. Les API et les capacit&#xe9;s &#xe9;voluent constamment.</li>
+</ul>

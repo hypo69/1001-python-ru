@@ -1,0 +1,115 @@
+<h2>Szkolenie modelu OpenAI do klasyfikacji stron internetowych</h2>
+<h2>Wprowadzenie</h2>
+<p>Szkolenie modelu OpenAI do określania, czy strona jest sklepem internetowym.</p>
+<ul>
+<li>przygotowanie danych,</li>
+<li>tokenizacja tekstu,</li>
+<li>wysyłanie danych do szkolenia</li>
+<li>testowanie modelu.</li>
+</ul>
+<h2>Krok 1: Rejestracja i konfiguracja API OpenAI</h2>
+<p>Aby rozpocząć pracę z API OpenAI, musisz zarejestrować się na platformie OpenAI i uzyskać klucz API. Ten klucz będzie używany do uwierzytelniania podczas wywoływania metod API.</p>
+<pre class="line-numbers"><code class="language-python">import openai
+
+# Ustawienie klucza API
+openai.api_key = 'your-api-key'
+</code></pre>
+<h2>Krok 2: Przygotowanie danych</h2>
+<p>Aby wyszkolić model, musisz przygotować zestaw danych, który będzie zawierał przykłady stron internetowych,
+zarówno sklepów, jak i stron innych niż sklepy.
+Każdy wpis musi zawierać tekst strony i odpowiadającą mu etykietę (<code>positive</code> dla sklepów i <code>negative</code> dla stron innych niż sklepy).</p>
+<p>Przykładowy plik JSON:</p>
+<pre class="line-numbers"><code class="language-json">[
+    {
+        "text": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;Witamy w naszym sklepie internetowym&lt;/h1&gt;&lt;p&gt;Oferujemy szeroki wybór produktów w konkurencyjnych cenach. Odwiedź nasz sklep już dziś!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
+        "label": "positive"
+    },
+    {
+        "text": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;O nas&lt;/h1&gt;&lt;p&gt;Jesteśmy wiodącym dostawcą wysokiej jakości usług. Skontaktuj się z nami, aby uzyskać więcej informacji.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
+        "label": "negative"
+    }
+]
+</code></pre>
+<h2>Krok 3: Tokenizacja tekstu</h2>
+<p>Przed wysłaniem danych do modelu OpenAI tekst musi zostać stokenizowany.
+Tokenizacja to proces dzielenia tekstu na pojedyncze słowa lub tokeny.
+W Pythonie możesz użyć bibliotek takich jak NLTK, spaCy lub tokenizers z biblioteki transformers.</p>
+<p>Przykład tokenizacji za pomocą NLTK:</p>
+<pre class="line-numbers"><code class="language-python">import nltk
+from nltk.tokenize import word_tokenize
+
+# Przykładowy tekst
+text = "To jest przykładowy tekst do tokenizacji."
+
+# Tokenizacja tekstu
+tokens = word_tokenize(text)
+tokenized_text = ' '.join(tokens)
+print(tokenized_text)
+</code></pre>
+<h2>Krok 4: Wysyłanie danych do szkolenia</h2>
+<p>Po tokenizacji tekstu możesz wysłać dane do szkolenia modelu OpenAI.
+Oto przykład kodu do wysyłania danych:</p>
+<pre class="line-numbers"><code class="language-python">import openai
+
+def train_model(data, positive=True):
+    try:
+        response = openai.Train.create(
+            model="text-davinci-003",
+            documents=[entry["text"] for entry in data],
+            labels=["positive" if positive else "negative"] * len(data),
+            show_progress=True
+        )
+        return response.id
+    except Exception as ex:
+        print("Wystąpił błąd podczas szkolenia:", ex)
+        return None
+
+# Przykładowe użycie
+data = [
+    {"text": "Tekst pierwszej strony internetowej...", "label": "positive"},
+    {"text": "Tekst drugiej strony internetowej...", "label": "negative"}
+]
+
+job_id = train_model(data, positive=True)
+print("ID zadania:", job_id)
+</code></pre>
+<h2>Krok 5: Testowanie modelu</h2>
+<p>Po wyszkoleniu modelu należy go przetestować na zestawie danych testowych.
+Oto przykład kodu do testowania:</p>
+<pre class="line-numbers"><code class="language-python">def test_model(test_data):
+    try:
+        predictions = []
+        for entry in test_data:
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=entry["text"],
+                max_tokens=1
+            )
+            prediction = response.choices[0].text.strip()
+            predictions.append(prediction)
+        return predictions
+    except Exception as ex:
+        print("Wystąpił błąd podczas testowania:", ex)
+        return None
+
+# Przykładowe użycie
+test_data = [
+    {"text": "Tekst testowej strony internetowej...", "label": "positive"},
+    {"text": "Tekst innej strony testowej...", "label": "negative"}
+]
+
+predictions = test_model(test_data)
+print("Prognozy:", predictions)
+</code></pre>
+<h2>Krok 6: Obsługa błędów i ulepszanie modelu</h2>
+<p>Jeśli model daje nieprawidłowe prognozy, możesz go ulepszyć,
+dodając więcej danych lub zmieniając parametry szkolenia. Możesz również wykorzystać informacje zwrotne do analizy błędów.</p>
+<p>Przykład obsługi błędów:</p>
+<pre class="line-numbers"><code class="language-python">def handle_errors(predictions, test_data):
+    for pred, entry in zip(predictions, test_data):
+        if pred != entry["label"]:
+            print(f"Nieprawidłowa prognoza dla strony '{entry['name']}': Przewidziano {pred}, Rzeczywiste {entry['label']}")
+
+# Przykładowe użycie
+handle_errors(predictions, test_data)
+</code></pre>

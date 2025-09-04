@@ -1,0 +1,1 @@
+Article [déplacé](информатика/temps_polynomial_et_exponentiel_d_execution.md)

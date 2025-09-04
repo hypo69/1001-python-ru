@@ -1,0 +1,402 @@
+<p>🚀 <strong>CI/CD: Od podstaw do produkcji na GCP z GitHub Actions – Kompletny przewodnik z przykładami</strong> 🚀</p>
+<p>Witajcie, deweloperzy! W tym artykule opowiem o CI/CD – koncepcji.</p>
+<h3>Czym jest potok CI/CD w kontekście programowania?</h3>
+<p><strong>Potok CI/CD (Continuous Integration / Continuous Delivery lub Continuous Deployment)</strong> to zautomatyzowany proces, który pozwala deweloperom szybko i niezawodnie dostarczać zmiany w kodzie do środowiska produkcyjnego.</p>
+<p>Rozłóżmy kluczowe pojęcia:</p>
+<p>🔧 <strong>CI — Continuous Integration (Ciągła Integracja)</strong><br>
+Jest to praktyka, w której deweloperzy często wprowadzają zmiany do wspólnej bazy kodu. Każda taka zmiana jest automatycznie:
+*   <strong>Budowana</strong> (build)
+*   <strong>Testowana</strong> (testy jednostkowe, testy integracyjne)
+*   <strong>Sprawdzana pod kątem zgodności ze standardami</strong> (linting, analiza statyczna)
+</p>
+<p>👉 **Cel CI:** Wykrywanie błędów na najwcześniejszym etapie, zanim zepsują coś ważnego lub trafią do wydania.</p>
+<p>🚀 **CD — Continuous Delivery (Ciągłe Dostarczanie) lub Continuous Deployment (Ciągłe Wdrażanie)**<br>
+Tutaj są dwie opcje:
+</p>
+<p>✅ **Continuous Delivery (Ciągłe Dostarczanie)**<br>
+Po pomyślnym przejściu etapu CI, zmiany automatycznie:
+*   Przechodzą dodatkowe testy (np. E2E – testy end-to-end)
+*   Trafiają na serwer stagingowy (testowy)
+</p>
+<p>👉 **Ale wdrożenie na produkcję nadal wymaga ręcznego potwierdzenia.** Daje to zespołowi kontrolę nad tym, *kiedy* dokładnie użytkownicy zobaczą zmiany.</p>
+<p>🤖 **Continuous Deployment (Ciągłe Wdrażanie)**<br>
+Jest to kolejny krok po Continuous Delivery. Tutaj wdrożenie na produkcję odbywa się **całkowicie automatycznie**, jeśli wszystkie poprzednie etapy potoku (kompilacja, wszystkie testy) zakończyły się pomyślnie. Jest to najbardziej zaawansowany poziom automatyzacji.</p>
+<h3>🔄 Z czego zazwyczaj składa się potok CI/CD?</h3>
+<p>Typowy potok obejmuje następujące etapy:</p>
+<ol>
+<li><strong>Checkout</strong> — Klonowanie najnowszej wersji kodu z repozytorium.</li>
+<li><strong>Build</strong> — Budowanie projektu (kompilacja, tworzenie artefaktów, obrazów Docker).</li>
+<li><strong>Test</strong> — Uruchamianie różnych rodzajów testów (jednostkowych, integracyjnych, E2E).</li>
+<li><strong>Lint/Code Quality</strong> — Sprawdzanie kodu pod kątem zgodności ze stylem i potencjalnych błędów za pomocą statycznych analizatorów.</li>
+<li><strong>Deploy</strong> — Wdrażanie aplikacji (na serwer stagingowy lub produkcyjny).</li>
+<li><strong>Notify</strong> — Wysyłanie powiadomień o statusie potoku do zespołu (np. w Slacku, e-mailu).</li>
+</ol>
+<h3>🛠 Popularne narzędzia CI/CD:</h3>
+<ul>
+<li><strong>GitHub Actions</strong> (nasz dzisiejszy fokus!)</li>
+<li>GitLab CI/CD</li>
+<li>Jenkins</li>
+<li>CircleCI</li>
+<li>Bitbucket Pipelines</li>
+<li>Azure DevOps</li>
+<li>TeamCity</li>
+</ul>
+<h3>🧠 Po co w ogóle potrzebne jest CI/CD?</h3>
+<ul>
+<li><strong>Zmniejsza czynnik ludzki:</strong> Automatyzacja eliminuje błędy związane z ręcznymi operacjami.</li>
+<li><strong>Szybkie wykrywanie błędów:</strong> Błędy są znajdowane wcześniej, co sprawia, że są łatwiejsze i tańsze w naprawie.</li>
+<li><strong>Automatyzacja rutynowych zadań:</strong> Deweloperzy spędzają mniej czasu na budowaniu i wdrażaniu, a więcej na kodowaniu.</li>
+<li><strong>Poprawa jakości kodu:</strong> Ciągłe sprawdzanie i testowanie podnosi ogólny poziom jakości.</li>
+<li><strong>Szybkie dostarczanie funkcji użytkownikom:</strong> Nowe funkcje docierają do użytkownika końcowego szybciej i częściej.</li>
+</ul>
+<h3>📦 Proste przykłady CI/CD z GitHub Actions</h3>
+<p>Przyjrzyjmy się podstawowym potokom dla popularnych technologii. Wszystkie przykłady używają GitHub Actions i są zapisywane w katalogu <code>.github/workflows/</code> Twojego projektu.</p>
+<h4>🐍 CI/CD dla Pythona (z `pytest` i `flake8`)</h4>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/python-ci.yml
+name: Python CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' # Określ swoją wersję
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt # Upewnij się, że masz requirements.txt
+          pip install flake8 pytest
+
+      - name: Lint with flake8
+        run: |
+          # Sprawdź kod w folderach src i tests (dostosuj do swojego projektu)
+          flake8 src tests
+
+      - name: Run tests
+        run: |
+          pytest
+</code></pre>
+<h4>🌐 CI/CD dla Node.js (z `npm test` i `eslint`)</h4>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/node-ci.yml
+name: Node.js CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x] # Określ swoją wersję Node.js
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install # lub npm ci dla bardziej przewidywalnej instalacji
+
+      - name: Lint with ESLint
+        run: npx eslint . # Upewnij się, że ESLint jest skonfigurowany w projekcie
+
+      - name: Run tests
+        run: npm test
+</code></pre>
+<h4>🐳 CI/CD dla Docker (budowanie i wypychanie do Docker Hub)</h4>
+<p>W tym przykładzie będziesz potrzebować sekretów <code>DOCKER_USERNAME</code> i <code>DOCKER_PASSWORD</code> (lub tokena) w ustawieniach repozytorium GitHub (<code>Settings -> Secrets and variables -> Actions</code>).</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/docker-ci.yml
+name: Docker CI/CD
+
+on:
+  push:
+    branches: [ main ] # Uruchamiaj tylko dla gałęzi main
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        # Zastąp myapp nazwą swojej aplikacji
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:latest .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+</code></pre>
+<h3>🚚 Wdrażanie na popularne platformy</h3>
+<p>Teraz, gdy mamy zbudowane i przetestowane artefakty (np. obraz Docker), zobaczmy, jak można je wdrożyć.</p>
+<h4>🟣 Wdrażanie na Heroku</h4>
+<p><strong>🔐 Sekrety GitHub:</strong> <code>HEROKU_API_KEY</code>, <code>HEROKU_APP_NAME</code>.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-heroku.yml
+name: Deploy to Heroku
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Login to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku auth:token
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+          git push heroku main -f # Bądź ostrożny z -f (force push)
+</code></pre>
+<p>Jeśli wdrażasz obraz Docker na Heroku:</p>
+<pre class="line-numbers"><code class="language-yaml"># ... (kroki budowania i logowania do Docker Hub/GHCR z poprzednich przykładów) ...
+# deploy:
+#   name: Deploy to Heroku
+#   needs: build # Zależy od zadania budowania obrazu
+#   runs-on: ubuntu-latest
+#   steps:
+#     # ...
+#     - name: Login to Heroku container registry
+#       run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
+#     - name: Tag image for Heroku
+#       # Zakładając, że obraz jest zbudowany jako ghcr.io/username/repo/myapp:latest
+#       run: docker tag ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+#     - name: Push image to Heroku
+#       run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+#     - name: Release Heroku App
+#       env:
+#         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+#       run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
+</code></pre>
+<h3>🟨 Wdrażanie na AWS (np. pliki statyczne do S3)</h3>
+<p><strong>🔐 Sekrety GitHub:</strong> `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET_NAME`.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-aws-s3.yml
+name: Deploy Static Site to AWS S3
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Sync files to S3
+        # Zastąp ./public ścieżką do swoich plików statycznych
+        run: aws s3 sync ./public s3://${{ secrets.S3_BUCKET_NAME }} --delete
+</code></pre>
+<p>Do wdrożenia na **AWS Elastic Beanstalk** zazwyczaj używa się EB CLI, potok będzie podobny, ale z poleceniami `eb deploy`.</p>
+<h3>🔵 Wdrażanie na Google Cloud Platform (GCP App Engine)</h3>
+<p><strong>🔐 Sekrety GitHub:</strong> `GCP_CREDENTIALS` (klucz JSON konta serwisowego), `GCP_PROJECT_ID`.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-gcp-app-engine.yml
+name: Deploy to GCP App Engine
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+          export_default_credentials: true
+      - name: Deploy to App Engine
+        # Upewnij się, że masz app.yaml w katalogu głównym projektu
+        run: gcloud app deploy --quiet
+</code></pre>
+<h3>🟪 Wdrażanie na Render.com</h3>
+<p>Render często automatycznie wdraża po pushu do GitHub, jeśli repozytorium jest podłączone. Ale dla ręcznego wyzwalacza (lub jako część bardziej złożonego potoku) można użyć Deploy Hook.<br>
+<strong>🔐 Sekrety GitHub:</strong> `RENDER_DEPLOY_HOOK` (URL uzyskany z ustawień usługi Render).</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-render.yml
+name: Trigger Render Deploy
+
+on:
+  workflow_dispatch: # Ręczne wyzwalanie z UI GitHub
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+</code></pre>
+<h3>🌟 Zaawansowane CI/CD: Budowanie Docker → Wypychanie do GHCR → Staging/Production na GCP Cloud Run</h3>
+<p>A teraz wisienka na torcie! Zbudujmy zaawansowany potok:
+1.  Budowanie obrazu Docker.
+2.  Publikowanie obrazu w GitHub Container Registry (ghcr.io).
+3.  Automatyczne wdrożenie do środowiska **staging** na GCP Cloud Run.
+4.  Wdrożenie do środowiska **production** na GCP Cloud Run **po ręcznym potwierdzeniu**.
+</p>
+<p>Do tego potrzebne będą nam pliki workflow.</p>
+<p><strong>Wymagane sekrety GitHub:</strong></p>
+<ul>
+<li>`GCP_PROJECT_ID`: ID Twojego projektu w GCP.</li>
+<li>`GCP_CREDENTIALS`: Klucz JSON konta serwisowego GCP z uprawnieniami do wdrażania w Cloud Run i dostępu do GHCR (jeśli potrzebne). Zazwyczaj `GITHUB_TOKEN` wystarcza do dostępu do GHCR z Actions.</li>
+<li>`GCP_REGION`: Region dla Cloud Run (np. `europe-west1`).</li>
+</ul>
+<h3>1. Budowanie i publikowanie obrazu Docker w GHCR</h3>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/build.yml
+name: Build & Push to GHCR
+
+on:
+  push:
+    branches: [main] # Uruchamiaj po pushu do main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read      # Do checkout
+      packages: write     # Do pushu do GHCR
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest
+          # Możesz dodać tagowanie po SHA commita dla unikalności:
+          # tags: |
+          #   ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest
+          #   ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:${{ github.sha }}
+</code></pre>
+<ul>
+<li>`github.repository_owner`: Właściciel repozytorium (Twoja nazwa użytkownika lub organizacji).</li>
+<li>`github.event.repository.name`: Nazwa repozytorium.</li>
+<li>`myapp`: Nazwa Twojej aplikacji/obrazu.</li>
+</ul>
+<h3>2. Automatyczne wdrożenie do Staging (GCP Cloud Run)</h3>
+<p>Ten workflow zostanie uruchomiony automatycznie po pomyślnym zakończeniu `build.yml`.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-staging.yml
+name: Deploy to GCP Cloud Run (Staging)
+
+on:
+  workflow_run:
+    workflows: ["Build & Push to GHCR"]
+    types:
+      - completed
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Staging)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-staging'
+          region: '${{ secrets.GCP_REGION }}'
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest'
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed'
+</code></pre>
+<h3>3. Wdrożenie do Production z ręcznym potwierdzeniem (GCP Cloud Run)</h3>
+<p>Ten workflow jest wyzwalany ręcznie za pośrednictwem interfejsu użytkownika GitHub Actions.</p>
+<pre class="line-numbers"><code class="language-yaml"># .github/workflows/deploy-prod.yml
+name: Deploy to GCP Cloud Run (Production)
+
+on:
+  workflow_dispatch: # Pozwala na ręczne wyzwalanie
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Production)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-production'
+          region: '${{ secrets.GCP_REGION }}'
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest'
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed'
+          # Dla produkcji możesz dodać --no-traffic, a następnie stopniowo przenosić ruch
+          # traffic:
+          #   latest: true
+          #   percent: 100
+</code></pre>
+<p><strong>Ważne punkty tego zaawansowanego potoku:</strong></p>
+<ul>
+<li>**GitHub Container Registry (ghcr.io):** Używamy go do przechowywania obrazów Docker. Jest to wygodne, ponieważ jest ściśle zintegrowane z GitHub Actions.</li>
+<li>**`workflow_run`:** Pozwala na uruchomienie jednego workflow (wdrożenie staging) po zakończeniu drugiego (budowanie).</li>
+<li>**`workflow_dispatch`:** Zapewnia możliwość ręcznego wyzwalania workflow (wdrożenie produkcyjne), co zapewnia kontrolę.</li>
+<li>**GitHub Environments:** Pozwalają na konfigurację reguł ochrony dla produkcji (np. wymaganie zatwierdzenia od określonych recenzentów) i przechowywanie sekretów specyficznych dla środowiska.</li>
+<li>**GCP Cloud Run:** Doskonała opcja serverless do uruchamiania aplikacji skonteneryzowanych.</li>
+</ul>
+<h3>🔐 Bezpieczeństwo – to ważne!</h3>
+<ul>
+<li>**Używaj sekretów GitHub:** Nigdy nie przechowuj tokenów, haseł, kluczy API bezpośrednio w plikach YAML. Użyj `Settings -> Secrets and variables -> Actions` w swoim repozytorium.</li>
+<li>**Minimalne uprawnienia:** Dla kont serwisowych (np. GCP) przyznawaj tylko te uprawnienia, które są absolutnie niezbędne do wykonywania zadań CI/CD.</li>
+<li>**Izoluj środowiska:** Staging i produkcja powinny być jak najbardziej izolowane. Różne projekty/konta u dostawców chmury to dobra praktyka.</li>
+<li>**Ochrona gałęzi:** Skonfiguruj ochronę dla gałęzi `main` (lub `master`) aby wypychanie do niej było możliwe tylko poprzez Pull Request z obowiązkowymi kontrolami CI.

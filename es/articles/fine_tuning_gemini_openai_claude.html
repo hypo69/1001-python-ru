@@ -1,0 +1,255 @@
+<h2>Hoja de trucos. Personalización de LLM: prompts, ajuste fino de modelos, ejemplos de código.</h2>
+<p>En este artículo:</p>
+<ol>
+<li>Cómo se crea el "efecto memoria" en LLM (breve resumen).</li>
+<li>Por qué y cuándo es necesario el ajuste fino (Fine-tuning) de un modelo.</li>
+<li>Cuándo el ajuste fino no es la mejor solución.</li>
+<li>Preparación de datos.</li>
+<li>Ejemplos de ajuste fino para <strong>OpenAI (GPT)</strong>, <strong>Google (Gemini)</strong> y <strong>Anthropic (Claude)</strong> (difiere).</li>
+</ol>
+<h3>1. Cómo LLM "recuerda" y "se adapta": La ilusión del contexto</h3>
+<p>Antes de hablar sobre el ajuste fino, es importante entender cómo LLM logra crear una sensación de personalización.
+Esto es importante para no apresurarse a un ajuste fino costoso si la tarea se puede resolver con métodos más simples:</p>
+<ul>
+<li>A través de la <strong>Ventana de Contexto (Memoria a Corto Plazo):</strong> Dentro de un solo diálogo, envías al modelo no solo una nueva pregunta, sino también <strong>toda o parte de la correspondencia anterior</strong>. El modelo procesa todo este texto como un único "contexto". Es gracias a esto que "recuerda" las observaciones anteriores y continúa el pensamiento. La limitación aquí es la longitud de la ventana de contexto (número de tokens).</li>
+<li>Componiendo <strong>Instrucciones del Sistema (System Prompt):</strong> Puedes establecer el rol, el tono y las reglas de comportamiento del modelo al comienzo de cada diálogo. Por ejemplo: "Eres un experto en Python, responde brevemente".</li>
+<li>Incluyendo varios ejemplos del comportamiento deseado en la solicitud <strong>Aprendizaje de Pocos Disparos (Few-Shot Learning):</strong> (pares de entrada/salida) permite que el modelo "aprenda" este patrón directamente dentro de la solicitud actual.</li>
+<li><strong>Gestión de estado del lado de la aplicación:</strong> La forma más poderosa. La aplicación (que accede a la API) puede almacenar información del usuario (preferencias, historial, datos de perfil) y agregarla dinámicamente al prompt antes de enviarla al modelo.</li>
+</ul>
+<h3>2.</h3>
+<p>El ajuste fino es el proceso de entrenar aún más un LLM base ya preparado en tu propio conjunto de datos específico. Esto permite que el modelo:</p>
+<ul>
+<li><strong>Adapte el estilo y el tono:</strong> El modelo hablará "tu idioma", ya sea científico estricto, marketing amigable o la jerga de una comunidad específica.</li>
+<li><strong>Siga instrucciones y formatos específicos:</strong> Si necesitas respuestas en una estructura JSON estrictamente definida, o siempre con un conjunto específico de campos.</li>
+<li><strong>Comprenda el lenguaje específico del dominio:</strong> El entrenamiento con tu documentación interna o textos de la industria ayudará al modelo a manejar mejor la terminología de tu nicho.</li>
+<li><strong>Mejore el rendimiento en tareas específicas:</strong> Para ciertos tipos de consultas (por ejemplo, clasificación de sentimientos, generación de código en un marco específico), el ajuste fino puede proporcionar respuestas más precisas y relevantes que el modelo base.</li>
+<li><strong>Reduzca la longitud de los prompts:</strong> Si el modelo ya "conoce" el comportamiento deseado gracias al ajuste, no necesitas recordárselo cada vez en el prompt, lo que ahorra tokens y reduce la latencia.</li>
+</ul>
+<h3>3.</h3>
+<p>El ajuste fino es una herramienta poderosa pero no universal. No debes usarla si:</p>
+<ul>
+<li><strong>El modelo necesita acceder a nuevos conocimientos:</strong> El ajuste fino cambia los pesos del modelo, pero no "carga" nuevos hechos en él en tiempo real. Si tu tarea es responder preguntas basadas en una base de conocimientos en constante cambio (documentos de la empresa, últimas noticias), es mejor usar <strong>Generación Aumentada por Recuperación (RAG)</strong>. Aquí, el modelo base obtiene el contexto de tu base de datos <em>durante la ejecución de la consulta</em>.</li>
+<li><strong>Una tarea simple se puede resolver con ingeniería de prompts:</strong> Siempre comienza con la ingeniería de prompts más efectiva. Si la tarea se puede resolver con instrucciones simples y ejemplos de pocos disparos, el ajuste fino es redundante y más costoso.</li>
+<li><strong>No tienes suficientes datos de alta calidad:</strong> Datos malos = modelo mal ajustado.</li>
+</ul>
+<h3>4. Preparación de datos.</h3>
+<p>La calidad y cantidad de tus datos son de vital importancia. El modelo aprende de tus ejemplos, por lo que deben ser precisos, diversos y consistentes.</p>
+<ul>
+<li><strong>Formato:</strong> La mayoría de las veces JSON Lines (<code>.jsonl</code>) o CSV (<code>.csv</code>).</li>
+<li><strong>Estructura de datos:</strong> Depende de la tarea.
+<ul>
+<li><strong>Ajuste de Instrucciones (Instruction Tuning - Instrucción-Respuesta):</strong> Adecuado para tareas generalizadas como preguntas y respuestas, reformulación, resumen.
+<pre class="line-numbers"><code class="language-json">{"input_text": "Reformula la frase: 'La tecnología de IA se está desarrollando rápidamente.'", "output_text": "La inteligencia artificial está demostrando un rápido progreso."} 
+{"input_text": "Nombra la capital de Francia.", "output_text": "La capital de Francia es París."} 
+</code></pre>
+</li>
+<li><strong>Ajuste de Chat (Chat Tuning - Chat):</strong> Ideal para entrenar al modelo para mantener un diálogo en un rol o estilo específico.
+<pre class="line-numbers"><code class="language-json">{"messages": [{"author": "user", "content": "¡Hola! ¿Qué me recomiendas para cenar?"}, {"author": "model", "content": "¡Buenas noches! Hoy es un gran día para pasta Carbonara, o, si prefieres algo ligero, ensalada César."}]} 
+{"messages": [{"author": "user", "content": "Háblame de las nuevas características de Python 3.12."}, {"author": "model", "content": "En Python 3.12 se introdujeron f-strings con sangría, nueva sintaxis para genéricos universales y un manejo mejorado de errores Unicode."} ]} 
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong>Cantidad:</strong> Mínimo 100-200 ejemplos de alta calidad, pero cuanto más, mejor (miles para tareas serias).</li>
+<li><strong>Calidad:</strong> Precisión, consistencia de estilo, tono y formato en todo el conjunto de datos.</li>
+</ul>
+<h3>5. Modelos y plataformas</h3>
+<h4>5.1. OpenAI</h4>
+<p>OpenAI proporciona una API bastante simple e intuitiva para el ajuste fino.</p>
+<p><strong>Proceso:</strong></p>
+<ol>
+<li>Prepara los datos en formato JSONL, donde cada línea es un objeto con una matriz de <code>messages</code> (como en la API de Chat Completions).</li>
+<li>Sube el archivo de datos a través de la API.</li>
+<li>Crea un trabajo de ajuste fino, especificando el archivo subido y el modelo base.</li>
+<li>Supervisa el progreso.</li>
+<li>Usa el nuevo modelo ajustado por su ID.</li>
+</ol>
+<p><strong>Ejemplo de datos (archivo <code>training_data.jsonl</code>):</strong></p>
+<pre class="line-numbers"><code class="language-json">{"messages": [{"role": "system", "content": "Eres un asistente amigable para el soporte al cliente de una empresa de TI."}, {"role": "user", "content": "Mi internet no funciona."}, {"role": "assistant", "content": "¡Oh, disculpe las molestias! Intentemos resolverlo. ¿Cómo está conectado a internet, por Wi-Fi o por cable?"}]} 
+{"messages": [{"role": "system", "content": "Eres un asistente amigable para el soporte al cliente de una empresa de TI."}, {"role": "user", "content": "¿Cómo puedo restablecer mi contraseña?"}, {"role": "assistant", "content": "¡Claro! Para restablecer su contraseña, por favor, vaya a la página de inicio de sesión y haga clic en '¿Olvidó su contraseña?' debajo del campo de entrada. Luego siga las instrucciones en pantalla."} ]} 
+</code></pre>
+<p><strong>Ejemplo de código Python:</strong></p>
+<p>Instala previamente: <code>pip install openai</code></p>
+<pre class="line-numbers"><code class="language-python">import openai
+from openai import OpenAI
+import os
+
+# Establece tu clave API de OpenAI. Se recomienda usar una variable de entorno.
+# os.environ["OPENAI_API_KEY"] = "sk-..."
+client = OpenAI()
+
+# 1. Subir archivo de datos
+try:
+    file_response = client.files.create(
+        file=open("training_data.jsonl", "rb"),
+        purpose="fine-tune"
+    )
+    file_id = file_response.id
+    print(f"Archivo subido exitosamente. ID del archivo: {file_id}")
+except openai.APIStatusError as e:
+    print(f"Error al subir el archivo: {e.status_code} - {e.response}")
+    exit()
+
+# 2. Crear trabajo de ajuste fino
+try:
+    ft_job_response = client.fine_tuning.jobs.create(
+        training_file=file_id,
+        model="gpt-3.5-turbo" # Puedes especificar una versión específica, por ejemplo, "gpt-3.5-turbo-0125"
+    )
+    job_id = ft_job_response.id
+    print(f"Trabajo de ajuste fino creado. ID del trabajo: {job_id}")
+    print("Supervisa el estado del trabajo a través de la API o en OpenAI Playground.")
+except openai.APIStatusError as e:
+    print(f"Error al crear el trabajo: {e.status_code} - {e.response}")
+    exit()
+
+# Ejemplo de supervisión de estado y obtención del nombre del modelo (ejecutar después de la creación del trabajo):
+# # job_id = "ftjob-..." # Reemplaza con el ID de tu trabajo
+# # job_status = client.fine_tuning.jobs.retrieve(job_id)
+# # print(f"Estado actual del trabajo: {job_status.status}")
+# # if job_status.status == "succeeded":
+# #     fine_tuned_model_name = job_status.fine_tuned_model
+# #     print(f"Nombre del modelo ajustado: {fine_tuned_model_name}")
+
+# 3. Usar el modelo ajustado (una vez que esté listo)
+# # Reemplaza con el nombre real de tu modelo, obtenido después del ajuste fino exitoso
+# # fine_tuned_model_name = "ft:gpt-3.5-turbo-0125:my-org::abcd123"
+
+# # if 'fine_tuned_model_name' in locals() and fine_tuned_model_name:
+# #     try:
+# #         response = client.chat.completions.create(
+# #             model=fine_tuned_model_name,
+# #             messages=[
+# #                 {"role": "user", "content": "Tengo un problema de inicio de sesión."}
+# #             ]
+# #         )
+# #         print("\nRespuesta del modelo ajustado:")
+# #         print(response.choices[0].message.content)
+# #     except openai.APIStatusError as e:
+# #         print(f"Error al usar el modelo: {e.status_code} - {e.response}")
+</code></pre>
+<h4>5.2. Anthropic</h4>
+<p>Anthropic <strong>no proporciona una API pública para el ajuste fino de sus modelos Claude 3 (Opus, Sonnet, Haiku) en el mismo sentido que OpenAI o Google.</strong></p>
+<p>Anthropic se enfoca en crear modelos base muy potentes que, según afirman, funcionan excelentemente con ingeniería de prompts avanzada y patrones RAG, minimizando la necesidad de ajuste fino en la mayoría de los casos.
+Para grandes clientes empresariales o socios, puede haber programas para crear "custom" modelos o integraciones especializadas, pero esta no es una función de ajuste fino disponible públicamente a través de la API.</p>
+<p>If you are working with Claude 3, your primary focus should be on:</p>
+<ul>
+<li><strong>High-quality prompt engineering:</strong> Experiment with system instructions, few-shot examples, clear request formatting. Claude is known for its ability to strictly follow instructions, especially in XML tags.</li>
+<li><strong>RAG systems:</strong> Use external knowledge bases to provide the model with relevant context.</li>
+</ul>
+<h4>5.3. Google (Gemini)</h4>
+<p>Google está desarrollando activamente capacidades de ajuste fino a través de su plataforma <strong>Google Cloud Vertex AI</strong>.
+This is a full-fledged ML platform that provides tools for data preparation, running training jobs, and deploying models.
+Fine-tuning is available for the Gemini family of models.</p>
+<p><strong>Process:</strong></p>
+<ol>
+<li>Prepare data (JSONL or CSV) in <code>input_text</code>/<code>output_text</code> format (for instruction tuning) or <code>messages</code> (for chat tuning).</li>
+<li>Upload data to Google Cloud Storage (GCS).</li>
+<li>Create and run a fine-tuning job via the Vertex AI Console or SDK.</li>
+<li>Deploy the fine-tuned model to an Endpoint.</li>
+<li>Use the fine-tuned model via this Endpoint.</li>
+</ol>
+<p><strong>Example data (file <code>gemini_tuning_data.jsonl</code>):</strong></p>
+<pre class="line-numbers"><code class="language-json">{"input_text": "Resume las ideas principales de este libro: 'El libro trata sobre el viaje de un héroe que supera obstáculos y se encuentra a sí mismo.'", "output_text": "El personaje principal del libro se embarca en un viaje transformador, enfrentando desafíos y logrando el autodescubrimiento."} 
+{"input_text": "Explica el principio de un reactor termonuclear en términos sencillos.", "output_text": "Un reactor termonuclear intenta reproducir el proceso que ocurre en el Sol: la fusión de núcleos atómicos ligeros a temperaturas muy altas, liberando enormes cantidades de energía."} 
+</code></pre>
+<p><strong>Example Python code (requires <code>google-cloud-aiplatform</code>):</strong></p>
+<p>Install beforehand: <code>pip install google-cloud-aiplatform</code> and <code>pip install google-cloud-storage</code></p>
+<pre class="line-numbers"><code class="language-python">import os
+from google.cloud import aiplatform
+from google.cloud import storage
+
+# --- Configuración ---
+# REEMPLAZA con tus valores:
+PROJECT_ID = "your-gcp-project-id"
+REGION = "us-central1"               # Elige una región que admita Gemini y Vertex AI
+BUCKET_NAME = "your-gcs-bucket-for-tuning" # Nombre de tu bucket de GCS (debe crearse previamente)
+DATA_FILE_LOCAL_PATH = "gemini_tuning_data.jsonl"
+GCS_DATA_URI = f"gs://{BUCKET_NAME}/{DATA_FILE_LOCAL_PATH}"
+TUNED_MODEL_DISPLAY_NAME = "my-tuned-gemini-model"
+# --- Fin de la configuración ---
+
+# Inicializar Vertex AI
+aiplatform.init(project=PROJECT_ID, location=REGION)
+
+# 1. Crear archivo de datos (si no existe)
+with open(DATA_FILE_LOCAL_PATH, "w", encoding="utf-8") as f:
+    f.write('{"input_text": "Resume las ideas principales de este libro: \'El libro trata sobre el viaje de un héroe que supera obstáculos y se encuentra a sí mismo.\'", "output_text": "El personaje principal del libro se embarca en un viaje transformador, enfrentando desafíos y logrando el autodescubrimiento."}')
+    f.write('\n')
+    f.write('{"input_text": "Explica el principio de un reactor termonuclear en términos sencillos.", "output_text": "Un reactor termonuclear intenta reproducir el proceso que ocurre en el Sol: la fusión de núcleos atómicos ligeros a temperaturas muy altas, liberando enormes cantidades de energía."}')
+print(f"Archivo de datos '{DATA_FILE_LOCAL_PATH}' creado.")
+
+
+# 2. Subir datos a Google Cloud Storage
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    """Sube un archivo a un bucket de GCS."""
+    storage_client = storage.Client(project=PROJECT_ID)
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(source_file_name)
+    print(f"Archivo '{source_file_name}' subido a 'gs://{bucket_name}/{destination_blob_name}'.")
+
+try:
+    upload_blob(BUCKET_NAME, DATA_FILE_LOCAL_PATH, DATA_FILE_LOCAL_PATH)
+except Exception as e:
+    print(f"Error al subir el archivo a GCS. Asegúrate de que el bucket exista y tengas permisos: {e}")
+    exit()
+
+# 3. Crear y ejecutar trabajo de ajuste fino
+print(f"\nIniciando ajuste fino del modelo '{TUNED_MODEL_DISPLAY_NAME}'...")
+try:
+    # `tune_model` inicia el trabajo y devuelve el modelo ajustado al finalizar
+    tuned_model = aiplatform.Model.tune_model(
+        model_display_name=TUNED_MODEL_DISPLAY_NAME,
+        source_model_name="gemini-1.0-pro-001", # Modelo base Gemini Pro
+        training_data_path=GCS_DATA_URI,
+        tuning_method="SUPERVISED_TUNING",
+        train_steps=100, # Número de pasos de entrenamiento. El valor óptimo depende del tamaño de los datos.
+        # batch_size=16, # Se puede especificar
+        # learning_rate_multiplier=1.0 # Se puede especificar
+    )
+    print(f"Modelo '{TUNED_MODEL_DISPLAY_NAME}' ajustado con éxito. ID del modelo: {tuned_model.name}")
+    print("El proceso de ajuste fino puede llevar un tiempo considerable.")
+except Exception as e:
+    print(f"Error de ajuste fino. Revisa los registros en la Consola de Vertex AI: {e}")
+    exit()
+
+# 4. Implementar modelo ajustado (para usar)
+print(f"\nImplementando modelo ajustado '{TUNED_MODEL_DISPLAY_NAME}' en el endpoint...")
+try:
+    endpoint = tuned_model.deploy(
+        machine_type="n1-standard-4", # Tipo de máquina para el endpoint. Elige el adecuado.
+        min_replica_count=1,
+        max_replica_count=1
+    )
+    print(f"Modelo implementado en el endpoint: {endpoint.name}")
+    print("La implementación también puede llevar varios minutos.")
+except Exception as e:
+    print(f"Error al implementar el modelo: {e}")
+    exit()
+
+# 5. Usar modelo ajustado
+print("\nProbando modelo ajustado...")
+prompt = "Háblame de tus capacidades después del entrenamiento."
+instances = [{"prompt": prompt}] # Para ajuste de instrucciones. Si es ajuste de chat, entonces {"messages": [...]} 
+
+try:
+    response = endpoint.predict(instances=instances)
+    print("\nRespuesta del modelo ajustado:")
+    print(response.predictions[0])
+except Exception as e:
+    print(f"Error al usar el modelo ajustado: {e}")
+
+# Después de terminar, no olvides eliminar el endpoint y el modelo para evitar costos innecesarios:
+# endpoint.delete()
+# tuned_model.delete()
+</code></pre>
+<h3>6. Recomendaciones generales</h3>
+<ul>
+<li><strong>Empieza poco a poco:</strong> No intentes entrenar el modelo con miles de ejemplos de inmediato. Empieza con un conjunto de datos pequeño pero de alta calidad.</li>
+<li><strong>Itera:</strong> El ajuste fino es un proceso iterativo. Entrena, evalúa, ajusta los datos o los hiperparámetros, repite.</li>
+<li><strong>Monitoreo:</strong> Supervisa cuidadosamente las métricas de entrenamiento (pérdida) y utiliza un conjunto de datos de validación para evitar el sobreajuste.</li>
+<li><strong>Evaluación:</strong> Siempre prueba el modelo ajustado con datos que <em>nunca haya visto</em> durante el entrenamiento para evaluar su capacidad de generalización.</li>
+<li><strong>Costo:</strong> Recuerda que el ajuste fino y la implementación de endpoints son de pago. Tenlo en cuenta en tu presupuesto.</li>
+<li><strong>Documentación:</strong> Consulta siempre la documentación oficial del proveedor de LLM. Las API y las capacidades están en constante evolución.</li>
+</ul>

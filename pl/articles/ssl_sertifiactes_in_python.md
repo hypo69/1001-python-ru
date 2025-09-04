@@ -1,0 +1,1 @@
+Post [przeniesiony](python/certyfikat_ssl_w_pythonie.md)

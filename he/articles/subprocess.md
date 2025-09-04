@@ -1,0 +1,1 @@
+פוסט [הועבר](python/subprocess.md)

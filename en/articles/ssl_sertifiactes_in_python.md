@@ -1,0 +1,1 @@
+Post [moved](python/ssl_certificate_in_python.md)

@@ -1,0 +1,1 @@
+Post [przeniesiony](python/dataclass.md)

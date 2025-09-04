@@ -1,0 +1,1 @@
+Пост [переїхав](python/dataclass.md)

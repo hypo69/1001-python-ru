@@ -1,0 +1,1 @@
+Пост [переїхав](python/subprocess.md)

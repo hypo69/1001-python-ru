@@ -1,0 +1,115 @@
+<h2>Обучение модели OpenAI для классификации веб-страниц</h2>
+<h2>Введение</h2>
+<p>Обучение модели OpenAI определять, является ли страница онлайн-магазином.</p>
+<ul>
+<li>подготовка данных,</li>
+<li>токенизация текста,</li>
+<li>отправка данные для обучения</li>
+<li>тест модели.</li>
+</ul>
+<h2>Шаг 1: Регистрация и настройка OpenAI API</h2>
+<p>Для начала работы с OpenAI API необходимо зарегистрироваться на платформе OpenAI и получить ключ API. Этот ключ будет использоваться для аутентификации при вызове методов API.</p>
+<pre class="line-numbers"><code class="language-python">import openai
+
+# Установка ключа API
+openai.api_key = 'your-api-key'
+</code></pre>
+<h2>Шаг 2: Подготовка данных</h2>
+<p>Для обучения модели нужно подготовить набор данных, который будет содержать примеры веб-страниц,
+как магазинов, так и не магазинов.
+Каждая запись должна включать текст страницы и соответствующую метку (<code>positive</code> для магазинов и <code>negative</code> для не магазинов).</p>
+<p>Пример JSON-файла:</p>
+<pre class="line-numbers"><code class="language-json">[
+    {
+        "text": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;Welcome to Our Online Store&lt;/h1&gt;&lt;p&gt;We offer a wide range of products at competitive prices. Visit our store today!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
+        "label": "positive"
+    },
+    {
+        "text": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;About Us&lt;/h1&gt;&lt;p&gt;We are a leading provider of quality services. Contact us for more information.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
+        "label": "negative"
+    }
+]
+</code></pre>
+<h2>Шаг 3: Токенизация текста</h2>
+<p>Перед отправкой данных в модель OpenAI, текст необходимо токенизировать.
+Токенизация — это процесс разбиения текста на отдельные слова или токены.
+В Python можно использовать библиотеки, такие как NLTK, spaCy или tokenizers из библиотеки transformers.</p>
+<p>Пример токенизации с использованием NLTK:</p>
+<pre class="line-numbers"><code class="language-python">import nltk
+from nltk.tokenize import word_tokenize
+
+# Пример текста
+text = "Это пример текста для токенизации."
+
+# Токенизация текста
+tokens = word_tokenize(text)
+tokenized_text = ' '.join(tokens)
+print(tokenized_text)
+</code></pre>
+<h2>Шаг 4: Отправка данных для обучения</h2>
+<p>После токенизации текста можно отправить данные для обучения модели OpenAI.
+Вот пример кода для отправки данных:</p>
+<pre class="line-numbers"><code class="language-python">import openai
+
+def train_model(data, positive=True):
+    try:
+        response = openai.Train.create(
+            model="text-davinci-003",
+            documents=[entry["text"] for entry in data],
+            labels=["positive" if positive else "negative"] * len(data),
+            show_progress=True
+        )
+        return response.id
+    except Exception as ex:
+        print("An error occurred during training:", ex)
+        return None
+
+# Пример использования
+data = [
+    {"text": "Текст первой веб-страницы...", "label": "positive"},
+    {"text": "Текст второй веб-страницы...", "label": "negative"}
+]
+
+job_id = train_model(data, positive=True)
+print("Job ID:", job_id)
+</code></pre>
+<h2>Шаг 5: Тестирование модели</h2>
+<p>После обучения модели необходимо протестировать её на тестовом наборе данных.
+Вот пример кода для тестирования:</p>
+<pre class="line-numbers"><code class="language-python">def test_model(test_data):
+    try:
+        predictions = []
+        for entry in test_data:
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=entry["text"],
+                max_tokens=1
+            )
+            prediction = response.choices[0].text.strip()
+            predictions.append(prediction)
+        return predictions
+    except Exception as ex:
+        print("An error occurred during testing:", ex)
+        return None
+
+# Пример использования
+test_data = [
+    {"text": "Текст тестовой веб-страницы...", "label": "positive"},
+    {"text": "Текст другой тестовой страницы...", "label": "negative"}
+]
+
+predictions = test_model(test_data)
+print("Predictions:", predictions)
+</code></pre>
+<h2>Шаг 6: Обработка ошибок и улучшение модели</h2>
+<p>Если модель даёт неверные предсказания, можно улучшить её,
+добавив больше данных или изменив параметры обучения. Также можно использовать обратную связь для анализа ошибок.</p>
+<p>Пример обработки ошибок:</p>
+<pre class="line-numbers"><code class="language-python">def handle_errors(predictions, test_data):
+    for pred, entry in zip(predictions, test_data):
+        if pred != entry["label"]:
+            print(f"Incorrect prediction for page '{entry['name']}': Predicted {pred}, Actual {entry['label']}")
+
+# Пример использования
+handle_errors(predictions, test_data)
+</code></pre>

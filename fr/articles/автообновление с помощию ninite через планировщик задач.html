@@ -1,0 +1,72 @@
+<p>Vous avez tout à fait raison. Merci pour la clarification. L'utilisation des guillemets «ёлочки» est standard pour la typographie russe.</p>
+<p>Voici la version corrigée de l'article avec les guillemets corrects:</p>
+<hr>
+<h3>Comment mettre à jour automatiquement les programmes à l'aide de Ninite et du Planificateur de tâches Windows</h3>
+<p>Maintenir les logiciels à jour est essentiel pour la sécurité et la stabilité de votre système. Cependant, la vérification et l'installation manuelles des mises à jour pour chaque application peuvent prendre beaucoup de temps. Dans cet article, nous verrons comment automatiser ce processus à l'aide du service Ninite.com et du Planificateur de tâches Windows intégré.</p>
+<h3>Partie 1: Familiarisation avec Ninite et création d'un installateur</h3>
+<p>Ninite est un service conçu pour l'installation et la mise à jour simultanées de plusieurs applications populaires. Il vise à vous faire gagner du temps en éliminant le besoin d'installer manuellement chaque programme, de parcourir les assistants d'installation et de refuser les offres d'installation de barres d'outils ou d'autres logiciels indésirables.</p>
+<p><strong>Principales caractéristiques et avantages de Ninite:</strong></p>
+<ul>
+<li><strong>Installation sans actions inutiles:</strong> Vous n'avez pas besoin de cliquer sur «suivant» ou de refuser les barres d'outils et les éléments indésirables supplémentaires. Il suffit de sélectionner les applications souhaitées et d'exécuter l'installateur.</li>
+<li><strong>Versions toujours à jour:</strong> Ninite utilise des robots pour suivre les mises à jour, vous obtenez donc toujours les dernières versions stables des applications.</li>
+<li><strong>Automatisation du processus:</strong> Ninite fonctionne en arrière-plan, installant les applications dans des emplacements standard et dans la langue de votre système. Il ignore les applications déjà mises à jour et les demandes de redémarrage des installateurs.</li>
+<li><strong>Sécurité:</strong> Les applications sont téléchargées directement depuis les sites officiels des éditeurs, et leurs signatures numériques ou leurs hachages sont vérifiés avant le lancement pour garantir l'authenticité.</li>
+<li><strong>Prise en charge du système:</strong> Ninite fonctionne sur Windows 11, 10, 8.x, 7 et les versions de serveur équivalentes.</li>
+<li><strong>Gratuit pour un usage domestique:</strong> Le site est gratuit pour l'usage personnel (sans publicité ni logiciels indésirables). La version payante de Ninite Pro offre des fonctionnalités étendues pour la gestion des logiciels dans les organisations.</li>
+</ul>
+<p><strong>Sections d'applications (catégories) parmi lesquelles vous pouvez choisir:</strong></p>
+<p>Ninite propose un large éventail de programmes, regroupés par catégories:</p>
+<ul>
+<li><strong>Navigateurs Web (Web Browsers):</strong> Chrome, Opera, Firefox, Edge, Brave.</li>
+<li><strong>Messagerie (Messaging):</strong> Zoom, Discord, Teams, Pidgin, Thunderbird.</li>
+<li><strong>Multimédia (Media):</strong> iTunes, VLC, AIMP, foobar2000, Audacity, K-Lite Codecs, Spotify, HandBrake.</li>
+<li><strong>Imagerie (Imaging):</strong> Krita, Blender, Paint.NET, GIMP, IrfanView, Inkscape, Greenshot, ShareX.</li>
+<li><strong>Documents:</strong> Foxit Reader, LibreOffice, SumatraPDF, OpenOffice.</li>
+<li><strong>Sécurité (Security):</strong> Malwarebytes, Avast, AVG, Avira.</li>
+<li><strong>Stockage en ligne (Online Storage):</strong> Dropbox, Google Drive, OneDrive.</li>
+<li><strong>Utilitaires (Utilities):</strong> TeamViewer, ImgBurn, TeraCopy, Revo, WinDirStat, CCleaner.</li>
+<li><strong>Compression:</strong> 7-Zip, PeaZip, WinRAR.</li>
+<li><strong>Outils de développement (Developer Tools):</strong> Python, Git, FileZilla, Notepad++, WinSCP, PuTTY, Visual Studio Code.</li>
+<li><strong>Et bien plus encore:</strong> y compris .NET, Java, utilitaires et autres outils utiles.</li>
+</ul>
+<p><strong>Comment sélectionner et télécharger le fichier d'installation:</strong></p>
+<ol>
+<li><strong>Sélectionnez les applications:</strong> Sur la page principale de ninite.com, vous verrez une liste de catégories avec des applications. Cochez les cases des programmes que vous souhaitez installer ou maintenir à jour.</li>
+<li><strong>Téléchargez l'installateur:</strong> Après avoir sélectionné les applications, cliquez sur le bouton <strong>«Get Your Ninite»</strong>. Le site générera et vous proposera de télécharger un fichier exécutable personnel. Ce petit fichier est votre installateur/metteur à jour universel.</li>
+</ol>
+<h3>Partie 2: Configuration des mises à jour automatiques</h3>
+<p>Maintenant que vous avez un installateur Ninite configuré, voyons où il est préférable de le placer et comment configurer le lancement automatique.</p>
+<p><strong>Où placer le fichier Ninite</strong></p>
+<p>Pour que le système puisse trouver et exécuter votre fichier Ninite sans problème, il est recommandé de créer un dossier séparé pour celui-ci. Cela évitera la suppression ou le déplacement accidentel du fichier.</p>
+<p><strong>Recommandations de placement:</strong></p>
+<ul>
+<li><strong>Évitez les dossiers système:</strong> Ne sauvegardez pas le fichier à la racine du lecteur <code>C:</code> ou dans le dossier <code>C:\Windows</code>.</li>
+<li><strong>Créez un dossier dédié:</strong> Une bonne pratique serait de créer un dossier, par exemple, <code>C:\NiniteUpdater</code>. Cela simplifiera la gestion du fichier et sa recherche future.</li>
+</ul>
+<p>Déplacez le fichier Ninite téléchargé depuis le site (par exemple, <code>Ninite-bundle-logiciels.exe</code>) vers le dossier que vous avez créé précédemment (<code>C:\NiniteUpdater</code>).</p>
+<p><strong>Configuration du lancement automatique via le Planificateur de tâches Windows</strong></p>
+<p>Pour que la vérification et la mise à jour des programmes se produisent automatiquement chaque dimanche, nous utiliserons l'outil intégré de Windows — le **Planificateur de tâches**.</p>
+<p><strong>1. Ouverture du Planificateur de tâches:</strong></p>
+<ul>
+<li>Appuyez sur les touches <code>Win + R</code>, tapez <code>taskschd.msc</code> et appuyez sur Entrée.</li>
+</ul>
+<p><strong>2. Création d'une nouvelle tâche:</strong></p>
+<p>Dans la fenêtre du Planificateur de tâches, dans le volet droit «Actions», sélectionnez <strong>«Créer une tâche de base...»</strong>.</p>
+<ul>
+<li><strong>Nom et description:</strong> Entrez un nom clair pour votre tâche, par exemple, «Mise à jour hebdomadaire de Ninite». Cliquez sur «Suivant».</li>
+<li><strong>Déclencheur (heure de lancement):</strong> À cette étape, vous devez spécifier la fréquence d'exécution de la tâche.
+<ul>
+<li>Sélectionnez «Hebdomadaire» et cliquez sur «Suivant».</li>
+<li>Spécifiez le jour de la semaine — «dimanche». Vous pouvez également choisir une heure de lancement qui vous convient, par exemple, lorsque l'ordinateur est généralement allumé mais n'est pas utilisé activement. Cliquez sur «Suivant».</li>
+</ul>
+</li>
+<li><strong>Action:</strong> Ici, nous spécifierons le programme à exécuter.
+<ul>
+<li>Sélectionnez «Démarrer un programme» et cliquez sur «Suivant».</li>
+<li>Dans le champ «Programme ou script», cliquez sur le bouton «Parcourir...» et trouvez votre fichier Ninite dans le dossier que vous avez créé précédemment (<code>C:\NiniteUpdater\Ninite-bundle-logiciels.exe</code>).</li>
+<li>Cliquez sur «Suivant».</li>
+</ul>
+</li>
+<li><strong>Achèvement:</strong> À la dernière étape, vérifiez tous les paramètres spécifiés. Si tout est correct, cliquez sur «Terminer».</li>
+</ul>
+<p>Maintenant, le Planificateur de tâches exécutera automatiquement votre fichier Ninite chaque dimanche à l'heure que vous avez spécifiée. Lorsque Ninite s'exécutera en arrière-plan, il vérifiera les versions des programmes que vous avez sélectionnés et, s'il trouve des mises à jour, il les téléchargera et les installera sans votre intervention. Ainsi, vous obtenez un système simple et fiable pour maintenir votre logiciel à jour.</p>
