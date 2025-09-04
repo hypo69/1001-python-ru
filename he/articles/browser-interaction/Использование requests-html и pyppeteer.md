@@ -1,0 +1,1 @@
+מאמר [הועבר](שימוש-ב-requests-html-ו-pyppeteer.he.md)

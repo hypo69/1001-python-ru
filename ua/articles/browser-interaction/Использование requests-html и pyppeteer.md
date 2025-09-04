@@ -1,0 +1,1 @@
+Стаття [переїхала](vykorystannia-requests-html-i-pyppeteer.ua.md)
