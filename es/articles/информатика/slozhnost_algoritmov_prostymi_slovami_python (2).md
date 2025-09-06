@@ -1,0 +1,1 @@
+Artículo [movido](informatica/complejidad_algoritmos_en_palabras_simples_python.md)

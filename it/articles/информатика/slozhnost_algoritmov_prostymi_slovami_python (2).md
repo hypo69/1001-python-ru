@@ -1,0 +1,1 @@
+Articolo [spostato](informatica/complessita_algoritmica_in_termini_semplici_python.md)

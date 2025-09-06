@@ -1,0 +1,1 @@
+Artykuł [przeniesiony](informatyka/zlozonosc_algorytmow_prostymi_slowami_python.md)
