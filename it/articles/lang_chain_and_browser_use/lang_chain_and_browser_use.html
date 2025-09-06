@@ -1,0 +1,85 @@
+<h2>Come creare un agente AI per interagire con il browser web usando LangChain e Browser-Use: una guida passo-passo</h2>
+<p>Questa guida passo-passo ti mostrerà come creare un agente AI capace di cercare informazioni su Google e analizzare pagine web usando LangChain e Browser-Use.</p>
+<p><strong>Passaggio 1: Installare le librerie necessarie</strong></p>
+<p>Per prima cosa, devi installare le librerie Python richieste. Apri il tuo terminale o prompt dei comandi ed esegui il seguente comando:</p>
+<pre class="line-numbers"><code class="language-bash">pip install -U langchain langchain-openai langchain-community browser-use python-dotenv serpapi google-search-results numexpr
+</code></pre>
+<p><strong>Passaggio 2: Configurare le chiavi API</strong></p>
+<p>Sono necessarie le chiavi API per lavorare con OpenAI e SerpAPI.</p>
+<ul>
+<li><strong>Chiave API OpenAI:</strong> Ottieni la tua chiave API dal sito web di OpenAI (openai.com).</li>
+<li><strong>Chiave API SerpAPI:</strong> SerpAPI fornisce un'API per lavorare con i risultati di ricerca. Registrati su serpapi.com (è disponibile una prova gratuita), accedi al tuo account e trova la tua chiave API nella pagina Dashboard.</li>
+</ul>
+<p>Crea un file <code>.env</code> nella stessa directory del tuo script Python e aggiungi le chiavi nel seguente formato:</p>
+<pre class="line-numbers"><code class="language-text">OPENAI_API_KEY=la_tua_chiave_openai
+SERPAPI_API_KEY=la_tua_chiave_serpapi
+</code></pre>
+<p><strong>Passaggio 3: Creare lo script Python (browser_agent.py)</strong></p>
+<p>Crea un file chiamato <code>browser_agent.py</code> e incolla il seguente codice al suo interno:</p>
+<pre class="line-numbers"><code class="language-python">import asyncio
+import logging
+import os
+from dotenv import load_dotenv
+
+from langchain.agents import AgentType, initialize_agent
+from langchain.tools import Tool
+from langchain_openai import ChatOpenAI
+
+
+# Configura la registrazione
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+load_dotenv()
+
+# Carica le chiavi API dal file .env
+os.environ["SERPAPI_API_KEY"] = os.getenv("SERPAPI_API_KEY")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+
+async def main():
+    # Inizializza il modello linguistico
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0) # Puoi provare altri modelli
+
+    # Definisci lo strumento di ricerca (esempio semplice, senza ricerca Google effettiva)
+    search_tool = Tool(
+        name="Google Search",
+        func=lambda query: f"Ricerca Google per: {query}",  # Sostituisci con la ricerca SerpAPI effettiva se necessario
+        description="Cerca informazioni su Google."
+    )
+
+
+    # Definisci il compito dell'agente
+    task = """
+    Trova le ultime notizie su OpenAI su Google.
+    Poi visita uno dei siti web trovati e trova i nomi dei fondatori.
+    """
+
+    # Crea l'agente
+    agent = initialize_agent(
+        tools=[search_tool],
+        llm=llm,
+        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        verbose=True,
+    )
+
+    # Esegui l'agente
+    try:
+        result = await agent.arun(task)
+        print(f"Risultato: {result}")
+    except Exception as e:
+        logging.error(f"Si è verificato un errore: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+</code></pre>
+<p><strong>Passaggio 4: Eseguire l'agente</strong></p>
+<p>Apri il tuo terminale o prompt dei comandi, naviga nella directory contenente <code>browser_agent.py</code> ed eseguilo:</p>
+<pre class="line-numbers"><code class="language-bash">python browser_agent.py
+</code></pre>
+<p><strong>Passaggio 5: Migliorare l'agente (funzionalità avanzate)</strong></p>
+<ul>
+<li><strong>Ricerca Google reale:</strong> Sostituisci la funzione <code>lambda</code> in <code>search_tool</code> con codice che utilizza SerpAPI per ricerche Google reali. Ciò richiederà lo studio della documentazione di SerpAPI.</li>
+<li><strong>Interazione con le pagine web (Browser-Use):</strong> Per aggiungere funzionalità di interazione con le pagine web (apertura di link, estrazione di testo, ecc.), dovrai utilizzare la libreria <code>browser-use</code>. La documentazione di questa libreria ti aiuterà ad aggiungere gli strumenti appropriati al tuo agente.</li>
+<li><strong>Utilizzo della memoria:</strong> Per mantenere il contesto tra le richieste, puoi utilizzare i meccanismi di memoria di LangChain.</li>
+<li><strong>Catene di azioni più complesse:</strong> LangChain ti consente di creare catene di azioni più complesse (Chains) per risolvere compiti più complessi.</li>
+</ul>
+<p>Questo esempio dimostra la struttura di base. Per implementare un agente completo che interagisce con un browser e Google Search, sarà necessario un lavoro aggiuntivo con SerpAPI e <code>browser-use</code>. Non dimenticare di fare riferimento alla documentazione di queste librerie per informazioni più dettagliate.</p>

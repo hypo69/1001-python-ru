@@ -1,0 +1,36 @@
+<p><img src="assets/Screenshot 2025-09-02 074636.png" alt="1"></p>
+<p>Leider gibt es in der GitHub-Oberfläche keinen Button, um alle Workflow-Läufe mit einem Klick zu löschen. Dies kann jedoch auf verschiedene Arten erfolgen.</p>
+<h3>Verwendung von GitHub CLI (empfohlene Methode für Massenlöschung)</h3>
+<p>Dies ist die effizienteste Methode, um eine große Anzahl von Läufen zu löschen. <br>Sie benötigen das installierte <a href="https://cli.github.com/">GitHub CLI</a>.</p>
+<ol>
+<li><strong>Authentifizierung (falls noch nicht geschehen):</strong>
+<pre class="line-numbers"><code class="language-bash">gh auth login
+</code></pre>
+</li>
+<li><strong>Löschen von Läufen:</strong><br>Sie können einen Befehl verwenden, um eine Liste aller Läufe zu erhalten und diese dann zu löschen. Hier ist ein Skriptbeispiel für <code>bash</code>:
+<pre class="line-numbers"><code class="language-bash">gh run list --json databaseId -q '.[].databaseId' | xargs -IID gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/runs/ID" -X DELETE
+</code></pre>
+<p>Dieser Befehl ruft die IDs aller Läufe ab und führt für jeden von ihnen den Löschbefehl über die GitHub API aus.</p>
+<p>Für PowerShell sieht das Skript so aus:</p>
+<pre class="line-numbers"><code class="language-powershell">$workflowRuns = gh api "repos/$OWNER/$REPO/actions/runs" --paginate --jq '.workflow_runs[].id'
+foreach ($runId in $workflowRuns) {
+  Write-Host "Deleting workflow run ID: $runId"
+  gh api "repos/$OWNER/$REPO/actions/runs/$runId" -X DELETE
+}
+</code></pre>
+<p>Sie müssen <code>$OWNER</code> und <code>$REPO</code> durch den Namen des Besitzers und den Namen Ihres Repositorys ersetzen.</p>
+</li>
+</ol>
+<h3>Manuelles Löschen über die GitHub-Weboberfläche</h3>
+<p>Diese Methode eignet sich, wenn Sie eine kleine Anzahl von Läufen löschen müssen.</p>
+<ol>
+<li>Gehen Sie zur Hauptseite Ihres Repositorys auf GitHub.</li>
+<li>Unter dem Repository-Namen klicken Sie auf den Tab <strong>Actions</strong>.</li>
+<li>Wählen Sie in der linken Seitenleiste den Workflow aus, dessen Läufe Sie löschen möchten.</li>
+<li>Sie sehen eine Liste der Läufe für diesen Workflow.</li>
+<li>Für jeden Lauf, den Sie löschen möchten, klicken Sie auf das "..."-Menü rechts und wählen Sie <strong>Delete workflow run</strong>.</li>
+<li>Bestätigen Sie das Löschen.</li>
+</ol>
+<p>Es ist zu beachten, dass nach dem Löschen aller Läufe der Workflow selbst aus der Liste verschwinden kann, wenn die entsprechende <code>.yml</code>-Datei im Repository nicht mehr existiert.</p>
+<h3>Verwendung von vorgefertigten GitHub Actions</h3>
+<p>Es gibt vorgefertigte Aktionen im <a href="https://cli.github.com/">GitHub Marketplace</a>, die so konfiguriert werden können, dass alte Läufe automatisch gelöscht werden. Zum Beispiel ermöglicht <code>delete-workflow-runs</code> das Löschen von Läufen nach Zeitplan oder nach einer bestimmten Zeitspanne. Dies ist eine bequeme Möglichkeit, Ihre Actions-Protokolle ohne manuelles Eingreifen sauber zu halten.</p>

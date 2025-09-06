@@ -1,0 +1,36 @@
+<p><img src="assets/Screenshot 2025-09-02 074636.png" alt="1"></p>
+<p>Niestety, interfejs GitHub nie posiada przycisku do usuwania wszystkich uruchomień przepływów pracy jednym kliknięciem. Można to jednak zrobić na kilka sposobów.</p>
+<h3>Użycie GitHub CLI (zalecana metoda do masowego usuwania)</h3>
+<p>Jest to najbardziej efektywny sposób na usunięcie dużej liczby uruchomień. <br>Będziesz potrzebować zainstalowanego <a href="https://cli.github.com/">GitHub CLI</a>.</p>
+<ol>
+<li><strong>Uwierzytelnianie (jeśli jeszcze tego nie zrobiłeś):</strong>
+<pre class="line-numbers"><code class="language-bash">gh auth login
+</code></pre>
+</li>
+<li><strong>Usuwanie uruchomień:</strong><br>Możesz użyć polecenia, aby uzyskać listę wszystkich uruchomień, a następnie je usunąć. Oto przykład skryptu dla <code>bash</code>:
+<pre class="line-numbers"><code class="language-bash">gh run list --json databaseId -q '.[].databaseId' | xargs -IID gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/runs/ID" -X DELETE
+</code></pre>
+<p>To polecenie pobiera identyfikatory wszystkich uruchomień i dla każdego z nich wykonuje polecenie usunięcia za pośrednictwem API GitHub.</p>
+<p>Dla PowerShell, skrypt będzie wyglądał tak:</p>
+<pre class="line-numbers"><code class="language-powershell">$workflowRuns = gh api "repos/$OWNER/$REPO/actions/runs" --paginate --jq '.workflow_runs[].id'
+foreach ($runId in $workflowRuns) {
+  Write-Host "Deleting workflow run ID: $runId"
+  gh api "repos/$OWNER/$REPO/actions/runs/$runId" -X DELETE
+}
+</code></pre>
+<p>Będziesz musiał zastąpić <code>$OWNER</code> i <code>$REPO</code> nazwą właściciela i nazwą swojego repozytorium, odpowiednio.</p>
+</li>
+</ol>
+<h3>Ręczne usuwanie za pośrednictwem interfejsu webowego GitHub</h3>
+<p>Ta metoda jest odpowiednia, jeśli masz niewielką liczbę uruchomień do usunięcia.</p>
+<ol>
+<li>Przejdź do głównej strony swojego repozytorium na GitHub.</li>
+<li>Pod nazwą repozytorium kliknij zakładkę <strong>Actions</strong>.</li>
+<li>W lewym panelu bocznym wybierz przepływ pracy, którego uruchomienia chcesz usunąć.</li>
+<li>Zobaczysz listę uruchomień dla tego przepływu pracy.</li>
+<li>Dla każdego uruchomienia, które chcesz usunąć, kliknij menu "..." po prawej stronie i wybierz <strong>Delete workflow run</strong>.</li>
+<li>Potwierdź usunięcie.</li>
+</ol>
+<p>Warto zauważyć, że po usunięciu wszystkich uruchomień, sam przepływ pracy może zniknąć z listy, jeśli odpowiedni plik <code>.yml</code> nie istnieje już w repozytorium.</p>
+<h3>Użycie gotowych GitHub Actions</h3>
+<p>Istnieją gotowe akcje w <a href="https://cli.github.com/">GitHub Marketplace</a>, które można skonfigurować do automatycznego usuwania starych uruchomień. Na przykład, <code>delete-workflow-runs</code> pozwala na usuwanie uruchomień według harmonogramu lub po upływie określonego czasu. Jest to wygodny sposób na utrzymanie czystości w logach Twoich Actions bez ręcznej interwencji.</p>

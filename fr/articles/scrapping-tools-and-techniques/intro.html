@@ -1,0 +1,49 @@
+<h3><strong>Cycle "PAS Selenium". Introduction</strong></h3>
+<p>Ceux qui s'occupent du web scraping, des tests et de l'automatisation connaissent Selenium, le plus moderne Playwright et/ou le framework Crawlee. Ils sont puissants, ils peuvent presque tout faire, et ils... ne sont pas toujours nécessaires. De plus, dans de nombreux cas, utiliser ces outils, c'est comme enfoncer des clous avec un microscope : le travail sera certes fait, mais au prix de dépenses injustifiées – vitesse, ressources système et complexité de configuration.</p>
+<p>Bienvenue dans le cycle d'articles "PAS Selenium". Ici, je vous montrerai d'autres façons (pas toujours évidentes) d'interagir avec le contenu d'Internet.</p>
+<h4>Paradigm n°1 : Communication directe. Clients HTTP</h4>
+<ul>
+<li><strong><code>Requests</code></strong> — Forme et envoie une requête réseau à l'adresse cible (URL), exactement comme le fait votre navigateur au tout premier moment du chargement de la page, mais sans le navigateur lui-même. Dans cette requête, il emballe la méthode (par exemple, <code>GET</code> pour obtenir des données), les en-têtes (<code>Headers</code>) qui se présentent au site (par exemple, <code>User-Agent: &quot;je-suis-un-navigateur&quot;</code>), et d'autres paramètres. En réponse du serveur, il reçoit des données brutes — le plus souvent, c'est le code HTML original de la page ou une chaîne au format JSON, ainsi qu'un code de statut (par exemple, <code>200 OK</code>).</li>
+<li><strong><code>HTTPX</code></strong> — est un successeur moderne de <code>Requests</code>. Fondamentalement, il fait la même chose : envoie les mêmes requêtes HTTP avec les mêmes en-têtes et reçoit les mêmes réponses. Mais il y a une différence clé : <code>Requests</code> fonctionne <strong>de manière synchrone</strong> — il envoie une requête, attend la réponse, reçoit la réponse, envoie la suivante. <code>HTTPX</code>, en revanche, peut fonctionner <strong>de manière asynchrone</strong> — il peut &quot;lancer&quot; une centaine de requêtes à la fois sans attendre les réponses, puis les traiter efficacement au fur et à mesure qu'elles arrivent.</li>
+</ul>
+<p>Ils sont excellents pour collecter des données sur des sites statiques, travailler avec des API, analyser des milliers de pages où l'exécution de JavaScript n'est pas requise.</p>
+<ul>
+<li><strong>Avantages :</strong> <strong>Vitesse et efficacité.</strong> Grâce à la nature asynchrone de <code>HTTPX</code>, là où <code>Requests</code> ferait séquentiellement 100 requêtes pendant plusieurs minutes, <code>HTTPX</code> s'en chargera en quelques secondes.</li>
+<li><strong>Inconvénients :</strong> Ne conviennent pas aux sites où le contenu est généré à l'aide de JavaScript.</li>
+</ul>
+<h4>Paradigm n°2 : Protocole Chrome DevTools (CDP)</h4>
+<p>Que faire si le site est dynamique et que le contenu est généré à l'aide de JavaScript ? Les navigateurs modernes (Chrome, Chromium, Edge) disposent d'un protocole intégré pour le débogage et le contrôle — <strong>Chrome DevTools Protocol (CDP)</strong>. Il permet d'envoyer des commandes directement au navigateur, en contournant la couche lourde de WebDriver utilisée par Selenium.</p>
+<ul>
+<li><strong>Outils :</strong> Le principal représentant de cette approche aujourd'hui est <code>Pydoll</code>, qui a remplacé le <code>pyppeteer</code>, autrefois populaire mais désormais non pris en charge.</li>
+<li><strong>Quand l'utiliser :</strong> Lorsque le rendu JavaScript est nécessaire, mais que l'on souhaite maintenir une vitesse élevée et éviter les complexités liées aux pilotes.</li>
+<li><strong>Avantages :</strong> <strong>Équilibre.</strong> Vous obtenez la puissance d'un vrai navigateur, mais avec des frais généraux beaucoup plus faibles et souvent avec des mécanismes intégrés de contournement des protections.</li>
+<li><strong>Inconvénients :</strong> Peut être plus difficile à déboguer que Playwright et nécessite une compréhension plus approfondie du fonctionnement du navigateur.</li>
+</ul>
+<h4>Paradigm n°3 : Agents LLM autonomes</h4>
+<p>C'est la pointe de la technologie. Et si, au lieu d'écrire du code qui dit &quot;clique ici, tape ça&quot;, nous donnions simplement une tâche en langage naturel ? &quot;Trouve-moi tous les fournisseurs sur ce site et collecte leurs catégories de produits&quot;.</p>
+<p>C'est exactement le problème que résolvent les agents LLM. En utilisant un &quot;cerveau&quot; sous la forme d'un grand modèle linguistique (GPT, Gemini) et des &quot;mains&quot; sous la forme d'un ensemble d'outils (navigateur, recherche Google), ces agents peuvent planifier et exécuter de manière autonome des tâches complexes sur le web.</p>
+<ul>
+<li><strong>Outils :</strong> Des ensembles comme <code>LangChain</code> + <code>Pydoll</code> ou des solutions personnalisées, comme dans <code>simple_browser.py</code>, que nous analyserons plus tard.</li>
+<li><strong>Quand l'utiliser :</strong> Pour des tâches de recherche complexes où les étapes sont inconnues à l'avance et où une adaptation en temps réel est requise.</li>
+<li><strong>Avantages :</strong> <strong>Intelligence.</strong> La capacité à résoudre des problèmes non structurés et à s'adapter aux changements à la volée.</li>
+<li><strong>Inconvénients :</strong> &quot;Non-déterminisme&quot; (les résultats peuvent varier d'une exécution à l'autre), coût des appels API aux LLM, vitesse inférieure par rapport au code direct.</li>
+</ul>
+<h4>Paradigm n°4 : Scraping sans code</h4>
+<p>Parfois, la tâche est si simple qu'écrire du code est superflu. Besoin d'extraire rapidement un tableau d'une page ? Il existe des solutions élégantes pour cela qui ne nécessitent pas de programmation.</p>
+<ul>
+<li><strong>Outils :</strong> Fonctions Google Sheets (<code>IMPORTXML</code>, <code>IMPORTHTML</code>), extensions de navigateur.</li>
+<li><strong>Quand l'utiliser :</strong> Pour des tâches ponctuelles, un prototypage rapide, ou lorsque vous ne voulez tout simplement pas écrire de code.</li>
+<li><strong>Avantages :</strong> <strong>Simplicité.</strong> Ouvert, spécifié ce qu'il faut collecter — obtenu le résultat.</li>
+<li><strong>Inconvénients :</strong> Fonctionnalité limitée, ne conviennent pas aux tâches complexes ou aux grands volumes de données.</li>
+</ul>
+<h3>Et ensuite ?</h3>
+<p>Cet article n'est qu'une introduction. Dans les prochains numéros de notre série &quot;PAS Selenium&quot;, nous passerons de la théorie à la pratique. Nous approfondirons chacun de ces paradigmes et montrerons comment ils fonctionnent avec des exemples concrets :</p>
+<ul>
+<li>Nous analyserons <strong>Pydoll</strong> et verrons comment il contourne Cloudflare.</li>
+<li>Nous organiserons une bataille entre <strong>JavaScript vs Python</strong> pour le titre du meilleur langage pour le web scraping.</li>
+<li>Nous apprendrons à tirer le maximum de vitesse de l'analyse avec <strong>lxml</strong>.</li>
+<li>Nous écrirons un script qui collecte des données d'<strong>Amazon</strong> et les enregistre dans <strong>Excel</strong>.</li>
+<li>Nous montrerons comment <strong>Google Sheets</strong> peut devenir votre premier scraper.</li>
+<li>Et, bien sûr, nous analyserons en détail comment créer et utiliser un <strong>agent LLM autonome</strong> pour contrôler le navigateur.</li>
+</ul>
+<p>Préparez-vous à changer votre vision de l'automatisation et de la collecte de données sur le web. Ce sera rapide, efficace et très intéressant. Abonnez-vous</p>

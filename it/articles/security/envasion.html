@@ -1,0 +1,92 @@
+# L'arte dell'elusione: tecniche di `Evasion` nella cybersecurity con esempi in `Python`
+
+Nel mondo della cybersecurity è in corso una corsa agli armamenti continua. Da un lato, gli sviluppatori di sistemi di protezione creano firewall, antivirus, sistemi di rilevamento delle intrusioni (IDS/IPS) e EDR-soluzioni sempre più sofisticati. Dall'altro, gli aggressori, che cercano modi altrettanto ingegnosi per aggirare queste barriere protettive. È qui che entra in gioco **Evasion** – l'arte di eludere il rilevamento.
+Le tecniche di Evasion – non sono magia, ma il risultato di una profonda comprensione del funzionamento dei sistemi operativi, delle reti e dei mezzi di protezione. Gli aggressori migliorano costantemente i loro metodi, cercando di rimanere un passo avanti.
+
+Per gli specialisti della cybersecurity, la comprensione di queste tecniche – chiave per costruire sistemi di protezione più resilienti e adattivi. Non si tratta solo di rilevare i sintomi (firme), ma di un'analisi approfondita del comportamento e del contesto.
+
+Questo materiale – guida al mondo delle tecniche di Evasion. Io mostrerò, come gli aggressori nascondono il loro codice dannoso, mascherano le loro azioni e ingannano i sistemi di sicurezza, accompagnando la teoria con esempi pratici in Python.
+
+⚠️ **Avvertenza:** Tutta l'informazione e gli esempi di codice in questa articolo forniti esclusivamente a scopo didattico. L'utilizzo di queste tecniche a fini dannosi è illegale e perseguibile per legge. L'autore e la fonte non si assumono alcuna responsabilità per qualsiasi uso improprio delle informazioni fornite.
+
+**Che cos'è Evasion e perché è importante?**
+
+**Evasion (Elusione, Aggiramento)** – è un insieme di metodi e tecniche, utilizzati da software dannoso (e dagli aggressori) per prevenire il proprio rilevamento e analisi da parte dei sistemi di sicurezza o degli specialisti di sicurezza informatica.
+
+L'obiettivo di Evasion – rendere l'attività dannosa il più invisibile possibile, al fine di:
+1.  **Penetrare con successo** nel sistema target.
+2.  **Eseguire inosservato** i propri compiti (furto di dati, crittografia, spionaggio).
+3.  **Stabilirsi nel sistema** per una presenza a lungo termine.
+4.  **Evitare l'analisi** in sandbox e laboratori antivirus.
+
+La comprensione delle tecniche di Evasion è di importanza critica non solo per gli aggressori, ma anche per la parte che si difende. Sapendo, come il nemico cerca di nascondersi, è possibile configurare mezzi di rilevamento e risposta più efficaci.
+
+**Principali Categorie di Tecniche di Evasion**
+
+Esaminiamo le tecniche più comuni e interessanti, raggruppandole per principio di funzionamento.
+
+**Parte 1: Mascheramento del Codice Dannoso**
+
+L'obiettivo di queste tecniche – modificare l'aspetto o la struttura del codice in modo che non corrisponda a firme di malware note o non sollevi sospetti negli analizzatori statici.
+
+1.  **Offuscamento (Obfuscation) – Confusione del Codice**
+    L'offuscamento modifica il codice, rendendolo difficile da leggere per l'uomo e irriconoscibile per gli scanner basati su firme, ma mantenendo la sua funzionalità originale.
+
+    *   **Esempio 1: Codifica di stringhe (Base64)**
+        Invece di memorizzare un comando dannoso o un URL in chiaro, li codificano.
+```python
+        import base64
+        import os
+
+        # Comando dannoso che vogliamo nascondere da una semplice analisi statica
+        # Ad esempio, l'avvio di una calcolatrice (in realtà potrebbe essere qualcosa di più pericoloso)
+        original_command = "os.system('calc.exe')" # Windows
+        # original_command = "os.system('gnome-calculator')" # Linux
+
+        # Codifica il comando in Base64
+        encoded_payload_bytes = base64.b64encode(original_command.encode('utf-8'))
+        encoded_payload_string = encoded_payload_bytes.decode('utf-8')
+
+        print(f"Comando codificato (stringa): {encoded_payload_string}")
+
+        # Decodifica ed esegui durante l'esecuzione del programma
+        decoded_payload_bytes = base64.b64decode(encoded_payload_string)
+        decoded_payload_string = decoded_payload_bytes.decode('utf-8')
+
+        print(f"Comando decodificato: {decoded_payload_string}")
+        # Per dimostrazione, l'esecuzione reale è commentata
+        # exec(decoded_payload_string)
+        # Un modo più sicuro per exec, se è necessario compilare
+        # exec(compile(decoded_payload_string, "<string>", "exec"))
+```
+        Un analizzatore statico, che cerca la stringa `'os.system('calc.exe')'`, potrebbe non trovarla.
+
+    *   **Esempio 2: Formazione dinamica di stringhe**
+        Le stringhe, contenenti comandi o percorsi, vengono assemblate da parti durante l'esecuzione.
+```python
+        import os
+
+        # Invece di: command = "calc.exe"
+        p = "c"
+        a1 = "a"
+        l = "l"
+        c = "c"
+        dot = "."
+        e = "e"
+        x = "x"
+        
+        command_parts = [p, a1, l, c, dot, e, x, e]
+        malicious_command = "".join(command_parts)
+
+        print(f"Comando assemblato: {malicious_command}")
+        # os.system(malicious_command) # Esecuzione del comando
+```
+
+2.  **Polimorfismo (Polymorphism) e Metamorfismo (Metamorphism)**
+    Queste tecniche consentono al codice dannoso di modificare la propria struttura ad ogni nuova infezione o esecuzione per evitare il rilevamento basato su firme.
+    *   **Codice polimorfico:** Utilizza diverse chiavi di crittografia per il corpo principale del virus e un decifratore modificabile. Il corpo del virus stesso rimane invariato, ma il suo "involucro" è nuovo ogni volta.
+    *   **Codice metamorfico:** Riscrive se stesso completamente ad ogni diffusione, modificando non solo l'"aspetto", ma anche la logica interna, l'ordine delle istruzioni, aggiungendo codice spazzatura, ma mantenendo la funzionalità dannosa. Questo è significativamente più complesso da implementare.
+
+    *   **Esempio: Generatore polimorfico più semplice di "payload"**
+        
+        Questo codice ad ogni esecuzione crea un nuovo file Python con un contenuto leggermente diverso (in questo caso, semplicemente stampando un numero casuale diverso). Questo simula un cambiamento nell'

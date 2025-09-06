@@ -1,0 +1,85 @@
+<h2>כיצד ליצור סוכן AI לעבודה עם דפדפן אינטרנט באמצעות LangChain ו-Browser-Use: מדריך שלב אחר שלב</h2>
+<p>מדריך זה שלב אחר שלב יראה לך כיצד ליצור סוכן AI המסוגל לחפש מידע ב-Google ולנתח דפי אינטרנט באמצעות LangChain ו-Browser-Use.</p>
+<p><strong>שלב 1: התקנת הספריות הנדרשות</strong></p>
+<p>ראשית, עליך להתקין את ספריות Python הנדרשות. פתח את הטרמינל או שורת הפקודה והפעל את הפקודה הבאה:</p>
+<pre class="line-numbers"><code class="language-bash">pip install -U langchain langchain-openai langchain-community browser-use python-dotenv serpapi google-search-results numexpr
+</code></pre>
+<p><strong>שלב 2: הגדרת מפתחות API</strong></p>
+<p>נדרשים מפתחות API כדי לעבוד עם OpenAI ו-SerpAPI.</p>
+<ul>
+<li><strong>מפתח API של OpenAI:</strong> קבל את מפתח ה-API שלך מאתר OpenAI (openai.com).</li>
+<li><strong>מפתח API של SerpAPI:</strong> SerpAPI מספקת API לעבודה עם תוצאות חיפוש. הירשם ב-serpapi.com (קיימת תקופת ניסיון חינם), היכנס לחשבונך ומצא את מפתח ה-API שלך בדף ה-Dashboard.</li>
+</ul>
+<p>צור קובץ <code>.env</code> באותה ספרייה שבה נמצא סקריפט ה-Python שלך והוסף את המפתחות בפורמט הבא:</p>
+<pre class="line-numbers"><code class="language-text">OPENAI_API_KEY=מפתח_openai_שלך
+SERPAPI_API_KEY=מפתח_serpapi_שלך
+</code></pre>
+<p><strong>שלב 3: יצירת סקריפט Python (browser_agent.py)</strong></p>
+<p>צור קובץ בשם <code>browser_agent.py</code> והדבק בו את הקוד הבא:</p>
+<pre class="line-numbers"><code class="language-python">import asyncio
+import logging
+import os
+from dotenv import load_dotenv
+
+from langchain.agents import AgentType, initialize_agent
+from langchain.tools import Tool
+from langchain_openai import ChatOpenAI
+
+
+# הגדרת רישום
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+load_dotenv()
+
+# טעינת מפתחות API מקובץ .env
+os.environ["SERPAPI_API_KEY"] = os.getenv("SERPAPI_API_KEY")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+
+async def main():
+    # אתחול מודל השפה
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0) # ניתן לנסות מודלים אחרים
+
+    # הגדרת כלי החיפוש (דוגמה פשוטה, ללא חיפוש Google בפועל)
+    search_tool = Tool(
+        name="Google Search",
+        func=lambda query: f"מחפש ב-Google: {query}",  # החלף בחיפוש SerpAPI בפועל אם נדרש
+        description="מחפש מידע ב-Google."
+    )
+
+
+    # הגדרת משימת הסוכן
+    task = """
+    מצא את החדשות האחרונות על חברת OpenAI ב-Google.
+    לאחר מכן בקר באחד האתרים שנמצאו ומצא את שמות המייסדים.
+    """
+
+    # יצירת הסוכן
+    agent = initialize_agent(
+        tools=[search_tool],
+        llm=llm,
+        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        verbose=True,
+    )
+
+    # הפעלת הסוכן
+    try:
+        result = await agent.arun(task)
+        print(f"תוצאה: {result}")
+    except Exception as e:
+        logging.error(f"אירעה שגיאה: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+</code></pre>
+<p><strong>שלב 4: הפעלת הסוכן</strong></p>
+<p>פתח את הטרמינל או שורת הפקודה, נווט לספרייה המכילה את <code>browser_agent.py</code>, והפעל אותו:</p>
+<pre class="line-numbers"><code class="language-bash">python browser_agent.py
+</code></pre>
+<p><strong>שלב 5: שיפור הסוכן (תכונות מתקדמות)</strong></p>
+<ul>
+<li><strong>חיפוש Google אמיתי:</strong> החלף את פונקציית <code>lambda</code> ב-<code>search_tool</code> בקוד המשתמש ב-SerpAPI לחיפושי Google אמיתיים. זה ידרוש לימוד תיעוד SerpAPI.</li>
+<li><strong>אינטראקציה עם דפי אינטרנט (Browser-Use):</strong> כדי להוסיף פונקציונליות לאינטראקציה עם דפי אינטרנט (פתיחת קישורים, חילוץ טקסט וכו'), תצטרך להשתמש בספריית <code>browser-use</code>. התיעוד של ספרייה זו יעזור לך להוסיף את הכלים המתאימים לסוכן שלך.</li>
+<li><strong>שימוש בזיכרון:</strong> כדי לשמור על הקשר בין בקשות, תוכל להשתמש במנגנוני הזיכרון של LangChain.</li>
+<li><strong>שרשרות פעולות מורכבות יותר:</strong> LangChain מאפשרת לך ליצור שרשרות פעולות מורכבות יותר (Chains) כדי לפתור משימות מורכבות יותר.</li>
+</ul>
+<p>דוגמה זו מדגימה את המבנה הבסיסי. כדי ליישם סוכן מלא המקיים אינטראקציה עם דפדפן וחיפוש Google, תידרש עבודה נוספת עם SerpAPI ו-<code>browser-use</code>. אל תשכח לעיין בתיעוד של ספריות אלו לקבלת מידע מפורט יותר.</p>

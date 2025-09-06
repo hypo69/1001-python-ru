@@ -1,0 +1,36 @@
+<p><img src="assets/Screenshot 2025-09-02 074636.png" alt="1"></p>
+<p>Unfortunately, the GitHub interface does not have a button to delete all workflow runs with one click. However, this can be done in several ways.</p>
+<h3>Using GitHub CLI (recommended method for bulk deletion)</h3>
+<p>This is the most efficient way to delete a large number of runs. <br>You will need installed <a href="https://cli.github.com/">GitHub CLI</a>.</p>
+<ol>
+<li><strong>Authentication (if you haven't already):</strong>
+<pre class="line-numbers"><code class="language-bash">gh auth login
+</code></pre>
+</li>
+<li><strong>Deleting runs:</strong><br>You can use a command to get a list of all runs and then delete them. Here's a script example for <code>bash</code>:
+<pre class="line-numbers"><code class="language-bash">gh run list --json databaseId -q '.[].databaseId' | xargs -IID gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/runs/ID" -X DELETE
+</code></pre>
+<p>This command gets the IDs of all runs and for each of them executes the delete command via the GitHub API.</p>
+<p>For PowerShell, the script will look like this:</p>
+<pre class="line-numbers"><code class="language-powershell">$workflowRuns = gh api "repos/$OWNER/$REPO/actions/runs" --paginate --jq '.workflow_runs[].id'
+foreach ($runId in $workflowRuns) {
+  Write-Host "Deleting workflow run ID: $runId"
+  gh api "repos/$OWNER/$REPO/actions/runs/$runId" -X DELETE
+}
+</code></pre>
+<p>You will need to replace <code>$OWNER</code> and <code>$REPO</code> with the owner name and your repository name, respectively.</p>
+</li>
+</ol>
+<h3>Manual deletion via GitHub web interface</h3>
+<p>This method is suitable if you have a small number of runs to delete.</p>
+<ol>
+<li>Go to the main page of your repository on GitHub.</li>
+<li>Under the repository name, click on the <strong>Actions</strong> tab.</li>
+<li>In the left sidebar, select the workflow whose runs you want to delete.</li>
+<li>You will see a list of runs for that workflow.</li>
+<li>For each run you want to delete, click the "..." menu on the right and select <strong>Delete workflow run</strong>.</li>
+<li>Confirm deletion.</li>
+</ol>
+<p>It is worth noting that after deleting all runs, the workflow itself may disappear from the list if the corresponding <code>.yml</code> file no longer exists in the repository.</p>
+<h3>Using ready-made GitHub Actions</h3>
+<p>There are ready-made actions in the <a href="https://github.com/marketplace?type=actions">GitHub Marketplace</a> that can be configured to automatically delete old runs. For example, <code>delete-workflow-runs</code> allows you to delete runs by schedule or after a certain period of time. This is a convenient way to keep your Actions logs clean without manual intervention.</p>

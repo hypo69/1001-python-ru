@@ -1,0 +1,49 @@
+<h3><strong>"NOT Selenium" Cycle. Intro</strong></h3>
+<p>Those involved in web scraping, testing, and automation are familiar with Selenium, the more modern Playwright, and/or the Crawlee framework. They are powerful, they can do almost anything, and they... are not always needed. Moreover, in many cases, using these tools is like hammering nails with a microscope: the job will certainly be done, but at the cost of unjustified expenses – speed, system resources, and configuration complexity.</p>
+<p>Welcome to the "NOT Selenium" article series. Here I will show other (not always obvious) ways to interact with internet content.</p>
+<h4>Paradigm #1: Direct Communication. HTTP Clients</h4>
+<ul>
+<li><strong><code>Requests</code></strong> — Forms and sends a network request to the target address (URL), exactly as your browser does at the very first moment of page loading, but without the browser itself. In this request, it packages the method (e.g., <code>GET</code> to retrieve data), headers (<code>Headers</code>) that represent the site (e.g., <code>User-Agent: &quot;I-am-a-browser&quot;</code>), and other parameters. In response from the server, it receives raw data — most often, it's the original HTML code of the page or a string in JSON format, as well as a status code (e.g., <code>200 OK</code>).</li>
+<li><strong><code>HTTPX</code></strong> — is a modern successor to <code>Requests</code>. At a fundamental level, it does the same thing: sends the same HTTP requests with the same headers and receives the same responses. But there's a key difference: <code>Requests</code> works <strong>synchronously</strong> — it sends a request, sits and waits for a response, gets a response, sends the next one. <code>HTTPX</code> on the other hand, can work <strong>asynchronously</strong> — it can "fire off" a hundred requests at once without waiting for responses, and then efficiently process them as they arrive.</li>
+</ul>
+<p>They are excellent for collecting data from static sites, working with APIs, parsing thousands of pages where JavaScript execution is not required.</p>
+<ul>
+<li><strong>Advantages:</strong> <strong>Speed and efficiency.</strong> Thanks to <code>HTTPX</code>'s asynchronous nature, where <code>Requests</code> would sequentially make 100 requests for several minutes, <code>HTTPX</code> will handle it in a few seconds.</li>
+<li><strong>Disadvantages:</strong> Not suitable for sites where content is generated using JavaScript.</li>
+</ul>
+<h4>Paradigm #2: Chrome DevTools Protocol (CDP)</h4>
+<p>What if the site is dynamic and content is generated using JavaScript? Modern browsers (Chrome, Chromium, Edge) have a built-in protocol for debugging and control — <strong>Chrome DevTools Protocol (CDP)</strong>. It allows you to send commands directly to the browser, bypassing the cumbersome WebDriver layer that Selenium uses.</p>
+<ul>
+<li><strong>Tools:</strong> The main representative of this approach today is <code>Pydoll</code>, which replaced the once popular but now unsupported <code>pyppeteer</code>.</li>
+<li><strong>When to use:</strong> When JavaScript rendering is needed, but you want to maintain high speed and avoid driver complexities.</li>
+<li><strong>Advantages:</strong> <strong>Balance.</strong> You get the power of a real browser, but with much lower overhead and often with built-in protection bypass mechanisms.</li>
+<li><strong>Disadvantages:</strong> Can be more difficult to debug than Playwright and requires a deeper understanding of browser operation.</li>
+</ul>
+<h4>Paradigm #3: Autonomous LLM Agents</h4>
+<p>This is the cutting edge. What if instead of writing code that says "click here, type this," we just give a task in natural language? "Find all suppliers on this site and collect their product categories."</p>
+<p>This is exactly the problem that LLM agents solve. Using a "brain" in the form of a large language model (GPT, Gemini) and "hands" in the form of a set of tools (browser, Google search), these agents can independently plan and execute complex tasks on the web.</p>
+<ul>
+<li><strong>Tools:</strong> Bundles like <code>LangChain</code> + <code>Pydoll</code> or custom solutions, as in <code>simple_browser.py</code>, which we will analyze later.</li>
+<li><strong>When to use:</strong> For complex research tasks where steps are unknown in advance and real-time adaptation is required.</li>
+<li><strong>Advantages:</strong> <strong>Intelligence.</strong> The ability to solve unstructured problems and adapt to changes on the fly.</li>
+<li><strong>Disadvantages:</strong> "Non-determinism" (results may vary from run to run), cost of API calls to LLM, lower speed compared to direct code.</li>
+</ul>
+<h4>Paradigm #4: Code-Free Scraping</h4>
+<p>Sometimes the task is so simple that writing code is overkill. Need to quickly pull a table from one page? There are elegant solutions for this that don't require programming.</p>
+<ul>
+<li><strong>Tools:</strong> Google Sheets functions (<code>IMPORTXML</code>, <code>IMPORTHTML</code>), browser extensions.</li>
+<li><strong>When to use:</strong> For one-off tasks, rapid prototyping, or when you simply don't want to write code.</li>
+<li><strong>Advantages:</strong> <strong>Simplicity.</strong> Opened, specified what to collect — got the result.</li>
+<li><strong>Disadvantages:</strong> Limited functionality, not suitable for complex tasks or large volumes of data.</li>
+</ul>
+<h3>What's next?</h3>
+<p>This article is just an introduction. In the next issues of our "NOT Selenium" series, we will move from theory to hard practice. We will delve deep into each of these paradigms and show how they work with real-world examples:</p>
+<ul>
+<li>We will analyze <strong>Pydoll</strong> and see how it bypasses Cloudflare.</li>
+<li>We will stage a battle between <strong>JavaScript vs. Python</strong> for the title of the best language for web scraping.</li>
+<li>We will learn how to squeeze maximum speed out of parsing with <strong>lxml</strong>.</li>
+<li>We will write a script that collects data from <strong>Amazon</strong> and saves it to <strong>Excel</strong>.</li>
+<li>We will show how <strong>Google Sheets</strong> can become your first scraper.</li>
+<li>And, of course, we will thoroughly analyze how to create and use an <strong>autonomous LLM agent</strong> to control the browser.</li>
+</ul>
+<p>Get ready to change your view on automation and data collection on the web. It will be fast, efficient, and very interesting. Subscribe</p>

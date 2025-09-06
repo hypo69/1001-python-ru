@@ -1,0 +1,36 @@
+<p><img src="assets/Screenshot 2025-09-02 074636.png" alt="1"></p>
+<p>Malheureusement, l'interface GitHub ne dispose pas d'un bouton pour supprimer toutes les exécutions de workflows en un seul clic. Cependant, cela peut être fait de plusieurs manières.</p>
+<h3>Utilisation de GitHub CLI (méthode recommandée pour la suppression en masse)</h3>
+<p>C'est le moyen le plus efficace de supprimer un grand nombre d'exécutions. <br>Vous aurez besoin d'avoir <a href="https://cli.github.com/">GitHub CLI</a> installé.</p>
+<ol>
+<li><strong>Authentification (si ce n'est pas déjà fait) :</strong>
+<pre class="line-numbers"><code class="language-bash">gh auth login
+</code></pre>
+</li>
+<li><strong>Suppression des exécutions :</strong><br>Vous pouvez utiliser une commande pour obtenir une liste de toutes les exécutions, puis les supprimer. Voici un exemple de script pour <code>bash</code> :
+<pre class="line-numbers"><code class="language-bash">gh run list --json databaseId -q '.[].databaseId' | xargs -IID gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/runs/ID" -X DELETE
+</code></pre>
+<p>Cette commande obtient les ID de toutes les exécutions et pour chacune d'elles exécute la commande de suppression via l'API GitHub.</p>
+<p>Pour PowerShell, le script ressemblera à ceci :</p>
+<pre class="line-numbers"><code class="language-powershell">$workflowRuns = gh api "repos/$OWNER/$REPO/actions/runs" --paginate --jq '.workflow_runs[].id'
+foreach ($runId in $workflowRuns) {
+  Write-Host "Deleting workflow run ID: $runId"
+  gh api "repos/$OWNER/$REPO/actions/runs/$runId" -X DELETE
+}
+</code></pre>
+<p>Vous devrez remplacer <code>$OWNER</code> et <code>$REPO</code> par le nom du propriétaire et le nom de votre dépôt, respectivement.</p>
+</li>
+</ol>
+<h3>Suppression manuelle via l'interface web de GitHub</h3>
+<p>Cette méthode convient si vous avez un petit nombre d'exécutions à supprimer.</p>
+<ol>
+<li>Accédez à la page principale de votre dépôt sur GitHub.</li>
+<li>Sous le nom du dépôt, cliquez sur l'onglet <strong>Actions</strong>.</li>
+<li>Dans la barre latérale gauche, sélectionnez le workflow dont vous souhaitez supprimer les exécutions.</li>
+<li>Vous verrez une liste des exécutions pour ce workflow.</li>
+<li>Pour chaque exécution que vous souhaitez supprimer, cliquez sur le menu "..." à droite et sélectionnez <strong>Delete workflow run</strong>.</li>
+<li>Confirmez la suppression.</li>
+</ol>
+<p>Il est à noter qu'après la suppression de toutes les exécutions, le workflow lui-même peut disparaître de la liste si le fichier <code>.yml</code> correspondant n'existe plus dans le dépôt.</p>
+<h3>Utilisation de GitHub Actions prêtes à l'emploi</h3>
+<p>Il existe des actions prêtes à l'emploi sur le <a href="https://cli.github.com/">GitHub Marketplace</a> qui peuvent être configurées pour supprimer automatiquement les anciennes exécutions. Par exemple, <code>delete-workflow-runs</code> vous permet de supprimer des exécutions par planification ou après une certaine période de temps. C'est un moyen pratique de garder vos journaux d'Actions propres sans intervention manuelle.</p>

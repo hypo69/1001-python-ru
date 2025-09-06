@@ -1,0 +1,49 @@
+<h3><strong>מחזור &quot;לא סלניום&quot;. מבוא</strong></h3>
+<p>אלה העוסקים בגירוד אתרים, בדיקות ואוטומציה מכירים את <span dir="ltr">Selenium</span>, את <span dir="ltr">Playwright</span> המודרני יותר ו/או את פריימוורק <span dir="ltr">Crawlee</span>. הם חזקים, הם יכולים לעשות כמעט הכל, והם... לא תמיד נחוצים. יתרה מכך, במקרים רבים, שימוש בכלים אלה הוא כמו לדפוק מסמרים במיקרוסקופ: העבודה אמנם תיעשה, אך במחיר של הוצאות בלתי מוצדקות – מהירות, משאבי מערכת ומורכבות הגדרה.</p>
+<p>ברוכים הבאים לסדרת המאמרים &quot;לא סלניום&quot;. כאן אראה דרכים אחרות (לא תמיד ברורות) לאינטראקציה עם תוכן האינטרנט.</p>
+<h4>פרדיגמה מס' 1: תקשורת ישירה. לקוחות <span dir="ltr">HTTP</span></h4>
+<ul>
+<li><strong><span dir="ltr"><code>Requests</code></span></strong> — יוצר ושולח בקשת רשת לכתובת היעד (<span dir="ltr">URL</span>), בדיוק כפי שעושה הדפדפן שלך ברגע הראשון של טעינת הדף, אך ללא הדפדפן עצמו. בבקשה זו הוא אורז את השיטה (לדוגמה, <span dir="ltr"><code>GET</code></span> כדי לקבל נתונים), כותרות (<span dir="ltr"><code>Headers</code></span>) המייצגות את האתר (לדוגמה, <span dir="ltr"><code>User-Agent: &quot;אני-דפדפן&quot;</code></span>), ופרמטרים אחרים. בתגובה מהשרת, הוא מקבל נתונים גולמיים — לרוב, זהו קוד ה-<span dir="ltr">HTML</span> המקורי של הדף או מחרוזת בפורמט <span dir="ltr">JSON</span>, וכן קוד סטטוס (לדוגמה, <span dir="ltr"><code>200 OK</code></span>).</li>
+<li><strong><span dir="ltr"><code>HTTPX</code></span></strong> — הוא יורש מודרני של <span dir="ltr"><code>Requests</code></span>. ברמה הבסיסית, הוא עושה את אותו הדבר: שולח את אותן בקשות <span dir="ltr">HTTP</span> עם אותן כותרות ומקבל את אותן תגובות. אבל יש הבדל מהותי: <span dir="ltr"><code>Requests</code></span> עובד <strong>באופן סינכרוני</strong> — הוא שולח בקשה, יושב ומחכה לתגובה, מקבל תגובה, שולח את הבאה. <span dir="ltr"><code>HTTPX</code></span>, לעומת זאת, יכול לעבוד <strong>באופן אסינכרוני</strong> — הוא יכול &quot;לשגר&quot; מאה בקשות בבת אחת מבלי לחכות לתגובות, ולאחר מכן לעבד אותן ביעילות ככל שהן מגיעות.</li>
+</ul>
+<p>הם מצוינים לאיסוף נתונים מאתרים סטטיים, עבודה עם ממשקי <span dir="ltr">API</span>, ניתוח אלפי דפים שבהם אין צורך בהפעלת <span dir="ltr">JavaScript</span>.</p>
+<ul>
+<li><strong>יתרונות:</strong> <strong>מהירות ויעילות.</strong> בזכות האופי האסינכרוני של <span dir="ltr"><code>HTTPX</code></span>, במקום שבו <span dir="ltr"><code>Requests</code></span> יבצע ברצף 100 בקשות במשך מספר דקות, <span dir="ltr"><code>HTTPX</code></span> יטפל בזה תוך מספר שניות.</li>
+<li><strong>חסרונות:</strong> לא מתאימים לאתרים שבהם התוכן נוצר באמצעות <span dir="ltr">JavaScript</span>.</li>
+</ul>
+<h4>פרדיגמה מס' 2: פרוטוקול <span dir="ltr">Chrome DevTools (CDP)</span></h4>
+<p>מה לעשות אם האתר דינמי והתוכן נוצר באמצעות <span dir="ltr">JavaScript</span>? לדפדפנים מודרניים (<span dir="ltr">Chrome, Chromium, Edge</span>) יש פרוטוקול מובנה לניפוי באגים ובקרה — <strong><span dir="ltr">Chrome DevTools Protocol (CDP)</span></strong>. הוא מאפשר לשלוח פקודות ישירות לדפדפן, תוך עקיפת שכבת <span dir="ltr">WebDriver</span> המסורבלת שבה משתמש <span dir="ltr">Selenium</span>.</p>
+<ul>
+<li><strong>כלים:</strong> הנציג העיקרי של גישה זו כיום הוא <span dir="ltr"><code>Pydoll</code></span>, שהחליף את <span dir="ltr"><code>pyppeteer</code></span> שהיה פעם פופולרי אך אינו נתמך עוד.</li>
+<li><strong>מתי להשתמש:</strong> כאשר נדרש רינדור <span dir="ltr">JavaScript</span>, אך רוצים לשמור על מהירות גבוהה ולהימנע ממורכבות עם דרייברים.</li>
+<li><strong>יתרונות:</strong> <strong>איזון.</strong> אתה מקבל את העוצמה של דפדפן אמיתי, אך עם תקורה נמוכה בהרבה ולעתים קרובות עם מנגנוני עקיפת הגנות מובנים.</li>
+<li><strong>חסרונות:</strong> יכול להיות קשה יותר לניפוי באגים מ-<span dir="ltr">Playwright</span> ודורש הבנה עמוקה יותר של פעולת הדפדפן.</li>
+</ul>
+<h4>פרדיגמה מס' 3: סוכני <span dir="ltr">LLM</span> אוטונומיים</h4>
+<p>זהו הקצה המוביל. מה אם במקום לכתוב קוד שאומר &quot;לחץ כאן, הקלד זאת&quot;, פשוט ניתן משימה בשפה טבעית? &quot;מצא לי את כל הספקים באתר זה ואסוף את קטגוריות המוצרים שלהם&quot;.</p>
+<p>זו בדיוק הבעיה שסוכני <span dir="ltr">LLM</span> פותרים. באמצעות &quot;מוח&quot; בצורת מודל שפה גדול (<span dir="ltr">GPT, Gemini</span>) ו&quot;ידיים&quot; בצורת סט כלים (דפדפן, חיפוש <span dir="ltr">Google</span>), סוכנים אלה יכולים לתכנן ולבצע באופן עצמאי משימות מורכבות באינטרנט.</p>
+<ul>
+<li><strong>כלים:</strong> חבילות כמו <span dir="ltr"><code>LangChain</code></span> + <span dir="ltr"><code>Pydoll</code></span> או פתרונות מותאמים אישית, כמו ב-<span dir="ltr"><code>simple_browser.py</code></span>, שננתח בהמשך.</li>
+<li><strong>מתי להשתמש:</strong> למשימות מחקר מורכבות שבהן השלבים אינם ידועים מראש ונדרשת התאמה בזמן אמת.</li>
+<li><strong>יתרונות:</strong> <strong>אינטליגנציה.</strong> היכולת לפתור בעיות לא מובנות ולהתאים את עצמך לשינויים תוך כדי תנועה.</li>
+<li><strong>חסרונות:</strong> &quot;אי-דטרמיניזם&quot; (התוצאות עשויות להשתנות מהרצה להרצה), עלות קריאות <span dir="ltr">API</span> ל-<span dir="ltr">LLM</span>, מהירות נמוכה יותר בהשוואה לקוד ישיר.</li>
+</ul>
+<h4>פרדיגמה מס' 4: גירוד ללא קוד</h4>
+<p>לפעמים המשימה כל כך פשוטה, שכתיבת קוד היא מיותרת. צריך לשלוף במהירות טבלה מדף אחד? לשם כך קיימים פתרונות אלגנטיים שאינם דורשים תכנות.</p>
+<ul>
+<li><strong>כלים:</strong> פונקציות <span dir="ltr">Google Sheets</span> (<span dir="ltr"><code>IMPORTXML</code></span>, <span dir="ltr"><code>IMPORTHTML</code></span>), הרחבות דפדפן.</li>
+<li><strong>מתי להשתמש:</strong> למשימות חד-פעמיות, אב-טיפוס מהיר, או כשאתה פשוט לא רוצה לכתוב קוד.</li>
+<li><strong>יתרונות:</strong> <strong>פשטות.</strong> פתח, ציין מה לאסוף, — קיבל את התוצאה.</li>
+<li><strong>חסרונות:</strong> פונקציונליות מוגבלת, לא מתאימים למשימות מורכבות או לכמויות גדולות של נתונים.</li>
+</ul>
+<h3>מה הלאה?</h3>
+<p>מאמר זה הוא רק מבוא. בגיליונות הבאים של סדרת &quot;לא סלניום&quot; שלנו, נעבור מתיאוריה לפרקטיקה קשה. נצלול עמוק לכל אחת מהפרדיגמות הללו ונראה כיצד הן פועלות בדוגמאות מהעולם האמיתי:</p>
+<ul>
+<li>ננתח את <strong><span dir="ltr">Pydoll</span></strong> ונראה כיצד הוא עוקף את <span dir="ltr">Cloudflare</span>.</li>
+<li>נארגן קרב בין <strong><span dir="ltr">JavaScript</span> ל-<span dir="ltr">Python</span></strong> על התואר השפה הטובה ביותר לגירוד אתרים.</li>
+<li>נלמד כיצד לסחוט מהירות מקסימלית מניתוח באמצעות <strong><span dir="ltr">lxml</span></strong>.</li>
+<li>נכתוב סקריפט שאוסף נתונים מ<strong>אמזון</strong> ושומר אותם ב<strong>אקסל</strong>.</li>
+<li>נראה כיצד <strong><span dir="ltr">Google Sheets</span></strong> יכול להפוך לגרדן הראשון שלך.</li>
+<li>וכמובן, ננתח בפירוט כיצד ליצור ולהשתמש ב<strong>סוכן <span dir="ltr">LLM</span> אוטונומי</strong> לשליטה בדפדפן.</li>
+</ul>
+<p>התכונן לשנות את השקפתך על אוטומציה ואיסוף נתונים באינטרנט. זה יהיה מהיר, יעיל ומעניין מאוד. הירשם</p>

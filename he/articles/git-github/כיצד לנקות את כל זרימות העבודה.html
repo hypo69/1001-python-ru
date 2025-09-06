@@ -1,0 +1,38 @@
+<p dir="rtl"><img src="assets/Screenshot 2025-09-02 074636.png" alt="1"></p>
+<p dir="rtl">לצערנו, בממשק <span dir="ltr">GitHub</span> אין כפתור למחיקת כל הרצות זרימת העבודה בלחיצה אחת. עם זאת, ניתן לעשות זאת במספר דרכים.</p>
+<h3 dir="rtl">שימוש ב-<span dir="ltr">GitHub CLI</span> (השיטה המומלצת למחיקה המונית)</h3>
+<p dir="rtl">זוהי הדרך היעילה ביותר למחוק מספר רב של הרצות. <br>
+תצטרך להתקין את <a href="https://cli.github.com/"><span dir="ltr">GitHub CLI</span></a>.</p>
+<ol dir="rtl">
+<li><strong>אימות (אם עדיין לא עשית זאת):</strong>
+<pre class="line-numbers"><code class="language-bash">gh auth login
+</code></pre>
+</li>
+<li><strong>מחיקת הרצות:</strong><br>
+תוכל להשתמש בפקודה כדי לקבל רשימה של כל ההרצות ולאחר מכן למחוק אותן. הנה דוגמת סקריפט עבור <span dir="ltr"><code>bash</code></span>:
+<pre class="line-numbers"><code class="language-bash">gh run list --json databaseId -q '.[].databaseId' | xargs -IID gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/runs/ID" -X DELETE
+</code></pre>
+<p dir="rtl">פקודה זו מקבלת את מזהי כל ההרצות ועבור כל אחת מהן מבצעת את פקודת המחיקה באמצעות <span dir="ltr">GitHub API</span>.</p>
+<p dir="rtl">עבור <span dir="ltr">PowerShell</span>, הסקריפט ייראה כך:</p>
+<pre class="line-numbers"><code class="language-powershell">$workflowRuns = gh api "repos/$OWNER/$REPO/actions/runs" --paginate --jq '.workflow_runs[].id'
+foreach ($runId in $workflowRuns) {
+  Write-Host "Deleting workflow run ID: $runId"
+  gh api "repos/$OWNER/$REPO/actions/runs/$runId" -X DELETE
+}
+</code></pre>
+<p dir="rtl">יהיה עליך להחליף את <span dir="ltr">$OWNER</span> ו-<span dir="ltr">$REPO</span> בשם הבעלים ובשם המאגר שלך, בהתאמה.</p>
+</li>
+</ol>
+<h3 dir="rtl">מחיקה ידנית דרך ממשק האינטרנט של <span dir="ltr">GitHub</span></h3>
+<p dir="rtl">שיטה זו מתאימה אם יש לך מספר קטן של הרצות למחיקה.</p>
+<ol dir="rtl">
+<li>עבור לדף הראשי של המאגר שלך ב-<span dir="ltr">GitHub</span>.</li>
+<li>מתחת לשם המאגר, לחץ על לשונית <strong><span dir="ltr">Actions</span></strong>.</li>
+<li>בסרגל הצד השמאלי, בחר את זרימת העבודה שהרצות שלה ברצונך למחוק.</li>
+<li>תראה רשימה של הרצות עבור זרימת עבודה זו.</li>
+<li>עבור כל הרצה שברצונך למחוק, לחץ על תפריט "..." מימין ובחר <strong><span dir="ltr">Delete workflow run</span></strong>.</li>
+<li>אשר את המחיקה.</li>
+</ol>
+<p dir="rtl">ראוי לציין כי לאחר מחיקת כל ההרצות, זרימת העבודה עצמה עשויה להיעלם מהרשימה אם קובץ ה-<span dir="ltr"><code>.yml</code></span> המתאים אינו קיים עוד במאגר.</p>
+<h3 dir="rtl">שימוש ב-<span dir="ltr">GitHub Actions</span> מוכנות מראש</h3>
+<p dir="rtl">קיימות פעולות מוכנות מראש ב-<a href="https://github.com/marketplace?type=actions"><span dir="ltr">GitHub Marketplace</span></a> שניתן להגדיר למחיקה אוטומטית של הרצות ישנות. לדוגמה, <span dir="ltr"><code>delete-workflow-runs</code></span> מאפשרת למחוק הרצות לפי לוח זמנים או לאחר תקופה מסוימת. זוהי דרך נוחה לשמור על ניקיון יומני ה-<span dir="ltr">Actions</span> שלך ללא התערבות ידנית.</p>

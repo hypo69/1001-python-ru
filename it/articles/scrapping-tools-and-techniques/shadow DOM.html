@@ -1,0 +1,163 @@
+<h3>Shadow DOM - «DOM all'interno del DOM»</h3>
+<p>DOM è un'interfaccia di programmazione (API) per il codice della pagina, che rappresenta la pagina come una struttura ad albero di oggetti.</p>
+<p>Ogni elemento HTML (ad esempio, <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;img&gt;</code>), ogni attributo e ogni frammento di testo è un singolo «nodo»
+(node) in questo albero. Con JavaScript, possiamo accedere a questi nodi per modificare dinamicamente la pagina: cambiare testo, aggiungere stili, creare nuovi elementi o eliminare quelli esistenti. In sostanza, il DOM è un modello «vivo» del documento con cui il codice interagisce.</p>
+<p>Ma questa apertura ha anche un rovescio della medaglia. Quando creiamo un componente complesso e riutilizzabile (ad esempio, un lettore video personalizzato o un widget calendario), la sua struttura interna e i suoi stili diventano vulnerabili. Gli stili CSS dalla pagina principale possono accidentalmente «trapelare» all'interno del componente e rovinarne l'aspetto. Allo stesso modo, il codice JavaScript della pagina può inavvertitamente modificare gli elementi interni del componente, interrompendone la logica.</p>
+<p>Per risolvere questo problema esiste <strong>Shadow DOM</strong>.</p>
+<p>In sostanza, Shadow DOM è un <strong>«DOM all'interno del DOM»</strong>. È un albero nascosto di elementi che è allegato a un elemento normale sulla pagina (chiamato «host»), ma è isolato dal DOM principale. Consente allo sviluppatore di creare un confine ermetico attorno alla struttura interna di un componente, proteggendolo dal mondo esterno.</p>
+<p>Shadow DOM consente di allegare alberi DOM nascosti agli elementi nell'albero DOM normale. Questo albero ombra inizia con una <strong>radice ombra</strong> (shadow root), sotto la quale è possibile allegare qualsiasi elemento proprio come nel DOM normale.</p>
+<p>Ci sono diversi termini associati a Shadow DOM che dovresti conoscere:
+<img src="../../assets/shadow_dom/file.png" alt="DOM"></p>
+<ul>
+<li><strong>Host ombra (Shadow host):</strong> Un nodo DOM normale a cui è allegato lo Shadow DOM.</li>
+<li><strong>Albero ombra (Shadow tree):</strong> L'albero DOM all'interno dello Shadow DOM.</li>
+<li><strong>Confine ombra (Shadow boundary):</strong> Il punto in cui termina lo Shadow DOM e inizia il DOM normale.</li>
+<li><strong>Radice ombra (Shadow root):</strong> Il nodo radice dell'albero ombra.</li>
+</ul>
+<p>Puoi influenzare i nodi nello Shadow DOM esattamente come i nodi normali. La differenza è che nessun codice all'interno dello Shadow DOM può influenzare qualcosa al di fuori di esso, il che fornisce un'incapsulazione affidabile.</p>
+<p>Prima che lo Shadow DOM fosse disponibile per gli sviluppatori web, i browser lo utilizzavano già per incapsulare la struttura interna degli elementi standard. Ad esempio, l'elemento <code>&lt;video&gt;</code> con i controlli. Tutto ciò che vedi nel DOM, — è il tag <code>&lt;video&gt;</code>, ma contiene una serie di pulsanti e altri controlli all'interno del suo Shadow DOM.</p>
+<h4>Creazione di Shadow DOM</h4>
+<p>È possibile creare Shadow DOM in due modi: in modo imperativo usando JavaScript o in modo dichiarativo direttamente in HTML.</p>
+<h5>Imperativo con JavaScript</h5>
+<p>Questo metodo è ottimo per le applicazioni renderizzate lato client. Selezioniamo un elemento host e chiamiamo su di esso il metodo <code>attachShadow()</code>.</p>
+<pre class="line-numbers"><code class="language-html"><!-- Markup HTML -->
+&lt;div id=&quot;host&quot;&gt;&lt;/div&gt;
+&lt;span&gt;Non sono nello Shadow DOM&lt;/span&gt;
+</code></pre>
+<pre class="line-numbers"><code class="language-javascript">// Trova l'host e allega lo Shadow DOM ad esso
+const host = document.querySelector(&quot;#host&quot;);
+const shadow = host.attachShadow({ mode: &quot;open&quot; });
+
+// Crea e aggiungi elementi all'albero ombra
+const span = document.createElement(&quot;span&quot;);
+span.textContent = &quot;Sono nello Shadow DOM&quot;;
+shadow.appendChild(span);
+</code></pre>
+<p>Il risultato sulla pagina sarà simile a questo:</p>
+<blockquote>
+<p>Sono nello Shadow DOM
+Non sono nello Shadow DOM</p>
+</blockquote>
+<h5>Dichiarativo con HTML</h5>
+<p>Per le applicazioni in cui il rendering lato server è importante, è possibile definire lo Shadow DOM in modo dichiarativo utilizzando l'elemento <code>&lt;template&gt;</code> con l'attributo <code>shadowrootmode</code>.</p>
+<pre class="line-numbers"><code class="language-html">&lt;div id=&quot;host&quot;&gt;
+  &lt;template shadowrootmode=&quot;open&quot;&gt;
+    &lt;p&gt;Questo paragrafo è all'interno dello Shadow DOM.&lt;/p&gt;
+    &lt;style&gt;
+      p { color: red; } /* Questi stili saranno isolati */
+    &lt;/style&gt;
+  &lt;/template&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Quando il browser elabora questo codice, creerà automaticamente una radice ombra per il <code>&lt;div&gt;</code> e vi inserirà il contenuto del tag <code>&lt;template&gt;</code>. Il tag <code>&lt;template&gt;</code> stesso scomparirà dall'albero DOM principale.</p>
+<h4>Incapsulamento: protezione da JavaScript e CSS</h4>
+<p>Il vantaggio principale di Shadow DOM è l'isolamento. Vediamo come funziona.</p>
+<h5>Incapsulamento da JavaScript</h5>
+<p>Aggiungiamo un pulsante che tenterà di modificare tutti gli elementi <code>&lt;span&gt;</code> sulla pagina.</p>
+<pre class="line-numbers"><code class="language-javascript">// ... codice di creazione dello Shadow DOM ...
+
+const upper = document.querySelector(&quot;#upper-button&quot;);
+upper.addEventListener(&quot;click&quot;, () =&gt; {
+  // Questo selettore cerca in tutto il documento
+  const spans = document.querySelectorAll(&quot;span&quot;);
+  for (const span of spans) {
+    span.textContent = span.textContent.toUpperCase();
+  }
+});
+</code></pre>
+<p>Quando si fa clic sul pulsante, il testo cambierà solo per lo <code>&lt;span&gt;</code> che si trova nel documento principale. L'elemento all'interno dello Shadow DOM rimarrà intatto, perché <code>document.querySelectorAll()</code> non può &quot;guardare&quot; oltre il confine dell'ombra.</p>
+<h5>Accesso a Shadow DOM: la proprietà <code>shadowRoot</code> e la gestione dell'annidamento</h5>
+<p>Quando chiamiamo <code>host.attachShadow({ mode: &quot;open&quot; })</code>, creiamo uno Shadow DOM in modalità &quot;aperta&quot;. Ciò significa che possiamo accedere al suo contenuto dall'esterno tramite la proprietà <code>host.shadowRoot</code>.</p>
+<pre class="line-numbers"><code class="language-javascript">// Trova gli span solo all'interno dell'albero ombra di un host specifico
+const spansInShadow = host.shadowRoot.querySelectorAll(&quot;span&quot;);
+</code></pre>
+<p>Se invece si specifica <code>mode: &quot;closed&quot;</code>, la proprietà <code>host.shadowRoot</code> restituirà <code>null</code>, e l'accesso all'albero ombra dall'esterno sarà bloccato. Questo non è un meccanismo di sicurezza rigoroso, ma piuttosto una convenzione per gli sviluppatori sul fatto che le parti interne del componente non dovrebbero essere toccate.</p>
+<p><strong>Lavorare con alberi ombra annidati</strong></p>
+<p>Nelle architetture a componenti complesse, un elemento utente può contenere al suo interno altri elementi utente, ognuno con il proprio Shadow DOM. Per raggiungere un elemento in un albero ombra profondamente annidato, sarà necessario &quot;attraversare&quot; sequenzialmente ogni <code>shadowRoot</code>.</p>
+<p>Immaginiamo una struttura come questa:</p>
+<ul>
+<li>Componente <code>&lt;nmbrs-form&gt;</code> (modulo principale).</li>
+<li>Al suo interno c'è un <code>&lt;div&gt;</code>, e al suo interno — componente <code>&lt;nmbrs-button&gt;</code> (pulsante personalizzato).</li>
+<li>All'interno di <code>&lt;nmbrs-button&gt;</code> c'è un vero pulsante HTML <code>&lt;button&gt;</code>.</li>
+</ul>
+<p>Per accedere a questo pulsante dal contesto globale, il percorso sarà simile a questo:</p>
+<pre class="line-numbers"><code class="language-javascript">// 1. Trova il componente radice nel documento principale
+const formComponent = document.querySelector('nmbrs-form');
+
+// 2. &quot;Entra&quot; nel suo albero ombra
+const shadowRoot1 = formComponent.shadowRoot;
+
+// 3. Trova il componente pulsante annidato
+const buttonComponent = shadowRoot1.querySelector('div div.btn-container nmbrs-button');
+
+// 4. &quot;Entra&quot; nell'albero ombra di questo componente
+const shadowRoot2 = buttonComponent.shadowRoot;
+
+// 5. E solo ora trova l'elemento finale
+const finalButton = shadowRoot2.querySelector('button#button');
+</code></pre>
+<p>In una singola catena di chiamate, appare così:</p>
+<pre class="line-numbers"><code class="language-javascript">const button = document.querySelector('nmbrs-form').shadowRoot
+                      .querySelector('div div.btn-container nmbrs-button').shadowRoot
+                      .querySelector('button#button');
+</code></pre>
+<p>Una catena così lunga dimostra chiaramente la potenza dell'incapsulamento: per accedere ai dettagli interni, è necessario attraversare esplicitamente ogni &quot;confine&quot;. Questo rende il codice più prevedibile e protegge i componenti da modifiche accidentali.</p>
+<h5>Incapuslamento da CSS</h5>
+<p>Gli stili definiti nella pagina principale non influenzano gli elementi all'interno dello Shadow DOM.</p>
+<pre class="line-numbers"><code class="language-css">/* Questo stile si applicherà solo agli span nel documento principale */
+span {
+  color: blue;
+  border: 1px solid black;
+}
+</code></pre>
+<p>L'elemento <code>&lt;span&gt;</code> all'interno dell'albero ombra non riceverà questi stili. Questo risolve un enorme problema di intersezioni e conflitti CSS accidentali.</p>
+<h4>Applicazione di stili all'interno dello Shadow DOM</h4>
+<p>Gli stili definiti all'interno dell'albero ombra, a loro volta, non influenzano la pagina principale. Ci sono due modi principali per aggiungerli.</p>
+<h5>1. Fogli di stile costruibili (Constructable Stylesheets)</h5>
+<p>Questo metodo consente di creare un oggetto <code>CSSStyleSheet</code> in JavaScript e applicarlo a uno o più alberi ombra. Questo è efficiente se si hanno stili comuni per molti componenti.</p>
+<pre class="line-numbers"><code class="language-javascript">const sheet = new CSSStyleSheet();
+sheet.replaceSync(&quot;span { color: red; border: 2px dotted black; }&quot;);
+
+const shadow = host.attachShadow({ mode: &quot;open&quot; });
+// Applica il foglio di stile alla radice ombra
+shadow.adoptedStyleSheets = [sheet];
+</code></pre>
+<h5>2. Aggiunta dell'elemento <code>&lt;style&gt;</code></h5>
+<p>Un modo semplice e dichiarativo — posizionare il tag <code>&lt;style&gt;</code> direttamente all'interno dell'albero ombra (spesso all'interno di <code>&lt;template&gt;</code>).</p>
+<pre class="line-numbers"><code class="language-html">&lt;div id=&quot;host&quot;&gt;
+  &lt;template shadowrootmode=&quot;open&quot;&gt;
+    &lt;p&gt;Questo paragrafo è all'interno dello Shadow DOM.&lt;/p&gt;
+    &lt;style&gt;
+      p { color: red; }
+    &lt;/style&gt;
+  &lt;/template&gt;
+&lt;/div&gt;
+</code></pre>
+<h4>Shadow DOM ed elementi personalizzati: la combinazione perfetta</h4>
+<p>Tutta la potenza di Shadow DOM si rivela nella creazione di <strong>elementi personalizzati (Custom Elements)</strong>. Senza incapsulamento, sarebbero incredibilmente fragili.</p>
+<p>Un elemento personalizzato è una classe che eredita da <code>HTMLElement</code>. Di solito, l'elemento stesso funge da host ombra, e tutta la sua struttura interna viene creata all'interno dell'albero ombra.</p>
+<p>Ecco un esempio di un semplice componente <code>&lt;filled-circle&gt;</code>:</p>
+<pre class="line-numbers"><code class="language-javascript">class FilledCircle extends HTMLElement {
+  connectedCallback() {
+    const shadow = this.attachShadow({ mode: &quot;open&quot; });
+
+    // Crea l'implementazione interna (ad esempio, un cerchio SVG)
+    const svg = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;svg&quot;);
+    const circle = document.createElementNS(&quot;http://www.w3.org/2000/svg&quot;, &quot;circle&quot;);
+    circle.setAttribute(&quot;r&quot;, &quot;50&quot;);
+    circle.setAttribute(&quot;cx&quot;, &quot;50&quot;);
+    circle.setAttribute(&quot;cy&quot;, &quot;50&quot;);
+    // Il colore viene preso dall'attributo dell'host stesso
+    circle.setAttribute(&quot;fill&quot;, this.getAttribute(&quot;color&quot;));
+    
+    svg.appendChild(circle);
+    shadow.appendChild(svg);
+  }
+}
+customElements.define(&quot;filled-circle&quot;, FilledCircle);
+</code></pre>
+<p>Ora possiamo usarlo in HTML come un normale tag, senza preoccuparci della sua struttura interna:</p>
+<pre class="line-numbers"><code class="language-html">&lt;filled-circle color=&quot;blue&quot;&gt;&lt;/filled-circle&gt;
+&lt;filled-circle color=&quot;green&quot;&gt;&lt;/filled-circle&gt;
+</code></pre>
+<p>Ciascuno di questi componenti sarà completamente incapsulato e protetto dall'influenza della pagina esterna.</p>

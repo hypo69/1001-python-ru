@@ -1,0 +1,36 @@
+<p><img src="assets/Screenshot 2025-09-02 074636.png" alt="1"></p>
+<p>К сожалению, в интерфейсе GitHub нет кнопки для удаления всех запусков рабочих процессов (workflow runs) одним кликом. Однако это можно сделать несколькими способами.</p>
+<h3>Использование GitHub CLI (рекомендуемый способ для массового удаления)</h3>
+<p>Это наиболее эффективный способ удаления большого количества запусков. <br>Вам понадобится установленный <a href="https://cli.github.com/">GitHub CLI</a>.</p>
+<ol>
+<li><strong>Аутентификация (если вы еще этого не сделали):</strong>
+<pre class="line-numbers"><code class="language-bash">gh auth login
+</code></pre>
+</li>
+<li><strong>Удаление запусков:</strong><br>Вы можете использовать команду для получения списка всех запусков и их последующего удаления. Вот пример скрипта для <code>bash</code>:
+<pre class="line-numbers"><code class="language-bash">gh run list --json databaseId -q '.[].databaseId' | xargs -IID gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/runs/ID" -X DELETE
+</code></pre>
+<p>Эта команда получает идентификаторы всех запусков и для каждого из них выполняет команду удаления через API GitHub.</p>
+<p>Для PowerShell скрипт будет выглядеть так:</p>
+<pre class="line-numbers"><code class="language-powershell">$workflowRuns = gh api "repos/$OWNER/$REPO/actions/runs" --paginate --jq '.workflow_runs[].id'
+foreach ($runId in $workflowRuns) {
+  Write-Host "Deleting workflow run ID: $runId"
+  gh api "repos/$OWNER/$REPO/actions/runs/$runId" -X DELETE
+}
+</code></pre>
+<p>Вам нужно будет заменить <code>$OWNER</code> и <code>$REPO</code> на имя владельца и название вашего репозитория соответственно.</p>
+</li>
+</ol>
+<h3>Ручное удаление через веб-интерфейс GitHub</h3>
+<p>Этот способ подходит, если у вас небольшое количество запусков, которые нужно удалить.</p>
+<ol>
+<li>Перейдите на главную страницу вашего репозитория на GitHub.</li>
+<li>Под названием репозитория нажмите на вкладку <strong>Actions</strong>.</li>
+<li>На левой боковой панели выберите рабочий процесс, запуски которого вы хотите удалить.</li>
+<li>Вы увидите список запусков этого рабочего процесса.</li>
+<li>Для каждого запуска, который вы хотите удалить, нажмите на меню "..." справа и выберите <strong>Delete workflow run</strong>.</li>
+<li>Подтвердите удаление.</li>
+</ol>
+<p>Стоит отметить, что после удаления всех запусков сам рабочий процесс может исчезнуть из списка, если соответствующий файл <code>.yml</code> больше не существует в репозитории.</p>
+<h3>Использование готовых GitHub Actions</h3>
+<p>Существуют готовые экшены в <a href="https://github.com/marketplace?type=actions">GitHub Marketplace</a>, которые можно настроить для автоматического удаления старых запусков. Например, <code>delete-workflow-runs</code> позволяет удалять запуски по расписанию или по прошествии определенного времени. Это удобный способ поддерживать чистоту в логах ваших Actions без ручного вмешательства.</p>
