@@ -1,0 +1,392 @@
+<h2>Dataclasses: Wenn Python auf strukturierte Daten trifft (mit neuen benannten Beispielen)</h2>
+<p>In Python müssen Sie, wenn Sie eine Klasse zum Speichern von Daten benötigen, normalerweise Boilerplate-Code für <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code> und andere magische Methoden schreiben. Das Modul <code>dataclasses</code>, das in Python 3.7 eingeführt wurde, soll dieses Problem lösen, indem es einen <code>@dataclass</code>-Decorator bereitstellt, der diese Methoden automatisch für Sie generiert.</p>
+<h3>Was ist eine Dataclass?</h3>
+<p>Eine <code>dataclass</code> ist eine Klasse, die, wie der Name schon sagt, hauptsächlich zum Speichern von Daten gedacht ist. Sie bietet die folgenden Hauptvorteile:</p>
+<ul>
+<li><strong>Weniger Boilerplate-Code:</strong> Generiert automatisch <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code>, <code>__hash__</code> (unter bestimmten Bedingungen) und andere Methoden basierend auf den Typannotationen Ihrer Felder.</li>
+<li><strong>Lesbarkeit:</strong> Der Code wird prägnanter und konzentriert sich auf die Definition der Datenstruktur.</li>
+<li><strong>Introspektion:</strong> Dataclass-Felder lassen sich leicht mit Funktionen aus demselben <code>dataclasses</code>-Modul introspektieren (überprüfen).</li>
+<li><strong>Leistung (mit <code>slots=True</code>):</strong> Kann weniger Speicher verbrauchen und schneller auf Attribute zugreifen.</li>
+</ul>
+<h3>Grundlegende Verwendung</h3>
+<p>Beginnen wir mit einem einfachen Beispiel. Angenommen, wir benötigen eine Klasse, um einen Punkt im 2D-Raum darzustellen.</p>
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+# Erstellen einer Instanz
+p1 = Point(10, 20)
+print(p1) # Point(x=10, y=20) - automatisch generierter __repr__
+
+# Vergleichen von Instanzen - automatisch generierter __eq__
+p2 = Point(10, 20)
+p3 = Point(30, 40)
+print(p1 == p2) # True
+print(p1 == p3) # False
+</code></pre>
+<p>Wie Sie sehen, mussten wir <code>__init__</code> oder <code>__repr__</code> nicht schreiben. Alles funktionierte "out of the box".</p>
+<h3>Parameter des <code>@dataclass</code>-Decorators</h3>
+<p>Der <code>@dataclass</code>-Decorator akzeptiert mehrere Parameter, mit denen Sie das generierte Verhalten anpassen können.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass(
+    init=True,         # Ob __init__ generiert werden soll (Standard True)
+    repr=True,         # Ob __repr__ generiert werden soll (Standard True)
+    eq=True,           # Ob __eq__ generiert werden soll (Standard True)
+    order=False,       # Ob __lt__, __le__, __gt__, __ge__ generiert werden sollen (Standard False)
+    unsafe_hash=False, # Ob __hash__ generiert werden soll (Standard False)
+    frozen=False,      # Ob Instanzen unveränderlich gemacht werden sollen (Standard False)
+    match_args=True,   # Ob die Klasse in den strukturellen Mustervergleichsmechanismus aufgenommen werden soll (Python 3.10+, Standard True)
+    kw_only=False,     # Ob alle Felder nur-Schlüsselwort-Argumente in __init__ sein sollen (Python 3.10+, Standard False)
+    slots=False        # Ob __slots__ zur Speichereinsparung verwendet werden sollen (Python 3.10+, Standard False)
+)
+class MyDataClass:
+    # ...
+</code></pre>
+<p>Betrachten wir die wichtigsten davon, einschließlich derer, die in Ihrer Anfrage enthalten waren:</p>
+<h4><code>init=True</code> (Standard)</h4>
+<p>Wenn <code>True</code>, generiert <code>dataclass</code> die <code>__init__</code>-Methode. Wenn Sie Ihre eigene <code>__init__</code> haben und <code>init=True</code> belassen, wird Ihre <code>__init__</code> aufgerufen, aber die in der Dataclass definierten Felder werden nicht automatisch darüber initialisiert. Normalerweise, wenn Sie Ihre eigene <code>__init__</code> schreiben, setzen Sie <code>init=False</code>, um Konflikte zu vermeiden und die volle Kontrolle über die Initialisierung zu haben.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass(init=False)
+class CustomPersonInit:
+    name: str
+    age: int
+
+    def __init__(self, name: str, age: int, welcome_message: str = "Hallo!"):
+        self.name = name
+        self.age = age
+        print(welcome_message)
+
+alice = CustomPersonInit("Alice", 30) # Gibt "Hallo!" aus
+print(alice) # CustomPersonInit(name='Alice', age=30) - repr funktioniert immer noch
+</code></pre>
+<h4><code>repr=True</code> (Standard)</h4>
+<p>Wenn <code>True</code>, generiert es eine <code>__repr__</code>-Methode, die eine bequeme Zeichenfolgendarstellung des Objekts liefert, nützlich zum Debuggen.</p>
+<h4><code>eq=True</code> (Standard)</h4>
+<p>Wenn <code>True</code>, generiert es eine <code>__eq__</code>-Methode, die es Ihnen ermöglicht, zwei Instanzen einer Klasse auf Gleichheit zu vergleichen, indem die Gleichheit aller ihrer Felder überprüft wird.</p>
+<h4><code>order=False</code></h4>
+<p>Wenn <code>True</code>, generiert <code>dataclass</code> die Methoden <code>__lt__</code>, <code>__le__</code>, <code>__gt__</code>, <code>__ge__</code>. Dies ermöglicht es Ihnen, Instanzen auf "kleiner als", "größer als" usw. zu vergleichen. Der Vergleich erfolgt in der Reihenfolge, in der die Felder deklariert sind. Damit <code>order=True</code> funktioniert, muss auch <code>eq=True</code> gesetzt sein.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass(order=True)
+class Person:
+    name: str
+    age: int
+
+alice = Person("Alice", 30)
+boris = Person("Boris", 25)
+victor = Person("Victor", 35) # Fügen wir Victor hinzu
+galina = Person("Galina", 30)
+alice_older = Person("Alice", 35)
+
+
+print(f"Alice ({alice.age}) > Boris ({boris.age})? {alice > boris}") # False (da 'Alice' < 'Boris' nach Namen) -> der Vergleich erfolgt lexikographisch auf dem Tupel (Name, Alter). ('Alice', 30) < ('Boris', 25) ist True. Also wird `>` False sein.
+# Erklärung: ('Alice', 30) > ('Boris', 25) -> False, weil 'Alice' < 'Boris'.
+print(f"Alice ({alice.age}) < Alice_older ({alice_older.age})? {alice < alice_older}") # True (weil der Name derselbe ist, aber das Alter 30 < 35)
+print(f"Galina ({galina.age}) == Alice ({alice.age})? {galina == alice}") # False (unterschiedliche Namen)
+</code></pre>
+<p><strong>Wichtiger Hinweis:</strong> Die Reihenfolge der Felder ist wichtig für <code>order=True</code>.</p>
+<h4><code>unsafe_hash=False</code></h4>
+<p>Wenn <code>True</code>, generiert es eine <code>__hash__</code>-Methode. Dataclasses sind standardmäßig nicht hashbar, wenn sie veränderlich sind (<code>frozen=False</code>), da hashbare Objekte unveränderlich sein müssen. Wenn Sie sicher sind, dass Ihre veränderliche Dataclass nur in Kontexten verwendet wird, in denen ihr Hash nicht geändert wird (was riskant ist!), können Sie <code>unsafe_hash=True</code> setzen.
+Viel häufiger wird <code>__hash__</code> automatisch generiert, wenn:
+1.  <code>frozen=True</code>.
+2.  <code>frozen=False</code>, aber <code>eq=True</code> und alle Felder ebenfalls hashbar sind.
+
+```python
+@dataclass(frozen=True) # Gefrorene Dataclasses sind hashbar
+class ImmutablePoint:
+    x: int
+    y: int
+
+p = ImmutablePoint(1, 2)
+print(hash(p)) # Funktioniert
+
+@dataclass(unsafe_hash=True) # Riskant, wenn das Objekt veränderlich ist
+class MutableButHashable:
+    value: int
+
+m = MutableButHashable(5)
+print(hash(m))
+m.value = 10
+print(hash(m)) # Der Hash hat sich geändert, was zu Problemen bei der Verwendung in einem Set/Dict führen kann
+```
+
+#### <code>frozen=False</code>
+
+Wenn <code>True</code>, werden Instanzen der Klasse unveränderlich. Nach dem Erstellen eines Objekts können Sie die Werte seiner Felder nicht mehr ändern. Dies ist nützlich, um unveränderliche Objekte zu erstellen, die in Multithread-Anwendungen oder als Wörterbuchschlüssel (wenn sie hashbar sind) einfacher zu verwenden sind.
+
+```python
+@dataclass(frozen=True)
+class Coordinate:
+    lat: float
+    lon: float
+
+c = Coordinate(10.0, 20.0)
+# c.lat = 15.0 # AttributeError: cannot assign to field 'lat'
+```
+
+#### <code>kw_only=False</code> (Python 3.10+)
+
+Wenn <code>True</code>, **alle** Felder in <code>__init__</code> zu **nur-Schlüsselwort-Argumenten**. Das bedeutet, dass Sie die Werte der Felder nach Namen und nicht nach Position übergeben müssen. Dies verbessert die Lesbarkeit und verhindert Fehler, insbesondere wenn die Klasse viele Felder hat oder diese die gleichen Typen haben können.
+
+```python
+@dataclass(kw_only=True)
+class UserConfig:
+    username: str
+    email: str
+    is_active: bool = True
+    theme: str = "dark"
+
+# user1 = UserConfig("alice_ivanova", "alice@example.com") # TypeError: __init__() takes 0 positional arguments but 3 were given
+user1 = UserConfig(username="alice_ivanova", email="alice@example.com")
+print(user1)
+
+# Sie können dieses Verhalten für ein bestimmtes Feld mit field(kw_only=False) überschreiben
+@dataclass(kw_only=True)
+class MixedConfig:
+    # Obligatorisch nur-positional (nicht im Dataclass-Stil)
+    # Das Feld `id` wird nicht kw_only sein, obwohl die Klasse als kw_only=True angegeben ist
+    id: int = field(kw_only=False)
+    name: str = field(kw_only=False)
+
+    # Die restlichen Felder sind kw_only
+    email: str
+    age: int = 0
+
+# Beachten Sie, dass id und name positional übergeben werden und email nach Namen
+mixed_config = MixedConfig(123, "Boris", email="boris@example.com")
+print(mixed_config)
+# mixed_config_fail = MixedConfig(id=123, name="Victor", email="viktor@example.com") # Fehler, id und name wären positional
+# Dieses Szenario ist weniger typisch, kw_only wird normalerweise auf die gesamte Klasse angewendet
+```
+
+<p><strong>Hinweis:</strong> <code>field(kw_only=False)</code> bei einem Feld überschreibt <code>kw_only=True</code> auf Klassenebene und macht dieses spezifische Feld positional. Am häufigsten wird jedoch <code>kw_only=True</code> für die gesamte Klasse verwendet. Der Hauptzweck von <code>field(kw_only=True)</code> ist, wenn Sie eine normale Dataclass haben (standardmäßig <code>kw_only=False</code>), aber *einige* Felder nur-Schlüsselwort-Argumente sein sollen.</p>
+<h4><code>slots=False</code> (Python 3.10+)</h4>
+<p>Wenn <code>True</code>, generiert <code>dataclass</code> <code>__slots__</code> für Ihre Klasse. <code>__slots__</code> ist ein spezielles Attribut, das Python ermöglicht, eine feste Menge an Speicher für Klasseninstanzen zuzuweisen, anstatt ein dynamisches <code>__dict__</code> zum Speichern von Attributen zu verwenden.</p>
+<p><strong>Vorteile von <code>slots=True</code>:</strong></p>
+<ul>
+<li><strong>Speichereinsparungen:</strong> Reduziert die von jeder Instanz verbrauchte Speichermenge erheblich. Dies ist besonders wichtig für Anwendungen, die Millionen von Objekten erstellen.</li>
+<li><strong>Schnellerer Attributzugriff:</strong> Der Zugriff auf Attribute über <code>__slots__</code> kann etwas schneller sein, da Python sie nicht in einem Wörterbuch nachschlagen muss.</li>
+</ul>
+<p><strong>Nachteile von <code>slots=True</code>:</strong></p>
+<ul>
+<li><strong>Kann keine neuen Attribute "on the fly" hinzufügen:</strong> Sie können kein Attribut zuweisen, das nicht in der Dataclass (oder in den <code>__slots__</code> einer übergeordneten Klasse) deklariert wurde.</li>
+<li><strong>Schwierigkeiten bei Mehrfachvererbung:</strong> Es kann schwierig sein, <code>__slots__</code> mit Mehrfachvererbung zu verwenden, insbesondere wenn einige übergeordnete Klassen <code>__slots__</code> nicht verwenden oder sie anders verwenden.</li>
+<li><strong>Hat kein <code>__dict__</code>:</strong> Instanzen haben kein <code>__dict__</code>-Attribut, es sei denn, es wurde explizit zu <code>__slots__</code> oder einer übergeordneten Klasse hinzugefügt.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">import sys
+
+@dataclass
+class RegularPoint:
+    x: int
+    y: int
+
+@dataclass(slots=True)
+class SlottedPoint:
+    x: int
+    y: int
+
+rp = RegularPoint(1, 2)
+sp = SlottedPoint(1, 2)
+
+print(f"Größe von RegularPoint: {sys.getsizeof(rp)} Bytes")
+# Ungefähr 56 Bytes unter Python 3.10+ (kann variieren)
+# print(rp.__dict__) # {'x': 1, 'y': 2} - hat __dict__
+
+print(f"Größe von SlottedPoint: {sys.getsizeof(sp)} Bytes")
+# Ungefähr 32 Bytes unter Python 3.10+ (kann variieren) - deutlich kleiner
+# print(sp.__dict__) # AttributeError: 'SlottedPoint' object has no attribute '__dict__'
+
+# Versuch, ein neues Attribut zu einer slotted Dataclass hinzuzufügen
+try:
+    sp.z = 30
+except AttributeError as e:
+    print(f"Fehler beim Hinzufügen eines neuen Attributs: {e}")
+</code></pre>
+<p><strong>Wann sollte man <code>slots=True</code> verwenden?</strong>
+Wenn Sie eine sehr große Anzahl von Instanzen derselben Klasse erstellen und die Speichereinsparung Priorität hat. Dies ist eine großartige Optimierung, hat aber ihre Kompromisse.</p>
+<h3>Die Funktion <code>field()</code>: Detaillierte Feldkonfiguration</h3>
+<p>Zusätzlich zu den Parametern auf Klassenebene können Sie jedes Feld einzeln mit der Funktion <code>field()</code> aus dem <code>dataclasses</code>-Modul konfigurieren. Dies ist besonders nützlich, wenn Sie eine komplexere Logik für Felder benötigen als nur eine Typannotation.</p>
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass, field
+from typing import List, Dict, Any
+import uuid # Zum Generieren von IDs
+
+@dataclass
+class Product:
+    id: str = field(default_factory=lambda: "prod-" + str(uuid.uuid4())[:8], init=False) # Nicht über __init__ initialisiert, automatisch generiert
+    name: str
+    price: float = field(compare=False, metadata={'unit': 'USD', 'min_value': 0.0}) # Nimmt nicht am Vergleich teil, hat Metadaten
+    tags: List[str] = field(default_factory=list, repr=False) # Verwendet eine Factory für eine Liste, wird nicht in repr angezeigt
+    description: str = field(default="Keine Beschreibung verfügbar") # Regulärer Standardwert
+    details: Dict[str, Any] = field(default_factory=dict, hash=False) # Nimmt nicht am Hashing teil
+
+p = Product(name="Laptop", price=1200.0, tags=["Elektronik", "Technik"])
+print(p)
+# Product(id='prod-...', name='Laptop', price=1200.0, description='Keine Beschreibung verfügbar', details={})
+# Beachten Sie, dass 'tags' nicht in repr ist und 'id' automatisch generiert wurde.
+
+p2 = Product(name="Laptop", price=1500.0, tags=["Elektronik", "Technik"])
+print(f"p == p2? {p == p2}") # True, weil der Preis nicht am Vergleich teilnimmt (compare=False)
+
+# p3 = Product(name="Desktop-PC", price=1000.0, details={"cpu": "Intel"})
+# print(hash(p3)) # TypeError: unhashable type: 'dict' (aufgrund von details: hash=False)
+# Wenn frozen=True und details nicht hash=False wären, müsste das Dict unveränderlich sein.
+</code></pre>
+<p>Betrachten wir die <code>field()</code>-Parameter:</p>
+<ul>
+<li><strong><code>default</code></strong>: Ein regulärer Standardwert für das Feld.
+<pre class="line-numbers"><code class="language-python">value: int = field(default=0)
+</code></pre>
+</li>
+<li><strong><code>default_factory</code></strong>: Eine Funktion ohne Argumente, die aufgerufen wird, um den Standardwert für das Feld zu erhalten. <strong>Stellen Sie sicher, dass Sie <code>default_factory</code> für veränderliche Standardwerte (Listen, Wörterbücher, Objekte) verwenden, um Probleme mit gemeinsam genutztem Zustand zwischen Instanzen zu vermeiden!</strong>
+<pre class="line-numbers"><code class="language-python">items: List[str] = field(default_factory=list)
+</code></pre>
+</li>
+<li><strong><code>init</code></strong>: Wenn <code>True</code> (Standard), wird das Feld in die generierte <code>__init__</code>-Methode aufgenommen. Wenn <code>False</code>, ist das Feld kein Argument im Konstruktor, und Sie müssen entweder einen <code>default</code> / <code>default_factory</code> dafür bereitstellen oder es in <code>__post_init__</code> initialisieren.
+<pre class="line-numbers"><code class="language-python">import time
+timestamp: float = field(init=False, default_factory=time.time)
+</code></pre>
+</li>
+<li><strong><code>repr</code></strong>: Wenn <code>True</code> (Standard), wird das Feld in die generierte <code>__repr__</code>-Methode aufgenommen. Nützlich zum Ausblenden großer oder sensibler Daten.
+<pre class="line-numbers"><code class="language-python">password: str = field(repr=False)
+</code></pre>
+</li>
+<li><strong><code>compare</code></strong>: Wenn <code>True</code> (Standard), wird das Feld in die generierten <code>__eq__</code>- und <code>__order__</code>-Methoden aufgenommen. Wenn <code>False</code>, hat es keinen Einfluss auf den Vergleich von Objekten.
+<pre class="line-numbers"><code class="language-python">version: str = field(compare=False)
+</code></pre>
+</li>
+<li><strong><code>hash</code></strong>: Wenn <code>True</code> (Standard), wird das Feld in die generierte <code>__hash__</code>-Methode aufgenommen. Wenn <code>False</code>, hat es keinen Einfluss auf den Hash des Objekts. Wenn die Klasse <code>frozen=True</code> ist, aber ein Feld <code>hash=False</code> hat, kann die Klasse ihren <code>__hash__</code> nicht generieren und wird unhashbar.
+<pre class="line-numbers"><code class="language-python">config: Dict[str, Any] = field(hash=False, default_factory=dict)
+</code></pre>
+</li>
+<li><strong><code>metadata</code></strong>: Ein Wörterbuch zum Speichern beliebiger Daten, die mit dem Feld verknüpft sind. <code>dataclasses</code> ignorieren diese Daten, aber sie können von externen Tools verwendet werden (z. B. zur Validierung, Serialisierung, Dokumentationsgenerierung).
+<pre class="line-numbers"><code class="language-python">user_id: int = field(metadata={'help': 'Eindeutige Benutzerkennung', 'validator': 'positive_int'})
+</code></pre>
+</li>
+<li><strong><code>kw_only</code></strong>: (Python 3.10+) Wenn <code>True</code>, wird dieses spezifische Feld zu einem nur-Schlüsselwort-Argument in <code>__init__</code>. Wenn <code>False</code>, wird es positional. Dies ermöglicht es Ihnen, positional und nur-Schlüsselwort-Argumente zu mischen, wenn das <code>kw_only</code> der Klasse standardmäßig <code>False</code> ist.
+<pre class="line-numbers"><code class="language-python">@dataclass
+class FlexibleParams:
+        mandatory_pos: str # Positional
+        optional_kw: int = field(default=0, kw_only=True) # Nur-Schlüsselwort
+
+    fp1 = FlexibleParams("obligatorisch", optional_kw=100)
+    # fp2 = FlexibleParams("obligatorisch", 200) # TypeError: __init__() takes 1 positional argument but 2 were given (optional_kw)
+</code></pre>
+</li>
+</ul>
+<h3>Die Funktion <code>fields()</code>: Dataclass-Introspektion</h3>
+<p>Die Funktion <code>fields()</code> aus dem <code>dataclasses</code>-Modul ermöglicht es Ihnen, Informationen über die Felder einer Dataclass oder ihrer Instanz zu erhalten. Sie gibt ein Tupel von <code>Field</code>-Objekten zurück.</p>
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass, field, fields
+from typing import List
+
+@dataclass
+class Book:
+    title: str
+    author: str = field(metadata={'display_name': 'Autor', 'max_length': 100})
+    pages: int = field(default=0, metadata={'min_value': 1})
+    tags: List[str] = field(default_factory=list, repr=False)
+
+# Informationen über die Felder der Book-Klasse abrufen
+book_fields = fields(Book)
+
+for f in book_fields:
+    print(f"Feldname: {f.name}")
+    print(f"Feldtyp: {f.type}")
+    print(f"Standardwert: {f.default}")
+    print(f"Verwendet default_factory: {f.default_factory is not None}")
+    print(f"In init enthalten: {f.init}")
+    print(f"In repr enthalten: {f.repr}")
+    print(f"In compare enthalten: {f.compare}")
+    print(f"In hash enthalten: {f.hash}")
+    print(f"Metadaten: {f.metadata}")
+    print(f"Nur-Schlüsselwort: {f.kw_only}") # Für Python 3.10+
+    print("-" * 20)
+
+# Zugriff auf die Metadaten eines bestimmten Feldes:
+author_field_info = next(f for f in book_fields if f.name == 'author')
+print(f"Anzeigename für Autor: {author_field_info.metadata.get('display_name')}")
+</code></pre>
+<p>Das <code>Field</code>-Objekt hat die folgenden Attribute: <code>name</code>, <code>type</code>, <code>default</code>, <code>default_factory</code>, <code>init</code>, <code>repr</code>, <code>hash</code>, <code>compare</code>, <code>metadata</code>, <code>kw_only</code>.</p>
+<h3>Die <code>__post_init__</code>-Methode</h3>
+<p>Manchmal benötigen Sie zusätzliche Logik, nachdem die automatische <code>__init__</code> einer Dataclass die Felder initialisiert hat. Dafür können Sie eine <code>__post_init__</code>-Methode definieren. Sie wird sofort nach <code>__init__</code> aufgerufen.</p>
+<p>Dies ist nützlich für:</p>
+<ul>
+<li>Datenvalidierung.</li>
+<li>Berechnung abgeleiteter Felder basierend auf bereits initialisierten.</li>
+<li>Ausführung jeder anderen Logik, die von vollständig initialisierten Feldern abhängt.</li>
+</ul>
+<pre class="line-numbers"><code class="language-python">import datetime
+
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    email: str = field(init=False) # Dieses Feld wird nicht in die __init__-Parameter aufgenommen
+    created_at: datetime.datetime = field(default_factory=datetime.datetime.now, init=False)
+
+    def __post_init__(self):
+        print(f"--- __post_init__ gestartet für {self.first_name} {self.last_name} ---")
+        # Validierung
+        if not self.first_name or not self.last_name:
+            raise ValueError("Vorname und Nachname dürfen nicht leer sein.")
+        # Berechnung eines abgeleiteten Feldes
+        self.email = f"{self.first_name.lower()}.{self.last_name.lower()}@example.com"
+        print(f"Benutzer {self.first_name} {self.last_name} erstellt mit E-Mail: {self.email}")
+        print(f"Erstellungszeit: {self.created_at}")
+        print(f"--- __post_init__ beendet ---")
+
+alice_ivanova = User("Alice", "Ivanova")
+print("
+Objekt erstellt:")
+print(alice_ivanova)
+
+print("
+")
+
+try:
+    victor_no_last_name = User("Victor", "")
+except ValueError as e:
+    print(f"Fehler beim Erstellen des Benutzers: {e}")
+</code></pre>
+<h3>Dataclass-Vererbung</h3>
+<p>Dataclasses unterstützen Vererbung. Felder aus Basisklassen werden in Kindklassen aufgenommen.</p>
+<pre class="line-numbers"><code class="language-python">@dataclass
+class Vehicle:
+    make: str
+    model: str
+
+@dataclass
+class Car(Vehicle):
+    num_doors: int
+    is_electric: bool = False
+
+@dataclass
+class ElectricCar(Car):
+    battery_kwh: float
+
+alices_car = Car("Toyota", "Camry", 4)
+print(alices_car) # Car(make='Toyota', model='Camry', num_doors=4, is_electric=False)
+
+boris_car = ElectricCar("Tesla", "Model 3", 4, True, 75.0)
+print(boris_car) # ElectricCar(make='Tesla', model='Model 3', num_doors=4, is_electric=True, battery_kwh=75.0)
+</code></pre>
+<p><strong>Merkmale der Vererbung mit <code>slots=True</code>:</strong></p>
+<ul>
+<li>Wenn die übergeordnete Klasse <code>__slots__</code> verwendet, muss die untergeordnete Klasse ebenfalls <code>__slots__</code> verwenden, um die Speichereinsparungen zu erzielen.</li>
+<li>Die untergeordnete Klasse muss ihre eigenen <code>__slots__</code> für ihre neuen Felder definieren.</li>
+<li>Wenn die untergeordnete Klasse keine <code>__slots__</code> definiert, hat sie zusätzlich zu den Slots des übergeordneten Elements ein <code>__dict__</code>.</li>
+</ul>
+<h3>Wann sollte man Dataclasses verwenden?</h3>
+<ul>
+<li><strong>Datencontainer-Klassen:</strong> Wenn der Hauptzweck der Klasse darin besteht, Daten zu speichern, und Sie automatische <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code> benötigen.</li>
+<li><strong>Unveränderliche Objekte:</strong> Wenn Sie Objekte benötigen, deren Zustand sich nach der Erstellung nicht ändern sollte (<code>frozen=True</code>).</li>
+<li><strong>Konfigurationen:</strong> Zum Definieren der Struktur von Konfigurationsparametern.</li>
+<li><strong>Datenübertragungsobjekte (DTOs):</strong> Zum Übertragen strukturierter Daten zwischen Teilen einer Anwendung.</li>
+<li><strong>Einfache Geschäftslogik:</strong> Wenn die Klassenmethoden hauptsächlich mit den Daten der Klasse selbst arbeiten, keinen komplexen internen Zustand oder Nebenwirkungen haben.</li>
+</ul>
+<h3>Wann sollte man Dataclasses NICHT verwenden?</h3>
+<ul>
+<li><strong>Klassen mit reichem Verhalten:</strong> Wenn eine Klasse eine komplexe Geschäftslogik, viele Methoden, die mit externen Systemen interagieren, oder einen komplexen internen Zustand hat, ist es besser, eine normale Klasse zu verwenden.</li>
+<li><strong>OR-Mapping (ORM)-Modelle:</strong> Obwohl Dataclasses Teil eines ORM sein können, ersetzen sie keine vollwertigen ORM-Modelle, die oft spezifische Methoden für die Arbeit mit einer Datenbank, Lazy Loading usw. erfordern.</li>
+<li><strong>Polymorphie und tiefe Vererbungshierarchie:</strong> Wenn Sie eine komplexe Klassenhierarchie mit tiefer Polymorphie und Verhaltensüberschreibung haben, können normale Klassen flexibler sein.</li>
+</ul>
+<h3>Fazit</h3>
+<p><code>dataclasses</code> sind eine leistungsstarke und bequeme Ergänzung zu Python, die die Erstellung datenorientierter Klassen erheblich vereinfacht. Sie helfen dabei, saubereren, lesbareren und wartbareren Code zu schreiben, und Optionen wie <code>slots=True</code> und <code>kw_only=True</code> bieten zusätzliche Möglichkeiten zur Leistungsoptimierung und Verbesserung der Ergonomie der API Ihres Codes. Vergessen Sie nicht <code>field()</code> für die detaillierte Konfiguration jedes Feldes und <code>fields()</code> für die Introspektion!</p>

@@ -1,0 +1,249 @@
+<h2>Foglio illustrativo. Personalizzazione di LLM: prompt, ottimizzazione dei modelli, esempi di codice.</h2>
+<p>In questo articolo:</p>
+<ol>
+<li>Come viene creato l<span>"</span>effetto memoria<span>"</span> in LLM (breve panoramica).</li>
+<li>Perché e quando è necessaria l'ottimizzazione (Fine-tuning) di un modello.</li>
+<li>Quando l'ottimizzazione non è la soluzione migliore.</li>
+<li>Preparazione dei dati.</li>
+<li>Esempi di ottimizzazione per <strong>OpenAI (GPT)</strong>, <strong>Google (Gemini)</strong> e <strong>Anthropic (Claude)</strong> (differisce).</li>
+</ol>
+<h3>1. Come LLM "ricorda" e "si adatta": L<span>'</span>illusione del contesto</h3>
+<p>Prima di parlare di ottimizzazione, è importante capire come LLM riesca a creare un senso di personalizzazione.
+Questo è importante per non affrettarsi a un'ottimizzazione costosa se il compito può essere risolto con metodi più semplici:</p>
+<ul>
+<li>Tramite la <strong>Finestra di contesto (Memoria a breve termine):</strong> All'interno di un singolo dialogo, si invia al modello non solo una nuova domanda, ma anche <strong>tutta o parte della corrispondenza precedente</strong>. Il modello elabora tutto questo testo come un unico "contesto". È grazie a questo che "ricorda" le osservazioni precedenti e continua il pensiero. La limitazione qui è la lunghezza della finestra di contesto (numero di token).</li>
+<li>Composizione delle <strong>Istruzioni di sistema (System Prompt):</strong> È possibile impostare il ruolo, il tono e le regole di comportamento del modello all'inizio di ogni dialogo. Ad esempio: "Sei un esperto di Python, rispondi brevemente."</li>
+<li>Inclusione di diversi esempi del comportamento desiderato nella richiesta <strong>Apprendimento Few-Shot:</strong> (coppie input/output) consente al modello di "imparare" questo pattern direttamente all'interno della richiesta corrente.</li>
+<li><strong>Gestione dello stato lato applicazione:</strong> Il modo più potente. L<span>'</span>applicazione (che accede all<span>'</span>API) può memorizzare le informazioni dell<span>'</span>utente (preferenze, cronologia, dati del profilo) e aggiungerle dinamicamente al prompt prima di inviarle al modello.</li>
+</ul>
+<h3>2.</h3>
+<p>L<span>'</span>ottimizzazione è il processo di ulteriore addestramento di un LLM di base già preparato sul proprio set di dati specifico. Ciò consente al modello di:</p>
+<ul>
+<li><strong>Adattare stile e tono:</strong> Il modello parlerà "la tua lingua" – che si tratti di un linguaggio scientifico rigoroso, di marketing amichevole o del gergo di una comunità specifica.</li>
+<li><strong>Seguire istruzioni e formati specifici:</strong> Se hai bisogno di risposte in una struttura JSON strettamente definita, o sempre con un set specifico di campi.</li>
+<li><strong>Comprendere il linguaggio specifico del dominio:</strong> L<span>'</span>addestramento sulla tua documentazione interna o sui testi del settore aiuterà il modello a gestire meglio la terminologia della tua nicchia.</li>
+<li><strong>Migliorare le prestazioni su compiti specifici:</strong> Per alcuni tipi di query (ad esempio, classificazione del sentiment, generazione di codice in un framework specifico), l<span>'</span>ottimizzazione può fornire risposte più accurate e pertinenti rispetto al modello di base.</li>
+<li><strong>Ridurre la lunghezza dei prompt:</strong> Se il modello "conosce" già il comportamento desiderato tramite l<span>'</span>ottimizzazione, non è necessario ricordarglielo ogni volta nel prompt, il che consente di risparmiare token e ridurre la latenza.</li>
+</ul>
+<h3>3.</h3>
+<p>L<span>'</span>ottimizzazione è uno strumento potente ma non universale. Non dovresti usarla se:</p>
+<ul>
+<li><strong>Il modello deve accedere a nuove conoscenze:</strong> L<span>'</span>ottimizzazione modifica i pesi del modello, ma non "carica" nuovi fatti in esso in tempo reale. Se il tuo compito è rispondere a domande basate su una base di conoscenze in continua evoluzione (documenti aziendali, ultime notizie), è meglio usare la <strong>Generazione Aumentata da Recupero (RAG)</strong>. Qui, il modello di base ottiene il contesto dal tuo database <em>durante l<span>'</span>esecuzione della query</em>.</li>
+<li><strong>Un compito semplice può essere risolto con l<span>'</span>ingegneria dei prompt:</strong> Inizia sempre con l<span>'</span>ingegneria dei prompt più efficace. Se il compito può essere risolto con istruzioni semplici e pochi esempi, l<span>'</span>ottimizzazione è ridondante e più costosa.</li>
+<li><strong>Non hai abbastanza dati di alta qualità:</strong> Dati scadenti = modello ottimizzato male.</li>
+</ul>
+<h3>4. Preparazione dei dati.</h3>
+<p>La qualità e la quantità dei tuoi dati sono di fondamentale importanza. Il modello impara dai tuoi esempi, quindi devono essere accurati, diversi e coerenti.</p>
+<ul>
+<li><strong>Formato:</strong> Molto spesso JSON Lines (<code>.jsonl</code>) o CSV (<code>.csv</code>).</li>
+<li><strong>Struttura dei dati:</strong> Dipende dal compito.
+<ul>
+<li><strong>Ottimizzazione delle istruzioni (Instruction Tuning - Istruzione-Risposta):</strong> Adatto per compiti generalizzati come domande-risposte, riformulazione, riassunto.
+<pre class="line-numbers"><code class="language-json">{"input_text": "Riformula la frase: 'La tecnologia AI si sta sviluppando rapidamente.'", "output_text": "L'intelligenza artificiale sta dimostrando rapidi progressi."} 
+{"input_text": "Nomina la capitale della Francia.", "output_text": "La capitale della Francia è Parigi."}</code></pre>
+</li>
+<li><strong>Ottimizzazione della chat (Chat Tuning - Chat):</strong> Ideale per addestrare il modello a condurre un dialogo in un ruolo o stile specifico.
+<pre class="line-numbers"><code class="language-json">{"messages": [{"author": "user", "content": "Ciao! Cosa mi consigli per cena?"}, {"author": "model", "content": "Buonasera! Oggi è un ottimo giorno per la pasta Carbonara, o, se preferisci qualcosa di leggero, un'insalata Caesar."}]} 
+{"messages": [{"author": "user", "content": "Parlami delle nuove funzionalità di Python 3.12."}, {"author": "model", "content": "In Python 3.12 sono state introdotte le f-string con indentazione, una nuova sintassi per i generici universali e una migliore gestione degli errori Unicode."}]}</code></pre>
+</li>
+</ul>
+</li>
+<li><strong>Quantità:</strong> Minimo 100-200 esempi di alta qualità, ma più ce ne sono, meglio è (migliaia per compiti seri).</li>
+<li><strong>Qualità:</strong> Accuratezza, coerenza di stile, tono e formato in tutto il set di dati.</li>
+</ul>
+<h3>5. Modelli e piattaforme</h3>
+<h4>5.1. OpenAI</h4>
+<p>OpenAI fornisce un<span>'</span>API abbastanza semplice e intuitiva per l<span>'</span>ottimizzazione.</p>
+<p><strong>Processo:</strong></p>
+<ol>
+<li>Prepara i dati in formato JSONL, dove ogni riga è un oggetto con un array di <code>messages</code> (come nell<span>'</span>API Chat Completions).</li>
+<li>Carica il file di dati tramite API.</li>
+<li>Crea un lavoro di ottimizzazione, specificando il file caricato e il modello di base.</li>
+<li>Monitora i progressi.</li>
+<li>Usa il nuovo modello ottimizzato tramite il suo ID.</li>
+</ol>
+<p><strong>Esempio di dati (file <code>training_data.jsonl</code>):</strong></p>
+<pre class="line-numbers"><code class="language-json">{"messages": [{"role": "system", "content": "Sei un assistente amichevole per il supporto clienti di un<span>'</span>azienda IT."}, {"role": "user", "content": "La mia connessione internet non funziona."}, {"role": "assistant", "content": "Oh, mi scuso per l<span>'</span>inconveniente! Cerchiamo di capire. Come sei connesso a internet – tramite Wi-Fi o via cavo?"}]} 
+{"messages": [{"role": "system", "content": "Sei un assistente amichevole per il supporto clienti di un<span>'</span>azienda IT."}, {"role": "user", "content": "Come posso reimpostare la mia password?"}, {"role": "assistant", "content": "Certo! Per reimpostare la tua password, vai alla pagina di accesso e clicca su 'Password dimenticata?' sotto il campo di input. Quindi segui le istruzioni sullo schermo."}]}</code></pre>
+<p><strong>Esempio di codice Python:</strong></p>
+<p>Installa in anticipo: <code>pip install openai</code></p>
+<pre class="line-numbers"><code class="language-python">import openai
+from openai import OpenAI
+import os
+
+# Imposta la tua chiave API OpenAI. Si consiglia di utilizzare una variabile d<span>'</span>ambiente.
+# os.environ["OPENAI_API_KEY"] = "sk-..."
+client = OpenAI()
+
+# 1. Caricamento del file di dati
+try:
+    file_response = client.files.create(
+        file=open("training_data.jsonl", "rb"),
+        purpose="fine-tune"
+    )
+    file_id = file_response.id
+    print(f"File caricato con successo. ID file: {file_id}")
+except openai.APIStatusError as e:
+    print(f"Errore di caricamento del file: {e.status_code} - {e.response}")
+    exit()
+
+# 2. Creazione del lavoro di ottimizzazione
+try:
+    ft_job_response = client.fine_tuning.jobs.create(
+        training_file=file_id,
+        model="gpt-3.5-turbo" # Puoi specificare una versione specifica, ad esempio, "gpt-3.5-turbo-0125"
+    )
+    job_id = ft_job_response.id
+    print(f"Lavoro di ottimizzazione creato. ID lavoro: {job_id}")
+    print("Monitora lo stato del lavoro tramite API o in OpenAI Playground.")
+except openai.APIStatusError as e:
+    print(f"Errore di creazione del lavoro: {e.status_code} - {e.response}")
+    exit()
+
+# Esempio di monitoraggio dello stato e ottenimento del nome del modello (da eseguire dopo la creazione del lavoro):
+# # job_id = "ftjob-..." # Sostituisci con l<span>'</span>ID del tuo lavoro
+# # job_status = client.fine_tuning.jobs.retrieve(job_id)
+# # print(f"Stato attuale del lavoro: {job_status.status}")
+# # if job_status.status == "succeeded":
+# #     fine_tuned_model_name = job_status.fine_tuned_model
+# #     print(f"Nome del modello ottimizzato: {fine_tuned_model_name}")
+
+# 3. Utilizzo del modello ottimizzato (dopo che è pronto)
+# # Sostituisci con il nome reale del tuo modello, ottenuto dopo l<span>'</span>ottimizzazione riuscita
+# # fine_tuned_model_name = "ft:gpt-3.5-turbo-0125:my-org::abcd123"
+
+# # if 'fine_tuned_model_name' in locals() and fine_tuned_model_name:
+# #     try:
+# #         response = client.chat.completions.create(
+# #             model=fine_tuned_model_name,
+# #             messages=[
+# #                 {"role": "user", "content": "Ho un problema di accesso."}
+# #             ]
+# #         )
+# #         print("\nRisposta del modello ottimizzato:")
+# #         print(response.choices[0].message.content)
+# #     except openai.APIStatusError as e:
+# #         print(f"Errore durante l<span>'</span>utilizzo del modello: {e.status_code} - {e.response}")</code></pre>
+<h4>5.2. Anthropic</h4>
+<p>Anthropic <strong>non fornisce un<span>'</span>API pubblica per l<span>'</span>ottimizzazione dei suoi modelli Claude 3 (Opus, Sonnet, Haiku) nello stesso senso di OpenAI o Google.</strong></p>
+<p>Anthropic si concentra sulla creazione di modelli di base molto potenti che, a loro dire, funzionano in modo eccellente con l<span>'</span>ingegneria dei prompt avanzata e i pattern RAG, minimizzando la necessità di ottimizzazione nella maggior parte dei casi.
+Per i grandi clienti aziendali o i partner, potrebbero esistere programmi per la creazione di modelli "personalizzati" o integrazioni specializzate, ma questa non è una funzione di ottimizzazione disponibile pubblicamente tramite API.</p>
+<p>Se stai lavorando con Claude 3, il tuo obiettivo principale dovrebbe essere:</p>
+<ul>
+<li><strong>Ingegneria dei prompt di alta qualità:</strong> Sperimenta con le istruzioni di sistema, gli esempi few-shot, la formattazione chiara delle richieste. Claude è noto per la sua capacità di seguire rigorosamente le istruzioni, specialmente nei tag XML.</li>
+<li><strong>Sistemi RAG:</strong> Utilizza basi di conoscenza esterne per fornire al modello un contesto pertinente.</li>
+</ul>
+<h4>5.3. Google (Gemini)</h4>
+<p>Google sta sviluppando attivamente le capacità di ottimizzazione tramite la sua piattaforma <strong>Google Cloud Vertex AI</strong>.
+Questa è una piattaforma ML completa che fornisce strumenti per la preparazione dei dati, l<span>'</span>esecuzione di lavori di addestramento e la distribuzione dei modelli.
+L<span>'</span>ottimizzazione è disponibile per i modelli della famiglia Gemini.</p>
+<p><strong>Processo:</strong></p>
+<ol>
+<li>Prepara i dati (JSONL o CSV) in formato <code>input_text</code>/<code>output_text</code> (per l<span>'</span>ottimizzazione delle istruzioni) o <code>messages</code> (per l<span>'</span>ottimizzazione della chat).
+</li>
+<li>Carica i dati su Google Cloud Storage (GCS).</li>
+<li>Crea ed esegui un lavoro di ottimizzazione tramite la console Vertex AI o l<span>'</span>SDK.</li>
+<li>Distribuisci il modello ottimizzato su un Endpoint.</li>
+<li>Utilizza il modello ottimizzato tramite questo Endpoint.</li>
+</ol>
+<p><strong>Esempio di dati (file <code>gemini_tuning_data.jsonl</code>):</strong></p>
+<pre class="line-numbers"><code class="language-json">{"input_text": "Riassumi le idee principali di questo libro: 'Il libro parla del viaggio di un eroe che supera gli ostacoli e trova se stesso.'", "output_text": "Il personaggio principale del libro intraprende un viaggio trasformativo, affrontando sfide e acquisendo la scoperta di sé."} 
+{"input_text": "Spiega il principio di un reattore termonucleare in termini semplici.", "output_text": "Un reattore termonucleare tenta di riprodurre il processo che avviene sul Sole: la fusione di nuclei atomici leggeri a temperature molto elevate, rilasciando enormi quantità di energia."}</code></pre>
+<p><strong>Esempio di codice Python (richiede <code>google-cloud-aiplatform</code>):</strong></p>
+<p>Installa in anticipo: <code>pip install google-cloud-aiplatform</code> e <code>pip install google-cloud-storage</code></p>
+<pre class="line-numbers"><code class="language-python">import os
+from google.cloud import aiplatform
+from google.cloud import storage
+
+# --- Impostazioni ---
+# SOSTITUISCI con i tuoi valori:
+PROJECT_ID = "your-gcp-project-id"
+REGION = "us-central1"               # Scegli una regione che supporti Gemini e Vertex AI
+BUCKET_NAME = "your-gcs-bucket-for-tuning" # Nome del tuo bucket GCS (deve essere creato in anticipo)
+DATA_FILE_LOCAL_PATH = "gemini_tuning_data.jsonl"
+GCS_DATA_URI = f"gs://{BUCKET_NAME}/{DATA_FILE_LOCAL_PATH}"
+TUNED_MODEL_DISPLAY_NAME = "my-tuned-gemini-model"
+# --- Fine delle impostazioni ---
+
+# Inizializzazione di Vertex AI
+aiplatform.init(project=PROJECT_ID, location=REGION)
+
+# 1. Creazione del file di dati (se non esiste)
+with open(DATA_FILE_LOCAL_PATH, "w", encoding="utf-8") as f:
+    f.write('{"input_text": "Riassumi le idee principali di questo libro: \'Il libro parla del viaggio di un eroe che supera gli ostacoli e trova se stesso.\'", "output_text": "Il personaggio principale del libro intraprende un viaggio trasformativo, affrontando sfide e acquisendo la scoperta di sé."}\n')
+    f.write('{"input_text": "Spiega il principio di un reattore termonucleare in termini semplici.", "output_text": "Un reattore termonucleare tenta di riprodurre il processo che avviene sul Sole: la fusione di nuclei atomici leggeri a temperature molto elevate, rilasciando enormi quantità di energia."}\n')
+print(f"File di dati '{DATA_FILE_LOCAL_PATH}' creato.")
+
+
+# 2. Caricamento dei dati su Google Cloud Storage
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    """Carica un file in un bucket GCS."""
+    storage_client = storage.Client(project=PROJECT_ID)
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(source_file_name)
+    print(f"File '{source_file_name}' caricato su 'gs://{bucket_name}/{destination_blob_name}'.")
+
+try:
+    upload_blob(BUCKET_NAME, DATA_FILE_LOCAL_PATH, DATA_FILE_LOCAL_PATH)
+except Exception as e:
+    print(f"Errore durante il caricamento del file su GCS. Assicurati che il bucket esista e che tu abbia i permessi: {e}")
+    exit()
+
+# 3. Creazione ed esecuzione del lavoro di ottimizzazione
+print(f"\nAvvio dell'ottimizzazione del modello '{TUNED_MODEL_DISPLAY_NAME}'...")
+try:
+    # `tune_model` avvia il lavoro e restituisce il modello ottimizzato al completamento
+    tuned_model = aiplatform.Model.tune_model(
+        model_display_name=TUNED_MODEL_DISPLAY_NAME,
+        source_model_name="gemini-1.0-pro-001", # Modello base Gemini Pro
+        training_data_path=GCS_DATA_URI,
+        tuning_method="SUPERVISED_TUNING",
+        train_steps=100, # Numero di passaggi di addestramento. Il valore ottimale dipende dalla dimensione dei dati.
+        # batch_size=16, # Può essere specificato
+        # learning_rate_multiplier=1.0 # Può essere specificato
+    )
+    print(f"Modello '{TUNED_MODEL_DISPLAY_NAME}' ottimizzato con successo. ID modello: {tuned_model.name}")
+    print("Il processo di ottimizzazione potrebbe richiedere un tempo significativo.")
+except Exception as e:
+    print(f"Errore di ottimizzazione. Controlla i log nella console Vertex AI: {e}")
+    exit()
+
+# 4. Distribuzione del modello ottimizzato (per l'uso)
+print(f"\nDistribuzione del modello ottimizzato '{TUNED_MODEL_DISPLAY_NAME}' all'endpoint...")
+try:
+    endpoint = tuned_model.deploy(
+        machine_type="n1-standard-4", # Tipo di macchina per l'endpoint. Scegli quello appropriato.
+        min_replica_count=1,
+        max_replica_count=1
+    )
+    print(f"Modello distribuito all'endpoint: {endpoint.name}")
+    print("La distribuzione potrebbe richiedere anche diversi minuti.")
+except Exception as e:
+    print(f"Errore durante la distribuzione del modello: {e}")
+    exit()
+
+# 5. Utilizzo del modello ottimizzato
+print("\nTest del modello ottimizzato...")
+prompt = "Parlami delle tue capacità dopo l'addestramento."
+instances = [{"prompt": prompt}] # Per l'ottimizzazione delle istruzioni. Se ottimizzazione della chat, allora {"messages": [...]}
+
+try:
+    response = endpoint.predict(instances=instances)
+    print("\nRisposta del modello ottimizzato:")
+    print(response.predictions[0])
+except Exception as e:
+    print(f"Errore durante l'utilizzo del modello ottimizzato: {e}")
+
+# Dopo aver terminato, non dimenticare di eliminare l'endpoint e il modello per evitare costi inutili:
+# # endpoint.delete()
+# # tuned_model.delete()</code></pre>
+<h3>6. Raccomandazioni generali</h3>
+<ul>
+<li><strong>Inizia con poco:</strong> Non cercare di addestrare il modello subito con migliaia di esempi. Inizia con un set di dati piccolo ma di alta qualità.</li>
+<li><strong>Itera:</strong> L<span>'</span>ottimizzazione è un processo iterativo. Addestra, valuta, regola i dati o gli iperparametri, ripeti.</li>
+<li><strong>Monitoraggio:</strong> Monitora attentamente le metriche di addestramento (perdita) e usa un set di dati di validazione per evitare l<span>'</span>overfitting.</li>
+<li><strong>Valutazione:</strong> Testa sempre il modello ottimizzato su dati che non ha <em>mai visto</em> durante l<span>'</span>addestramento per valutarne la capacità di generalizzazione.</li>
+<li><strong>Costo:</strong> Ricorda che l<span>'</span>ottimizzazione e la distribuzione degli endpoint sono a pagamento. Tienine conto nel tuo budget.</li>
+<li><strong>Documentazione:</strong> Fai sempre riferimento alla documentazione ufficiale del fornitore LLM. Le API e le funzionalità sono in continua evoluzione.</li>
+</ul>
