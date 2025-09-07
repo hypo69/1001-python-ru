@@ -1,0 +1,1 @@
+פוסט [עבר](python/dataclass.he.md)

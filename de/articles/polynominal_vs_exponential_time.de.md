@@ -1,0 +1,1 @@
+Artikel [verschoben](informatics/polynomial_and_exponential_execution_time.de.md)

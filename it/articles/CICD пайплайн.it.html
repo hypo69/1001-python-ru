@@ -1,0 +1,169 @@
+<p>🚀 **<span dir="ltr">CI</span>/<span dir="ltr">CD</span>: <span dir="ltr">Dalle</span> <span dir="ltr">basi</span> <span dir="ltr">alla</span> <span dir="ltr">produzione</span> <span dir="ltr">su</span> <span dir="ltr">GCP</span> <span dir="ltr">con</span> <span dir="ltr">GitHub</span> <span dir="ltr">Actions</span> – <span dir="ltr">Una</span> <span dir="ltr">guida</span> <span dir="ltr">completa</span> <span dir="ltr">con</span> <span dir="ltr">esempi</span>** 🚀</p>
+<p><span dir="ltr">Ciao</span>, <span dir="ltr">sviluppatori</span>! <span dir="ltr">In</span> <span dir="ltr">questo</span> <span dir="ltr">articolo</span> <span dir="ltr">parlerò</span> <span dir="ltr">di</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span> – <span dir="ltr">il</span> <span dir="ltr">concetto</span>.</p>
+<h3><span dir="ltr">Cos</span>'è <span dir="ltr">una</span> <span dir="ltr">pipeline</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span> <span dir="ltr">nel</span> <span dir="ltr">contesto</span> <span dir="ltr">della</span> <span dir="ltr">programmazione</span>?</h3>
+<p><span dir="ltr">Una</span> **<span dir="ltr">pipeline</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span> (<span dir="ltr">Continuous</span> <span dir="ltr">Integration</span> / <span dir="ltr">Continuous</span> <span dir="ltr">Delivery</span> <span dir="ltr">o</span> <span dir="ltr">Continuous</span> <span dir="ltr">Deployment</span>)** è <span dir="ltr">un</span> <span dir="ltr">processo</span> <span dir="ltr">automatizzato</span> <span dir="ltr">che</span> <span dir="ltr">consente</span> <span dir="ltr">agli</span> <span dir="ltr">sviluppatori</span> <span dir="ltr">di</span> <span dir="ltr">consegnare</span> <span dir="ltr">rapidamente</span> <span dir="ltr">e</span> <span dir="ltr">in</span> <span dir="ltr">modo</span> <span dir="ltr">affidabile</span> <span dir="ltr">le</span> <span dir="ltr">modifiche</span> <span dir="ltr">al</span> <span dir="ltr">codice</span> <span dir="ltr">in</span> <span dir="ltr">un</span> <span dir="ltr">ambiente</span> <span dir="ltr">di</span> <span dir="ltr">lavoro</span> (<span dir="ltr">produzione</span>).</p>
+<p><span dir="ltr">Analizziamo</span> <span dir="ltr">i</span> <span dir="ltr">concetti</span> <span dir="ltr">chiave</span>:</p>
+<p>🔧 **<span dir="ltr">CI</span> — <span dir="ltr">Continuous</span> <span dir="ltr">Integration</span> (<span dir="ltr">Integrazione</span> <span dir="ltr">Continua</span>)**</p>
+<p><span dir="ltr">Questa</span> è <span dir="ltr">una</span> <span dir="ltr">pratica</span> <span dir="ltr">in</span> <span dir="ltr">cui</span> <span dir="ltr">gli</span> <span dir="ltr">sviluppatori</span> <span dir="ltr">apportano</span> <span dir="ltr">frequentemente</span> <span dir="ltr">modifiche</span> <span dir="ltr">a</span> <span dir="ltr">una</span> <span dir="ltr">codebase</span> <span dir="ltr">condivisa</span>. <span dir="ltr">Ogni</span> <span dir="ltr">modifica</span> <span dir="ltr">di</span> <span dir="ltr">questo</span> <span dir="ltr">tipo</span> <span dir="ltr">automaticamente</span>:</p>
+<li>**<span dir="ltr">Viene</span> <span dir="ltr">costruita</span>** (<span dir="ltr">build</span>)</li>
+<li>**<span dir="ltr">Viene</span> <span dir="ltr">testata</span>** (<span dir="ltr">test</span> <span dir="ltr">unitari</span>, <span dir="ltr">test</span> <span dir="ltr">di</span> <span dir="ltr">integrazione</span>)</li>
+<li>**<span dir="ltr">Viene</span> <span dir="ltr">verificata</span> <span dir="ltr">la</span> <span dir="ltr">conformità</span> <span dir="ltr">agli</span> <span dir="ltr">standard</span>** (<span dir="ltr">linting</span>, <span dir="ltr">analisi</span> <span dir="ltr">statica</span>)</li>
+<p>👉 **<span dir="ltr">Obiettivo</span> <span dir="ltr">della</span> <span dir="ltr">CI</span>:** <span dir="ltr">Identificare</span> <span dir="ltr">gli</span> <span dir="ltr">errori</span> <span dir="ltr">nella</span> <span dir="ltr">fase</span> <span dir="ltr">più</span> <span dir="ltr">precoce</span>, <span dir="ltr">prima</span> <span dir="ltr">che</span> <span dir="ltr">danneggino</span> <span dir="ltr">qualcosa</span> <span dir="ltr">di</span> <span dir="ltr">importante</span> <span dir="ltr">o</span> <span dir="ltr">finiscano</span> <span dir="ltr">in</span> <span dir="ltr">una</span> <span dir="ltr">release</span>.</p>
+<p>🚀 **<span dir="ltr">CD</span> — <span dir="ltr">Continuous</span> <span dir="ltr">Delivery</span> (<span dir="ltr">Consegna</span> <span dir="ltr">Continua</span>) <span dir="ltr">o</span> <span dir="ltr">Continuous</span> <span dir="ltr">Deployment</span> (<span dir="ltr">Distribuzione</span> <span dir="ltr">Continua</span>)**</p>
+<p><span dir="ltr">Qui</span> <span dir="ltr">ci</span> <span dir="ltr">sono</span> <span dir="ltr">due</span> <span dir="ltr">opzioni</span>:</p>
+<p>✅ **<span dir="ltr">Continuous</span> <span dir="ltr">Delivery</span> (<span dir="ltr">Consegna</span> <span dir="ltr">Continua</span>)**</p>
+<p><span dir="ltr">Dopo</span> <span dir="ltr">aver</span> <span dir="ltr">completato</span> <span dir="ltr">con</span> <span dir="ltr">successo</span> <span dir="ltr">la</span> <span dir="ltr">fase</span> <span dir="ltr">di</span> <span dir="ltr">CI</span>, <span dir="ltr">le</span> <span dir="ltr">modifiche</span> <span dir="ltr">automaticamente</span>:</p>
+<li><span dir="ltr">Superano</span> <span dir="ltr">test</span> <span dir="ltr">aggiuntivi</span> (<span dir="ltr">ad</span> <span dir="ltr">esempio</span>, <span dir="ltr">E2E</span> – <span dir="ltr">test</span> <span dir="ltr">end</span>-<span dir="ltr">to</span>-<span dir="ltr">end</span>)</li>
+<li><span dir="ltr">Vanno</span> <span dir="ltr">su</span> <span dir="ltr">un</span> <span dir="ltr">server</span> <span dir="ltr">di</span> <span dir="ltr">staging</span> (<span dir="ltr">test</span>)</li>
+<p>👉 **<span dir="ltr">Ma</span> <span dir="ltr">la</span> <span dir="ltr">distribuzione</span> <span dir="ltr">in</span> <span dir="ltr">produzione</span> <span dir="ltr">richiede</span> <span dir="ltr">ancora</span> <span dir="ltr">una</span> <span dir="ltr">conferma</span> <span dir="ltr">manuale</span>.** <span dir="ltr">Questo</span> <span dir="ltr">dà</span> <span dir="ltr">al</span> <span dir="ltr">team</span> <span dir="ltr">il</span> <span dir="ltr">controllo</span> <span dir="ltr">su</span> *<span dir="ltr">quando</span>* <span dir="ltr">esattamente</span> <span dir="ltr">gli</span> <span dir="ltr">utenti</span> <span dir="ltr">vedranno</span> <span dir="ltr">le</span> <span dir="ltr">modifiche</span>.</p>
+<p>🤖 **<span dir="ltr">Continuous</span> <span dir="ltr">Deployment</span> (<span dir="ltr">Distribuzione</span> <span dir="ltr">Continua</span>)**</p>
+<p><span dir="ltr">Questo</span> è <span dir="ltr">il</span> <span dir="ltr">passo</span> <span dir="ltr">successivo</span> <span dir="ltr">dopo</span> <span dir="ltr">la</span> <span dir="ltr">Continuous</span> <span dir="ltr">Delivery</span>. <span dir="ltr">Qui</span> <span dir="ltr">la</span> <span dir="ltr">distribuzione</span> <span dir="ltr">in</span> <span dir="ltr">produzione</span> <span dir="ltr">avviene</span> **<span dir="ltr">in</span> <span dir="ltr">modo</span> <span dir="ltr">completamente</span> <span dir="ltr">automatico</span>**, <span dir="ltr">se</span> <span dir="ltr">tutte</span> <span dir="ltr">le</span> <span dir="ltr">fasi</span> <span dir="ltr">precedenti</span> <span dir="ltr">della</span> <span dir="ltr">pipeline</span> (<span dir="ltr">build</span>, <span dir="ltr">tutti</span> <span dir="ltr">i</span> <span dir="ltr">test</span>) <span dir="ltr">sono</span> <span dir="ltr">state</span> <span dir="ltr">completate</span> <span dir="ltr">con</span> <span dir="ltr">successo</span>. <span dir="ltr">Questo</span> è <span dir="ltr">il</span> <span dir="ltr">livello</span> <span dir="ltr">più</span> <span dir="ltr">avanzato</span> <span dir="ltr">di</span> <span dir="ltr">automazione</span>.</p>
+<h3>🔄 <span dir="ltr">Di</span> <span dir="ltr">cosa</span> è <span dir="ltr">composta</span> <span dir="ltr">di</span> <span dir="ltr">solito</span> <span dir="ltr">una</span> <span dir="ltr">pipeline</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span>?</h3>
+<p><span dir="ltr">Una</span> <span dir="ltr">pipeline</span> <span dir="ltr">tipica</span> <span dir="ltr">include</span> <span dir="ltr">le</span> <span dir="ltr">seguenti</span> <span dir="ltr">fasi</span>:</p>
+<li>**<span dir="ltr">Checkout</span>** — <span dir="ltr">Clonazione</span> <span dir="ltr">dell</span>'<span dir="ltr">ultima</span> <span dir="ltr">versione</span> <span dir="ltr">del</span> <span dir="ltr">codice</span> <span dir="ltr">dal</span> <span dir="ltr">repository</span>.</li>
+<li>**<span dir="ltr">Build</span>** — <span dir="ltr">Costruzione</span> <span dir="ltr">del</span> <span dir="ltr">progetto</span> (<span dir="ltr">compilazione</span>, <span dir="ltr">assemblaggio</span> <span dir="ltr">di</span> <span dir="ltr">artefatti</span>, <span dir="ltr">immagini</span> <span dir="ltr">Docker</span>).</li>
+<li>**<span dir="ltr">Test</span>** — <span dir="ltr">Esecuzione</span> <span dir="ltr">di</span> <span dir="ltr">vari</span> <span dir="ltr">tipi</span> <span dir="ltr">di</span> <span dir="ltr">test</span> (<span dir="ltr">unitari</span>, <span dir="ltr">di</span> <span dir="ltr">integrazione</span>, <span dir="ltr">E2E</span>).</li>
+<li>**<span dir="ltr">Lint</span>/<span dir="ltr">Code</span> <span dir="ltr">Quality</span>** — <span dir="ltr">Verifica</span> <span dir="ltr">del</span> <span dir="ltr">codice</span> <span dir="ltr">per</span> <span dir="ltr">la</span> <span dir="ltr">conformità</span> <span dir="ltr">dello</span> <span dir="ltr">stile</span> <span dir="ltr">e</span> <span dir="ltr">potenziali</span> <span dir="ltr">errori</span> <span dir="ltr">utilizzando</span> <span dir="ltr">analizzatori</span> <span dir="ltr">statici</span>.</li>
+<li>**<span dir="ltr">Deploy</span>** — <span dir="ltr">Distribuzione</span> <span dir="ltr">dell</span>'<span dir="ltr">applicazione</span> (<span dir="ltr">su</span> <span dir="ltr">un</span> <span dir="ltr">server</span> <span dir="ltr">di</span> <span dir="ltr">staging</span> <span dir="ltr">o</span> <span dir="ltr">di</span> <span dir="ltr">produzione</span>).</li>
+<li>**<span dir="ltr">Notify</span>** — <span dir="ltr">Invio</span> <span dir="ltr">di</span> <span dir="ltr">notifiche</span> <span dir="ltr">sullo</span> <span dir="ltr">stato</span> <span dir="ltr">della</span> <span dir="ltr">pipeline</span> <span dir="ltr">al</span> <span dir="ltr">team</span> (<span dir="ltr">ad</span> <span dir="ltr">esempio</span>, <span dir="ltr">in</span> <span dir="ltr">Slack</span>, <span dir="ltr">Email</span>).</li>
+<h3>🛠 <span dir="ltr">Strumenti</span> <span dir="ltr">popolari</span> <span dir="ltr">per</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span>:</h3>
+<li>**<span dir="ltr">GitHub</span> <span dir="ltr">Actions</span>** (<span dir="ltr">il</span> <span dir="ltr">nostro</span> <span dir="ltr">focus</span> <span dir="ltr">oggi</span>!)</li>
+<li><span dir="ltr">GitLab</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span></li>
+<li><span dir="ltr">Jenkins</span></li>
+<li><span dir="ltr">CircleCI</span></li>
+<li><span dir="ltr">Bitbucket</span> <span dir="ltr">Pipelines</span></li>
+<li><span dir="ltr">Azure</span> <span dir="ltr">DevOps</span></li>
+<li><span dir="ltr">TeamCity</span></li>
+<h3>🧠 <span dir="ltr">Perché</span> <span dir="ltr">abbiamo</span> <span dir="ltr">bisogno</span> <span dir="ltr">di</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span>?</h3>
+<li>**<span dir="ltr">Riduce</span> <span dir="ltr">l</span>'<span dir="ltr">errore</span> <span dir="ltr">umano</span>:** <span dir="ltr">L</span>'<span dir="ltr">automazione</span> <span dir="ltr">elimina</span> <span dir="ltr">gli</span> <span dir="ltr">errori</span> <span dir="ltr">associati</span> <span dir="ltr">alle</span> <span dir="ltr">operazioni</span> <span dir="ltr">manuali</span>.</li>
+<li>**<span dir="ltr">Rilevamento</span> <span dir="ltr">rapido</span> <span dir="ltr">dei</span> <span dir="ltr">bug</span>:** <span dir="ltr">Gli</span> <span dir="ltr">errori</span> <span dir="ltr">vengono</span> <span dir="ltr">trovati</span> <span dir="ltr">prima</span>, <span dir="ltr">rendendoli</span> <span dir="ltr">più</span> <span dir="ltr">facili</span> <span dir="ltr">ed</span> <span dir="ltr">economici</span> <span dir="ltr">da</span> <span dir="ltr">correggere</span>.</li>
+<li>**<span dir="ltr">Automazione</span> <span dir="ltr">delle</span> <span dir="ltr">attività</span> <span dir="ltr">di</span> <span dir="ltr">routine</span>:** <span dir="ltr">Gli</span> <span dir="ltr">sviluppatori</span> <span dir="ltr">dedicano</span> <span dir="ltr">meno</span> <span dir="ltr">tempo</span> <span dir="ltr">alla</span> <span dir="ltr">costruzione</span> <span dir="ltr">e</span> <span dir="ltr">alla</span> <span dir="ltr">distribuzione</span>, <span dir="ltr">e</span> <span dir="ltr">più</span> <span dir="ltr">al</span> <span dir="ltr">codice</span>.</li>
+<li>**<span dir="ltr">Miglioramento</span> <span dir="ltr">della</span> <span dir="ltr">qualità</span> <span dir="ltr">del</span> <span dir="ltr">codice</span>:** <span dir="ltr">Controlli</span> <span dir="ltr">e</span> <span dir="ltr">test</span> <span dir="ltr">costanti</span> <span dir="ltr">elevano</span> <span dir="ltr">il</span> <span dir="ltr">livello</span> <span dir="ltr">di</span> <span dir="ltr">qualità</span> <span dir="ltr">generale</span>.</li>
+<li>**<span dir="ltr">Consegna</span> <span dir="ltr">rapida</span> <span dir="ltr">delle</span> <span dir="ltr">funzionalità</span> <span dir="ltr">agli</span> <span dir="ltr">utenti</span>:** <span dir="ltr">Nuove</span> <span dir="ltr">funzionalità</span> <span dir="ltr">raggiungono</span> <span dir="ltr">l</span>'<span dir="ltr">utente</span> <span dir="ltr">finale</span> <span dir="ltr">più</span> <span dir="ltr">velocemente</span> <span dir="ltr">e</span> <span dir="ltr">più</span> <span dir="ltr">frequentemente</span>.</li>
+<h3>📦 <span dir="ltr">Esempi</span> <span dir="ltr">semplici</span> <span dir="ltr">di</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span> <span dir="ltr">con</span> <span dir="ltr">GitHub</span> <span dir="ltr">Actions</span></h3>
+<p><span dir="ltr">Vediamo</span> <span dir="ltr">le</span> <span dir="ltr">pipeline</span> <span dir="ltr">di</span> <span dir="ltr">base</span> <span dir="ltr">per</span> <span dir="ltr">le</span> <span dir="ltr">tecnologie</span> <span dir="ltr">più</span> <span dir="ltr">diffuse</span>. <span dir="ltr">Tutti</span> <span dir="ltr">gli</span> <span dir="ltr">esempi</span> <span dir="ltr">utilizzano</span> <span dir="ltr">GitHub</span> <span dir="ltr">Actions</span> <span dir="ltr">e</span> <span dir="ltr">vengono</span> <span dir="ltr">salvati</span> <span dir="ltr">nella</span> <span dir="ltr">directory</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>>.<span dir="ltr">github</span>/<span dir="ltr">workflows</span>/</<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">del</span> <span dir="ltr">tuo</span> <span dir="ltr">progetto</span>.</p>
+<h4>🐍 <span dir="ltr">CI</span>/<span dir="ltr">CD</span> <span dir="ltr">per</span> <span dir="ltr">Python</span> (<span dir="ltr">con</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">pytest</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">e</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">flake8</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>)</h4>
+<pre class="line-numbers"><code class="language-yaml">
+# .github/workflows/python-ci.yml
+name: Python CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' # Specifica la tua versione
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt # Assicurati di avere requirements.txt
+          pip install flake8 pytest
+
+      - name: Lint with flake8
+        run: |
+          # Controlla il codice nelle cartelle src e tests (adatta al tuo progetto)
+          flake8 src tests
+
+      - name: Run tests
+        run: |
+          pytest
+</code></pre>
+<h4>🌐 <span dir="ltr">CI</span>/<span dir="ltr">CD</span> <span dir="ltr">per</span> <span dir="ltr">Node.js</span> (<span dir="ltr">con</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">npm</span> <span dir="ltr">test</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">e</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">eslint</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>)</h4>
+<pre class="line-numbers"><code class="language-yaml">
+# .github/workflows/node-ci.yml
+name: Node.js CI
+
+on:
+  workflow_run:
+    workflows: ["Build & Push to GHCR"] # Nome del workflow di build
+    types:
+      - completed
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    # Esegui solo se il workflow di build è stato completato con successo
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    # Usa gli ambienti GitHub per lo staging (opzionale, ma buona pratica)
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url }} # L'URL sarà disponibile dopo la distribuzione
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Staging)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-staging' # Nome del tuo servizio di staging in Cloud Run
+          region: '${{ secrets.GCP_REGION }}'
+          # Usa l'immagine che è stata pushata in build.yml
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest'
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed' # Consenti l'accesso non autenticato per esempio
+</code></pre>
+<h4>3. <span dir="ltr">Distribuzione</span> <span dir="ltr">in</span> <span dir="ltr">Produzione</span> <span dir="ltr">con</span> <span dir="ltr">conferma</span> <span dir="ltr">manuale</span> (<span dir="ltr">GCP</span> <span dir="ltr">Cloud</span> <span dir="ltr">Run</span>)</h4>
+<p><span dir="ltr">Questo</span> <span dir="ltr">workflow</span> <span dir="ltr">viene</span> <span dir="ltr">attivato</span> <span dir="ltr">manualmente</span> <span dir="ltr">tramite</span> <span dir="ltr">l</span>'<span dir="ltr">interfaccia</span> <span dir="ltr">utente</span> <span dir="ltr">di</span> <span dir="ltr">GitHub</span> <span dir="ltr">Actions</span>.</p>
+<pre class="line-numbers"><code class="language-yaml">
+# .github/workflows/deploy-prod.yml
+name: Deploy to GCP Cloud Run (Production)
+
+on:
+  workflow_dispatch: # Consente il trigger manuale
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Production)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-production' # Nome del tuo servizio di produzione
+          region: '${{ secrets.GCP_REGION }}'
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest' # Usa la stessa immagine 'latest'
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed'
+          # Per la produzione, puoi aggiungere --no-traffic e poi passare gradualmente il traffico
+          # traffic:
+          #   latest: true
+          #   percent: 100
+</code></pre>
+<p>**<span dir="ltr">Punti</span> <span dir="ltr">importanti</span> <span dir="ltr">di</span> <span dir="ltr">questa</span> <span dir="ltr">pipeline</span> <span dir="ltr">avanzata</span>:**</p>
+<li>**<span dir="ltr">GitHub</span> <span dir="ltr">Container</span> <span dir="ltr">Registry</span> (<span dir="ltr">ghcr.io</span>):** <span dir="ltr">Lo</span> <span dir="ltr">usiamo</span> <span dir="ltr">per</span> <span dir="ltr">archiviare</span> <span dir="ltr">le</span> <span dir="ltr">immagini</span> <span dir="ltr">Docker</span>. <span dir="ltr">Questo</span> è <span dir="ltr">comodo</span> <span dir="ltr">in</span> <span dir="ltr">quanto</span> è <span dir="ltr">strettamente</span> <span dir="ltr">integrato</span> <span dir="ltr">con</span> <span dir="ltr">GitHub</span> <span dir="ltr">Actions</span>.</li>
+<li>**<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">workflow_run</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>:** <span dir="ltr">Consente</span> <span dir="ltr">di</span> <span dir="ltr">attivare</span> <span dir="ltr">un</span> <span dir="ltr">workflow</span> (<span dir="ltr">distribuzione</span> <span dir="ltr">di</span> <span dir="ltr">staging</span>) <span dir="ltr">al</span> <span dir="ltr">completamento</span> <span dir="ltr">di</span> <span dir="ltr">un</span> <span dir="ltr">altro</span> (<span dir="ltr">build</span>).</li>
+<li>**<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">workflow_dispatch</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>:** <span dir="ltr">Offre</span> <span dir="ltr">la</span> <span dir="ltr">possibilità</span> <span dir="ltr">di</span> <span dir="ltr">attivare</span> <span dir="ltr">manualmente</span> <span dir="ltr">un</span> <span dir="ltr">workflow</span> (<span dir="ltr">distribuzione</span> <span dir="ltr">di</span> <span dir="ltr">produzione</span>), <span dir="ltr">fornendo</span> <span dir="ltr">controllo</span>.</li>
+<li>**<span dir="ltr">Ambienti</span> <span dir="ltr">GitHub</span>:** <span dir="ltr">Ti</span> <span dir="ltr">consentono</span> <span dir="ltr">di</span> <span dir="ltr">configurare</span> <span dir="ltr">regole</span> <span dir="ltr">di</span> <span dir="ltr">protezione</span> <span dir="ltr">per</span> <span dir="ltr">la</span> <span dir="ltr">produzione</span> (<span dir="ltr">ad</span> <span dir="ltr">esempio</span>, <span dir="ltr">richiedendo</span> <span dir="ltr">l</span>'<span dir="ltr">approvazione</span> <span dir="ltr">di</span> <span dir="ltr">revisori</span> <span dir="ltr">specifici</span>) <span dir="ltr">e</span> <span dir="ltr">di</span> <span dir="ltr">archiviare</span> <span dir="ltr">secret</span> <span dir="ltr">specifici</span> <span dir="ltr">dell</span>'<span dir="ltr">ambiente</span>.</li>
+<li>**<span dir="ltr">GCP</span> <span dir="ltr">Cloud</span> <span dir="ltr">Run</span>:** <span dir="ltr">Un</span>'<span dir="ltr">ottima</span> <span dir="ltr">opzione</span> <span dir="ltr">serverless</span> <span dir="ltr">per</span> <span dir="ltr">l</span>'<span dir="ltr">esecuzione</span> <span dir="ltr">di</span> <span dir="ltr">applicazioni</span> <span dir="ltr">containerizzate</span>.</li>
+<h3>🔐 <span dir="ltr">Sicurezza</span> – è <span dir="ltr">importante</span>!</h3>
+<li>**<span dir="ltr">Usa</span> <span dir="ltr">i</span> <span dir="ltr">secret</span> <span dir="ltr">di</span> <span dir="ltr">GitHub</span>:** <span dir="ltr">Non</span> <span dir="ltr">archiviare</span> <span dir="ltr">mai</span> <span dir="ltr">token</span>, <span dir="ltr">password</span>, <span dir="ltr">chiavi</span> <span dir="ltr">API</span> <span dir="ltr">direttamente</span> <span dir="ltr">nei</span> <span dir="ltr">file</span> <span dir="ltr">YAML</span>. <span dir="ltr">Usa</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">Settings</span> -> <span dir="ltr">Secrets</span> <span dir="ltr">and</span> <span dir="ltr">variables</span> -> <span dir="ltr">Actions</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">nel</span> <span dir="ltr">tuo</span> <span dir="ltr">repository</span>.</li>
+<li>**<span dir="ltr">Privilegio</span> <span dir="ltr">minimo</span>:** <span dir="ltr">Per</span> <span dir="ltr">gli</span> <span dir="ltr">account</span> <span dir="ltr">di</span> <span dir="ltr">servizio</span> (<span dir="ltr">ad</span> <span dir="ltr">esempio</span>, <span dir="ltr">GCP</span>), <span dir="ltr">concedi</span> <span dir="ltr">solo</span> <span dir="ltr">i</span> <span dir="ltr">permessi</span> <span dir="ltr">strettamente</span> <span dir="ltr">necessari</span> <span dir="ltr">per</span> <span dir="ltr">eseguire</span> <span dir="ltr">le</span> <span dir="ltr">attività</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span>.</li>
+<li>**<span dir="ltr">Isola</span> <span dir="ltr">gli</span> <span dir="ltr">ambienti</span>:** <span dir="ltr">Staging</span> <span dir="ltr">e</span> <span dir="ltr">Produzione</span> <span dir="ltr">dovrebbero</span> <span dir="ltr">essere</span> <span dir="ltr">il</span> <span dir="ltr">più</span> <span dir="ltr">isolati</span> <span dir="ltr">possibile</span>. <span dir="ltr">Progetti</span>/<span dir="ltr">account</span> <span dir="ltr">diversi</span> <span dir="ltr">nei</span> <span dir="ltr">provider</span> <span dir="ltr">cloud</span> <span dir="ltr">sono</span> <span dir="ltr">una</span> <span dir="ltr">buona</span> <span dir="ltr">pratica</span>.</li>
+<li>**<span dir="ltr">Protezione</span> <span dir="ltr">dei</span> <span dir="ltr">branch</span>:** <span dir="ltr">Configura</span> <span dir="ltr">la</span> <span dir="ltr">protezione</span> <span dir="ltr">per</span> <span dir="ltr">il</span> <span dir="ltr">branch</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">main</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> (<span dir="ltr">o</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">master</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>) <span dir="ltr">in</span> <span dir="ltr">modo</span> <span dir="ltr">che</span> <span dir="ltr">i</span> <span dir="ltr">push</span> <span dir="ltr">siano</span> <span dir="ltr">possibili</span> <span dir="ltr">solo</span> <span dir="ltr">tramite</span> <span dir="ltr">Pull</span> <span dir="ltr">Request</span> <span dir="ltr">con</span> <span dir="ltr">controlli</span> <span dir="ltr">CI</span> <span dir="ltr">obbligatori</span>.</li>

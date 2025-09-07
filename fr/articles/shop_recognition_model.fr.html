@@ -1,0 +1,121 @@
+<p># <span dir="ltr">Entraînement</span> <span dir="ltr">d</span>'<span dir="ltr">un</span> <span dir="ltr">modèle</span> <span dir="ltr">OpenAI</span> <span dir="ltr">pour</span> <span dir="ltr">la</span> <span dir="ltr">classification</span> <span dir="ltr">de</span> <span dir="ltr">pages</span> <span dir="ltr">web</span></p>
+<h2><span dir="ltr">Introduction</span></h2>
+<p><span dir="ltr">Entraînement</span> <span dir="ltr">d</span>'<span dir="ltr">un</span> <span dir="ltr">modèle</span> <span dir="ltr">OpenAI</span> <span dir="ltr">pour</span> <span dir="ltr">déterminer</span> <span dir="ltr">si</span> <span dir="ltr">une</span> <span dir="ltr">page</span> <span dir="ltr">est</span> <span dir="ltr">une</span> <span dir="ltr">boutique</span> <span dir="ltr">en</span> <span dir="ltr">ligne</span>.</p>
+<p>- <span dir="ltr">préparation</span> <span dir="ltr">des</span> <span dir="ltr">données</span>,</p>
+<p>- <span dir="ltr">tokenisation</span> <span dir="ltr">du</span> <span dir="ltr">texte</span>,</p>
+<p>- <span dir="ltr">envoi</span> <span dir="ltr">des</span> <span dir="ltr">données</span> <span dir="ltr">pour</span> <span dir="ltr">l</span>'<span dir="ltr">entraînement</span></p>
+<p>- <span dir="ltr">test</span> <span dir="ltr">du</span> <span dir="ltr">modèle</span>.</p>
+<h2>Étape 1: <span dir="ltr">Inscription</span> <span dir="ltr">et</span> <span dir="ltr">configuration</span> <span dir="ltr">de</span> <span dir="ltr">l</span>'<span dir="ltr">API</span> <span dir="ltr">OpenAI</span></h2>
+<p><span dir="ltr">Pour</span> <span dir="ltr">commencer</span> à <span dir="ltr">travailler</span> <span dir="ltr">avec</span> <span dir="ltr">l</span>'<span dir="ltr">API</span> <span dir="ltr">OpenAI</span>, <span dir="ltr">vous</span> <span dir="ltr">devez</span> <span dir="ltr">vous</span> <span dir="ltr">inscrire</span> <span dir="ltr">sur</span> <span dir="ltr">la</span> <span dir="ltr">plateforme</span> <span dir="ltr">OpenAI</span> <span dir="ltr">et</span> <span dir="ltr">obtenir</span> <span dir="ltr">une</span> <span dir="ltr">clé</span> <span dir="ltr">API</span>. <span dir="ltr">Cette</span> <span dir="ltr">clé</span> <span dir="ltr">sera</span> <span dir="ltr">utilisée</span> <span dir="ltr">pour</span> <span dir="ltr">l</span>'<span dir="ltr">authentification</span> <span dir="ltr">lors</span> <span dir="ltr">de</span> <span dir="ltr">l</span>'<span dir="ltr">appel</span> <span dir="ltr">des</span> <span dir="ltr">méthodes</span> <span dir="ltr">API</span>.</p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+
+# Définir la clé API
+openai.api_key = 'votre-clé-api'
+</code></pre>
+<h2>Étape 2: <span dir="ltr">Préparation</span> <span dir="ltr">des</span> <span dir="ltr">données</span></h2>
+<p><span dir="ltr">Pour</span> <span dir="ltr">entraîner</span> <span dir="ltr">le</span> <span dir="ltr">modèle</span>, <span dir="ltr">vous</span> <span dir="ltr">devez</span> <span dir="ltr">préparer</span> <span dir="ltr">un</span> <span dir="ltr">ensemble</span> <span dir="ltr">de</span> <span dir="ltr">données</span> <span dir="ltr">qui</span> <span dir="ltr">contiendra</span> <span dir="ltr">des</span> <span dir="ltr">exemples</span> <span dir="ltr">de</span> <span dir="ltr">pages</span> <span dir="ltr">web</span>,</p>
+<p>à <span dir="ltr">la</span> <span dir="ltr">fois</span> <span dir="ltr">des</span> <span dir="ltr">boutiques</span> <span dir="ltr">et</span> <span dir="ltr">des</span> <span dir="ltr">non</span>-<span dir="ltr">boutiques</span>.</p>
+<p><span dir="ltr">Chaque</span> <span dir="ltr">entrée</span> <span dir="ltr">doit</span> <span dir="ltr">inclure</span> <span dir="ltr">le</span> <span dir="ltr">texte</span> <span dir="ltr">de</span> <span dir="ltr">la</span> <span dir="ltr">page</span> <span dir="ltr">et</span> <span dir="ltr">une</span> étiquette <span dir="ltr">correspondante</span> (<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">positive</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">pour</span> <span dir="ltr">les</span> <span dir="ltr">boutiques</span> <span dir="ltr">et</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">negative</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">pour</span> <span dir="ltr">les</span> <span dir="ltr">non</span>-<span dir="ltr">boutiques</span>).</p>
+<p><span dir="ltr">Exemple</span> <span dir="ltr">de</span> <span dir="ltr">fichier</span> <span dir="ltr">JSON</span>:</p>
+<pre class="line-numbers"><code class="language-json">
+[
+    {
+        "text": "<html><body><h1>Bienvenue dans notre boutique en ligne</h1><p>Nous offrons une large gamme de produits à des prix compétitifs. Visitez notre boutique aujourd'hui!</p></body></html>",
+        "label": "positive"
+    },
+    {
+        "text": "<html><body><h1>À propos de nous</h1><p>Nous sommes un fournisseur leader de services de qualité. Contactez-nous pour plus d'informations.</p></body></html>",
+        "label": "negative"
+    }
+]
+</code></pre>
+<h2>Étape 3: <span dir="ltr">Tokenisation</span> <span dir="ltr">du</span> <span dir="ltr">texte</span></h2>
+<p><span dir="ltr">Avant</span> <span dir="ltr">d</span>'<span dir="ltr">envoyer</span> <span dir="ltr">les</span> <span dir="ltr">données</span> <span dir="ltr">au</span> <span dir="ltr">modèle</span> <span dir="ltr">OpenAI</span>, <span dir="ltr">le</span> <span dir="ltr">texte</span> <span dir="ltr">doit</span> être <span dir="ltr">tokenisé</span>.</p>
+<p><span dir="ltr">La</span> <span dir="ltr">tokenisation</span> <span dir="ltr">est</span> <span dir="ltr">le</span> <span dir="ltr">processus</span> <span dir="ltr">de</span> <span dir="ltr">division</span> <span dir="ltr">du</span> <span dir="ltr">texte</span> <span dir="ltr">en</span> <span dir="ltr">mots</span> <span dir="ltr">ou</span> <span dir="ltr">tokens</span> <span dir="ltr">individuels</span>.</p>
+<p><span dir="ltr">En</span> <span dir="ltr">Python</span>, <span dir="ltr">vous</span> <span dir="ltr">pouvez</span> <span dir="ltr">utiliser</span> <span dir="ltr">des</span> <span dir="ltr">bibliothèques</span> <span dir="ltr">telles</span> <span dir="ltr">que</span> <span dir="ltr">NLTK</span>, <span dir="ltr">spaCy</span> <span dir="ltr">ou</span> <span dir="ltr">tokenizers</span> <span dir="ltr">de</span> <span dir="ltr">la</span> <span dir="ltr">bibliothèque</span> <span dir="ltr">transformers</span>.</p>
+<p><span dir="ltr">Exemple</span> <span dir="ltr">de</span> <span dir="ltr">tokenisation</span> <span dir="ltr">utilisant</span> <span dir="ltr">NLTK</span>:</p>
+<pre class="line-numbers"><code class="language-python">
+import nltk
+from nltk.tokenize import word_tokenize
+
+# Exemple de texte
+text = "Ceci est un exemple de texte pour la tokenisation."
+
+# Tokenisation du texte
+tokens = word_tokenize(text)
+tokenized_text = ' '.join(tokens)
+print(tokenized_text)
+</code></pre>
+<h2>Étape 4: <span dir="ltr">Envoi</span> <span dir="ltr">des</span> <span dir="ltr">données</span> <span dir="ltr">pour</span> <span dir="ltr">l</span>'<span dir="ltr">entraînement</span></h2>
+<p><span dir="ltr">Après</span> <span dir="ltr">avoir</span> <span dir="ltr">tokenisé</span> <span dir="ltr">le</span> <span dir="ltr">texte</span>, <span dir="ltr">vous</span> <span dir="ltr">pouvez</span> <span dir="ltr">envoyer</span> <span dir="ltr">les</span> <span dir="ltr">données</span> <span dir="ltr">pour</span> <span dir="ltr">entraîner</span> <span dir="ltr">le</span> <span dir="ltr">modèle</span> <span dir="ltr">OpenAI</span>.</p>
+<p><span dir="ltr">Voici</span> <span dir="ltr">un</span> <span dir="ltr">exemple</span> <span dir="ltr">de</span> <span dir="ltr">code</span> <span dir="ltr">pour</span> <span dir="ltr">l</span>'<span dir="ltr">envoi</span> <span dir="ltr">des</span> <span dir="ltr">données</span>:</p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+
+def train_model(data, positive=True):
+    try:
+        response = openai.Train.create(
+            model="text-davinci-003",
+            documents=[entry["text"] for entry in data],
+            labels=["positive" if positive else "negative"] * len(data),
+            show_progress=True
+        )
+        return response.id
+    except Exception as ex:
+        print("Une erreur s'est produite pendant l'entraînement:", ex)
+        return None
+
+# Exemple d'utilisation
+data = [
+    {"text": "Texte de la première page web...", "label": "positive"},
+    {"text": "Texte de la deuxième page web...", "label": "negative"}
+]
+
+job_id = train_model(data, positive=True)
+print("ID de la tâche:", job_id)
+</code></pre>
+<h2>Étape 5: <span dir="ltr">Test</span> <span dir="ltr">du</span> <span dir="ltr">modèle</span></h2>
+<p><span dir="ltr">Après</span> <span dir="ltr">l</span>'<span dir="ltr">entraînement</span> <span dir="ltr">du</span> <span dir="ltr">modèle</span>, <span dir="ltr">vous</span> <span dir="ltr">devez</span> <span dir="ltr">le</span> <span dir="ltr">tester</span> <span dir="ltr">sur</span> <span dir="ltr">un</span> <span dir="ltr">ensemble</span> <span dir="ltr">de</span> <span dir="ltr">données</span> <span dir="ltr">de</span> <span dir="ltr">test</span>.</p>
+<p><span dir="ltr">Voici</span> <span dir="ltr">un</span> <span dir="ltr">exemple</span> <span dir="ltr">de</span> <span dir="ltr">code</span> <span dir="ltr">pour</span> <span dir="ltr">le</span> <span dir="ltr">test</span>:</p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+
+def test_model(test_data):
+    try:
+        predictions = []
+        for entry in test_data:
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=entry["text"],
+                max_tokens=1
+            )
+            prediction = response.choices[0].text.strip()
+            predictions.append(prediction)
+        return predictions
+    except Exception as ex:
+        print("Une erreur s'est produite pendant le test:", ex)
+        return None
+
+# Exemple d'utilisation
+test_data = [
+    {"text": "Texte de la page web de test...", "label": "positive"},
+    {"text": "Texte d'une autre page de test...", "label": "negative"}
+]
+
+predictions = test_model(test_data)
+print("Prédictions:", predictions)
+</code></pre>
+<h2>Étape 6: <span dir="ltr">Gestion</span> <span dir="ltr">des</span> <span dir="ltr">erreurs</span> <span dir="ltr">et</span> <span dir="ltr">amélioration</span> <span dir="ltr">du</span> <span dir="ltr">modèle</span></h2>
+<p><span dir="ltr">Si</span> <span dir="ltr">le</span> <span dir="ltr">modèle</span> <span dir="ltr">donne</span> <span dir="ltr">des</span> <span dir="ltr">prédictions</span> <span dir="ltr">incorrectes</span>, <span dir="ltr">vous</span> <span dir="ltr">pouvez</span> <span dir="ltr">l</span>'<span dir="ltr">améliorer</span> <span dir="ltr">en</span></p>
+<p><span dir="ltr">ajoutant</span> <span dir="ltr">plus</span> <span dir="ltr">de</span> <span dir="ltr">données</span> <span dir="ltr">ou</span> <span dir="ltr">en</span> <span dir="ltr">modifiant</span> <span dir="ltr">les</span> <span dir="ltr">paramètres</span> <span dir="ltr">d</span>'<span dir="ltr">entraînement</span>. <span dir="ltr">Vous</span> <span dir="ltr">pouvez</span> également <span dir="ltr">utiliser</span> <span dir="ltr">les</span> <span dir="ltr">retours</span> <span dir="ltr">pour</span> <span dir="ltr">analyser</span> <span dir="ltr">les</span> <span dir="ltr">erreurs</span>.</p>
+<p><span dir="ltr">Exemple</span> <span dir="ltr">de</span> <span dir="ltr">gestion</span> <span dir="ltr">des</span> <span dir="ltr">erreurs</span>:</p>
+<pre class="line-numbers"><code class="language-python">
+def handle_errors(predictions, test_data):
+    for pred, entry in zip(predictions, test_data):
+        if pred != entry["label"]:
+            print(f"Prédiction incorrecte pour la page '{entry['name']}': Prédit {pred}, Réel {entry['label']}")
+
+# Exemple d'utilisation
+handle_errors(predictions, test_data)
+</code></pre>

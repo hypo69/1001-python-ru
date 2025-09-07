@@ -1,0 +1,237 @@
+<h2>Шпаргалка. Персоналізація <span dir="ltr">LLM</span>: промпти, тонке налаштування моделей, приклади коду.</h2>
+<p>У цій статті:</p>
+<li>Як створюється "ефект пам'яті" в <span dir="ltr">LLM</span> (короткий огляд).</li>
+<li>Навіщо і коли потрібне тонке налаштування (<span dir="ltr">Fine</span>-<span dir="ltr">tuning</span>) моделі.</li>
+<li>Коли тонке налаштування – не найкраще рішення.</li>
+<li>Підготовка даних.</li>
+<li>Приклади тонкого налаштування для **<span dir="ltr">OpenAI</span> (<span dir="ltr">GPT</span>)**, **<span dir="ltr">Google</span> (<span dir="ltr">Gemini</span>)** та **<span dir="ltr">Anthropic</span> (<span dir="ltr">Claude</span>)** (відрізняється).</li>
+<h3>1. Як <span dir="ltr">LLM</span> "пам'ятає" та "підлаштовується": Ілюзія контексту</h3>
+<p>Перш ніж говорити про тонке налаштування, важливо зрозуміти, як <span dir="ltr">LLM</span> взагалі вдається створювати відчуття персоналізації.</p>
+<p>Це важливо, щоб не кидатися в дороге тонке налаштування, якщо завдання вирішується простішими способами:</p>
+<li>Через **Контекстне вікно (<span dir="ltr">Short</span>-<span dir="ltr">Term</span> <span dir="ltr">Memory</span>):** В рамках одного діалогу ви надсилаєте моделі не тільки нове запитання, але й **всю або частину попереднього листування**. Модель обробляє весь цей текст як єдиний "контекст". Саме завдяки цьому вона "пам'ятає" попередні репліки та продовжує думку. Обмеження тут — довжина контекстного вікна (кількість токенів).</li>
+<li>Складання **Системних інструкцій (<span dir="ltr">System</span> <span dir="ltr">Prompt</span>):** Ви можете задати моделі роль, тон, правила поведінки на початку кожного діалогу. Наприклад: "Ти – експерт з <span dir="ltr">Python</span>, відповідай коротко".</li>
+<li>Включення в запит кількох прикладів бажаної поведінки **<span dir="ltr">Few</span>-<span dir="ltr">Shot</span> <span dir="ltr">Learning</span>:** (пари вхід/вихід) дозволяє моделі "навчитися" цьому патерну прямо в рамках поточного запиту.</li>
+<li>**Управління станом на стороні програми:** Найпотужніший спосіб. Програма (яка звертається до <span dir="ltr">API</span>) може зберігати інформацію про користувача (переваги, історію, дані профілю) та динамічно додавати її в промпт перед надсиланням моделі.</li>
+<h3>2.</h3>
+<p>Тонке налаштування – це процес донавчання вже готової базової <span dir="ltr">LLM</span> на вашому власному, специфічному наборі даних. Це дозволяє моделі:</p>
+<li>**Адаптувати стиль та тон:** Модель буде говорити "вашою мовою" – будь то строгий науковий, доброзичливий маркетинговий або сленг певного співтовариства.</li>
+<li>**Дотримуватися специфічних інструкцій та форматів:** Якщо вам потрібні відповіді в строго визначеній <span dir="ltr">JSON</span>-структурі, або завжди з певним набором полів.</li>
+<li>**Розуміти домен-специфічну мову:** Навчання на вашій внутрішній документації або галузевих текстах допоможе моделі краще справлятися з термінологією вашої ніші.</li>
+<li>**Покращити продуктивність на вузьких завданнях:** Для певних типів запитів (наприклад, класифікація відгуків, генерація коду в специфічному фреймворку) тонке налаштування може дати більш точні та релевантні відповіді, ніж базова модель.</li>
+<li>**Скоротити довжину промптів:** Якщо модель вже "знає" бажану поведінку завдяки налаштуванню, вам не потрібно щоразу нагадувати їй про це в промпті, що економить токени та знижує затримку.</li>
+<h3>3.</h3>
+<p>Тонке налаштування – потужний, але не універсальний інструмент. Не варто використовувати його, якщо:</p>
+<li>**Модель повинна отримувати доступ до нових знань:** Тонке налаштування змінює ваги моделі, але не "завантажує" в неї нові факти в реальному часі. Якщо ваше завдання – відповідати на запитання за постійно змінюваною базою знань (документи компанії, останні новини), краще використовувати **<span dir="ltr">Retrieval</span> <span dir="ltr">Augmented</span> <span dir="ltr">Generation</span> (<span dir="ltr">RAG</span>)**. Тут базова модель отримує контекст з вашої бази даних *під час виконання запиту*.</li>
+<li>**Просте завдання вирішується промпт-інжинірингом:** Завжди починайте з максимально ефективного промпт-інжинірингу. Якщо завдання вирішується простими інструкціями та <span dir="ltr">few</span>-<span dir="ltr">shot</span> прикладами, тонке налаштування надмірне та більш затратне.</li>
+<li>**У вас немає достатньої кількості високоякісних даних:** Погані дані = погано налаштована модель.</li>
+<h3>4. Підготовка даних.</h3>
+<p>Якість та кількість ваших даних критично важливі. Модель навчається на ваших прикладах, тому вони повинні бути точними, різноманітними та послідовними.</p>
+<li>**Формат:** Найчастіше <span dir="ltr">JSON</span> <span dir="ltr">Lines</span> (<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>>.<span dir="ltr">jsonl</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>) або <span dir="ltr">CSV</span> (<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>>.<span dir="ltr">csv</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>).</li>
+<li>**Структура даних:** Залежить від завдання.</li>
+<p>*   **<span dir="ltr">Instruction</span> <span dir="ltr">Tuning</span> (Інструкція-Відповідь):** Підходить для узагальнених завдань типу "питання-відповідь", перефразування, узагальнення.</p>
+<p>```<span dir="ltr">json</span></p>
+<p>{"<span dir="ltr">input_text</span>": "Перефразируй предложение: 'Технология ИИ стремительно развивается.'", "<span dir="ltr">output_text</span>": "Искусственный интеллект демонстрирует стремительный прогресс."}</p>
+<p>{"<span dir="ltr">input_text</span>": "Назови столицу Франции.", "<span dir="ltr">output_text</span>": "Столица Франции — Париж."}</p>
+<p>```</p>
+<p>*   **<span dir="ltr">Chat</span> <span dir="ltr">Tuning</span> (Чат):** Ідеально для навчання моделі ведення діалогу в певній ролі або стилі.</p>
+<p>```<span dir="ltr">json</span></p>
+<p>{"<span dir="ltr">messages</span>": [{"<span dir="ltr">author</span>": "<span dir="ltr">user</span>", "<span dir="ltr">content</span>": "Привет! Что порекомендуешь на ужин?"}, {"<span dir="ltr">author</span>": "<span dir="ltr">model</span>", "<span dir="ltr">content</span>": "Добрый вечер! Сегодня отличный день для пасты Карбонара, или, если вы предпочитаете что-то легкое, салат Цезарь."}]}</p>
+<p>{"<span dir="ltr">messages</span>": [{"<span dir="ltr">author</span>": "<span dir="ltr">user</span>", "<span dir="ltr">content</span>": "Расскажи про новые фичи в <span dir="ltr">Python</span> 3.12."}, {"<span dir="ltr">author</span>": "<span dir="ltr">model</span>", "<span dir="ltr">content</span>": "В <span dir="ltr">Python</span> 3.12 появились <span dir="ltr">f</span>-строки с отступами, новый синтаксис для универсальных генериков и улучшенная обработка ошибок <span dir="ltr">Unicode</span>."}]}</p>
+<p>```</p>
+<li>**Кількість:** Мінімум 100-200 якісних прикладів, але чим більше, тим краще (тисячі для серйозних завдань).</li>
+<li>**Якість:** Точність, послідовність стилю, тону, формату в усьому наборі даних.</li>
+<h3>5. Моделі та платформи</h3>
+<h4>5.1. <span dir="ltr">OpenAI</span></h4>
+<p><span dir="ltr">OpenAI</span> надає досить простий та інтуїтивно зрозумілий <span dir="ltr">API</span> для тонкого налаштування.</p>
+<p>**Процес:**</p>
+<li>Підготовка даних у форматі <span dir="ltr">JSONL</span>, де кожен рядок — це об'єкт з масивом <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">messages</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> (як у <span dir="ltr">Chat</span> <span dir="ltr">Completions</span> <span dir="ltr">API</span>).</li>
+<li>Завантаження файлу даних через <span dir="ltr">API</span>.</li>
+<li>Створення завдання на тонке налаштування, вказавши завантажений файл та базову модель.</li>
+<li>Відстеження прогресу.</li>
+<li>Використання нової, налаштованої моделі за її <span dir="ltr">ID</span>.</li>
+<p>**Приклад даних (файл <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">training_data.jsonl</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>):**</p>
+<pre class="line-numbers"><code class="language-json">
+{"messages": [{"role": "system", "content": "You are a friendly IT company customer support assistant."}, {"role": "user", "content": "My internet is not working."}, {"role": "assistant", "content": "Oh, I apologize for the inconvenience! Let\'s try to figure it out. How are you connected to the internet – via Wi-Fi or cable?"}]}
+{"messages": [{"role": "system", "content": "You are a friendly IT company customer support assistant."}, {"role": "user", "content": "How can I reset my password?"}, {"role": "assistant", "content": "Of course! To reset your password, please go to the login page and click 'Forgot password?' below the input field. Then follow the on-screen instructions."}]}
+</code></pre>
+<p>**Приклад <span dir="ltr">Python</span> коду:**</p>
+<p>Попередньо встановіть: <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">pip</span> <span dir="ltr">install</span> <span dir="ltr">openai</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>></p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+from openai import OpenAI
+import os
+
+# Встановіть ваш API-ключ OpenAI. Рекомендується використовувати змінну середовища.
+# os.environ["OPENAI_API_KEY"] = "sk-..."
+client = OpenAI()
+
+# 1. Завантаження файлу даних
+try:
+    file_response = client.files.create(
+        file=open("training_data.jsonl", "rb"),
+        purpose="fine-tune"
+    )
+    file_id = file_response.id
+    print(f"Файл успішно завантажено. ID файлу: {file_id}")
+except openai.APIStatusError as e:
+    print(f"Помилка завантаження файлу: {e.status_code} - {e.response}")
+    exit()
+
+# 2. Створення завдання на тонке налаштування
+try:
+    ft_job_response = client.fine_tuning.jobs.create(
+        training_file=file_id,
+        model="gpt-3.5-turbo" # Можна вказати конкретну версію, наприклад, "gpt-3.5-turbo-0125"
+    )
+    job_id = ft_job_response.id
+    print(f"Завдання на тонке налаштування створено. ID завдання: {job_id}")
+    print("Відстежуйте статус завдання через API або в OpenAI Playground.")
+except openai.APIStatusError as e:
+    print(f"Помилка створення завдання: {e.status_code} - {e.response}")
+    exit()
+
+# Приклад відстеження статусу та отримання імені моделі (виконувати після створення завдання):
+# # job_id = "ftjob-..." # Замініть на ID вашого завдання
+# # job_status = client.fine_tuning.jobs.retrieve(job_id)
+# # print(f"Поточний статус завдання: {job_status.status}")
+# # if job_status.status == "succeeded":
+# #     fine_tuned_model_name = job_status.fine_tuned_model
+# #     print(f"Ім'я налаштованої моделі: {fine_tuned_model_name}")
+
+# 3. Використання налаштованої моделі (після її готовності)
+# # Замініть на реальне ім'я вашої моделі, отримане після успішного тонкого налаштування
+# # fine_tuned_model_name = "ft:gpt-3.5-turbo-0125:my-org::abcd123"
+
+# # if 'fine_tuned_model_name' in locals() and fine_tuned_model_name:
+# #     try:
+# #         response = client.chat.completions.create(
+# #             model=fine_tuned_model_name,
+# #             messages=[
+# #                 {"role": "user", "content": "У мене проблема з логіном."}
+# #             ]
+# #         )
+# #         print("\nВідповідь налаштованої моделі:")
+# #         print(response.choices[0].message.content)
+# #     except openai.APIStatusError as e:
+# #         print(f"Помилка при використанні моделі: {e.status_code} - {e.response}")
+</code></pre>
+<h4>5.2. <span dir="ltr">Anthropic</span></h4>
+<p><span dir="ltr">Anthropic</span> **не надає публічного <span dir="ltr">API</span> для тонкого налаштування своїх моделей <span dir="ltr">Claude</span> 3 (<span dir="ltr">Opus</span>, <span dir="ltr">Sonnet</span>, <span dir="ltr">Haiku</span>) у тому ж сенсі, як це робить <span dir="ltr">OpenAI</span> або <span dir="ltr">Google</span>.**</p>
+<p><span dir="ltr">Anthropic</span> сфокусований на створенні дуже потужних базових моделей, які, за їхніми твердженнями, відмінно працюють з просунутим промпт-інжинірингом та <span dir="ltr">RAG</span>-патернами, мінімізуючи необхідність у тонкому налаштуванні для більшості випадків.</p>
+<p>Для великих корпоративних клієнтів або партнерів можуть існувати програми зі створення "кастомних" моделей або спеціалізованих інтеграцій, але це не є загальнодоступною функцією тонкого налаштування через <span dir="ltr">API</span>.</p>
+<p>Якщо ви працюєте з <span dir="ltr">Claude</span> 3, ваш основний акцент має бути на:</p>
+<li>**Якісний промпт-інжиніринг:** Експериментуйте з системними інструкціями, <span dir="ltr">few</span>-<span dir="ltr">shot</span> прикладами, чітким форматуванням запитів. <span dir="ltr">Claude</span> відомий своєю здатністю строго дотримуватися інструкцій, особливо в <span dir="ltr">XML</span>-тегах.</li>
+<li>**<span dir="ltr">RAG</span>-системи:** Використовуйте зовнішні бази даних знань, щоб надавати моделі актуальний контекст.</li>
+<h4>5.3. <span dir="ltr">Google</span> (<span dir="ltr">Gemini</span>)</h4>
+<p><span dir="ltr">Google</span> активно розвиває можливості тонкого налаштування через свою платформу **<span dir="ltr">Google</span> <span dir="ltr">Cloud</span> <span dir="ltr">Vertex</span> <span dir="ltr">AI</span>**.</p>
+<p>Це повноцінна <span dir="ltr">ML</span>-платформа, яка надає інструменти для підготовки даних, запуску навчальних завдань та розгортання моделей.</p>
+<p>Тонке налаштування доступне для моделей сімейства <span dir="ltr">Gemini</span>.</p>
+<p>**Процес:**</p>
+<li>Підготовка даних (<span dir="ltr">JSONL</span> або <span dir="ltr">CSV</span>) у форматі <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">input_text</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>/<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">output_text</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> (для <span dir="ltr">instruction</span> <span dir="ltr">tuning</span>) або <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">messages</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> (для <span dir="ltr">chat</span> <span dir="ltr">tuning</span>).</li>
+<li>Завантаження даних у <span dir="ltr">Google</span> <span dir="ltr">Cloud</span> <span dir="ltr">Storage</span> (<span dir="ltr">GCS</span>).</li>
+<li>Створення та запуск завдання з тонкого налаштування через <span dir="ltr">Vertex</span> <span dir="ltr">AI</span> <span dir="ltr">Console</span> або <span dir="ltr">SDK</span>.</li>
+<li>Розгортання налаштованої моделі на кінцевій точці (<span dir="ltr">Endpoint</span>).</li>
+<li>Використання налаштованої моделі через цю кінцеву точку.</li>
+<p>**Приклад даних (файл <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">gemini_tuning_data.jsonl</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>):**</p>
+<pre class="line-numbers"><code class="language-json">
+{"input_text": "Суммируй основные идеи этой книги: 'Книга рассказывает о путешествии героя, который преодолевает препятствия и находит себя.'", "output_text": "Главный герой книги отправляется в трансформирующее путешествие, сталкиваясь с трудностями и обретая самопознание."}
+{"input_text": "Объясни принцип работы термоядерного реактора простыми словами.", "output_text": "Термоядерный реактор пытается воспроизвести процесс, который происходит на Солнце: слияние легких атомных ядер при очень высоких температурах, высвобождая огромное количество энергии."}
+</code></pre>
+<p>**Приклад <span dir="ltr">Python</span> коду (потребує <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">google</span>-<span dir="ltr">cloud</span>-<span dir="ltr">aiplatform</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>)**:</p>
+<p>Попередньо встановіть: <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">pip</span> <span dir="ltr">install</span> <span dir="ltr">google</span>-<span dir="ltr">cloud</span>-<span dir="ltr">aiplatform</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> та <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">pip</span> <span dir="ltr">install</span> <span dir="ltr">google</span>-<span dir="ltr">cloud</span>-<span dir="ltr">storage</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>></p>
+<pre class="line-numbers"><code class="language-python">
+import os
+from google.cloud import aiplatform
+from google.cloud import storage
+
+# --- Налаштування ---
+# ЗАМІНІТЬ на свої значення:
+PROJECT_ID = "your-gcp-project-id"
+REGION = "us-central1"               # Виберіть регіон, що підтримує Gemini та Vertex AI
+BUCKET_NAME = "your-gcs-bucket-for-tuning" # Назва вашого бакету GCS (має бути створений заздалегідь)
+DATA_FILE_LOCAL_PATH = "gemini_tuning_data.jsonl"
+GCS_DATA_URI = f"gs://{BUCKET_NAME}/{DATA_FILE_LOCAL_PATH}"
+TUNED_MODEL_DISPLAY_NAME = "my-tuned-gemini-model"
+# --- Кінець налаштувань ---
+
+# Ініціалізація Vertex AI
+aiplatform.init(project=PROJECT_ID, location=REGION)
+
+# 1. Створення файлу з даними (якщо його немає)
+with open(DATA_FILE_LOCAL_PATH, "w", encoding="utf-8") as f:
+    f.write('{"input_text": "Суммируй основные идеи этой книги: \'Книга рассказывает о путешествии героя, который преодолевает препятствия и находит себя.׳", "output_text": "Главный герой книги отправляется в трансформирующее путешествие, сталкиваясь с трудностями и обретая самопознание."}\n')
+    f.write('{"input_text": "Объясни принцип работы термоядерного реактора простыми словами.", "output_text": "Термоядерный реактор пытается воспроизвести процесс, который происходит на Солнце: слияние легких атомных ядер при очень высоких температурах, высвобождая огромное количество энергии."}\n')
+print(f"Файл даних '{DATA_FILE_LOCAL_PATH}' створено.")
+
+
+# 2. Завантаження даних у Google Cloud Storage
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    """Завантажує файл у бакет GCS."""
+    storage_client = storage.Client(project=PROJECT_ID)
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(source_file_name)
+    print(f"Файл '{source_file_name}' завантажено до 'gs://{bucket_name}/{destination_blob_name}'.")
+
+try:
+    upload_blob(BUCKET_NAME, DATA_FILE_LOCAL_PATH, DATA_FILE_LOCAL_PATH)
+except Exception as e:
+    print(f"Помилка завантаження файлу в GCS. Переконайтеся, що бакет існує і у вас є права: {e}")
+    exit()
+
+# 3. Створення та запуск завдання на тонке налаштування
+print(f"\nЗапуск тонкого налаштування моделі '{TUNED_MODEL_DISPLAY_NAME}'...")
+try:
+    # `tune_model` запускає завдання та повертає налаштовану модель після завершення
+    tuned_model = aiplatform.Model.tune_model(
+        model_display_name=TUNED_MODEL_DISPLAY_NAME,
+        source_model_name="gemini-1.0-pro-001", # Базова модель Gemini Pro
+        training_data_path=GCS_DATA_URI,
+        tuning_method="SUPERVISED_TUNING",
+        train_steps=100, # Кількість кроків навчання. Оптимальне значення залежить від розміру даних.
+        # batch_size=16, # Можна вказати
+        # learning_rate_multiplier=1.0 # Можна вказати
+    )
+    print(f"Модель '{TUNED_MODEL_DISPLAY_NAME}' успішно налаштована. ID моделі: {tuned_model.name}")
+    print("Процес тонкого налаштування може зайняти значний час.")
+except Exception as e:
+    print(f"Помилка тонкого налаштування. Перевірте логи в Vertex AI Console: {e}")
+    exit()
+
+# 4. Розгортання налаштованої моделі (для використання)
+print(f"\nРозгортання налаштованої моделі '{TUNED_MODEL_DISPLAY_NAME}' на кінцеву точку...")
+try:
+    endpoint = tuned_model.deploy(
+        machine_type="n1-standard-4", # Тип машини для кінцевої точки. Виберіть відповідний.
+        min_replica_count=1,
+        max_replica_count=1
+    )
+    print(f"Модель розгорнута на кінцеву точку: {endpoint.name}")
+    print("Розгортання також може зайняти кілька хвилин.")
+except Exception as e:
+    print(f"Помилка розгортання моделі: {e}")
+    exit()
+
+# 5. Використання налаштованої моделі
+print("\nТестування налаштованої моделі...")
+prompt = "Розкажіть мені про свої можливості після навчання."
+instances = [{"prompt": prompt}] # Для Instruction Tuning. Якщо Chat Tuning, то {"messages": [...]}
+
+try:
+    response = endpoint.predict(instances=instances)
+    print("\nВідповідь налаштованої моделі:")
+    print(response.choices[0].message.content)
+except Exception as e:
+    print(f"Помилка при використанні налаштованої моделі: {e}")
+
+# Після завершення роботи, не забудьте видалити кінцеву точку та модель, щоб уникнути зайвих витрат:
+# endpoint.delete()
+# tuned_model.delete()
+</code></pre>
+<h3>6. Загальні рекомендації</h3>
+<li>**Почніть з малого:** Не намагайтеся відразу навчити модель на тисячах прикладів. Почніть з невеликого, але якісного набору даних.</li>
+<li>**Ітеруйте:** Тонке налаштування — це ітераційний процес. Навчайте, оцінюйте, коригуйте дані або гіперпараметри, повторюйте.</li>
+<li>**Моніторинг:** Уважно відстежуйте метрики навчання (втрати) та використовуйте набір валідаційних даних, щоб уникнути перенавчання.</li>
+<li>**Оцінка:** Завжди тестуйте налаштовану модель на даних, які вона *ніколи не бачила* під час навчання, щоб оцінити її узагальнюючу здатність.</li>
+<li>**Вартість:** Пам'ятайте, що тонке налаштування та розгортання кінцевих точок платні. Враховуйте це в бюджеті.</li>
+<li>**Документація:** Завжди звіряйтеся з офіційною документацією постачальника <span dir="ltr">LLM</span>. <span dir="ltr">API</span> та можливості постійно розвиваються.</li>

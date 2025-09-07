@@ -1,0 +1,1 @@
+Post [spostato](python/array_array_vs_list.it.md)

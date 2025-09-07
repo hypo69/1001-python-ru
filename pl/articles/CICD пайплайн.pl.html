@@ -1,0 +1,169 @@
+<p>🚀 **<span dir="ltr">CI</span>/<span dir="ltr">CD</span>: <span dir="ltr">Od</span> <span dir="ltr">podstaw</span> <span dir="ltr">do</span> <span dir="ltr">produkcji</span> <span dir="ltr">w</span> <span dir="ltr">GCP</span> <span dir="ltr">z</span> <span dir="ltr">GitHub</span> <span dir="ltr">Actions</span> – <span dir="ltr">Kompletny</span> <span dir="ltr">przewodnik</span> <span dir="ltr">z</span> <span dir="ltr">przykładami</span>** 🚀</p>
+<p><span dir="ltr">Witajcie</span>, <span dir="ltr">deweloperzy</span>! <span dir="ltr">W</span> <span dir="ltr">tym</span> <span dir="ltr">artykule</span> <span dir="ltr">opowiem</span> <span dir="ltr">o</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span> – <span dir="ltr">koncepcji</span>.</p>
+<h3><span dir="ltr">Czym</span> <span dir="ltr">jest</span> <span dir="ltr">potok</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span> <span dir="ltr">w</span> <span dir="ltr">kontekście</span> <span dir="ltr">programowania</span>?</h3>
+<p>**<span dir="ltr">Potok</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span> (<span dir="ltr">Continuous</span> <span dir="ltr">Integration</span> / <span dir="ltr">Continuous</span> <span dir="ltr">Delivery</span> <span dir="ltr">lub</span> <span dir="ltr">Continuous</span> <span dir="ltr">Deployment</span>)** <span dir="ltr">to</span> <span dir="ltr">zautomatyzowany</span> <span dir="ltr">proces</span>, <span dir="ltr">który</span> <span dir="ltr">pozwala</span> <span dir="ltr">deweloperom</span> <span dir="ltr">szybko</span> <span dir="ltr">i</span> <span dir="ltr">niezawodnie</span> <span dir="ltr">dostarczać</span> <span dir="ltr">zmiany</span> <span dir="ltr">w</span> <span dir="ltr">kodzie</span> <span dir="ltr">do</span> środowiska <span dir="ltr">produkcyjnego</span>.</p>
+<p><span dir="ltr">Rozłóżmy</span> <span dir="ltr">kluczowe</span> <span dir="ltr">pojęcia</span>:</p>
+<p>🔧 **<span dir="ltr">CI</span> — <span dir="ltr">Continuous</span> <span dir="ltr">Integration</span> (<span dir="ltr">Ciągła</span> <span dir="ltr">Integracja</span>)**</p>
+<p><span dir="ltr">Jest</span> <span dir="ltr">to</span> <span dir="ltr">praktyka</span>, <span dir="ltr">w</span> <span dir="ltr">której</span> <span dir="ltr">deweloperzy</span> <span dir="ltr">często</span> <span dir="ltr">wprowadzają</span> <span dir="ltr">zmiany</span> <span dir="ltr">do</span> <span dir="ltr">wspólnej</span> <span dir="ltr">bazy</span> <span dir="ltr">kodu</span>. <span dir="ltr">Każda</span> <span dir="ltr">taka</span> <span dir="ltr">zmiana</span> <span dir="ltr">automatycznie</span>:</p>
+<li>**<span dir="ltr">Jest</span> <span dir="ltr">budowana</span>** (<span dir="ltr">build</span>)</li>
+<li>**<span dir="ltr">Jest</span> <span dir="ltr">testowana</span>** (<span dir="ltr">testy</span> <span dir="ltr">jednostkowe</span>, <span dir="ltr">testy</span> <span dir="ltr">integracyjne</span>)</li>
+<li>**<span dir="ltr">Jest</span> <span dir="ltr">sprawdzana</span> <span dir="ltr">pod</span> <span dir="ltr">kątem</span> <span dir="ltr">zgodności</span> <span dir="ltr">ze</span> <span dir="ltr">standardami</span>** (<span dir="ltr">linting</span>, <span dir="ltr">analiza</span> <span dir="ltr">statyczna</span>)</li>
+<p>👉 **<span dir="ltr">Cel</span> <span dir="ltr">CI</span>:** <span dir="ltr">Wykrywanie</span> <span dir="ltr">błędów</span> <span dir="ltr">na</span> <span dir="ltr">najwcześniejszym</span> <span dir="ltr">etapie</span>, <span dir="ltr">zanim</span> <span dir="ltr">zepsują</span> <span dir="ltr">coś</span> <span dir="ltr">ważnego</span> <span dir="ltr">lub</span> <span dir="ltr">trafią</span> <span dir="ltr">do</span> <span dir="ltr">wydania</span>.</p>
+<p>🚀 **<span dir="ltr">CD</span> — <span dir="ltr">Continuous</span> <span dir="ltr">Delivery</span> (<span dir="ltr">Ciągłe</span> <span dir="ltr">Dostarczanie</span>) <span dir="ltr">lub</span> <span dir="ltr">Continuous</span> <span dir="ltr">Deployment</span> (<span dir="ltr">Ciągłe</span> <span dir="ltr">Wdrażanie</span>)**</p>
+<p><span dir="ltr">Tutaj</span> <span dir="ltr">są</span> <span dir="ltr">dwie</span> <span dir="ltr">opcje</span>:</p>
+<p>✅ **<span dir="ltr">Continuous</span> <span dir="ltr">Delivery</span> (<span dir="ltr">Ciągłe</span> <span dir="ltr">Dostarczanie</span>)**</p>
+<p><span dir="ltr">Po</span> <span dir="ltr">pomyślnym</span> <span dir="ltr">przejściu</span> <span dir="ltr">etapu</span> <span dir="ltr">CI</span>, <span dir="ltr">zmiany</span> <span dir="ltr">automatycznie</span>:</p>
+<li><span dir="ltr">Przechodzą</span> <span dir="ltr">dodatkowe</span> <span dir="ltr">testy</span> (<span dir="ltr">np</span>. <span dir="ltr">E2E</span> – <span dir="ltr">testy</span> <span dir="ltr">end</span>-<span dir="ltr">to</span>-<span dir="ltr">end</span>)</li>
+<li><span dir="ltr">Trafiają</span> <span dir="ltr">na</span> <span dir="ltr">serwer</span> <span dir="ltr">stagingowy</span> (<span dir="ltr">testowy</span>)</li>
+<p>👉 **<span dir="ltr">Ale</span> <span dir="ltr">wdrożenie</span> <span dir="ltr">na</span> <span dir="ltr">produkcję</span> <span dir="ltr">nadal</span> <span dir="ltr">wymaga</span> <span dir="ltr">ręcznego</span> <span dir="ltr">potwierdzenia</span>.** <span dir="ltr">Daje</span> <span dir="ltr">to</span> <span dir="ltr">zespołowi</span> <span dir="ltr">kontrolę</span> <span dir="ltr">nad</span> <span dir="ltr">tym</span>, *<span dir="ltr">kiedy</span>* <span dir="ltr">dokładnie</span> <span dir="ltr">użytkownicy</span> <span dir="ltr">zobaczą</span> <span dir="ltr">zmiany</span>.</p>
+<p>🤖 **<span dir="ltr">Continuous</span> <span dir="ltr">Deployment</span> (<span dir="ltr">Ciągłe</span> <span dir="ltr">Wdrażanie</span>)**</p>
+<p><span dir="ltr">Jest</span> <span dir="ltr">to</span> <span dir="ltr">kolejny</span> <span dir="ltr">krok</span> <span dir="ltr">po</span> <span dir="ltr">Continuous</span> <span dir="ltr">Delivery</span>. <span dir="ltr">Tutaj</span> <span dir="ltr">wdrożenie</span> <span dir="ltr">na</span> <span dir="ltr">produkcję</span> <span dir="ltr">odbywa</span> <span dir="ltr">się</span> **<span dir="ltr">całkowicie</span> <span dir="ltr">automatycznie</span>**, <span dir="ltr">jeśli</span> <span dir="ltr">wszystkie</span> <span dir="ltr">poprzednie</span> <span dir="ltr">etapy</span> <span dir="ltr">potoku</span> (<span dir="ltr">kompilacja</span>, <span dir="ltr">wszystkie</span> <span dir="ltr">testy</span>) <span dir="ltr">zakończyły</span> <span dir="ltr">się</span> <span dir="ltr">pomyślnie</span>. <span dir="ltr">Jest</span> <span dir="ltr">to</span> <span dir="ltr">najbardziej</span> <span dir="ltr">zaawansowany</span> <span dir="ltr">poziom</span> <span dir="ltr">automatyzacji</span>.</p>
+<h3>🔄 <span dir="ltr">Z</span> <span dir="ltr">czego</span> <span dir="ltr">zazwyczaj</span> <span dir="ltr">składa</span> <span dir="ltr">się</span> <span dir="ltr">potok</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span>?</h3>
+<p><span dir="ltr">Typowy</span> <span dir="ltr">potok</span> <span dir="ltr">obejmuje</span> <span dir="ltr">następujące</span> <span dir="ltr">etapy</span>:</p>
+<li>**<span dir="ltr">Checkout</span>** — <span dir="ltr">Klonowanie</span> <span dir="ltr">najnowszej</span> <span dir="ltr">wersji</span> <span dir="ltr">kodu</span> <span dir="ltr">z</span> <span dir="ltr">repozytorium</span>.</li>
+<li>**<span dir="ltr">Build</span>** — <span dir="ltr">Budowanie</span> <span dir="ltr">projektu</span> (<span dir="ltr">kompilacja</span>, <span dir="ltr">montaż</span> <span dir="ltr">artefaktów</span>, <span dir="ltr">obrazów</span> <span dir="ltr">Docker</span>).</li>
+<li>**<span dir="ltr">Test</span>** — <span dir="ltr">Uruchamianie</span> <span dir="ltr">różnych</span> <span dir="ltr">rodzajów</span> <span dir="ltr">testów</span> (<span dir="ltr">jednostkowych</span>, <span dir="ltr">integracyjnych</span>, <span dir="ltr">E2E</span>).</li>
+<li>**<span dir="ltr">Lint</span>/<span dir="ltr">Code</span> <span dir="ltr">Quality</span>** — <span dir="ltr">Sprawdzanie</span> <span dir="ltr">kodu</span> <span dir="ltr">pod</span> <span dir="ltr">kątem</span> <span dir="ltr">zgodności</span> <span dir="ltr">stylu</span> <span dir="ltr">i</span> <span dir="ltr">potencjalnych</span> <span dir="ltr">błędów</span> <span dir="ltr">za</span> <span dir="ltr">pomocą</span> <span dir="ltr">analizatorów</span> <span dir="ltr">statycznych</span>.</li>
+<li>**<span dir="ltr">Deploy</span>** — <span dir="ltr">Wdrażanie</span> <span dir="ltr">aplikacji</span> (<span dir="ltr">na</span> <span dir="ltr">serwer</span> <span dir="ltr">stagingowy</span> <span dir="ltr">lub</span> <span dir="ltr">produkcyjny</span>).</li>
+<li>**<span dir="ltr">Notify</span>** — <span dir="ltr">Wysyłanie</span> <span dir="ltr">powiadomień</span> <span dir="ltr">o</span> <span dir="ltr">statusie</span> <span dir="ltr">potoku</span> <span dir="ltr">do</span> <span dir="ltr">zespołu</span> (<span dir="ltr">np</span>. <span dir="ltr">w</span> <span dir="ltr">Slacku</span>, <span dir="ltr">e</span>-<span dir="ltr">mailu</span>).</li>
+<h3>🛠 <span dir="ltr">Popularne</span> <span dir="ltr">narzędzia</span> <span dir="ltr">do</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span>:</h3>
+<li>**<span dir="ltr">GitHub</span> <span dir="ltr">Actions</span>** (<span dir="ltr">nasz</span> <span dir="ltr">dzisiejszy</span> <span dir="ltr">fokus</span>!)</li>
+<li><span dir="ltr">GitLab</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span></li>
+<li><span dir="ltr">Jenkins</span></li>
+<li><span dir="ltr">CircleCI</span></li>
+<li><span dir="ltr">Bitbucket</span> <span dir="ltr">Pipelines</span></li>
+<li><span dir="ltr">Azure</span> <span dir="ltr">DevOps</span></li>
+<li><span dir="ltr">TeamCity</span></li>
+<h3>🧠 <span dir="ltr">Dlaczego</span> <span dir="ltr">w</span> <span dir="ltr">ogóle</span> <span dir="ltr">potrzebujemy</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span>?</h3>
+<li>**<span dir="ltr">Zmniejsza</span> <span dir="ltr">czynnik</span> <span dir="ltr">ludzki</span>:** <span dir="ltr">Automatyzacja</span> <span dir="ltr">eliminuje</span> <span dir="ltr">błędy</span> <span dir="ltr">związane</span> <span dir="ltr">z</span> <span dir="ltr">ręcznymi</span> <span dir="ltr">operacjami</span>.</li>
+<li>**<span dir="ltr">Szybkie</span> <span dir="ltr">wykrywanie</span> <span dir="ltr">błędów</span>:** <span dir="ltr">Błędy</span> <span dir="ltr">są</span> <span dir="ltr">znajdowane</span> <span dir="ltr">wcześniej</span>, <span dir="ltr">co</span> <span dir="ltr">sprawia</span>, że <span dir="ltr">są</span> łatwiejsze <span dir="ltr">i</span> <span dir="ltr">tańsze</span> <span dir="ltr">w</span> <span dir="ltr">naprawie</span>.</li>
+<li>**<span dir="ltr">Automatyzacja</span> <span dir="ltr">rutynowych</span> <span dir="ltr">zadań</span>:** <span dir="ltr">Deweloperzy</span> <span dir="ltr">spędzają</span> <span dir="ltr">mniej</span> <span dir="ltr">czasu</span> <span dir="ltr">na</span> <span dir="ltr">budowaniu</span> <span dir="ltr">i</span> <span dir="ltr">wdrażaniu</span>, <span dir="ltr">a</span> <span dir="ltr">więcej</span> – <span dir="ltr">na</span> <span dir="ltr">kodzie</span>.</li>
+<li>**<span dir="ltr">Poprawa</span> <span dir="ltr">jakości</span> <span dir="ltr">kodu</span>:** <span dir="ltr">Ciągłe</span> <span dir="ltr">sprawdzanie</span> <span dir="ltr">i</span> <span dir="ltr">testowanie</span> <span dir="ltr">podnosi</span> <span dir="ltr">ogólny</span> <span dir="ltr">poziom</span> <span dir="ltr">jakości</span>.</li>
+<li>**<span dir="ltr">Szybkie</span> <span dir="ltr">dostarczanie</span> <span dir="ltr">funkcji</span> <span dir="ltr">użytkownikom</span>:** <span dir="ltr">Nowe</span> <span dir="ltr">funkcje</span> <span dir="ltr">docierają</span> <span dir="ltr">do</span> <span dir="ltr">użytkownika</span> <span dir="ltr">końcowego</span> <span dir="ltr">szybciej</span> <span dir="ltr">i</span> <span dir="ltr">częściej</span>.</li>
+<h3>📦 <span dir="ltr">Proste</span> <span dir="ltr">przykłady</span> <span dir="ltr">CI</span>/<span dir="ltr">CD</span> <span dir="ltr">z</span> <span dir="ltr">GitHub</span> <span dir="ltr">Actions</span></h3>
+<p><span dir="ltr">Przyjrzyjmy</span> <span dir="ltr">się</span> <span dir="ltr">podstawowym</span> <span dir="ltr">potokom</span> <span dir="ltr">dla</span> <span dir="ltr">popularnych</span> <span dir="ltr">technologii</span>. <span dir="ltr">Wszystkie</span> <span dir="ltr">przykłady</span> <span dir="ltr">używają</span> <span dir="ltr">GitHub</span> <span dir="ltr">Actions</span> <span dir="ltr">i</span> <span dir="ltr">są</span> <span dir="ltr">zapisywane</span> <span dir="ltr">w</span> <span dir="ltr">katalogu</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>>.<span dir="ltr">github</span>/<span dir="ltr">workflows</span>/</<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">Twojego</span> <span dir="ltr">projektu</span>.</p>
+<h4>🐍 <span dir="ltr">CI</span>/<span dir="ltr">CD</span> <span dir="ltr">dla</span> <span dir="ltr">Pythona</span> (<span dir="ltr">z</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">pytest</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">i</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">flake8</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>)</h4>
+<pre class="line-numbers"><code class="language-yaml">
+# .github/workflows/python-ci.yml
+name: Python CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' # Określ swoją wersję
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt # Upewnij się, że masz requirements.txt
+          pip install flake8 pytest
+
+      - name: Lint with flake8
+        run: |
+          # Sprawdź kod w folderach src i tests (dostosuj do swojego projektu)
+          flake8 src tests
+
+      - name: Run tests
+        run: |
+          pytest
+</code></pre>
+<h4>🌐 <span dir="ltr">CI</span>/<span dir="ltr">CD</span> <span dir="ltr">dla</span> <span dir="ltr">Node.js</span> (<span dir="ltr">z</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">npm</span> <span dir="ltr">test</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">i</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">eslint</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>)</h4>
+<pre class="line-numbers"><code class="language-yaml">
+# .github/workflows/node-ci.yml
+name: Node.js CI
+
+on:
+  workflow_run:
+    workflows: ["Build & Push to GHCR"] # Nazwa workflow budowania
+    types:
+      - completed
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    # Uruchom tylko, jeśli workflow budowania zakończył się pomyślnie
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    # Użyj środowisk GitHub dla staging (opcjonalnie, ale dobra praktyka)
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url }} # URL będzie dostępny po wdrożeniu
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Staging)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-staging' # Nazwa Twojej usługi stagingowej w Cloud Run
+          region: '${{ secrets.GCP_REGION }}'
+          # Użyj obrazu, który został wypchnięty w build.yml
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest'
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed' # Zezwól na nieautoryzowany dostęp dla przykładu
+</code></pre>
+<h4>3. Wdrażanie na produkcję z ręcznym potwierdzeniem (GCP Cloud Run)</h4>
+<p>Ten workflow jest uruchamiany ręcznie za pośrednictwem interfejsu użytkownika GitHub Actions.</p>
+<pre class="line-numbers"><code class="language-yaml">
+# .github/workflows/deploy-prod.yml
+name: Deploy to GCP Cloud Run (Production)
+
+on:
+  workflow_dispatch: # Pozwala na ręczne uruchomienie
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: 'Deploy to Cloud Run (Production)'
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'myapp-production' # Nazwa Twojej usługi produkcyjnej
+          region: '${{ secrets.GCP_REGION }}'
+          image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest' # Użyj tego samego obrazu 'latest'
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+          flags: '--allow-unauthenticated --platform=managed'
+          # Dla produkcji możesz dodać --no-traffic, a następnie stopniowo przełączać ruch
+          # traffic:
+          #   latest: true
+          #   percent: 100
+</code></pre>
+<p>**Ważne punkty tego zaawansowanego potoku:**</p>
+<li>**GitHub Container Registry (ghcr.io):** Używamy go do przechowywania obrazów Docker. Jest to wygodne, ponieważ jest ściśle zintegrowane z GitHub Actions.</li>
+<li>**`workflow_run`:** Pozwala na uruchomienie jednego workflow (wdrożenie stagingowe) po zakończeniu drugiego (budowanie).</li>
+<li>**`workflow_dispatch`:** Daje możliwość ręcznego uruchomienia workflow (wdrożenie produkcyjne), co zapewnia kontrolę.</li>
+<li>**Środowiska GitHub:** Pozwalają na konfigurację reguł ochrony dla produkcji (np. wymaganie zatwierdzenia od określonych recenzentów) i przechowywanie sekretów specyficznych dla środowiska.</li>
+<li>**GCP Cloud Run:** Doskonała opcja serverless do uruchamiania aplikacji kontenerowych.</li>
+<h3>🔐 Bezpieczeństwo – to ważne!</h3>
+<li>**Używaj sekretów GitHub:** Nigdy nie przechowuj tokenów, haseł, kluczy API bezpośrednio w plikach YAML. Użyj `Settings -> Secrets and variables -> Actions` w swoim repozytorium.</li>
+<li>**Minimalne uprawnienia:** Dla kont serwisowych (np. GCP) przyznawaj tylko te uprawnienia, które są naprawdę niezbędne do wykonywania zadań CI/CD.</li>
+<li>**Izoluj środowiska:** Staging i Produkcja powinny być jak najbardziej izolowane. Różne projekty/konta u dostawców chmury to dobra praktyka.</li>
+<li>**Ochrona gałęzi:** Skonfiguruj ochronę dla gałęzi `main` (lub `master`), aby pushowanie do niej było możliwe tylko poprzez Pull Request z obowiązkowymi kontrolami CI.</li>

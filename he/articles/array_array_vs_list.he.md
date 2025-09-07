@@ -1,0 +1,1 @@
+פוסט [עבר](python/array_array_vs_list.he.md)

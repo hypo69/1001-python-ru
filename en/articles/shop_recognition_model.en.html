@@ -1,0 +1,121 @@
+<p># <span dir="ltr">Training</span> <span dir="ltr">an</span> <span dir="ltr">OpenAI</span> <span dir="ltr">Model</span> <span dir="ltr">for</span> <span dir="ltr">Web</span> <span dir="ltr">Page</span> <span dir="ltr">Classification</span></p>
+<h2><span dir="ltr">Introduction</span></h2>
+<p><span dir="ltr">Training</span> <span dir="ltr">an</span> <span dir="ltr">OpenAI</span> <span dir="ltr">model</span> <span dir="ltr">to</span> <span dir="ltr">determine</span> <span dir="ltr">if</span> <span dir="ltr">a</span> <span dir="ltr">page</span> <span dir="ltr">is</span> <span dir="ltr">an</span> <span dir="ltr">online</span> <span dir="ltr">store</span>.</p>
+<p>- <span dir="ltr">data</span> <span dir="ltr">preparation</span>,</p>
+<p>- <span dir="ltr">text</span> <span dir="ltr">tokenization</span>,</p>
+<p>- <span dir="ltr">sending</span> <span dir="ltr">data</span> <span dir="ltr">for</span> <span dir="ltr">training</span></p>
+<p>- <span dir="ltr">model</span> <span dir="ltr">testing</span>.</p>
+<h2><span dir="ltr">Step</span> 1: <span dir="ltr">Registration</span> <span dir="ltr">and</span> <span dir="ltr">OpenAI</span> <span dir="ltr">API</span> <span dir="ltr">Setup</span></h2>
+<p><span dir="ltr">To</span> <span dir="ltr">start</span> <span dir="ltr">working</span> <span dir="ltr">with</span> <span dir="ltr">the</span> <span dir="ltr">OpenAI</span> <span dir="ltr">API</span>, <span dir="ltr">you</span> <span dir="ltr">need</span> <span dir="ltr">to</span> <span dir="ltr">register</span> <span dir="ltr">on</span> <span dir="ltr">the</span> <span dir="ltr">OpenAI</span> <span dir="ltr">platform</span> <span dir="ltr">and</span> <span dir="ltr">obtain</span> <span dir="ltr">an</span> <span dir="ltr">API</span> <span dir="ltr">key</span>. <span dir="ltr">This</span> <span dir="ltr">key</span> <span dir="ltr">will</span> <span dir="ltr">be</span> <span dir="ltr">used</span> <span dir="ltr">for</span> <span dir="ltr">authentication</span> <span dir="ltr">when</span> <span dir="ltr">calling</span> <span dir="ltr">API</span> <span dir="ltr">methods</span>.</p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+
+# Set API key
+openai.api_key = 'your-api-key'
+</code></pre>
+<h2><span dir="ltr">Step</span> 2: <span dir="ltr">Data</span> <span dir="ltr">Preparation</span></h2>
+<p><span dir="ltr">To</span> <span dir="ltr">train</span> <span dir="ltr">the</span> <span dir="ltr">model</span>, <span dir="ltr">you</span> <span dir="ltr">need</span> <span dir="ltr">to</span> <span dir="ltr">prepare</span> <span dir="ltr">a</span> <span dir="ltr">dataset</span> <span dir="ltr">that</span> <span dir="ltr">will</span> <span dir="ltr">contain</span> <span dir="ltr">examples</span> <span dir="ltr">of</span> <span dir="ltr">web</span> <span dir="ltr">pages</span>,</p>
+<p><span dir="ltr">both</span> <span dir="ltr">stores</span> <span dir="ltr">and</span> <span dir="ltr">non</span>-<span dir="ltr">stores</span>.</p>
+<p><span dir="ltr">Each</span> <span dir="ltr">entry</span> <span dir="ltr">should</span> <span dir="ltr">include</span> <span dir="ltr">the</span> <span dir="ltr">page</span> <span dir="ltr">text</span> <span dir="ltr">and</span> <span dir="ltr">a</span> <span dir="ltr">corresponding</span> <span dir="ltr">label</span> (<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">positive</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">for</span> <span dir="ltr">stores</span> <span dir="ltr">and</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">negative</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">for</span> <span dir="ltr">non</span>-<span dir="ltr">stores</span>).</p>
+<p><span dir="ltr">Example</span> <span dir="ltr">JSON</span> <span dir="ltr">file</span>:</p>
+<pre class="line-numbers"><code class="language-json">
+[
+    {
+        "text": "<html><body><h1>Welcome to Our Online Store</h1><p>We offer a wide range of products at competitive prices. Visit our store today!</p></body></html>",
+        "label": "positive"
+    },
+    {
+        "text": "<html><body><h1>About Us</h1><p>We are a leading provider of quality services. Contact us for more information.</p></body></html>",
+        "label": "negative"
+    }
+]
+</code></pre>
+<h2><span dir="ltr">Step</span> 3: <span dir="ltr">Text</span> <span dir="ltr">Tokenization</span></h2>
+<p><span dir="ltr">Before</span> <span dir="ltr">sending</span> <span dir="ltr">data</span> <span dir="ltr">to</span> <span dir="ltr">the</span> <span dir="ltr">OpenAI</span> <span dir="ltr">model</span>, <span dir="ltr">the</span> <span dir="ltr">text</span> <span dir="ltr">needs</span> <span dir="ltr">to</span> <span dir="ltr">be</span> <span dir="ltr">tokenized</span>.</p>
+<p><span dir="ltr">Tokenization</span> <span dir="ltr">is</span> <span dir="ltr">the</span> <span dir="ltr">process</span> <span dir="ltr">of</span> <span dir="ltr">breaking</span> <span dir="ltr">text</span> <span dir="ltr">into</span> <span dir="ltr">individual</span> <span dir="ltr">words</span> <span dir="ltr">or</span> <span dir="ltr">tokens</span>.</p>
+<p><span dir="ltr">In</span> <span dir="ltr">Python</span>, <span dir="ltr">you</span> <span dir="ltr">can</span> <span dir="ltr">use</span> <span dir="ltr">libraries</span> <span dir="ltr">such</span> <span dir="ltr">as</span> <span dir="ltr">NLTK</span>, <span dir="ltr">spaCy</span>, <span dir="ltr">or</span> <span dir="ltr">tokenizers</span> <span dir="ltr">from</span> <span dir="ltr">the</span> <span dir="ltr">transformers</span> <span dir="ltr">library</span>.</p>
+<p><span dir="ltr">Example</span> <span dir="ltr">tokenization</span> <span dir="ltr">using</span> <span dir="ltr">NLTK</span>:</p>
+<pre class="line-numbers"><code class="language-python">
+import nltk
+from nltk.tokenize import word_tokenize
+
+# Example text
+text = "Это пример текста для токенизации."
+
+# Text tokenization
+tokens = word_tokenize(text)
+tokenized_text = ' '.join(tokens)
+print(tokenized_text)
+</code></pre>
+<h2><span dir="ltr">Step</span> 4: <span dir="ltr">Sending</span> <span dir="ltr">Data</span> <span dir="ltr">for</span> <span dir="ltr">Training</span></h2>
+<p><span dir="ltr">After</span> <span dir="ltr">tokenizing</span> <span dir="ltr">the</span> <span dir="ltr">text</span>, <span dir="ltr">you</span> <span dir="ltr">can</span> <span dir="ltr">send</span> <span dir="ltr">the</span> <span dir="ltr">data</span> <span dir="ltr">to</span> <span dir="ltr">train</span> <span dir="ltr">the</span> <span dir="ltr">OpenAI</span> <span dir="ltr">model</span>.</p>
+<p><span dir="ltr">Here</span>'<span dir="ltr">s</span> <span dir="ltr">an</span> <span dir="ltr">example</span> <span dir="ltr">code</span> <span dir="ltr">for</span> <span dir="ltr">sending</span> <span dir="ltr">data</span>:</p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+
+def train_model(data, positive=True):
+    try:
+        response = openai.Train.create(
+            model="text-davinci-003",
+            documents=[entry["text"] for entry in data],
+            labels=["positive" if positive else "negative"] * len(data),
+            show_progress=True
+        )
+        return response.id
+    except Exception as ex:
+        print("An error occurred during training:", ex)
+        return None
+
+# Example usage
+data = [
+    {"text": "Текст первой веб-страницы...", "label": "positive"},
+    {"text": "Текст второй веб-страницы...", "label": "negative"}
+]
+
+job_id = train_model(data, positive=True)
+print("Job ID:", job_id)
+</code></pre>
+<h2><span dir="ltr">Step</span> 5: <span dir="ltr">Model</span> <span dir="ltr">Testing</span></h2>
+<p><span dir="ltr">After</span> <span dir="ltr">training</span> <span dir="ltr">the</span> <span dir="ltr">model</span>, <span dir="ltr">you</span> <span dir="ltr">need</span> <span dir="ltr">to</span> <span dir="ltr">test</span> <span dir="ltr">it</span> <span dir="ltr">on</span> <span dir="ltr">a</span> <span dir="ltr">test</span> <span dir="ltr">dataset</span>.</p>
+<p><span dir="ltr">Here</span>'<span dir="ltr">s</span> <span dir="ltr">an</span> <span dir="ltr">example</span> <span dir="ltr">code</span> <span dir="ltr">for</span> <span dir="ltr">testing</span>:</p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+
+def test_model(test_data):
+    try:
+        predictions = []
+        for entry in test_data:
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=entry["text"],
+                max_tokens=1
+            )
+            prediction = response.choices[0].text.strip()
+            predictions.append(prediction)
+        return predictions
+    except Exception as ex:
+        print("An error occurred during testing:", ex)
+        return None
+
+# Example usage
+test_data = [
+    {"text": "Текст тестовой веб-страницы...", "label": "positive"},
+    {"text": "Текст другой тестовой страницы...", "label": "negative"}
+]
+
+predictions = test_model(test_data)
+print("Predictions:", predictions)
+</code></pre>
+<h2><span dir="ltr">Step</span> 6: <span dir="ltr">Error</span> <span dir="ltr">Handling</span> <span dir="ltr">and</span> <span dir="ltr">Model</span> <span dir="ltr">Improvement</span></h2>
+<p><span dir="ltr">If</span> <span dir="ltr">the</span> <span dir="ltr">model</span> <span dir="ltr">gives</span> <span dir="ltr">incorrect</span> <span dir="ltr">predictions</span>, <span dir="ltr">you</span> <span dir="ltr">can</span> <span dir="ltr">improve</span> <span dir="ltr">it</span> <span dir="ltr">by</span></p>
+<p><span dir="ltr">adding</span> <span dir="ltr">more</span> <span dir="ltr">data</span> <span dir="ltr">or</span> <span dir="ltr">changing</span> <span dir="ltr">training</span> <span dir="ltr">parameters</span>. <span dir="ltr">You</span> <span dir="ltr">can</span> <span dir="ltr">also</span> <span dir="ltr">use</span> <span dir="ltr">feedback</span> <span dir="ltr">to</span> <span dir="ltr">analyze</span> <span dir="ltr">errors</span>.</p>
+<p><span dir="ltr">Example</span> <span dir="ltr">error</span> <span dir="ltr">handling</span>:</p>
+<pre class="line-numbers"><code class="language-python">
+def handle_errors(predictions, test_data):
+    for pred, entry in zip(predictions, test_data):
+        if pred != entry["label"]:
+            print(f"Incorrect prediction for page '{entry['name']}': Predicted {pred}, Actual {entry['label']}")
+
+# Example usage
+handle_errors(predictions, test_data)
+</code></pre>

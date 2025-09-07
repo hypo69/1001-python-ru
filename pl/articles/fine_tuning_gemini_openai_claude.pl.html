@@ -1,0 +1,237 @@
+<h2>Ściągawka. <span dir="ltr">Personalizacja</span> <span dir="ltr">LLM</span>: <span dir="ltr">prompty</span>, <span dir="ltr">dostrajanie</span> <span dir="ltr">modeli</span>, <span dir="ltr">przykłady</span> <span dir="ltr">kodu</span>.</h2>
+<p><span dir="ltr">W</span> <span dir="ltr">tym</span> <span dir="ltr">artykule</span>:</p>
+<li><span dir="ltr">Jak</span> <span dir="ltr">tworzy</span> <span dir="ltr">się</span> "<span dir="ltr">efekt</span> <span dir="ltr">pamięci</span>" <span dir="ltr">w</span> <span dir="ltr">LLM</span> (<span dir="ltr">krótki</span> <span dir="ltr">przegląd</span>).</li>
+<li><span dir="ltr">Po</span> <span dir="ltr">co</span> <span dir="ltr">i</span> <span dir="ltr">kiedy</span> <span dir="ltr">potrzebne</span> <span dir="ltr">jest</span> <span dir="ltr">dostrajanie</span> (<span dir="ltr">Fine</span>-<span dir="ltr">tuning</span>) <span dir="ltr">modelu</span>.</li>
+<li><span dir="ltr">Kiedy</span> <span dir="ltr">dostrajanie</span> <span dir="ltr">nie</span> <span dir="ltr">jest</span> <span dir="ltr">najlepszym</span> <span dir="ltr">rozwiązaniem</span>.</li>
+<li><span dir="ltr">Przygotowanie</span> <span dir="ltr">danych</span>.</li>
+<li><span dir="ltr">Przykłady</span> <span dir="ltr">dostrajania</span> <span dir="ltr">dla</span> **<span dir="ltr">OpenAI</span> (<span dir="ltr">GPT</span>)**, **<span dir="ltr">Google</span> (<span dir="ltr">Gemini</span>)** <span dir="ltr">i</span> **<span dir="ltr">Anthropic</span> (<span dir="ltr">Claude</span>)** (<span dir="ltr">różni</span> <span dir="ltr">się</span>).</li>
+<h3>1. <span dir="ltr">Jak</span> <span dir="ltr">LLM</span> "<span dir="ltr">pamięta</span>" <span dir="ltr">i</span> "<span dir="ltr">dostosowuje</span> <span dir="ltr">się</span>": <span dir="ltr">Iluzja</span> <span dir="ltr">kontekstu</span></h3>
+<p><span dir="ltr">Zanim</span> <span dir="ltr">przejdziemy</span> <span dir="ltr">do</span> <span dir="ltr">dostrajania</span>, <span dir="ltr">ważne</span> <span dir="ltr">jest</span>, <span dir="ltr">aby</span> <span dir="ltr">zrozumieć</span>, <span dir="ltr">jak</span> <span dir="ltr">LLM</span> <span dir="ltr">w</span> <span dir="ltr">ogóle</span> <span dir="ltr">udaje</span> <span dir="ltr">się</span> <span dir="ltr">stworzyć</span> <span dir="ltr">poczucie</span> <span dir="ltr">personalizacji</span>.</p>
+<p><span dir="ltr">Jest</span> <span dir="ltr">to</span> <span dir="ltr">ważne</span>, <span dir="ltr">aby</span> <span dir="ltr">nie</span> <span dir="ltr">rzucać</span> <span dir="ltr">się</span> <span dir="ltr">w</span> <span dir="ltr">kosztowne</span> <span dir="ltr">dostrajanie</span>, <span dir="ltr">jeśli</span> <span dir="ltr">zadanie</span> <span dir="ltr">można</span> <span dir="ltr">rozwiązać</span> <span dir="ltr">prostszymi</span> <span dir="ltr">metodami</span>:</p>
+<li><span dir="ltr">Poprzez</span> **<span dir="ltr">Okno</span> <span dir="ltr">Kontekstu</span> (<span dir="ltr">Pamięć</span> <span dir="ltr">Krótkotrwała</span>):** <span dir="ltr">W</span> <span dir="ltr">ramach</span> <span dir="ltr">jednego</span> <span dir="ltr">dialogu</span> <span dir="ltr">wysyłasz</span> <span dir="ltr">modelowi</span> <span dir="ltr">nie</span> <span dir="ltr">tylko</span> <span dir="ltr">nowe</span> <span dir="ltr">pytanie</span>, <span dir="ltr">ale</span> <span dir="ltr">także</span> **<span dir="ltr">całą</span> <span dir="ltr">lub</span> <span dir="ltr">część</span> <span dir="ltr">poprzedniej</span> <span dir="ltr">korespondencji</span>**. <span dir="ltr">Model</span> <span dir="ltr">przetwarza</span> <span dir="ltr">cały</span> <span dir="ltr">ten</span> <span dir="ltr">tekst</span> <span dir="ltr">jako</span> <span dir="ltr">jeden</span> "<span dir="ltr">kontekst</span>". <span dir="ltr">Dzięki</span> <span dir="ltr">temu</span> "<span dir="ltr">pamięta</span>" <span dir="ltr">poprzednie</span> <span dir="ltr">wypowiedzi</span> <span dir="ltr">i</span> <span dir="ltr">kontynuuje</span> <span dir="ltr">myśl</span>. <span dir="ltr">Ograniczeniem</span> <span dir="ltr">jest</span> <span dir="ltr">tutaj</span> <span dir="ltr">długość</span> <span dir="ltr">okna</span> <span dir="ltr">kontekstu</span> (<span dir="ltr">liczba</span> <span dir="ltr">tokenów</span>).</li>
+<li><span dir="ltr">Tworzenie</span> **<span dir="ltr">Instrukcji</span> <span dir="ltr">Systemowych</span> (<span dir="ltr">System</span> <span dir="ltr">Prompt</span>):** <span dir="ltr">Możesz</span> <span dir="ltr">ustawić</span> <span dir="ltr">rolę</span>, <span dir="ltr">ton</span>, <span dir="ltr">zasady</span> <span dir="ltr">zachowania</span> <span dir="ltr">modelu</span> <span dir="ltr">na</span> <span dir="ltr">początku</span> <span dir="ltr">każdego</span> <span dir="ltr">dialogu</span>. <span dir="ltr">Na</span> <span dir="ltr">przykład</span>: "<span dir="ltr">Jesteś</span> <span dir="ltr">ekspertem</span> <span dir="ltr">Pythona</span>, <span dir="ltr">odpowiadaj</span> <span dir="ltr">zwięźle</span>."</li>
+<li><span dir="ltr">Włączenie</span> <span dir="ltr">do</span> <span dir="ltr">zapytania</span> <span dir="ltr">kilku</span> <span dir="ltr">przykładów</span> <span dir="ltr">pożądanego</span> <span dir="ltr">zachowania</span> **<span dir="ltr">Few</span>-<span dir="ltr">Shot</span> <span dir="ltr">Learning</span>:** (<span dir="ltr">pary</span> <span dir="ltr">wejście</span>/<span dir="ltr">wyjście</span>) <span dir="ltr">pozwala</span> <span dir="ltr">modelowi</span> "<span dir="ltr">nauczyć</span> <span dir="ltr">się</span>" <span dir="ltr">tego</span> <span dir="ltr">wzorca</span> <span dir="ltr">bezpośrednio</span> <span dir="ltr">w</span> <span dir="ltr">ramach</span> <span dir="ltr">bieżącego</span> <span dir="ltr">zapytania</span>.</li>
+<li>**<span dir="ltr">Zarządzanie</span> <span dir="ltr">stanem</span> <span dir="ltr">po</span> <span dir="ltr">stronie</span> <span dir="ltr">aplikacji</span>:** <span dir="ltr">Najpotężniejszy</span> <span dir="ltr">sposób</span>. <span dir="ltr">Aplikacja</span> (<span dir="ltr">która</span> <span dir="ltr">odwołuje</span> <span dir="ltr">się</span> <span dir="ltr">do</span> <span dir="ltr">API</span>) <span dir="ltr">może</span> <span dir="ltr">przechowywać</span> <span dir="ltr">informacje</span> <span dir="ltr">o</span> <span dir="ltr">użytkowniku</span> (<span dir="ltr">preferencje</span>, <span dir="ltr">historię</span>, <span dir="ltr">dane</span> <span dir="ltr">profilowe</span>) <span dir="ltr">i</span> <span dir="ltr">dynamicznie</span> <span dir="ltr">dodawać</span> <span dir="ltr">je</span> <span dir="ltr">do</span> <span dir="ltr">promptu</span> <span dir="ltr">przed</span> <span dir="ltr">wysłaniem</span> <span dir="ltr">do</span> <span dir="ltr">modelu</span>.</li>
+<h3>2.</h3>
+<p><span dir="ltr">Dostrajanie</span> <span dir="ltr">to</span> <span dir="ltr">proces</span> <span dir="ltr">dalszego</span> <span dir="ltr">szkolenia</span> <span dir="ltr">już</span> <span dir="ltr">gotowego</span> <span dir="ltr">bazowego</span> <span dir="ltr">LLM</span> <span dir="ltr">na</span> <span dir="ltr">własnym</span>, <span dir="ltr">specyficznym</span> <span dir="ltr">zestawie</span> <span dir="ltr">danych</span>. <span dir="ltr">Pozwala</span> <span dir="ltr">to</span> <span dir="ltr">modelowi</span>:</p>
+<li>**<span dir="ltr">Dostosować</span> <span dir="ltr">styl</span> <span dir="ltr">i</span> <span dir="ltr">ton</span>:** <span dir="ltr">Model</span> <span dir="ltr">będzie</span> <span dir="ltr">mówił</span> "<span dir="ltr">Twoim</span> <span dir="ltr">językiem</span>" – <span dir="ltr">czy</span> <span dir="ltr">to</span> ściśle <span dir="ltr">naukowym</span>, <span dir="ltr">przyjaznym</span> <span dir="ltr">marketingowym</span>, <span dir="ltr">czy</span> <span dir="ltr">slangiem</span> <span dir="ltr">określonej</span> <span dir="ltr">społeczności</span>.</li>
+<li>**<span dir="ltr">Postępować</span> <span dir="ltr">zgodnie</span> <span dir="ltr">ze</span> <span dir="ltr">specyficznymi</span> <span dir="ltr">instrukcjami</span> <span dir="ltr">i</span> <span dir="ltr">formatami</span>:** <span dir="ltr">Jeśli</span> <span dir="ltr">potrzebujesz</span> <span dir="ltr">odpowiedzi</span> <span dir="ltr">w</span> ściśle <span dir="ltr">określonej</span> <span dir="ltr">strukturze</span> <span dir="ltr">JSON</span>, <span dir="ltr">lub</span> <span dir="ltr">zawsze</span> <span dir="ltr">z</span> <span dir="ltr">określonym</span> <span dir="ltr">zestawem</span> <span dir="ltr">pól</span>.</li>
+<li>**<span dir="ltr">Zrozumieć</span> <span dir="ltr">język</span> <span dir="ltr">specyficzny</span> <span dir="ltr">dla</span> <span dir="ltr">domeny</span>:** <span dir="ltr">Szkolenie</span> <span dir="ltr">na</span> <span dir="ltr">wewnętrznej</span> <span dir="ltr">dokumentacji</span> <span dir="ltr">lub</span> <span dir="ltr">tekstach</span> <span dir="ltr">branżowych</span> <span dir="ltr">pomoże</span> <span dir="ltr">modelowi</span> <span dir="ltr">lepiej</span> <span dir="ltr">radzić</span> <span dir="ltr">sobie</span> <span dir="ltr">z</span> <span dir="ltr">terminologią</span> <span dir="ltr">Twojej</span> <span dir="ltr">niszy</span>.</li>
+<li>**<span dir="ltr">Poprawić</span> <span dir="ltr">wydajność</span> <span dir="ltr">w</span> <span dir="ltr">wąskich</span> <span dir="ltr">zadaniach</span>:** <span dir="ltr">Dla</span> <span dir="ltr">niektórych</span> <span dir="ltr">typów</span> <span dir="ltr">zapytań</span> (<span dir="ltr">np</span>. <span dir="ltr">klasyfikacja</span> <span dir="ltr">opinii</span>, <span dir="ltr">generowanie</span> <span dir="ltr">kodu</span> <span dir="ltr">w</span> <span dir="ltr">określonym</span> <span dir="ltr">frameworku</span>) <span dir="ltr">dostrajanie</span> <span dir="ltr">może</span> <span dir="ltr">zapewnić</span> <span dir="ltr">dokładniejsze</span> <span dir="ltr">i</span> <span dir="ltr">bardziej</span> <span dir="ltr">trafne</span> <span dir="ltr">odpowiedzi</span> <span dir="ltr">niż</span> <span dir="ltr">model</span> <span dir="ltr">bazowy</span>.</li>
+<li>**<span dir="ltr">Skrócić</span> <span dir="ltr">długość</span> <span dir="ltr">promptów</span>:** <span dir="ltr">Jeśli</span> <span dir="ltr">model</span> "<span dir="ltr">zna</span>" <span dir="ltr">już</span> <span dir="ltr">pożądane</span> <span dir="ltr">zachowanie</span> <span dir="ltr">dzięki</span> <span dir="ltr">dostrojeniu</span>, <span dir="ltr">nie</span> <span dir="ltr">musisz</span> <span dir="ltr">mu</span> <span dir="ltr">o</span> <span dir="ltr">tym</span> <span dir="ltr">przypominać</span> <span dir="ltr">za</span> <span dir="ltr">każdym</span> <span dir="ltr">razem</span> <span dir="ltr">w</span> <span dir="ltr">prompcie</span>, <span dir="ltr">co</span> <span dir="ltr">oszczędza</span> <span dir="ltr">tokeny</span> <span dir="ltr">i</span> <span dir="ltr">zmniejsza</span> <span dir="ltr">opóźnienia</span>.</li>
+<h3>3.</h3>
+<p><span dir="ltr">Dostrajanie</span> <span dir="ltr">to</span> <span dir="ltr">potężne</span>, <span dir="ltr">ale</span> <span dir="ltr">nie</span> <span dir="ltr">uniwersalne</span> <span dir="ltr">narzędzie</span>. <span dir="ltr">Nie</span> <span dir="ltr">należy</span> <span dir="ltr">go</span> <span dir="ltr">używać</span>, <span dir="ltr">jeśli</span>:</p>
+<li>**<span dir="ltr">Model</span> <span dir="ltr">powinien</span> <span dir="ltr">mieć</span> <span dir="ltr">dostęp</span> <span dir="ltr">do</span> <span dir="ltr">nowej</span> <span dir="ltr">wiedzy</span>:** <span dir="ltr">Dostrajanie</span> <span dir="ltr">zmienia</span> <span dir="ltr">wagi</span> <span dir="ltr">modelu</span>, <span dir="ltr">ale</span> <span dir="ltr">nie</span> "ładuje" <span dir="ltr">do</span> <span dir="ltr">niego</span> <span dir="ltr">nowych</span> <span dir="ltr">faktów</span> <span dir="ltr">w</span> <span dir="ltr">czasie</span> <span dir="ltr">rzeczywistym</span>. <span dir="ltr">Jeśli</span> <span dir="ltr">Twoim</span> <span dir="ltr">zadaniem</span> <span dir="ltr">jest</span> <span dir="ltr">odpowiadanie</span> <span dir="ltr">na</span> <span dir="ltr">pytania</span> <span dir="ltr">na</span> <span dir="ltr">podstawie</span> <span dir="ltr">stale</span> <span dir="ltr">zmieniającej</span> <span dir="ltr">się</span> <span dir="ltr">bazy</span> <span dir="ltr">wiedzy</span> (<span dir="ltr">dokumenty</span> <span dir="ltr">firmowe</span>, <span dir="ltr">najnowsze</span> <span dir="ltr">wiadomości</span>), <span dir="ltr">lepiej</span> <span dir="ltr">użyć</span> **<span dir="ltr">Retrieval</span> <span dir="ltr">Augmented</span> <span dir="ltr">Generation</span> (<span dir="ltr">RAG</span>)**. <span dir="ltr">Tutaj</span> <span dir="ltr">model</span> <span dir="ltr">bazowy</span> <span dir="ltr">otrzymuje</span> <span dir="ltr">kontekst</span> <span dir="ltr">z</span> <span dir="ltr">Twojej</span> <span dir="ltr">bazy</span> <span dir="ltr">danych</span> *<span dir="ltr">w</span> <span dir="ltr">momencie</span> <span dir="ltr">zapytania</span>*.</li>
+<li>**<span dir="ltr">Proste</span> <span dir="ltr">zadanie</span> <span dir="ltr">można</span> <span dir="ltr">rozwiązać</span> <span dir="ltr">inżynierią</span> <span dir="ltr">promptów</span>:** <span dir="ltr">Zawsze</span> <span dir="ltr">zaczynaj</span> <span dir="ltr">od</span> <span dir="ltr">najbardziej</span> <span dir="ltr">efektywnej</span> <span dir="ltr">inżynierii</span> <span dir="ltr">promptów</span>. <span dir="ltr">Jeśli</span> <span dir="ltr">zadanie</span> <span dir="ltr">można</span> <span dir="ltr">rozwiązać</span> <span dir="ltr">prostymi</span> <span dir="ltr">instrukcjami</span> <span dir="ltr">i</span> <span dir="ltr">przykładami</span> <span dir="ltr">few</span>-<span dir="ltr">shot</span>, <span dir="ltr">dostrajanie</span> <span dir="ltr">jest</span> <span dir="ltr">zbędne</span> <span dir="ltr">i</span> <span dir="ltr">bardziej</span> <span dir="ltr">kosztowne</span>.</li>
+<li>**<span dir="ltr">Nie</span> <span dir="ltr">masz</span> <span dir="ltr">wystarczającej</span> <span dir="ltr">ilości</span> <span dir="ltr">wysokiej</span> <span dir="ltr">jakości</span> <span dir="ltr">danych</span>:** <span dir="ltr">Złe</span> <span dir="ltr">dane</span> = źle <span dir="ltr">dostrojony</span> <span dir="ltr">model</span>.</li>
+<h3>4. <span dir="ltr">Przygotowanie</span> <span dir="ltr">danych</span>.</h3>
+<p><span dir="ltr">Jakość</span> <span dir="ltr">i</span> <span dir="ltr">ilość</span> <span dir="ltr">Twoich</span> <span dir="ltr">danych</span> <span dir="ltr">są</span> <span dir="ltr">kluczowe</span>. <span dir="ltr">Model</span> <span dir="ltr">uczy</span> <span dir="ltr">się</span> <span dir="ltr">na</span> <span dir="ltr">Twoich</span> <span dir="ltr">przykładach</span>, <span dir="ltr">dlatego</span> <span dir="ltr">muszą</span> <span dir="ltr">być</span> <span dir="ltr">one</span> <span dir="ltr">dokładne</span>, <span dir="ltr">różnorodne</span> <span dir="ltr">i</span> <span dir="ltr">spójne</span>.</p>
+<li>**<span dir="ltr">Format</span>:** <span dir="ltr">Najczęściej</span> <span dir="ltr">JSON</span> <span dir="ltr">Lines</span> (<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>>.<span dir="ltr">jsonl</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>) <span dir="ltr">lub</span> <span dir="ltr">CSV</span> (<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>>.<span dir="ltr">csv</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>).</li>
+<li>**<span dir="ltr">Struktura</span> <span dir="ltr">danych</span>:** <span dir="ltr">Zależy</span> <span dir="ltr">od</span> <span dir="ltr">zadania</span>.</li>
+<p>*   **<span dir="ltr">Instruction</span> <span dir="ltr">Tuning</span> (<span dir="ltr">Instrukcja</span>-<span dir="ltr">Odpowiedź</span>):** <span dir="ltr">Nadaje</span> <span dir="ltr">się</span> <span dir="ltr">do</span> <span dir="ltr">uogólnionych</span> <span dir="ltr">zadań</span> <span dir="ltr">typu</span> "<span dir="ltr">pytanie</span>-<span dir="ltr">odpowiedź</span>", <span dir="ltr">parafrazy</span>, <span dir="ltr">podsumowania</span>.</p>
+<p>```<span dir="ltr">json</span></p>
+<p>{"<span dir="ltr">input_text</span>": "Перефразируй предложение: 'Технология ИИ стремительно развивается.'", "<span dir="ltr">output_text</span>": "Искусственный интеллект демонстрирует стремительный прогресс."}</p>
+<p>{"<span dir="ltr">input_text</span>": "Назови столицу Франции.", "<span dir="ltr">output_text</span>": "Столица Франции — Париж."}</p>
+<p>```</p>
+<p>*   **<span dir="ltr">Chat</span> <span dir="ltr">Tuning</span> (<span dir="ltr">Czat</span>):** <span dir="ltr">Idealny</span> <span dir="ltr">do</span> <span dir="ltr">szkolenia</span> <span dir="ltr">modelu</span> <span dir="ltr">w</span> <span dir="ltr">prowadzeniu</span> <span dir="ltr">dialogu</span> <span dir="ltr">w</span> <span dir="ltr">określonej</span> <span dir="ltr">roli</span> <span dir="ltr">lub</span> <span dir="ltr">stylu</span>.</p>
+<p>```<span dir="ltr">json</span></p>
+<p>{"<span dir="ltr">messages</span>": [{"<span dir="ltr">author</span>": "<span dir="ltr">user</span>", "<span dir="ltr">content</span>": "Привет! Что порекомендуешь на ужин?"}, {"<span dir="ltr">author</span>": "<span dir="ltr">model</span>", "<span dir="ltr">content</span>": "Добрый вечер! Сегодня отличный день для пасты Карбонара, или, если вы предпочитаете что-то легкое, салат Цезарь."}]}</p>
+<p>{"<span dir="ltr">messages</span>": [{"<span dir="ltr">author</span>": "<span dir="ltr">user</span>", "<span dir="ltr">content</span>": "Расскажи про новые фичи <span dir="ltr">w</span> <span dir="ltr">Python</span> 3.12."}, {"<span dir="ltr">author</span>": "<span dir="ltr">model</span>", "<span dir="ltr">content</span>": "<span dir="ltr">W</span> <span dir="ltr">Python</span> 3.12 <span dir="ltr">pojawiły</span> <span dir="ltr">się</span> <span dir="ltr">f</span>-<span dir="ltr">stroki</span> <span dir="ltr">z</span> <span dir="ltr">odstupami</span>, <span dir="ltr">nowy</span> <span dir="ltr">składnia</span> <span dir="ltr">dla</span> <span dir="ltr">uniwersalnych</span> <span dir="ltr">generyków</span> <span dir="ltr">i</span> <span dir="ltr">ulepszona</span> <span dir="ltr">obsługa</span> <span dir="ltr">błędów</span> <span dir="ltr">Unicode</span>."}]}</p>
+<p>```</p>
+<li>**<span dir="ltr">Ilość</span>:** <span dir="ltr">Minimum</span> 100-200 <span dir="ltr">wysokiej</span> <span dir="ltr">jakości</span> <span dir="ltr">przykładów</span>, <span dir="ltr">ale</span> <span dir="ltr">im</span> <span dir="ltr">więcej</span>, <span dir="ltr">tym</span> <span dir="ltr">lepiej</span> (<span dir="ltr">tysiące</span> <span dir="ltr">dla</span> <span dir="ltr">poważnych</span> <span dir="ltr">zadań</span>).</li>
+<li>**<span dir="ltr">Jakość</span>:** <span dir="ltr">Dokładność</span>, <span dir="ltr">spójny</span> <span dir="ltr">styl</span>, <span dir="ltr">ton</span>, <span dir="ltr">format</span> <span dir="ltr">w</span> <span dir="ltr">całym</span> <span dir="ltr">zestawie</span> <span dir="ltr">danych</span>.</li>
+<h3>5. <span dir="ltr">Modele</span> <span dir="ltr">i</span> <span dir="ltr">Platformy</span></h3>
+<h4>5.1. <span dir="ltr">OpenAI</span></h4>
+<p><span dir="ltr">OpenAI</span> <span dir="ltr">zapewnia</span> <span dir="ltr">dość</span> <span dir="ltr">prosty</span> <span dir="ltr">i</span> <span dir="ltr">intuicyjny</span> <span dir="ltr">interfejs</span> <span dir="ltr">API</span> <span dir="ltr">do</span> <span dir="ltr">dostrajania</span>.</p>
+<p>**<span dir="ltr">Proces</span>:**</p>
+<li><span dir="ltr">Przygotuj</span> <span dir="ltr">dane</span> <span dir="ltr">w</span> <span dir="ltr">formacie</span> <span dir="ltr">JSONL</span>, <span dir="ltr">gdzie</span> <span dir="ltr">każda</span> <span dir="ltr">linia</span> <span dir="ltr">to</span> <span dir="ltr">obiekt</span> <span dir="ltr">z</span> <span dir="ltr">tablicą</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">messages</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> (<span dir="ltr">jak</span> <span dir="ltr">w</span> <span dir="ltr">API</span> <span dir="ltr">Chat</span> <span dir="ltr">Completions</span>).</li>
+<li><span dir="ltr">Prześlij</span> <span dir="ltr">plik</span> <span dir="ltr">danych</span> <span dir="ltr">za</span> <span dir="ltr">pośrednictwem</span> <span dir="ltr">API</span>.</li>
+<li><span dir="ltr">Utwórz</span> <span dir="ltr">zadanie</span> <span dir="ltr">dostrajania</span>, <span dir="ltr">określając</span> <span dir="ltr">przesłany</span> <span dir="ltr">plik</span> <span dir="ltr">i</span> <span dir="ltr">model</span> <span dir="ltr">bazowy</span>.</li>
+<li><span dir="ltr">Monitoruj</span> <span dir="ltr">postęp</span>.</li>
+<li><span dir="ltr">Użyj</span> <span dir="ltr">nowego</span>, <span dir="ltr">dostrojonego</span> <span dir="ltr">modelu</span> <span dir="ltr">po</span> <span dir="ltr">jego</span> <span dir="ltr">ID</span>.</li>
+<p>**<span dir="ltr">Przykładowe</span> <span dir="ltr">dane</span> (<span dir="ltr">plik</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">training_data.jsonl</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>):**</p>
+<pre class="line-numbers"><code class="language-json">
+{"messages": [{"role": "system", "content": "You are a friendly IT company customer support assistant."}, {"role": "user", "content": "My internet is not working."}, {"role": "assistant", "content": "Oh, I apologize for the inconvenience! Let's try to figure it out. How are you connected to the internet – via Wi-Fi or cable?"}]}
+{"messages": [{"role": "system", "content": "You are a friendly IT company customer support assistant."}, {"role": "user", "content": "How can I reset my password?"}, {"role": "assistant", "content": "Of course! To reset your password, please go to the login page and click 'Forgot password?' below the input field. Then follow the on-screen instructions."}]}
+</code></pre>
+<p>**<span dir="ltr">Przykładowy</span> <span dir="ltr">kod</span> <span dir="ltr">Python</span>:**</p>
+<p><span dir="ltr">Zainstaluj</span> <span dir="ltr">wcześniej</span>: <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">pip</span> <span dir="ltr">install</span> <span dir="ltr">openai</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>></p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+from openai import OpenAI
+import os
+
+# Ustaw swój klucz API OpenAI. Zaleca się użycie zmiennej środowiskowej.
+# os.environ["OPENAI_API_KEY"] = "sk-..."
+client = OpenAI()
+
+# 1. Przesyłanie pliku danych
+try:
+    file_response = client.files.create(
+        file=open("training_data.jsonl", "rb"),
+        purpose="fine-tune"
+    )
+    file_id = file_response.id
+    print(f"Plik pomyślnie przesłany. ID pliku: {file_id}")
+except openai.APIStatusError as e:
+    print(f"Błąd przesyłania pliku: {e.status_code} - {e.response}")
+    exit()
+
+# 2. Tworzenie zadania dostrajania
+try:
+    ft_job_response = client.fine_tuning.jobs.create(
+        training_file=file_id,
+        model="gpt-3.5-turbo" # Możesz określić konkretną wersję, np. "gpt-3.5-turbo-0125"
+    )
+    job_id = ft_job_response.id
+    print(f"Zadanie dostrajania utworzone. ID zadania: {job_id}")
+    print("Monitoruj status zadania za pośrednictwem API lub w OpenAI Playground.")
+except openai.APIStatusError as e:
+    print(f"Błąd tworzenia zadania: {e.status_code} - {e.response}")
+    exit()
+
+# Przykład monitorowania statusu i pobierania nazwy modelu (wykonaj po utworzeniu zadania):
+# # job_id = "ftjob-..." # Zastąp swoim ID zadania
+# # job_status = client.fine_tuning.jobs.retrieve(job_id)
+# # print(f"Bieżący status zadania: {job_status.status}")
+# # if job_status.status == "succeeded":
+# #     fine_tuned_model_name = job_status.fine_tuned_model
+# #     print(f"Nazwa dostrojonego modelu: {fine_tuned_model_name}")
+
+# 3. Używanie dostrojonego modelu (po jego gotowości)
+# # Zastąp rzeczywistą nazwą swojego modelu, uzyskaną po pomyślnym dostrojeniu
+# # fine_tuned_model_name = "ft:gpt-3.5-turbo-0125:my-org::abcd123"
+
+# # if 'fine_tuned_model_name' in locals() and fine_tuned_model_name:
+# #     try:
+# #         response = client.chat.completions.create(
+# #             model=fine_tuned_model_name,
+# #             messages=[
+# #                 {"role": "user", "content": "Mam problem z logowaniem."}
+# #             ]
+# #         )
+# #         print("\nOdpowiedź dostrojonego modelu:")
+# #         print(response.choices[0].message.content)
+# #     except openai.APIStatusError as e:
+# #         print(f"Błąd podczas używania modelu: {e.status_code} - {e.response}")
+</code></pre>
+<h4>5.2. <span dir="ltr">Anthropic</span></h4>
+<p><span dir="ltr">Anthropic</span> **<span dir="ltr">nie</span> <span dir="ltr">udostępnia</span> <span dir="ltr">publicznego</span> <span dir="ltr">API</span> <span dir="ltr">do</span> <span dir="ltr">dostrajania</span> <span dir="ltr">swoich</span> <span dir="ltr">modeli</span> <span dir="ltr">Claude</span> 3 (<span dir="ltr">Opus</span>, <span dir="ltr">Sonnet</span>, <span dir="ltr">Haiku</span>) <span dir="ltr">w</span> <span dir="ltr">taki</span> <span dir="ltr">sam</span> <span dir="ltr">sposób</span>, <span dir="ltr">jak</span> <span dir="ltr">OpenAI</span> <span dir="ltr">czy</span> <span dir="ltr">Google</span>.**</p>
+<p><span dir="ltr">Anthropic</span> <span dir="ltr">koncentruje</span> <span dir="ltr">się</span> <span dir="ltr">na</span> <span dir="ltr">tworzeniu</span> <span dir="ltr">bardzo</span> <span dir="ltr">potężnych</span> <span dir="ltr">modeli</span> <span dir="ltr">bazowych</span>, <span dir="ltr">które</span>, <span dir="ltr">jak</span> <span dir="ltr">twierdzą</span>, <span dir="ltr">doskonale</span> <span dir="ltr">współpracują</span> <span dir="ltr">z</span> <span dir="ltr">zaawansowaną</span> <span dir="ltr">inżynierią</span> <span dir="ltr">promptów</span> <span dir="ltr">i</span> <span dir="ltr">wzorcami</span> <span dir="ltr">RAG</span>, <span dir="ltr">minimalizując</span> <span dir="ltr">potrzebę</span> <span dir="ltr">dostrajania</span> <span dir="ltr">w</span> <span dir="ltr">większości</span> <span dir="ltr">przypadków</span>.</p>
+<p><span dir="ltr">Dla</span> <span dir="ltr">dużych</span> <span dir="ltr">klientów</span> <span dir="ltr">korporacyjnych</span> <span dir="ltr">lub</span> <span dir="ltr">partnerów</span> <span dir="ltr">mogą</span> <span dir="ltr">istnieć</span> <span dir="ltr">programy</span> <span dir="ltr">tworzenia</span> <span dir="ltr">modeli</span> "<span dir="ltr">niestandardowych</span>" <span dir="ltr">lub</span> <span dir="ltr">specjalistycznych</span> <span dir="ltr">integracji</span>, <span dir="ltr">ale</span> <span dir="ltr">nie</span> <span dir="ltr">jest</span> <span dir="ltr">to</span> <span dir="ltr">publicznie</span> <span dir="ltr">dostępna</span> <span dir="ltr">funkcja</span> <span dir="ltr">dostrajania</span> <span dir="ltr">za</span> <span dir="ltr">pośrednictwem</span> <span dir="ltr">API</span>.</p>
+<p><span dir="ltr">Jeśli</span> <span dir="ltr">pracujesz</span> <span dir="ltr">z</span> <span dir="ltr">Claude</span> 3, <span dir="ltr">Twoim</span> <span dir="ltr">głównym</span> <span dir="ltr">celem</span> <span dir="ltr">powinno</span> <span dir="ltr">być</span>:</p>
+<li>**<span dir="ltr">Wysokiej</span> <span dir="ltr">jakości</span> <span dir="ltr">inżynieria</span> <span dir="ltr">promptów</span>:** <span dir="ltr">Eksperymentuj</span> <span dir="ltr">z</span> <span dir="ltr">instrukcjami</span> <span dir="ltr">systemowymi</span>, <span dir="ltr">przykładami</span> <span dir="ltr">few</span>-<span dir="ltr">shot</span>, <span dir="ltr">wyraźnym</span> <span dir="ltr">formatowaniem</span> <span dir="ltr">zapytań</span>. <span dir="ltr">Claude</span> <span dir="ltr">jest</span> <span dir="ltr">znany</span> <span dir="ltr">z</span> <span dir="ltr">umiejętności</span> ścisłego <span dir="ltr">przestrzegania</span> <span dir="ltr">instrukcji</span>, <span dir="ltr">zwłaszcza</span> <span dir="ltr">w</span> <span dir="ltr">tagach</span> <span dir="ltr">XML</span>.</li>
+<li>**<span dir="ltr">Systemy</span> <span dir="ltr">RAG</span>:** <span dir="ltr">Używaj</span> <span dir="ltr">zewnętrznych</span> <span dir="ltr">baz</span> <span dir="ltr">wiedzy</span>, <span dir="ltr">aby</span> <span dir="ltr">dostarczyć</span> <span dir="ltr">modelowi</span> <span dir="ltr">odpowiedni</span> <span dir="ltr">kontekst</span>.</li>
+<h4>5.3. <span dir="ltr">Google</span> (<span dir="ltr">Gemini</span>)</h4>
+<p><span dir="ltr">Google</span> <span dir="ltr">aktywnie</span> <span dir="ltr">rozwija</span> <span dir="ltr">możliwości</span> <span dir="ltr">dostrajania</span> <span dir="ltr">za</span> <span dir="ltr">pośrednictwem</span> <span dir="ltr">swojej</span> <span dir="ltr">platformy</span> **<span dir="ltr">Google</span> <span dir="ltr">Cloud</span> <span dir="ltr">Vertex</span> <span dir="ltr">AI</span>**.</p>
+<p><span dir="ltr">Jest</span> <span dir="ltr">to</span> <span dir="ltr">pełnoprawna</span> <span dir="ltr">platforma</span> <span dir="ltr">ML</span>, <span dir="ltr">która</span> <span dir="ltr">zapewnia</span> <span dir="ltr">narzędzia</span> <span dir="ltr">do</span> <span dir="ltr">przygotowywania</span> <span dir="ltr">danych</span>, <span dir="ltr">uruchamiania</span> <span dir="ltr">zadań</span> <span dir="ltr">szkoleniowych</span> <span dir="ltr">i</span> <span dir="ltr">wdrażania</span> <span dir="ltr">modeli</span>.</p>
+<p><span dir="ltr">Dostrajanie</span> <span dir="ltr">jest</span> <span dir="ltr">dostępne</span> <span dir="ltr">dla</span> <span dir="ltr">modeli</span> <span dir="ltr">z</span> <span dir="ltr">rodziny</span> <span dir="ltr">Gemini</span>.</p>
+<p>**<span dir="ltr">Proces</span>:**</p>
+<li><span dir="ltr">Przygotuj</span> <span dir="ltr">dane</span> (<span dir="ltr">JSONL</span> <span dir="ltr">lub</span> <span dir="ltr">CSV</span>) <span dir="ltr">w</span> <span dir="ltr">formacie</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">input_text</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>/<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">output_text</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> (<span dir="ltr">do</span> <span dir="ltr">dostrajania</span> <span dir="ltr">instrukcji</span>) <span dir="ltr">lub</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">messages</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> (<span dir="ltr">do</span> <span dir="ltr">dostrajania</span> <span dir="ltr">czatu</span>).</li>
+<li><span dir="ltr">Prześlij</span> <span dir="ltr">dane</span> <span dir="ltr">do</span> <span dir="ltr">Google</span> <span dir="ltr">Cloud</span> <span dir="ltr">Storage</span> (<span dir="ltr">GCS</span>).</li>
+<li><span dir="ltr">Utwórz</span> <span dir="ltr">i</span> <span dir="ltr">uruchom</span> <span dir="ltr">zadanie</span> <span dir="ltr">dostrajania</span> <span dir="ltr">za</span> <span dir="ltr">pośrednictwem</span> <span dir="ltr">konsoli</span> <span dir="ltr">Vertex</span> <span dir="ltr">AI</span> <span dir="ltr">lub</span> <span dir="ltr">SDK</span>.</li>
+<li><span dir="ltr">Wdróż</span> <span dir="ltr">dostrojony</span> <span dir="ltr">model</span> <span dir="ltr">do</span> <span dir="ltr">punktu</span> <span dir="ltr">końcowego</span> (<span dir="ltr">Endpoint</span>).</li>
+<li><span dir="ltr">Użyj</span> <span dir="ltr">dostrojonego</span> <span dir="ltr">modelu</span> <span dir="ltr">za</span> <span dir="ltr">pośrednictwem</span> <span dir="ltr">tego</span> <span dir="ltr">punktu</span> <span dir="ltr">końcowego</span>.</li>
+<p>**<span dir="ltr">Przykładowe</span> <span dir="ltr">dane</span> (<span dir="ltr">plik</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">gemini_tuning_data.jsonl</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>):**</p>
+<pre class="line-numbers"><code class="language-json">
+{"input_text": "Summarize the main ideas of this book: 'The book tells the story of a hero's journey, who overcomes obstacles and finds himself.'", "output_text": "The main character of the book embarks on a transformative journey, facing challenges and achieving self-discovery."}
+{"input_text": "Explain the principle of a thermonuclear reactor in simple terms.", "output_text": "A thermonuclear reactor attempts to replicate the process that occurs on the Sun: the fusion of light atomic nuclei at very high temperatures, releasing a huge amount of energy."}
+</code></pre>
+<p>**<span dir="ltr">Przykładowy</span> <span dir="ltr">kod</span> <span dir="ltr">Python</span> (<span dir="ltr">wymaga</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">google</span>-<span dir="ltr">cloud</span>-<span dir="ltr">aiplatform</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>>):**</p>
+<p><span dir="ltr">Zainstaluj</span> <span dir="ltr">wcześniej</span>: <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">pip</span> <span dir="ltr">install</span> <span dir="ltr">google</span>-<span dir="ltr">cloud</span>-<span dir="ltr">aiplatform</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">i</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">pip</span> <span dir="ltr">install</span> <span dir="ltr">google</span>-<span dir="ltr">cloud</span>-<span dir="ltr">storage</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>></p>
+<pre class="line-numbers"><code class="language-python">
+import os
+from google.cloud import aiplatform
+from google.cloud import storage
+
+# --- Ustawienia ---
+# ZASTĄP swoimi wartościami:
+PROJECT_ID = "your-gcp-project-id"
+REGION = "us-central1"               # Wybierz region obsługujący Gemini i Vertex AI
+BUCKET_NAME = "your-gcs-bucket-for-tuning" # Nazwa Twojego bucketa GCS (musi być utworzony wcześniej)
+DATA_FILE_LOCAL_PATH = "gemini_tuning_data.jsonl"
+GCS_DATA_URI = f"gs://{BUCKET_NAME}/{DATA_FILE_LOCAL_PATH}"
+TUNED_MODEL_DISPLAY_NAME = "my-tuned-gemini-model"
+# --- Koniec ustawień ---
+
+# Inicjalizacja Vertex AI
+aiplatform.init(project=PROJECT_ID, location=REGION)
+
+# 1. Tworzenie pliku danych (jeśli nie istnieje)
+with open(DATA_FILE_LOCAL_PATH, "w", encoding="utf-8") as f:
+    f.write('{"input_text": "Summarize the main ideas of this book: \'The book tells the story of a hero\'s journey, who overcomes obstacles and finds himself.\'", "output_text": "The main character of the book embarks on a transformative journey, facing challenges and achieving self-discovery."}\n')
+    f.write('{"input_text": "Explain the principle of a thermonuclear reactor in simple terms.", "output_text": "A thermonuclear reactor attempts to replicate the process that occurs on the Sun: the fusion of light atomic nuclei at very high temperatures, releasing a huge amount of energy."}\n')
+print(f"Plik danych '{DATA_FILE_LOCAL_PATH}' utworzony.")
+
+
+# 2. Przesyłanie danych do Google Cloud Storage
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    """Przesyła plik do bucketa GCS."""
+    storage_client = storage.Client(project=PROJECT_ID)
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(source_file_name)
+    print(f"Plik '{source_file_name}' przesłany do 'gs://{bucket_name}/{destination_blob_name}'.")
+
+try:
+    upload_blob(BUCKET_NAME, DATA_FILE_LOCAL_PATH, DATA_FILE_LOCAL_PATH)
+except Exception as e:
+    print(f"Błąd przesyłania pliku do GCS. Upewnij się, że bucket istnieje i masz uprawnienia: {e}")
+    exit()
+
+# 3. Tworzenie i uruchamianie zadania dostrajania
+print(f"\nUruchamianie dostrajania modelu '{TUNED_MODEL_DISPLAY_NAME}'...")
+try:
+    # `tune_model` uruchamia zadanie i zwraca dostrojony model po zakończeniu
+    tuned_model = aiplatform.Model.tune_model(
+        model_display_name=TUNED_MODEL_DISPLAY_NAME,
+        source_model_name="gemini-1.0-pro-001", # Bazowy model Gemini Pro
+        training_data_path=GCS_DATA_URI,
+        tuning_method="SUPERVISED_TUNING",
+        train_steps=100, # Liczba kroków szkoleniowych. Optymalna wartość zależy od rozmiaru danych.
+        # batch_size=16, # Można określić
+        # learning_rate_multiplier=1.0 # Można określić
+    )
+    print(f"Model '{TUNED_MODEL_DISPLAY_NAME}' pomyślnie dostrojony. ID modelu: {tuned_model.name}")
+    print("Proces dostrajania może zająć sporo czasu.")
+except Exception as e:
+    print(f"Błąd dostrajania. Sprawdź logi w konsoli Vertex AI: {e}")
+    exit()
+
+# 4. Wdrażanie dostrojonego modelu (do użytku)
+print(f"\nWdrażanie dostrojonego modelu '{TUNED_MODEL_DISPLAY_NAME}' do punktu końcowego...")
+try:
+    endpoint = tuned_model.deploy(
+        machine_type="n1-standard-4", # Typ maszyny dla punktu końcowego. Wybierz odpowiedni.
+        min_replica_count=1,
+        max_replica_count=1
+    )
+    print(f"Model wdrożony do punktu końcowego: {endpoint.name}")
+    print("Wdrażanie również może zająć kilka minut.")
+except Exception as e:
+    print(f"Błąd wdrażania modelu: {e}")
+    exit()
+
+# 5. Używanie dostrojonego modelu
+print("\nTestowanie dostrojonego modelu...")
+prompt = "Opowiedz mi o swoich możliwościach po szkoleniu."
+instances = [{"prompt": prompt}] # Do dostrajania instrukcji. Jeśli dostrajanie czatu, to {"messages": [...]}
+
+try:
+    response = endpoint.predict(instances=instances)
+    print("\nOdpowiedź dostrojonego modelu:")
+    print(response.predictions[0])
+except Exception as e:
+    print(f"Błąd podczas używania dostrojonego modelu: {e}")
+
+# Po zakończeniu, nie zapomnij usunąć punktu końcowego i modelu, aby uniknąć niepotrzebnych kosztów:
+# # endpoint.delete()
+# # tuned_model.delete()
+</code></pre>
+<h3>6. <span dir="ltr">Ogólne</span> <span dir="ltr">zalecenia</span></h3>
+<li>**<span dir="ltr">Zacznij</span> <span dir="ltr">od</span> <span dir="ltr">małych</span> <span dir="ltr">kroków</span>:** <span dir="ltr">Nie</span> <span dir="ltr">próbuj</span> <span dir="ltr">od</span> <span dir="ltr">razu</span> <span dir="ltr">szkolić</span> <span dir="ltr">modelu</span> <span dir="ltr">na</span> <span dir="ltr">tysiącach</span> <span dir="ltr">przykładów</span>. <span dir="ltr">Zacznij</span> <span dir="ltr">od</span> <span dir="ltr">małego</span>, <span dir="ltr">ale</span> <span dir="ltr">wysokiej</span> <span dir="ltr">jakości</span> <span dir="ltr">zestawu</span> <span dir="ltr">danych</span>.</li>
+<li>**<span dir="ltr">Iteruj</span>:** <span dir="ltr">Dostrajanie</span> <span dir="ltr">to</span> <span dir="ltr">proces</span> <span dir="ltr">iteracyjny</span>. <span dir="ltr">Szkol</span>, <span dir="ltr">oceniaj</span>, <span dir="ltr">dostosowuj</span> <span dir="ltr">dane</span> <span dir="ltr">lub</span> <span dir="ltr">hiperparametry</span>, <span dir="ltr">powtarzaj</span>.</li>
+<li>**<span dir="ltr">Monitorowanie</span>:** <span dir="ltr">Dokładnie</span> <span dir="ltr">monitoruj</span> <span dir="ltr">metryki</span> <span dir="ltr">szkoleniowe</span> (<span dir="ltr">straty</span>) <span dir="ltr">i</span> <span dir="ltr">używaj</span> <span dir="ltr">zestawu</span> <span dir="ltr">danych</span> <span dir="ltr">walidacyjnych</span>, <span dir="ltr">aby</span> <span dir="ltr">uniknąć</span> <span dir="ltr">przetrenowania</span>.</li>
+<li>**<span dir="ltr">Ocena</span>:** <span dir="ltr">Zawsze</span> <span dir="ltr">testuj</span> <span dir="ltr">dostrojony</span> <span dir="ltr">model</span> <span dir="ltr">na</span> <span dir="ltr">danych</span>, <span dir="ltr">których</span> *<span dir="ltr">nigdy</span> <span dir="ltr">nie</span> <span dir="ltr">widział</span>* <span dir="ltr">podczas</span> <span dir="ltr">szkolenia</span>, <span dir="ltr">aby</span> <span dir="ltr">ocenić</span> <span dir="ltr">jego</span> <span dir="ltr">zdolność</span> <span dir="ltr">do</span> <span dir="ltr">generalizacji</span>.</li>
+<li>**<span dir="ltr">Koszt</span>:** <span dir="ltr">Pamiętaj</span>, że <span dir="ltr">dostrajanie</span> <span dir="ltr">i</span> <span dir="ltr">wdrażanie</span> <span dir="ltr">punktów</span> <span dir="ltr">końcowych</span> <span dir="ltr">są</span> <span dir="ltr">płatne</span>. <span dir="ltr">Uwzględnij</span> <span dir="ltr">to</span> <span dir="ltr">w</span> <span dir="ltr">swoim</span> <span dir="ltr">budżecie</span>.</li>
+<li>**<span dir="ltr">Dokumentacja</span>:** <span dir="ltr">Zawsze</span> <span dir="ltr">odwołuj</span> <span dir="ltr">się</span> <span dir="ltr">do</span> <span dir="ltr">oficjalnej</span> <span dir="ltr">dokumentacji</span> <span dir="ltr">dostawcy</span> <span dir="ltr">LLM</span>. <span dir="ltr">API</span> <span dir="ltr">i</span> <span dir="ltr">możliwości</span> <span dir="ltr">stale</span> <span dir="ltr">ewoluują</span>.</li>

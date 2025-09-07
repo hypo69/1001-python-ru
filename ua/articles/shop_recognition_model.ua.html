@@ -1,0 +1,121 @@
+<p># Навчання моделі <span dir="ltr">OpenAI</span> для класифікації веб-сторінок</p>
+<h2>Вступ</h2>
+<p>Навчання моделі <span dir="ltr">OpenAI</span> визначати, чи є сторінка інтернет-магазином.</p>
+<p>- підготовка даних,</p>
+<p>- токенізація тексту,</p>
+<p>- надсилання даних для навчання</p>
+<p>- тест моделі.</p>
+<h2>Крок 1: Реєстрація та налаштування <span dir="ltr">OpenAI</span> <span dir="ltr">API</span></h2>
+<p>Для початку роботи з <span dir="ltr">OpenAI</span> <span dir="ltr">API</span> необхідно зареєструватися на платформі <span dir="ltr">OpenAI</span> та отримати ключ <span dir="ltr">API</span>. Цей ключ буде використовуватися для автентифікації при виклику методів <span dir="ltr">API</span>.</p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+
+# Встановлення ключа API
+openai.api_key = 'ваш-ключ-api'
+</code></pre>
+<h2>Крок 2: Підготовка даних</h2>
+<p>Для навчання моделі потрібно підготувати набір даних, який міститиме приклади веб-сторінок,</p>
+<p>як магазинів, так і не магазинів.</p>
+<p>Кожен запис повинен включати текст сторінки та відповідну мітку (<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">positive</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> для магазинів та <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">negative</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> для не магазинів).</p>
+<p>Приклад <span dir="ltr">JSON</span>-файлу:</p>
+<pre class="line-numbers"><code class="language-json">
+[
+    {
+        "text": "<html><body><h1>Ласкаво просимо до нашого інтернет-магазину</h1><p>Ми пропонуємо широкий асортимент товарів за конкурентними цінами. Відвідайте наш магазин сьогодні!</p></body></html>",
+        "label": "positive"
+    },
+    {
+        "text": "<html><body><h1>Про нас</h1><p>Ми є провідним постачальником якісних послуг. Зв'яжіться з нами для отримання додаткової інформації.</p></body></html>",
+        "label": "negative"
+    }
+]
+</code></pre>
+<h2>Крок 3: Токенізація тексту</h2>
+<p>Перед надсиланням даних до моделі <span dir="ltr">OpenAI</span>, текст необхідно токенізувати.</p>
+<p>Токенізація — це процес розбиття тексту на окремі слова або токени.</p>
+<p>У <span dir="ltr">Python</span> можна використовувати бібліотеки, такі як <span dir="ltr">NLTK</span>, <span dir="ltr">spaCy</span> або <span dir="ltr">tokenizers</span> з бібліотеки <span dir="ltr">transformers</span>.</p>
+<p>Приклад токенізації з використанням <span dir="ltr">NLTK</span>:</p>
+<pre class="line-numbers"><code class="language-python">
+import nltk
+from nltk.tokenize import word_tokenize
+
+# Приклад тексту
+text = "Це приклад тексту для токенізації."
+
+# Токенізація тексту
+tokens = word_tokenize(text)
+tokenized_text = ' '.join(tokens)
+print(tokenized_text)
+</code></pre>
+<h2>Крок 4: Надсилання даних для навчання</h2>
+<p>Після токенізації тексту можна надіслати дані для навчання моделі <span dir="ltr">OpenAI</span>.</p>
+<p>Ось приклад коду для надсилання даних:</p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+
+def train_model(data, positive=True):
+    try:
+        response = openai.Train.create(
+            model="text-davinci-003",
+            documents=[entry["text"] for entry in data],
+            labels=["positive" if positive else "negative"] * len(data),
+            show_progress=True
+        )
+        return response.id
+    except Exception as ex:
+        print("Під час навчання сталася помилка:", ex)
+        return None
+
+# Приклад використання
+data = [
+    {"text": "Текст першої веб-сторінки...", "label": "positive"},
+    {"text": "Текст другої веб-сторінки...", "label": "negative"}
+]
+
+job_id = train_model(data, positive=True)
+print("ID завдання:", job_id)
+</code></pre>
+<h2>Крок 5: Тестування моделі</h2>
+<p>Після навчання моделі необхідно протестувати її на тестовому наборі даних.</p>
+<p>Ось приклад коду для тестування:</p>
+<pre class="line-numbers"><code class="language-python">
+import openai
+
+def test_model(test_data):
+    try:
+        predictions = []
+        for entry in test_data:
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=entry["text"],
+                max_tokens=1
+            )
+            prediction = response.choices[0].text.strip()
+            predictions.append(prediction)
+        return predictions
+    except Exception as ex:
+        print("Під час тестування сталася помилка:", ex)
+        return None
+
+# Приклад використання
+test_data = [
+    {"text": "Текст тестової веб-сторінки...", "label": "positive"},
+    {"text": "Текст іншої тестової сторінки...", "label": "negative"}
+]
+
+predictions = test_model(test_data)
+print("Прогнози:", predictions)
+</code></pre>
+<h2>Крок 6: Обробка помилок та покращення моделі</h2>
+<p>Якщо модель дає невірні прогнози, її можна покращити,</p>
+<p>додавши більше даних або змінивши параметри навчання. Також можна використовувати зворотний зв'язок для аналізу помилок.</p>
+<p>Приклад обробки помилок:</p>
+<pre class="line-numbers"><code class="language-python">
+def handle_errors(predictions, test_data):
+    for pred, entry in zip(predictions, test_data):
+        if pred != entry["label"]:
+            print(f"Неправильний прогноз для сторінки '{entry['name']}': Прогнозовано {pred}, Фактично {entry['label']}")
+
+# Приклад використання
+handle_errors(predictions, test_data)
+</code></pre>

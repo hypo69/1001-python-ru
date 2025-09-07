@@ -31,17 +31,17 @@ def convert_md_to_html_content(md_content: str) -> str:
         if stripped == "":
             continue
 
+        if re.match(r"^(\*|\d+\.)\s", line):
+            content = re.sub(r"^(\*|\d+\.)\s+", "", line, count=1).strip()
+            processed = process_mixed_text(content)
+            html_lines.append(f"<li>{processed}</li>")
+            continue
+
         if re.match(r"^#{2,6}\s", line):
             level = len(re.match(r"^#+", line).group())
             content = line.strip("# ").strip()
             processed = process_mixed_text(content)
             html_lines.append(f"<h{level}>{processed}</h{level}>")
-            continue
-
-        if re.match(r"^(\*|\d+\.)\s", line): # Corrected regex here
-            content = re.sub(r"^(\*|\d+\.)\s+", "", line, count=1).strip()
-            processed = process_mixed_text(content)
-            html_lines.append(f"<li>{processed}</li>")
             continue
 
         processed = process_mixed_text(line.strip())
@@ -56,7 +56,7 @@ def process_mixed_text(text: str) -> str:
         r'dir\(\)',
         r'dict\(\)',
         r'\b[A-Z][a-zA-Z0-9_]*\([^)]*\)',
-        r'\b[a-zA-Z][\w.]*\b',
+        r'\b[a-zA-Z][\w.()]*\b',
     ]
 
     def wrap_match(match):
