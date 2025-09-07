@@ -1,0 +1,1 @@
+Placeholder for Italian translation of CI/CD Pipeline Guide (MD)

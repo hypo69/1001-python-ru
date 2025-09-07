@@ -1,0 +1,1 @@
+Placeholder for Spanish translation of CI/CD Pipeline Guide (MD)

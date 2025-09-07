@@ -1,0 +1,177 @@
+<h3><strong>Tempo polinomiale</strong></h3>
+<p><strong>Il tempo polinomiale</strong> — è un termine usato nella teoria della complessità computazionale per descrivere il tempo di esecuzione di un algoritmo, che cresce come un polinomio (polinomio) dalla dimensione dei dati di input. Se il tempo di esecuzione di un algoritmo può essere espresso come \(O(n^k)\), dove \(n\) — dimensione dei dati di input, e \(k\) — costante, allora tale algoritmo funziona in tempo polinomiale.</p>
+<h4><strong>Esempi:</strong></h4>
+<ol>
+<li><strong>Ordinamento di un elenco</strong>: Algoritmi, come il merge sort o il quick sort, funzionano in \(O(n \log n)\), che è tempo polinomiale.</li>
+<li><strong>Ricerca del percorso più breve in un grafo</strong>: L'algoritmo di Dijkstra funziona in \(O(n^2)\) o \(O(n \log n)\) a seconda dell'implementazione, che è anche polinomiale.</li>
+</ol>
+<h4><strong>Caratteristiche:</strong></h4>
+<ul>
+<li>Gli algoritmi, che funzionano in tempo polinomiale, sono considerati <strong>efficienti</strong> e <strong>praticamente applicabili</strong>.</li>
+<li>I problemi, che possono essere risolti in tempo polinomiale, appartengono alla classe <strong>P</strong>.</li>
+</ul>
+<hr>
+<h3><strong>Tempo esponenziale</strong></h3>
+<p><strong>Il tempo esponenziale</strong> — è il tempo di esecuzione di un algoritmo, che cresce esponenzialmente a seconda della dimensione dei dati di input. Se il tempo di esecuzione può essere espresso come \(O(k^n)\), dove \(n\) — dimensione dei dati di input, e \(k\) — costante, allora tale algoritmo funziona in tempo esponenziale.</p>
+<h4><strong>Esempi:</strong></h4>
+<ol>
+<li><strong>Problema del commesso viaggiatore</strong>: La risoluzione con il metodo della forza bruta di tutti i percorsi possibili richiede \(O(n!)\) tempo, che è peggio dell'esponenziale.</li>
+<li><strong>Enumerazione di tutti i sottoinsiemi</strong>: Un algoritmo, che controlla tutti i possibili sottoinsiemi di un insieme di \(n\) elementi, funziona in \(O(2^n)\).</li>
+</ol>
+<h4><strong>Caratteristiche:</strong></h4>
+<ul>
+<li>Gli algoritmi, che funzionano in tempo esponenziale, sono considerati <strong>inefficienti</strong> per grandi input, poiché il tempo di esecuzione diventa impraticabilmente lungo anche per \(n\) relativamente piccoli.</li>
+<li>I problemi, che possono essere risolti solo in tempo esponenziale, spesso richiedono l'uso di <strong>metodi approssimati</strong>, <strong>euristiche</strong> o <strong>calcolo parallelo</strong>.</li>
+</ul>
+<hr>
+<h3><strong>Confronto tra tempo polinomiale ed esponenziale</strong></h3>
+<table>
+<thead>
+<tr>
+<th><strong>Caratteristica</strong></th>
+<th><strong>Tempo polinomiale</strong></th>
+<th><strong>Tempo esponenziale</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Crescita del tempo di esecuzione</strong></td>
+<td>Lenta (ad esempio, \(n^2\), \(n^3\))</td>
+<td>Rapida (ad esempio, \(2^n\), \(3^n\))</td>
+</tr>
+<tr>
+<td><strong>Esempi di problemi</strong></td>
+<td>Ordinamento, ricerca del percorso più breve</td>
+<td>Problema del commesso viaggiatore, enumerazione di sottoinsiemi</td>
+</tr>
+<tr>
+<td><strong>Applicabilità pratica</strong></td>
+<td>Efficiente per grandi dati</td>
+<td>Inapplicabile per grandi dati</td>
+</tr>
+<tr>
+<td><strong>Classe di complessità</strong></td>
+<td>P</td>
+<td>NP-difficili, NP-completi</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3><strong>Perché è importante?</strong></h3>
+<ol>
+<li><strong>Tempo polinomiale</strong>:
+<ul>
+<li>Gli algoritmi, che funzionano in tempo polinomiale, sono considerati <strong>praticamente applicabili</strong>, poiché possono elaborare grandi volumi di dati in un tempo ragionevole.</li>
+<li>I problemi della classe <strong>P</strong> (risolvibili in tempo polinomiale) sono la base per molte applicazioni nell'informatica, come l'elaborazione dei dati, le reti, la crittografia e l'intelligenza artificiale.</li>
+</ul>
+</li>
+<li><strong>Tempo esponenziale</strong>:
+<ul>
+<li>Gli algoritmi, che funzionano in tempo esponenziale, diventano <strong>impraticabili</strong> anche per input relativamente piccoli. Ad esempio, per \(n = 100\), \(2^n\) supera già il numero di atomi nell'universo osservabile.</li>
+<li>I problemi, che possono essere risolti solo in tempo esponenziale, spesso richiedono l'uso di <strong>metodi approssimati</strong>, <strong>euristiche</strong> o <strong>calcolo parallelo</strong>.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3><strong>Esempio per la comprensione</strong></h3>
+<p>Immagina di avere un problema e di volerlo risolvere per \(n = 10\) e \(n = 100\):</p>
+<ul>
+<li><strong>Tempo polinomiale (\(n^2\))</strong>:
+<ul>
+<li>Per \(n = 10\): \(10^2 = 100\) operazioni.</li>
+<li>Per \(n = 100\): \(100^2 = 10\,000\) operazioni.</li>
+</ul>
+</li>
+<li><strong>Tempo esponenziale (\(2^n\))</strong>:
+<ul>
+<li>Per \(n = 10\): \(2^{10} = 1\,024\) operazioni.</li>
+<li>Per \(n = 100\): \(2^{100} \approx 1.26 \times 10^{30}\) operazioni.</li>
+</ul>
+</li>
+</ul>
+<p>Come si può vedere, per \(n = 100\) un algoritmo polinomiale eseguirà 10.000 operazioni, il che è abbastanza realistico, mentre un algoritmo esponenziale richiederà \(1.26 \times 10^{30}\) operazioni, il che è praticamente impossibile.</p>
+<p>Per costruire grafici che illustrano la differenza tra tempo polinomiale ed esponenziale, è possibile utilizzare varie funzioni matematiche. Ecco esempi di funzioni che possono essere utilizzate per la visualizzazione:</p>
+<hr>
+<h3><strong>Funzioni polinomiali</strong></h3>
+<ol>
+<li><strong>Funzione lineare</strong>: <br>
+   \( f(n) = n \) <br>
+   Esempio: tempo di esecuzione di un algoritmo che elabora ogni elemento una volta.</li>
+<li><strong>Funzione quadratica</strong>: <br>
+   \( f(n) = n^2 \) <br>
+   Esempio: tempo di esecuzione di un algoritmo con cicli annidati, ad esempio il bubble sort.</li>
+<li><strong>Funzione cubica</strong>: <br>
+   \( f(n) = n^3 \) <br>
+   Esempio: tempo di esecuzione di un algoritmo che elabora dati tridimensionali.</li>
+<li><strong>Funzione logaritmica</strong>: <br>
+   \( f(n) = \log n \) <br>
+   Esempio: tempo di esecuzione della ricerca binaria.</li>
+<li><strong>Funzione lineare-logaritmica</strong>: <br>
+   \( f(n) = n \log n \) <br>
+   Esempio: tempo di esecuzione del quick sort o del merge sort.</li>
+</ol>
+<hr>
+<h3><strong>Funzioni esponenziali</strong></h3>
+<ol>
+<li><strong>Funzione esponenziale</strong>: <br>
+   \( f(n) = 2^n \) <br>
+   Esempio: tempo di esecuzione di un algoritmo che enumera tutti i sottoinsiemi di un insieme.</li>
+<li><strong>Funzione fattoriale</strong>: <br>
+   \( f(n) = n! \) <br>
+   Esempio: tempo di esecuzione di un algoritmo che enumera tutte le permutazioni (ad esempio, il problema del commesso viaggiatore).</li>
+<li><strong>Funzione esponenziale con base diversa</strong>: <br>
+   \( f(n) = 3^n \) <br>
+   Esempio: tempo di esecuzione di un algoritmo che esplora tutte le possibili combinazioni.</li>
+</ol>
+<hr>
+<h3><strong>Esempio di codice per la creazione di grafici (Python, Matplotlib)</strong></h3>
+<pre class="line-numbers"><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+import math # Import the standard math module
+
+# Range of n values
+n = np.linspace(1, 20, 100)
+
+# Polynomial functions
+linear = n
+quadratic = n**2
+cubic = n**3
+logarithmic = np.log(n)
+nlogn = n * np.log(n)
+
+# Exponential functions
+exponential = 2**n
+# Use math.factorial from the imported math module
+factorial = [math.factorial(int(i)) for i in n]  # Factorial is defined only for integers
+
+# Plotting the graphs
+plt.figure(figsize=(10, 6))
+
+# Polynomial functions
+plt.plot(n, linear, label='Linear: $f(n) = n$')
+plt.plot(n, quadratic, label='Quadratic: $f(n) = n^2$')
+plt.plot(n, cubic, label='Cubic: $f(n) = n^3$')
+plt.plot(n, logarithmic, label='Logarithmic: $f(n) = \log n$')
+plt.plot(n, nlogn, label='Linearithmic: $f(n) = n \log n$')
+
+# Exponential functions
+plt.plot(n, exponential, label='Exponential: $f(n) = 2^n$')
+plt.plot(n, factorial, label='Factorial: $f(n) = n!$')
+
+# Graph settings
+plt.yscale('log')  # Logarithmic scale for convenience
+plt.xlabel('Input size (n)')
+plt.ylabel('Time complexity')
+plt.title('Comparison of Polynomial and Exponential Time Complexity')
+plt.legend()
+plt.grid(True)
+plt.show()
+</code></pre>
+<hr>
+<p><img src="../assets/exponetialy.png" alt="Exponetialy"></p>
+<h3><strong>Cosa mostrerà il grafico?</strong></h3>
+<ul>
+<li><strong>Funzioni polinomiali</strong> crescono lentamente e rimangono nella parte inferiore del grafico.</li>
+<li><strong>Funzioni esponenziali</strong> crescono molto rapidamente e si spostano verso l'alto anche per piccoli valori di \(n\).</li>
+<li>L'uso di una <strong>scala logaritmica</strong> (sull'asse Y) aiuta a visualizzare la differenza tra funzioni polinomiali ed esponenziali, poiché i loro valori differiscono di ordini di grandezza.</li>
+</ul>

@@ -1,0 +1,334 @@
+<h2>**Teoria dei gruppi - Semigruppo**</h2>
+<p>La struttura più semplice nella teoria dei gruppi - è un semigruppo. Un semigruppo - è un insieme per il quale è definita un'operazione binaria associativa, che prende in input due elementi di questo insieme e ne restituisce un terzo. Qui e di seguito, tutti gli esempi saranno forniti nel linguaggio di programmazione Python.</p>
+<p>In Python, possiamo definire il concetto di semigruppo usando <code>typing.Protocol</code> (per il controllo statico dei tipi) o semplicemente per convenzione (duck typing). Per chiarezza, useremo dizionari che memorizzano l'operazione <code>combine</code>.</p>
+<pre class="line-numbers"><code class="language-python">from typing import TypeVar, Callable, Protocol, Generic
+import functools # Per reduce
+
+T = TypeVar('T')
+
+# Descriviamo la struttura del semigruppo usando Protocol (per la tipizzazione statica)
+class Semigroup(Protocol[T]):
+    # Callable[[T, T], T] significa una funzione che accetta due argomenti di tipo T
+    # e restituisce un valore di tipo T
+    combine: Callable[[T, T], T]
+
+# Esempio: Semigruppo di numeri naturali (o interi/reali) con addizione
+# Rappresentiamo un semigruppo specifico come un dizionario con la chiave 'combine'
+addition_semigroup: Semigroup[int] = {
+    "combine": lambda a, b: a + b
+}
+
+# Esempio: Semigruppo di numeri con moltiplicazione
+multiplication_semigroup: Semigroup[int] = {
+    "combine": lambda a, b: a * b
+}
+
+# Esempio: Semigruppo di stringhe con concatenazione
+concatenation_semigroup: Semigroup[str] = {
+    "combine": lambda a, b: a + b
+}
+</code></pre>
+<p>L'operazione sugli elementi di un semigruppo deve necessariamente possedere la proprietà associativa. Testiamolo usando la funzione <code>assert</code> incorporata:</p>
+<pre class="line-numbers"><code class="language-python">def check_associativity(semigroup: Semigroup[T], a: T, b: T, c: T) -> None:
+    # Controlla che (a * b) * c == a * (b * c)
+    # Usa l'operazione combine dal semigruppo passato
+    left_side = semigroup["combine"](semigroup["combine"](a, b), c)
+    right_side = semigroup["combine"](a, semigroup["combine"](b, c))
+    assert left_side == right_side, f"Associativity failed for {semigroup}: ({a}, {b}, {c})"
+
+check_associativity(addition_semigroup, 1, 2, 3)
+check_associativity(multiplication_semigroup, 2, 3, 4) # 1*2*3 = 6, (1*2)*3 = 6, 1*(2*3)=6
+check_associativity(concatenation_semigroup, 'a', 'b', 'c')
+</code></pre>
+<p>Un semigruppo non ha proprietà particolarmente interessanti. Tuttavia, anche nel loro esempio, vediamo la comodità della teoria dei gruppi - la capacità di lavorare con insiemi e operazioni su di essi utilizzando un'interfaccia astratta (nel nostro caso, un dizionario con la funzione <code>combine</code>).</p>
+<p>Ad esempio, possiamo scrivere una funzione di riduzione (fold) di un elenco di valori di un semigruppo usando un valore iniziale. Questo suggerisce già la prossima struttura - un monoide.</p>
+<pre class="line-numbers"><code class="language-python">from typing import List
+
+# Questa funzione è più simile a fold (riduzione) della sezione successiva,
+# poiché richiede un valore iniziale. Una riduzione pura di un semigruppo
+# richiederebbe un elenco non vuoto.
+def reduce_semigroup_with_initial(
+    values: List[T],
+    semigroup: Semigroup[T],
+    initial_value: T
+) -> T:
+    # Usa functools.reduce per applicare sequenzialmente combine
+    return functools.reduce(semigroup["combine"], values, initial_value)
+
+# Ora possiamo usare questa funzione per ridurre un elenco:
+sum_val = reduce_semigroup_with_initial([1, 2, 3, 4], addition_semigroup, 0)
+assert sum_val == 10
+
+product_val = reduce_semigroup_with_initial([1, 2, 3, 4], multiplication_semigroup, 1)
+assert product_val == 24
+
+concat_val = reduce_semigroup_with_initial(['a', 'b', 'c'], concatenation_semigroup, '')
+assert concat_val == 'abc'
+
+</code></pre>
+<p>L'uso della funzione di riduzione dei semigruppi ci porta senza problemi alla prossima, e molto più interessante, struttura della teoria dei gruppi - il monoide.</p>
+<h2>**Teoria dei gruppi - Monoide**</h2>
+<p>Un monoide - è un semigruppo con un elemento neutro specificato (<code>unit</code> o <code>identity</code>).</p>
+<pre class="line-numbers"><code class="language-python"># Definisce il protocollo per il Monoide, ereditando da Semigroup
+class Monoid(Semigroup[T], Protocol[T]):
+    unit: T # Elemento neutro
+
+# Monoide dell'addizione di numeri (elemento neutro - 0)
+addition_monoid: Monoid[int] = {
+    "combine": lambda a, b: a + b,
+    "unit": 0
+}
+</code></pre>
+<p>L'elemento neutro - è un elemento tale che la sua combinazione con qualsiasi altro elemento non cambia quest'ultimo (<code>a + 0 = a</code>, <code>a * 1 = a</code>, <code>s + &quot;&quot; = s</code>). Per l'addizione di numeri, l'elemento neutro è ovviamente lo zero.</p>
+<p>Verifichiamo questa proprietà del monoide usando <code>assert</code>:</p>
+<pre class="line-numbers"><code class="language-python">def check_unit_combination(monoid: Monoid[T], value: T) -> None:
+    # Controlla che combine(value, unit) == value
+    # e combine(unit, value) == value (per completezza)
+    assert monoid["combine"](value, monoid["unit"]) == value
+    assert monoid["combine"](monoid["unit"], value) == value
+
+check_unit_combination(addition_monoid, 10)
+</code></pre>
+<p>L'elemento neutro del monoide di moltiplicazione dei numeri è l'unità.</p>
+<pre class="line-numbers"><code class="language-python">multiplication_monoid: Monoid[int] = {
+    "combine": lambda a, b: a * b,
+    "unit": 1
+}
+
+check_unit_combination(multiplication_monoid, 25)
+</code></pre>
+<p>Di conseguenza, l'elemento neutro del monoide di concatenazione di stringhe è la stringa vuota.</p>
+<pre class="line-numbers"><code class="language-python">concatenation_monoid: Monoid[str] = {
+    "combine": lambda a, b: a + b,
+    "unit": ""
+}
+
+check_unit_combination(concatenation_monoid, 'a')
+</code></pre>
+<p>E ora arriviamo alla proprietà più interessante dei monoidi: per lavorarci, si può usare l'operazione di fold. Questa è essenzialmente la stessa <code>reduce_semigroup_with_initial</code>, ma ora il valore iniziale è preso direttamente dal monoide (<code>unit</code>).</p>
+<pre class="line-numbers"><code class="language-python">def fold(monoid: Monoid[T], values: List[T]) -> T:
+    # Usa functools.reduce, partendo dall'elemento neutro monoid['unit']
+    return functools.reduce(monoid["combine"], values, monoid["unit"])
+
+# Con fold, si aprono capacità completamente magiche:
+sum_folded = fold(addition_monoid, [1, 2, 3, 4])
+assert sum_folded == 10
+
+product_folded = fold(multiplication_monoid, [1, 2, 3, 4])
+assert product_folded == 24
+
+concatenated_folded = fold(concatenation_monoid, ['a', 'b', 'c', 'd'])
+assert concatenated_folded == 'abcd'
+</code></pre>
+<p>Inoltre, possiamo definire, ad esempio, monoidi di funzioni. Ad esempio, un monoide di funzioni unarie (che accettano un argomento) sui numeri, dove l'operazione <code>combine</code> sarà la composizione di funzioni, e l'elemento neutro (<code>unit</code>) sarà la funzione identità (<code>lambda x: x</code>).</p>
+<pre class="line-numbers"><code class="language-python"># Tipo per una funzione unaria da int a int
+IntUnaryFunc = Callable[[int], int]
+
+# Monoide per la composizione di funzioni (int -> int)
+# IMPORTANTE: Ordine di composizione f(g(x))
+function_monoid: Monoid[IntUnaryFunc] = {
+    "combine": lambda f, g: lambda x: f(g(x)), # f dopo g
+    "unit": lambda x: x # Funzione identità
+}
+
+add_one: IntUnaryFunc = lambda x: x + 1
+double: IntUnaryFunc = lambda x: x * 2
+
+# Fold di un elenco di funzioni: [add_one, double]
+# Verrà applicato prima unit, poi double, poi add_one.
+# fold(monoid, [f, g]) è equivalente a combine(combine(unit, f), g) = combine(f, g)
+# combine(f, g) = lambda x: f(g(x))
+function_fold_result_func = fold(function_monoid, [add_one, double])
+
+# Applichiamo il risultato al numero 1: add_one(double(1)) = add_one(2) = 3
+assert function_fold_result_func(1) == 3
+
+# Se l'ordine delle funzioni è importante e si desidera g(f(x)), è necessario modificare combine:
+# "combine": lambda f, g: lambda x: g(f(x))
+</code></pre>
+<p>Nell'esempio del monoide, vediamo che la teoria dei gruppi ci permette di lavorare con una moltitudine di insiemi e operazioni su di essi in modo uniforme.</p>
+<p>Ricordi, a scuola ci dicevano che qualsiasi numero elevato alla potenza zero è uguale a uno, ma non ci spiegavano mai perché?</p>
+<p>Questa proprietà diventa ovvia al primo sguardo al monoide di moltiplicazione. L'elevazione a potenza è l'applicazione ripetuta dell'operazione <code>combine</code> del monoide di moltiplicazione. Ad esempio, <code>2^3</code> è <code>combine(combine(unit, 2), 2), 2)</code> o, che è lo stesso, <code>combine(combine(2, 2), 2)</code>.</p>
+<pre class="line-numbers"><code class="language-python"># 2^3 usando il monoide di moltiplicazione
+power_3 = multiplication_monoid["combine"](
+    multiplication_monoid["combine"](2, 2), # 2*2
+    2                                       # (2*2)*2
+)
+assert power_3 == 8
+</code></pre>
+<p>Ma cos'è la potenza zero? È l'applicazione dell'operazione <code>combine</code> zero volte all'elemento iniziale. Quale risultato dovremmo ottenere? Se non applichiamo <code>combine</code> nemmeno una volta, ci rimane solo l'elemento neutro <code>unit</code>, che nel caso del monoide di moltiplicazione è uguale a uno. Ecco perché <code>x^0 = 1</code>.</p>
+<h2>**Teoria dei gruppi - Gruppo**</h2>
+<p>Un gruppo - è un monoide per ogni elemento del quale è definito un elemento inverso dallo stesso insieme, tale che la combinazione dell'elemento con il suo inverso dia l'elemento neutro.</p>
+<pre class="line-numbers"><code class="language-python"># Definisce il protocollo per il Gruppo, ereditando da Monoid
+class Group(Monoid[T], Protocol[T]):
+    inverse: Callable[[T], T] # Funzione per ottenere l'elemento inverso
+
+# Un esempio classico di gruppo è l'insieme degli interi con l'operazione di addizione
+addition_group: Group[int] = {
+    "combine": lambda a, b: a + b,
+    "unit": 0,
+    "inverse": lambda a: -a # L'elemento inverso per l'addizione è l'opposto
+}
+</code></pre>
+<p>La proprietà principale di un gruppo è che la combinazione di un elemento con il suo elemento inverso dà sempre come risultato l'elemento neutro del gruppo:</p>
+<pre class="line-numbers"><code class="language-python">def check_inversion_combination(group: Group[T], value: T) -> None:
+    # Controlla che combine(value, inverse(value)) == unit
+    # e combine(inverse(value), value) == unit
+    assert group["combine"](value, group["inverse"](value)) == group["unit"]
+    assert group["combine"](group["inverse"](value), value) == group["unit"]
+
+check_inversion_combination(addition_group, 5) # 5 + (-5) == 0
+</code></pre>
+<p>Si può dire che un gruppo è una struttura matematica che astrae il concetto di simmetria. È con l'aiuto di questa struttura che i fisici studiano le proprietà dello spazio, del tempo, dell'energia e delle particelle elementari - alla base dell'apparato matematico della teoria della relatività e della meccanica quantistica c'è la teoria dei gruppi. Con il suo aiuto, nel 1918, Emmy Noether dimostrò i suoi famosi teoremi secondo cui qualsiasi legge di conservazione, che sia la legge di conservazione dell'energia, della quantità di moto o della carica, deriva da simmetrie fisiche fondamentali.</p>
+<p>Inoltre, monoidi e gruppi sono spesso applicati nella programmazione funzionale. Se studi anche solo un po' la teoria dei gruppi, vedrai che molti problemi e strutture in programmazione sono casi particolari di una struttura matematica più astratta. L'esempio più semplice di gruppo in programmazione è il sistema Undo-Redo, implementato in molte applicazioni (l'operazione è un'azione dell'utente, l'operazione inversa è l'annullamento dell'azione, l'elemento neutro è l'assenza di modifiche).</p>
+<h2>**Monadologia**</h2>
+<p>La bellezza delle simmetrie ha affascinato l'uomo fin dall'antichità. Nella scuola fondata dal leggendario filosofo e geometra greco antico Pitagora, i suoi allievi adoravano la monade, raffigurata come un cerchio con un punto spesso al suo centro:</p>
+<p>*(Immagine della monade di Pitagora)*</p>
+<p>Il significato mistico della monade risiedeva nel suo punto centrale - questo punto incarna il &quot;nulla&quot; da cui emerge l'Universo. Secondo i pitagorici, non ci sono limiti all'emergere di tutte le cose possibili dal nulla, ma contemporaneamente a queste cose emergono anche i loro opposti. Svelando il punto a dimensione zero in un numero infinito di opposti otteniamo un cerchio - una figura su cui giace un numero infinito di punti, per ognuno dei quali, rispetto al centro del cerchio, esiste un punto opposto. Nel complesso, questa descrizione si adatta perfettamente al concetto di gruppo della teoria dei gruppi.</p>
+<p>Nel suo magnum opus filosofico intitolato &quot;Monadologia&quot;, il grande filosofo e matematico tedesco Gottfried Wilhelm Leibniz espose la sua visione del mondo, secondo la quale tutta la nostra realtà consiste in un numero infinito di tali monadi duali. In onore di questo concetto pitagorico-leibniziano di monade, fu chiamata la struttura principale di un'altra teoria matematica - la teoria delle categorie.</p>
+<p>Se la teoria dei gruppi astrae le operazioni algebriche e geometriche intuitive di base in strutture generali, la teoria delle categorie - è come il passo successivo per la scala delle astrazioni - un'astrazione di astrazioni. La teoria delle categorie indaga varie strutture matematiche - gruppi, grafi, insiemi - come categorie astratte con oggetti (elementi) e morfismi (operazioni) tra di essi. I morfismi sono solitamente raffigurati come frecce e così si chiamano &quot;frecce&quot;. Un'eco di questo nome sono le funzioni lambda (<code>lambda</code>) o le funzioni normali (<code>def</code>) in programmazione, che trasformano alcuni valori in altri.</p>
+<p>Esaminiamo i concetti di base della teoria delle categorie.</p>
+<h2>**Teoria delle categorie - Freccia**</h2>
+<p>Una freccia (o morfismo) nella teoria delle categorie è una mappatura (funzione) tra due categorie (insiemi di oggetti) - una corrispondenza di ogni oggetto della prima categoria a un oggetto della seconda. Prendiamo ad esempio due categorie più semplici - numeri interi non negativi e stringhe della lettera &quot;a&quot;.</p>
+<pre class="line-numbers"><code>0 -&gt; &quot;&quot;
+1 -&gt; &quot;a&quot;
+2 -&gt; &quot;aa&quot;
+3 -&gt; &quot;aaa&quot;
+4 -&gt; &quot;aaaa&quot;
+...
+</code></pre>
+<p>Qui è chiaramente visibile che ogni elemento della categoria dei numeri è mappato a un elemento della categoria delle stringhe, composte dalla lettera 'a'. Qualsiasi mappatura di questo tipo può essere descritta usando una funzione. In questo caso è:</p>
+<pre class="line-numbers"><code class="language-python">def map_number_to_a_string(num: int) -> str:
+    # Assicurati che il numero sia non negativo per repeat
+    if num &lt; 0:
+        raise ValueError(&quot;Input number must be non-negative&quot;)
+    return &quot;a&quot; * num # In Python la stringa viene ripetuta per moltiplicazione
+
+assert map_number_to_a_string(3) == &quot;aaa&quot;
+</code></pre>
+<p>Non è necessario che un oggetto dalla prima categoria corrisponda a un oggetto unico della seconda. Ad esempio, per la seguente freccia dalla categoria dei numeri alla categoria della verità (valori booleani) nella seconda categoria ci sono solo due oggetti (<code>True</code> e <code>False</code>), ma ogni oggetto della prima è mappato a uno degli oggetti della seconda:</p>
+<pre class="line-numbers"><code>0 -&gt; False
+1 -&gt; False
+2 -&gt; False
+3 -&gt; True
+4 -&gt; True
+...
+n -&gt; True (per n &gt;= 3)
+</code></pre>
+<p>La funzione (freccia) in questo caso può essere descritta come:</p>
+<pre class="line-numbers"><code class="language-python">def map_number_to_boolean(number: int) -> bool:
+    return number &gt;= 3
+
+assert map_number_to_boolean(2) == False
+assert map_number_to_boolean(5) == True
+</code></pre>
+<h2>**Teoria delle categorie - Functor ed endofunctor**</h2>
+<p>Possiamo avvolgere gli oggetti di qualsiasi categoria in contenitori astratti. Se abbiamo categorie (tipi) A e B, e abbiamo un certo contenitore F (ad esempio, <code>list</code>, <code>Optional</code>, <code>Future</code>), che può contenere uno o più oggetti delle categorie A o B, allora otteniamo due nuove categorie (tipi) F(A) e F(B) (ad esempio, <code>list[A]</code> e <code>list[B]</code>).</p>
+<p>Nella teoria delle categorie vengono descritte le mappature tra categorie di oggetti e categorie di contenitori che, durante la trasformazione, mantengono la struttura. Tali mappature sono chiamate funtori. La mappatura stessa è chiamata <code>map</code> (o <code>fmap</code>).</p>
+<p>Esistono diversi tipi di funtori. Il più utilizzato è l'endofuntore, in cui la trasformazione avviene all'interno della stessa categoria di contenitore F(A) -&gt; F(B) (ad esempio, <code>list[A]</code> -&gt; <code>list[B]</code>).</p>
+<pre class="line-numbers"><code class="language-python"># Tipo generico per le variabili A e B
+A = TypeVar('A')
+B = TypeVar('B')
+
+# Protocollo per Functor
+class Functor(Protocol[A]):
+    # Il metodo map accetta una funzione (freccia) da A a B
+    # e restituisce un nuovo Functor con elementi di tipo B.
+    # Importante: restituisce un'istanza dello stesso tipo di funtore (ad esempio, list).
+    def map(self, func: Callable[[A], B]) -> 'Functor[B]':
+        ...
+
+# Un esempio classico di endofuntore in Python è la lista (list).
+# Sebbene la lista non abbia un metodo .map per impostazione predefinita, possiamo facilmente implementarlo
+# o usare le list comprehensions (che è più idiomatico).
+
+# Esempio di utilizzo di list comprehension come analogo di map:
+map_number_to_boolean_func = lambda number: number >= 3
+numbers_list: list[int] = [1, 2, 3, 4]
+
+# Applica la funzione a ogni elemento dell'elenco, ottenendo un nuovo elenco
+booleans_list: list[bool] = [map_number_to_boolean_func(n) for n in numbers_list]
+assert booleans_list == [False, False, True, True]
+
+# È possibile utilizzare anche la funzione map incorporata, che restituisce un iteratore:
+booleans_iterator = map(map_number_to_boolean_func, numbers_list)
+assert list(booleans_iterator) == [False, False, True, True]
+</code></pre>
+<p>Quindi, se abbiamo una freccia (funzione) <code>A -&gt; B</code>, allora con l'aiuto di un funtore (ad esempio, <code>list</code> e la sua operazione <code>map</code>/list comprehension) possiamo costruire una freccia <code>F[A] -&gt; F[B]</code>.</p>
+<p>Per i funtori devono essere rispettate diverse leggi.</p>
+<p>La prima legge - Legge dell'identità: <code>functor.map(id) == functor</code> (l'applicazione della funzione identità non deve modificare il funtore).</p>
+<pre class="line-numbers"><code class="language-python">def id_func(x: T) -> T:
+    return x
+
+# Verifica per la lista:
+numbers_list = [1, 2, 3]
+assert [id_func(x) for x in numbers_list] == numbers_list
+</code></pre>
+<p>La seconda legge - Legge della composizione: <code>functor.map(g o f) == functor.map(f).map(g)</code> (dove <code>g o f</code> - composizione di funzioni, <code>lambda x: g(f(x))</code>). La mappatura della composizione di funzioni è equivalente alla mappatura sequenziale di queste funzioni.</p>
+<pre class="line-numbers"><code class="language-python">f: Callable[[int], str] = lambda x: str(x) # int -> str
+g: Callable[[str], bool] = lambda x: len(x) > 1 # str -> bool
+compose_gf: Callable[[int], bool] = lambda x: g(f(x)) # int -> bool
+
+numbers_list = [5, 10, 15]
+
+# Lato sinistro: map(g o f)
+left_side = [compose_gf(x) for x in numbers_list] # [False, True, True]
+
+# Lato destro: map(f) e poi map(g)
+intermediate = [f(x) for x in numbers_list] # ['5', '10', '15']
+right_side = [g(y) for y in intermediate] # [False, True, True]
+
+assert left_side == right_side
+</code></pre>
+<h2>**Teoria delle categorie - Monade**</h2>
+<p>Una monade estende le capacità di un funtore, aggiungendo un'operazione <code>flatMap</code> (a volte chiamata <code>bind</code> o <code>&gt;&gt;=</code>) e un modo per &quot;avvolgere&quot; un valore normale in un contesto monadico (spesso chiamato <code>unit</code>, <code>return</code> o <code>pure</code>, in Python per le liste questo può essere semplicemente <code>lambda x: [x]</code>).</p>
+<pre class="line-numbers"><code class="language-python"># Protocollo per Monade (eredita da Functor)
+# IMPORTANTE: Questa è una rappresentazione semplificata. La tipizzazione corretta delle monadi in Python è complessa.
+class Monad(Functor[A], Protocol[A]):
+    # flatMap accetta una funzione che restituisce essa stessa una monade
+    def flatMap(self, func: Callable[[A], 'Monad[B]']) -> 'Monad[B]':
+        ...
+
+    # Metodo statico o di classe per "avvolgere" un valore
+    @classmethod
+    def unit(cls, value: A) -> 'Monad[A]':
+         ...
+
+# Usiamo di nuovo la lista come esempio di monade in Python.
+# Sebbene la lista non abbia metodi flatMap/unit, possiamo simularli.
+
+# 'unit' per la lista: avvolgere un valore in una lista
+list_unit = lambda x: [x]
+
+# 'flatMap' per la lista: applicare la funzione a ogni elemento,
+# e poi "appiattire" (flatten) il risultato (unire le liste).
+# Questo si fa facilmente con una list comprehension con due for.
+def list_flat_map(data: list[A], func: Callable[[A], list[B]]) -> list[B]:
+    # Per ogni x in data, applica func(x), che restituirà una lista.
+    # Poi per ogni y in questa lista interna, aggiungi y al risultato.
+    return [y for x in data for y in func(x)]
+
+# Esempio di utilizzo
+numbers = [1, 2, 3]
+# Funzione che per un numero n restituisce la lista [n, n+1]
+func_n_nplus1 = lambda number: [number, number + 1]
+
+flat_mapped_numbers = list_flat_map(numbers, func_n_nplus1)
+# Risultato atteso:
+# Per 1 -> [1, 2]
+# Per 2 -> [2, 3]
+# Per 3 -> [3, 4]
+# Uniamo: [1, 2, 2, 3, 3, 4]
+assert flat_mapped_numbers == [1, 2, 2, 3, 3, 4]
+</code></pre>
+<p>Altri esempi noti di monadi (o strutture simili a monadi) in Python possono essere:</p>
+<ul>
+<li><code>asyncio.Future</code> (o <code>awaitables</code> in generale) per operazioni asincrone (dove <code>await</code> è simile a <code>flatMap</code>).</li>
+<li>Il tipo <code>Optional</code> (spesso implementato come <code>Union[T, None]</code>, sebbene per una monade corretta sia necessaria una struttura <code>Maybe</code> o <code>Option</code> più rigorosa) per lavorare con valori che potrebbero essere assenti.</li>
+<li>Varie monadi da librerie di programmazione funzionale per Python (ad esempio, <code>pymonad</code>, <code>returns</code>).</li>
+</ul>
+<p>In sostanza, una monade è semplicemente un'astrazione dei calcoli in quanto tali, che consente di costruire pipeline di elaborazione dati, gestire effetti collaterali, gestire errori o asincronia in modo uniforme.</p>
+<p>*(Immagine/diagramma della monade)*</p>
+<p>Per le monadi devono essere soddisfatte diverse leggi monadiche speciali (identità sinistra e destra, associatività di <code>flatMap</code>), che, tuttavia, non elencherò qui, poiché è ora di concludere questo post già lungo. Voglio solo notare che il vantaggio più importante delle monadi è che consentono di ordinare l'esecuzione di calcoli isolati. Un esempio di tale ordinamento in Python è l'uso di <code>await</code> per l'esecuzione sequenziale di operazioni asincrone (<code>asyncio.Future</code>), che è concettualmente simile alla composizione monadica.</p>
+<h2>**Conclusione**</h2>
+<p>In conclusione, vorrei dire che la teoria dei gruppi e la teoria delle categorie sono alla base di tutta la matematica, l'informatica e la fisica conosciute dall'uomo. È letteralmente il linguaggio della creazione - il più espressivo e il più poeticamente bello. Lo imparerei solo perché Dio lo parlava!</p>

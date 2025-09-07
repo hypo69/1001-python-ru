@@ -1,0 +1,1 @@
+Placeholder for Ukrainian translation of CI/CD Pipeline Guide (MD)

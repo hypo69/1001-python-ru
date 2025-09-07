@@ -1,0 +1,151 @@
+Nel 1973 fu pubblicato il libro "101 BASIC Computer Games", che divenne rapidamente un vero bestseller, vendendo un milione di copie. Ha svolto un ruolo chiave nella divulgazione della programmazione, e dietro il suo successo c'era la Digital Equipment Corporation (DEC), uno dei pionieri nella produzione di minicomputer.
+
+Un po' di storia dello sviluppo dell'informatica
+
+Verso la fine degli anni Cinquanta del secolo scorso, le gigantesche macchine a valvole, come ENIAC e MARK-1, furono in gran parte sostituite da una generazione di computer a transistor. Ogni generazione successiva si distingueva notevolmente per velocità e volume di dati elaborati, ma anche queste occupavano molto spazio e richiedevano un team di professionisti per la manutenzione. Sul mercato dell'epoca c'erano diversi marchi eccezionali di macchine calcolatrici che hanno avuto un impatto significativo sullo sviluppo della tecnologia e della scienza. Elencherò alcuni di essi:
+
+IBM 709 — una delle macchine più popolari dell'epoca, utilizzata per calcoli scientifici e militari.
+
+UNIVAC I (Universal Automatic Computer I) — il primo computer commercialmente di successo, sviluppato per l'uso in aziende e agenzie governative.
+
+PDP-1 (Programmed Data Processor-1) — il primo computer della linea PDP, sviluppato dalla Digital Equipment Corporation (DEC), che divenne la base per lo sviluppo dei minicomputer. (dell'azienda DEC si parlerà più avanti)
+
+EDSAC (Electronic Delay Storage Automatic Calculator) — uno dei primi computer pratici con programma memorizzato, sviluppato all'Università di Cambridge.
+
+CDC 1604 — un computer della Control Data Corporation, noto per le sue alte prestazioni e l'uso nella ricerca scientifica.
+
+ENIAC
+
+
+ENIAC presso il poligono di prova di Aberdeen, Maryland. Glen Beck (dietro) e Betty Snyder (davanti) programmano ENIAC nell'edificio 328 del Ballistic Research Laboratory.
+
+Harvard Mark I
+
+Macchina calcolatrice elettromeccanica
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+Rack sinistro del calcolatore con componenti di calcolo elettromeccanici.
+
+IBM 1401
+
+Computer decimale a lunghezza di parola variabile
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+IBM 1401 in riparazione al Computer History Museum. Un volontario del museo usa un oscilloscopio per risolvere i problemi con l'addizionatore del computer.
+
+UNIVAC I
+
+Il primo computer americano per uso generale (1951)
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+UNIVAC I — il primo computer commerciale negli Stati Uniti, creato per un'agenzia governativa civile presso il laboratorio Eckert-Mauchly a Filadelfia, Pennsylvania.
+
+IBM 7070
+
+Computer decimale, introdotto da IBM nel 1958
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+Parte del telaio dell'IBM 7070, che mostra le schede del sistema modulare standard (SMS) con transistor discreti.
+
+UNIVAC 1232
+
+La serie 1230 era una versione militare dell'UNIVAC 490, prodotta dalla divisione Sperry Univac a St. Paul.
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+Pannello di controllo per il computer UNIVAC 1232. Questo particolare computer è stato utilizzato dal 1967 al 1990 circa presso il Satellite Control Center dell'US Air Force a Sunnyvale, California. Questo computer è una versione militare del computer commerciale universale UNIVAC 490. Si trova allo Smithsonian National Air and Space Museum presso l'Udvar-Hazy Center. (https://commons.wikimedia.org/)
+
+Programmazione negli anni '70-'80: l'era delle schede perforate e della pazienza
+Il processo di sviluppo negli anni '70 era molto diverso da oggi. L'accesso alle macchine calcolatrici era limitato, e questo influenzava l'intero processo. Principalmente, si trattava di esercito, università, e istituzioni scientifiche. La programmazione a quei tempi era più un'arte, che richiedeva meticolosità, diligenza e immensa pazienza. Lavorare con il codice richiedeva attenzione, accuratezza e un alto grado di perseveranza. Lo sviluppatore scriveva e modificava il codice manualmente su un quaderno o un blocco note. Immagina: nessuna evidenziazione della sintassi, completamento automatico o debugger! Se un errore si insinuava nel codice o era necessario cambiare qualcosa, il codice veniva riscritto da capo o corretto con annotazioni accurate. Era un processo lungo e monotono, che richiedeva la massima concentrazione. Non si parlava di una professione di programmatore di massa.
+
+L'inserimento del programma nella macchina era un'arte a sé stante. Il programmatore o l'operatore si sedeva davanti al perforatore, metteva accanto un quaderno con il codice e iniziava a perforare il codice sulle schede perforate. Il perforatore – è un dispositivo simile a una macchina da scrivere, dove ogni tasto corrispondeva a una lettera, un numero o un simbolo specifico. La pressione di un tasto perforava un foro nella colonna desiderata della scheda. Ogni scheda rappresentava una o più righe di codice. Dopo aver completato la digitazione, le schede venivano passate per la verifica – verifichiamo. L'operatore inseriva nel dispositivo di verifica i dati ripetutamente, e la macchina li confrontava con i fori perforati. La scheda perforata con un errore veniva sostituita, oppure corretta perforando nuovi fori nelle colonne appropriate. Quando tutte le schede erano pronte, venivano disposte in una sequenza rigorosa. L'ordine era di importanza critica, poiché era in questa sequenza che le schede venivano lette dalla macchina. Quindi le schede venivano passate al dispositivo di lettura. Per codificare anche programmi relativamente piccoli erano necessarie centinaia, migliaia, o addirittura decine di migliaia di schede perforate. Qualsiasi errore, che si trattasse di un foro perforato in modo errato o di una violazione della sequenza, portava al fallimento del programma. E allora l'intero processo doveva ricominciare da capo.
+
+Perforatore IBM 29 Keypunch
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+FORTRAN IV Pocket Handbook, Daniel E. Alexander e Andrew C. Messer, McGraw Hill, 1972.(https://www.math-cs.gordon.edu/courses/cs323/FORTRAN/keypunch.jpg)
+
+Questa pila di 62 500 schede perforate — con un volume di 5 MB — conteneva il programma di controllo per la gigantesca rete di computer militari SAGE.
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+Immagine tratta dal sito del Computer History Museum (CHM)
+
+DEC e David Ahl
+I laureati del Massachusetts Institute of Technology (MIT) Ken Olsen e Harlan Anderson non erano nuovi all'informatica. Lavorando presso il Lincoln Laboratory (un'istituzione di ricerca e sviluppo del Dipartimento della Difesa degli Stati Uniti all'interno della struttura del MIT) hanno completato la maggior parte dei progetti nello sviluppo delle macchine AN/FSQ-7, TX-0 e TX-2. Il TX-0 è stato il primo computer a transistor a 16 bit completamente transistorizzato con indirizzamento a 16 bit e istruzioni a 16 bit.
+
+AN/FSQ-7
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+Il nome "AN/FSQ" deriva da Army-Navy / Fixed Special eQuipment.
+
+L'AN/FSQ-7 era il più grande sistema informatico discreto mai creato. Era il sistema informatico principale della rete SAGE, sviluppato e costruito da IBM. Era enorme, conteneva circa 49 000 valvole elettroniche, pesava centinaia di tonnellate e consumava megawatt di energia. Il programma su schede perforate della foto precedente veniva eseguito su questo sistema
+(https://commons.wikimedia.org/)
+
+Nel 1957, Kenneth Olsen e Harlan Anderson fondarono la Digital Equipment Corporation (DEC) con l'obiettivo di ridurre i costi e le dimensioni delle macchine calcolatrici. Il capitale iniziale dell'azienda ammontava a $100 000, di cui il 70% apparteneva alla American Research and Development. La American Research and Development Corporation (ARDC) era una pionieristica società di venture capital, e il suo investimento in DEC è considerato il primo successo nella storia del venture capital. Un classico esempio di startup di quegli anni 😊. La società fondatrice insistette affinché il nome della società figlia non contenesse la parola "computer", sebbene inizialmente il nome fosse stato pianificato come "Digital Computer Corporation". Questa condizione fu rispettata anche nel nome dei prodotti: invece del termine "computer" fu usato il termine "Programmable Data Processor", o in breve "PDP". Questa condizione era legata al fatto che a quei tempi esisteva uno stereotipo secondo cui un computer era qualcosa di enorme e costoso, che richiedeva una sala macchine separata e un personale di servizio considerevole. In questo modo, l'azienda evitò le conseguenze negative di questo stereotipo.
+
+PDP-8
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+PDP-8 in mostra al National Museum of Computing di Bletchley, Inghilterra. Questo esemplare appartiene alla prima generazione di PDP-8, costruita con transistor discreti e successivamente conosciuta come Straight 8. (https://commons.wikimedia.org/)
+
+PDP-11
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+Computer PDP-11/40 al Museo Tecnico di Vienna. In basso si trova il processore PDP-11/40, sopra è installata una doppia unità DECtape TU56. (https://commons.wikimedia.org/)
+
+Nel 1969, la DEC invitò David Ahl a lavorare come consulente per la psicologia dell'apprendimento e il marketing per sviluppare la sua linea di prodotti educativi. Ahl aveva una solida formazione in scienze esatte e affari: aveva conseguito lauree in ingegneria elettrica e amministrazione aziendale. Prima di entrare in DEC, aveva acquisito esperienza nel campo dell'istruzione ed era noto per il suo interesse nell'uso dei computer nel processo di apprendimento. Ha iniziato la sua carriera presso la Digital Equipment Corporation come consulente per la psicologia dell'apprendimento e il marketing per sviluppare una linea di computer che non richiedevano una formazione speciale per la manutenzione dei sistemi di calcolo. David Ahl ha curato la newsletter della DEC, che pubblicava regolarmente blocchi di codice e istruzioni per la programmazione di minicomputer. Ahl convinse la direzione a pubblicare una raccolta di giochi in linguaggio BASIC.
+- BASIC, il linguaggio in cui sono scritti i giochi, stava allora guadagnando popolarità.
+- BASIC è stato progettato in modo che gli studenti potessero scrivere programmi senza difficoltà, utilizzando terminali con condivisione del tempo. Era destinato a utenti più "semplici", non tanto interessati alla velocità di esecuzione dei programmi, quanto semplicemente alla possibilità di utilizzare il computer per risolvere i loro problemi senza una formazione speciale.
+- l'interprete del linguaggio era presente in tutti i modelli PDP, tranne i primissimi (PDP-1, PDP-4, PDP-5)
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+(us.archive.org)
+
+La raccolta costava $7,50 più $0,50 per la spedizione. Oggi questo prezzo equivale a circa $50,25, considerando un'inflazione media annua del 3,8%.
+
+Un ruolo importante nella creazione del libro è stato svolto da appassionati di programmazione di tutto il paese. La DEC ha annunciato un concorso, invitando i programmatori a inviare i loro giochi in BASIC. Gli autori dei migliori lavori ricevevano un compenso e i loro giochi venivano inclusi nella raccolta. Questo approccio di crowdsourcing ha reso il libro davvero unico. È diventato non solo una raccolta di giochi, ma anche un riflesso dell'entusiasmo e della creatività di un'intera generazione di programmatori amatoriali. La DEC aveva requisiti piuttosto severi per la formattazione dei materiali inviati, necessari per l'unificazione e la semplificazione del processo di pubblicazione. Ecco alcuni di questi requisiti:
+Carta. Bianca, non rigata. Il minor numero possibile di pieghe sulle stampe. 
+Stampa. Nastro nero fresco. Il rosso non era accettato. 
+Nastro perforato. Preferibile era il nastro perforato piegato paraffinato (carta impregnata di paraffina per resistenza e protezione con fori per il meccanismo di avanzamento del nastro). Se veniva utilizzato nastro impregnato (ad esempio, da un teletype), doveva essere piegato con cura (pieghe ogni 8,5 pollici (21,59 cm)), lasciando almeno 17 pollici (43,18 cm) di leader vuoto e 8,5 pollici (21,59 cm) di trailer. Il nastro impregnato doveva essere avvolto in pellicola trasparente o carta cerata per evitare la contaminazione.
+
+- Leader — l'inizio del nastro, che rimane vuoto prima dell'inizio della registrazione dei dati.
+
+- Trailer — la fine del nastro, che rimane vuota dopo la fine della registrazione dei dati.
+
+Inoltre, gli autori dovevano fornire le seguenti informazioni:
+*  Nome
+*  Indirizzo completo
+*  Telefono
+*  Scuola (se applicabile)
+*  Età
+*  Sistema informatico utilizzato
+*  Fonte del programma (idea originale o adattamento)
+
+Inviando il programma, l'autore concedeva a Digital Equipment Corp. il diritto di pubblicare, ristampare, distribuire o utilizzare il programma in qualsiasi altro modo. L'autore, ovviamente, veniva sempre accreditato.
+
+101 giochi in Python. Prefazione Programmazione, Storia dell'IT, Python, Istruzioni, Guida, Longpost
+Pagina del libro con istruzioni per gli autori (us.archive.org)
+
+Oltre a questo libro, sono state pubblicate due guide aggiuntive:
+Understanding Mathematics and Logic Using BASIC Computer Games per studenti delle classi 7-12.
+Getting Started in Classroom Computing per studenti delle classi 2-7.
+
+Il libro ha avuto tre ristampe:
+1a edizione: luglio 1973.
+2a edizione: aprile 1974.
+3a edizione: marzo 1975.
+
+Nel 1973, David Ahl fu licenziato dalla sua posizione a causa di tagli al personale, ma prima del licenziamento era stato assunto in una nuova divisione della DEC. Questo gruppo lavorava alla creazione di un computer più piccolo di qualsiasi altro mai costruito, con l'intenzione di portare il nuovo prodotto su nuovi mercati, come le scuole. Riuscirono a costruire una macchina compatta, che combinava il PDP-8 con un terminale VT50, e riuscirono anche a inserire un PDP-11 in un piccolo case portatile. Quando il risultato fu mostrato al comitato operativo della DEC, gli ingegneri lo apprezzarono, ma il reparto vendite temeva che avrebbe ridotto le vendite delle loro linee esistenti. Alla fine, la decisione fu presa da Ken Olsen, uno dei fondatori della Digital Equipment Corporation, che alla fine dichiarò: "Non vedo alcun motivo per cui qualcuno dovrebbe aver bisogno di un computer personale".
+
+A questo punto il progetto si concluse.
+
+Nel 1974, Ahl lasciò la DEC, deluso dalla politica dell'azienda, e fondò Creative Computing, una delle prime riviste a divulgare i computer. Nel decennio successivo, Creative Computing coprì l'intero spettro dei computer amatoriali, domestici e personali, e, sebbene Ahl vendette la rivista all'inizio degli anni '80, continuò a svolgere le sue funzioni di caporedattore.
+Nel giugno 2022, Ahl ha rilasciato al pubblico tutto ciò che aveva mai scritto, dalla prosa al software.
+
+Continuazione della storia. David Ahl e Creative Computing
+
+In questa raccolta
+Inizio a portare i giochi in linguaggio Python. Ogni gioco è accompagnato da codice sorgente, spiegazione dettagliata, diagramma di flusso e algoritmo, in modo che tu possa facilmente capire come funziona e iniziare a sperimentare.
+
+La mia opinione
+
+L'apprendimento del codice attraverso la scrittura di giochi offre allo studente l'opportunità di vedere un risultato significativo dell'esecuzione del codice. Nel repository, il codice è scritto nel modo più semplice possibile per essere accessibile ai principianti. Nel processo, fornirò consigli sulla scrittura del codice, sui commenti e sul rispetto dello stile PEP-8.

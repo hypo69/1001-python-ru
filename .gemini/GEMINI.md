@@ -81,7 +81,7 @@ FOR each subdirectory D in ru/articles/:
    * Check if `.html` exists → if not, generate it.
 
 2. **Translations:**
-   For each `.md` file (except skipped ones) in each language (`en`, `es`, `fr`, `ua`, `he`, `pl`, `de`, `it`):
+   For each `.md` file (except skipped ones) in each language (`ru`,`en`, `es`, `fr`, `ua`, `he`, `pl`, `de`, `it`):
 
    * If translated `.md` does not exist → create it.
    * If translated `.html` does not exist → create it.
