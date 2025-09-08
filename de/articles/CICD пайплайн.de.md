@@ -65,7 +65,8 @@ Schauen wir uns grundlegende Pipelines für beliebte Technologien an. Alle Beisp
 ```yaml
 # .github/workflows/python-ci.yml
 name: Python CI
-on: [push, pull_request]
+
+on: [push, pull_request]
 
 jobs:
   build:

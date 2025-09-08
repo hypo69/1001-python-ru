@@ -1,1 +1,0 @@
-Placeholder for German translation of CI/CD Pipeline Guide (MD)
