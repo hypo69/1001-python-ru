@@ -16,7 +16,7 @@
 
 שם תראה תפריט להתאמה אישית של טקסט הקישורים (דוגמה בצילום המסך למטה):
 
-![הגדרות WP-PageNavi בוורדפרס](https://github.com/hypo69/1001-python-ru/blob/master/assets/wordpress-pagenavi-guide/a34df3db-dcb3-4815-ac1c-a73c693fce39.png)
+![הגדרות WP-PageNavi בוורדפרס](https://raw.githubusercontent.com/hypo69/1001-python-ru/master/ru/assets/wordpress-pagenavi-guide/a34df3db-dcb3-4815-ac1c-a73c693fce39.png)
 
 👉 בכל שדה, תוכל להשתמש במשתנים כדי להציג באופן דינמי את העמוד הנוכחי, המספר הכולל של העמודים ואלמנטים ניווט אחרים.
 

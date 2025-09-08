@@ -16,7 +16,7 @@ Después de instalar el plugin, vaya al panel de administración de WordPress:
 
 Allí verá un menú para personalizar el texto de los enlaces (ejemplo en la captura de pantalla a continuación):
 
-![Configuración de WP-PageNavi en WordPress](https://github.com/hypo69/1001-python-ru/blob/master/assets/wordpress-pagenavi-guide/a34df3db-dcb3-4815-ac1c-a73c693fce39.png)
+![Configuración de WP-PageNavi en WordPress](https://raw.githubusercontent.com/hypo69/1001-python-ru/master/ru/assets/wordpress-pagenavi-guide/a34df3db-dcb3-4815-ac1c-a73c693fce39.png)
 
 👉 En cada campo, puede usar variables para mostrar dinámicamente la página actual, el número total de páginas y otros elementos de navegación.
 

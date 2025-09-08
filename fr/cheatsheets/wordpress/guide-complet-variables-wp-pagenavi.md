@@ -16,7 +16,7 @@ Après avoir installé le plugin, accédez au panneau d'administration de WordPr
 
 Vous y verrez un menu pour personnaliser le texte des liens (exemple dans la capture d'écran ci-dessous) :
 
-![Paramètres WP-PageNavi dans WordPress](https://github.com/hypo69/1001-python-ru/blob/master/assets/wordpress-pagenavi-guide/a34df3db-dcb3-4815-ac1c-a73c693fce39.png)
+![Paramètres WP-PageNavi dans WordPress](https://raw.githubusercontent.com/hypo69/1001-python-ru/master/ru/assets/wordpress-pagenavi-guide/a34df3db-dcb3-4815-ac1c-a73c693fce39.png)
 
 👉 Dans chaque champ, vous pouvez utiliser des variables pour afficher dynamiquement la page actuelle, le nombre total de pages et d'autres éléments de navigation.
 

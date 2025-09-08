@@ -4,35 +4,35 @@ Hello, developers! In this article, I will talk about CI/CD – the concept.
 
 ### What is a CI/CD pipeline in the context of programming?
 
-**CI/CD pipeline (Continuous Integration / Continuous Delivery or Continuous Deployment)** is an automated process that allows developers to quickly and reliably deliver code changes to a working environment (production).
+**A CI/CD pipeline (Continuous Integration / Continuous Delivery or Continuous Deployment)** is an automated process that allows developers to quickly and reliably deliver code changes to a working environment (production).
 
 Let's break down the key concepts:
 
 🔧 **CI — Continuous Integration**
-This is a practice where developers frequently make changes to a shared codebase. Each such change automatically:
-*   **Builds**
-*   **Tests** (unit tests, integration tests)
-*   **Checks for compliance with standards** (linting, static analysis)
+This is a practice where developers frequently integrate changes into a shared codebase. Each such change is automatically:
+*   **Built**
+*   **Tested** (unit tests, integration tests)
+*   **Checked for compliance with standards** (linting, static analysis)
 
-👉 **CI Goal:** To identify errors at the earliest stage, before they break something important or get into a release.
+👉 **CI Goal:** To identify errors at the earliest stage, before they break something important or make it into a release.
 
 🚀 **CD — Continuous Delivery or Continuous Deployment**
 There are two options here:
 
 ✅ **Continuous Delivery**
-After successfully completing the CI stage, changes automatically:
-*   Pass additional tests (e.g., E2E – end-to-end tests)
-*   Go to a staging (test) server
-👉 **But deployment to production still requires manual confirmation.** This gives the team control over *when* exactly users will see the changes.
+After successfully passing the CI stage, changes automatically:
+*   Undergo additional tests (e.g., E2E – end-to-end tests)
+*   Are deployed to a staging (test) server
+👉 **But deployment to production still requires manual approval.** This gives the team control over *when* exactly users will see the changes.
 
 🤖 **Continuous Deployment**
-This is the next step after Continuous Delivery. Here, deployment to production happens **fully automatically** if all previous pipeline stages (build, all tests) have been successfully completed. This is the most advanced level of automation.
+This is the next step after Continuous Delivery. Here, deployment to production happens **fully automatically**, if all previous pipeline stages (build, all tests) have passed successfully. This is the most advanced level of automation.
 
 ### 🔄 What does a CI/CD pipeline usually consist of?
 
 A typical pipeline includes the following stages:
 1.  **Checkout** — Cloning the latest version of the code from the repository.
-2.  **Build** — Building the project (compilation, artifact assembly, Docker images).
+2.  **Build** — Building the project (compilation, artifact creation, Docker images).
 3.  **Test** — Running various types of tests (unit, integration, E2E).
 4.  **Lint/Code Quality** — Checking code for style compliance and potential errors using static analyzers.
 5.  **Deploy** — Deploying the application (to a staging or production server).
@@ -48,13 +48,13 @@ A typical pipeline includes the following stages:
 *   Azure DevOps
 *   TeamCity
 
-### 🧠 Why do we need CI/CD at all?
+### 🧠 Why do we even need CI/CD?
 
 *   **Reduces human error:** Automation eliminates errors associated with manual operations.
 *   **Fast bug detection:** Errors are found earlier, making them easier and cheaper to fix.
-*   **Automation of routine tasks:** Developers spend less time on building and deploying, and more on code.
-*   **Improved code quality:** Constant checks and tests raise the overall quality bar.
-*   **Fast delivery of features to users:** New features reach the end user faster and more frequently.
+*   **Automation of routine tasks:** Developers spend less time on building and deploying, and more on coding.
+*   **Improved code quality:** Continuous checks and tests raise the overall quality bar.
+*   **Faster feature delivery to users:** New features reach the end-user faster and more frequently.
 
 ### 📦 Simple CI/CD examples with GitHub Actions
 
@@ -121,7 +121,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: npm install # or npm ci for a more predictable installation
+        run: npm install # or npm ci for more predictable installation
 
       - name: Lint with ESLint
         run: npx eslint . # Make sure ESLint is configured in the project
@@ -153,7 +153,7 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build Docker image
-        # Replace myapp with the name of your application
+        # Replace myapp with your application name
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:latest .
 
       - name: Push Docker image
@@ -216,7 +216,7 @@ If you are deploying a Docker image to Heroku:
 #       run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
 ```
 
-#### 🟨 Deploy to AWS (e.g., static to S3)
+#### 🟨 Deploy to AWS (e.g., static site to S3)
 
 **🔐 GitHub Secrets:** `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET_NAME`.
 
@@ -243,11 +243,11 @@ jobs:
         # Replace ./public with the path to your static files
         run: aws s3 sync ./public s3://${{ secrets.S3_BUCKET_NAME }} --delete
 ```
-For deployment to **AWS Elastic Beanstalk**, EB CLI is usually used, the pipeline will be similar, but with `eb deploy` commands.
+For deployment to **AWS Elastic Beanstalk**, EB CLI is typically used; the pipeline will be similar but with `eb deploy` commands.
 
 #### 🔵 Deploy to Google Cloud Platform (GCP App Engine)
 
-**🔐 GitHub Secrets:** `GCP_CREDENTIALS` (JSON service account key), `GCP_PROJECT_ID`.
+**🔐 GitHub Secrets:** `GCP_CREDENTIALS` (JSON key of a service account), `GCP_PROJECT_ID`.
 
 ```yaml
 # .github/workflows/deploy-gcp-app-engine.yml
@@ -275,7 +275,7 @@ jobs:
 
 #### 🟪 Deploy to Render.com
 
-Render often automatically deploys on push to GitHub if the repository is connected. But for a manual trigger (or as part of a more complex pipeline), you can use a Deploy Hook.
+Render often automatically deploys on push to GitHub if the repository is connected. But for a manual trigger (or as part of a more complex pipeline) you can use a Deploy Hook.
 **🔐 GitHub Secrets:** `RENDER_DEPLOY_HOOK` (URL obtained from Render service settings).
 
 ```yaml
@@ -295,11 +295,11 @@ jobs:
 
 ### 🌟 Advanced CI/CD: Build Docker → Push to GHCR → Staging/Production on GCP Cloud Run
 
-And now the cherry on top! Let's build an advanced pipeline:
-1.  Build Docker image.
-2.  Publish image to GitHub Container Registry (ghcr.io).
-3.  Automatic deployment to **staging** environment on GCP Cloud Run.
-4.  Deployment to **production** environment on GCP Cloud Run **after manual confirmation**.
+And now for the cherry on top! Let's assemble an advanced pipeline:
+1.  Build a Docker image.
+2.  Publish the image to GitHub Container Registry (ghcr.io).
+3.  Automatic deployment to a **staging** environment on GCP Cloud Run.
+4.  Deployment to a **production** environment on GCP Cloud Run **after manual approval**.
 
 For this, we will need several workflow files.
 
@@ -316,18 +316,17 @@ name: Build & Push to GHCR
 
 on:
   push:
-    branches: [main] # Run on push to main
+    branches: [main] # Runs on push to main
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: read      # For checkout
-      packages: write     # For push to GHCR
+      packages: write     # For pushing to GHCR
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -342,7 +341,7 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest
-          # You can add tagging by commit SHA for uniqueness:
+          # Can add tagging by commit SHA for uniqueness:
           # tags: |
           #   ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest
           #   ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:${{ github.sha }}
@@ -353,7 +352,7 @@ jobs:
 
 #### 2. Automatic deployment to Staging (GCP Cloud Run)
 
-This workflow will run automatically after `build.yml` successfully completes.
+This workflow will run automatically after the successful completion of `build.yml`.
 
 ```yaml
 # .github/workflows/deploy-staging.yml
@@ -389,7 +388,7 @@ jobs:
         id: deploy
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
-          service: 'myapp-staging' # Name of your staging service in Cloud Run
+          service: 'myapp-staging' # Your staging service name in Cloud Run
           region: '${{ secrets.GCP_REGION }}'
           # Use the image that was pushed in build.yml
           image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest'
@@ -397,7 +396,7 @@ jobs:
           flags: '--allow-unauthenticated --platform=managed' # Allow unauthenticated access for example
 ```
 
-#### 3. Deploy to Production with manual confirmation (GCP Cloud Run)
+#### 3. Deploy to Production with manual approval (GCP Cloud Run)
 
 This workflow is triggered manually via the GitHub Actions UI.
 
@@ -429,7 +428,7 @@ jobs:
         id: deploy
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
-          service: 'myapp-production' # Name of your production service
+          service: 'myapp-production' # Your production service name
           region: '${{ secrets.GCP_REGION }}'
           image: 'ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/myapp:latest' # Use the same 'latest' image
           project_id: '${{ secrets.GCP_PROJECT_ID }}'
@@ -441,15 +440,15 @@ jobs:
 ```
 
 **Important points of this advanced pipeline:**
-*   **GitHub Container Registry (ghcr.io):** We use it to store Docker images. This is convenient as it is tightly integrated with GitHub Actions.
-*   **`workflow_run`:** Allows one workflow (staging deployment) to be triggered upon completion of another (build).
-*   **`workflow_dispatch`:** Allows manual triggering of a workflow (production deployment), providing control.
+*   **GitHub Container Registry (ghcr.io):** We use it to store Docker images. This is convenient as it's tightly integrated with GitHub Actions.
+*   **`workflow_run`:** Allows one workflow (staging deployment) to be triggered upon the completion of another (build).
+*   **`workflow_dispatch`:** Enables manual triggering of a workflow (production deployment), providing control.
 *   **GitHub Environments:** Allow you to configure protection rules for production (e.g., requiring approval from specific reviewers) and store environment-specific secrets.
 *   **GCP Cloud Run:** An excellent serverless option for running containerized applications.
 
 ### 🔐 Security – it's important!
 
 *   **Use GitHub Secrets:** Never store tokens, passwords, API keys directly in YAML files. Use `Settings -> Secrets and variables -> Actions` in your repository.
-*   **Least Privilege:** For service accounts (e.g., GCP), grant only the permissions truly necessary to perform CI/CD tasks.
-*   **Isolate Environments:** Staging and Production should be as isolated as possible. Different projects/accounts in cloud providers are good practice.
+*   **Least Privilege:** For service accounts (e.g., GCP), grant only the permissions strictly necessary to perform CI/CD tasks.
+*   **Isolate Environments:** Staging and Production should be as isolated as possible. Different projects/accounts in cloud providers are a good practice.
 *   **Branch Protection:** Configure protection for the `main` (or `master`) branch so that pushes to it are only possible via Pull Requests with mandatory CI checks.
