@@ -1,4 +1,5 @@
-# Training an OpenAI Model for Web Page Classification
+<!-- Translated to en -->
+# Training an OpenAI model for web page classification
 
 ## Introduction
 
@@ -9,9 +10,9 @@ Training an OpenAI model to determine if a page is an online store.
 - sending data for training
 - model testing.
 
-## Step 1: Registration and OpenAI API Setup
+## Step 1: Register and configure OpenAI API
 
-To start working with the OpenAI API, you need to register on the OpenAI platform and obtain an API key. This key will be used for authentication when calling API methods.
+To start working with the OpenAI API, you need to register on the OpenAI platform and get an API key. This key will be used for authentication when calling API methods.
 
 ```python
 import openai
@@ -20,11 +21,11 @@ import openai
 openai.api_key = 'your-api-key'
 ```
 
-## Step 2: Data Preparation
+## Step 2: Data preparation
 
 To train the model, you need to prepare a dataset that will contain examples of web pages,
 both stores and non-stores.
-Each entry should include the page text and a corresponding label (`positive` for stores and `negative` for non-stores).
+Each entry must include the page text and a corresponding label (`positive` for stores and `negative` for non-stores).
 
 Example JSON file:
 
@@ -41,11 +42,11 @@ Example JSON file:
 ]
 ```
 
-## Step 3: Text Tokenization
+## Step 3: Text tokenization
 
 Before sending data to the OpenAI model, the text needs to be tokenized.
 Tokenization is the process of breaking text into individual words or tokens.
-In Python, you can use libraries such as NLTK, spaCy, or tokenizers from the transformers library.
+In Python, you can use libraries, such as NLTK, spaCy, or tokenizers from the transformers library.
 
 Example tokenization using NLTK:
 
@@ -54,18 +55,18 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 # Example text
-text = "Это пример текста для токенизации."
+text = "This is an example text for tokenization."
 
-# Text tokenization
+# Tokenize text
 tokens = word_tokenize(text)
 tokenized_text = ' '.join(tokens)
 print(tokenized_text)
 ```
 
-## Step 4: Sending Data for Training
+## Step 4: Send data for training
 
 After tokenizing the text, you can send the data to train the OpenAI model.
-Here's an example code for sending data:
+Here is an example code for sending data:
 
 ```python
 import openai
@@ -85,22 +86,20 @@ def train_model(data, positive=True):
 
 # Example usage
 data = [
-    {"text": "Текст первой веб-страницы...", "label": "positive"},
-    {"text": "Текст второй веб-страницы...", "label": "negative"}
+    {"text": "Text of the first web page...", "label": "positive"},
+    {"text": "Text of the second web page...", "label": "negative"}
 ]
 
 job_id = train_model(data, positive=True)
 print("Job ID:", job_id)
 ```
 
-## Step 5: Model Testing
+## Step 5: Test the model
 
 After training the model, you need to test it on a test dataset.
-Here's an example code for testing:
+Here is an example code for testing:
 
 ```python
-import openai
-
 def test_model(test_data):
     try:
         predictions = []
@@ -119,15 +118,15 @@ def test_model(test_data):
 
 # Example usage
 test_data = [
-    {"text": "Текст тестовой веб-страницы...", "label": "positive"},
-    {"text": "Текст другой тестовой страницы...", "label": "negative"}
+    {"text": "Text of the test web page...", "label": "positive"},
+    {"text": "Text of another test page...", "label": "negative"}
 ]
 
 predictions = test_model(test_data)
 print("Predictions:", predictions)
 ```
 
-## Step 6: Error Handling and Model Improvement
+## Step 6: Error handling and model improvement
 
 If the model gives incorrect predictions, you can improve it by
 adding more data or changing training parameters. You can also use feedback to analyze errors.
@@ -142,4 +141,3 @@ def handle_errors(predictions, test_data):
 
 # Example usage
 handle_errors(predictions, test_data)
-```

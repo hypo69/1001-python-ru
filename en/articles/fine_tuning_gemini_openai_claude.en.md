@@ -1,4 +1,5 @@
-## Cheat Sheet. Personalizing LLM: Prompts, Fine-tuning Models, Code Examples.
+<!-- Translated to en -->
+## Cheat Sheet. Personalizing LLMs: prompts, fine-tuning models, code examples.
 
 In this article:
 
@@ -6,57 +7,57 @@ In this article:
 2.  Why and when fine-tuning a model is needed.
 3.  When fine-tuning is not the best solution.
 4.  Data preparation.
-5.  Fine-tuning examples for **OpenAI (GPT)**, **Google (Gemini)**, and **Anthropic (Claude)** (differs).
+5.  Examples of fine-tuning for **OpenAI (GPT)**, **Google (Gemini)**, and **Anthropic (Claude)** (differs).
 
-### 1. How LLMs "remember" and "adapt": The Illusion of Context
+### 1. How LLMs "remember" and "adapt": The illusion of context
 
-Before discussing fine-tuning, it's important to understand how LLMs manage to create a sense of personalization at all.
-This is important so as not to rush into expensive fine-tuning if the task can be solved by simpler methods:
+Before talking about fine-tuning, it's important to understand how LLMs manage to create a sense of personalization at all.
+This is important so as not to rush into expensive fine-tuning if the problem can be solved by simpler methods:
 
-*   Through **Context Window (Short-Term Memory):** Within a single dialogue, you send the model not only a new question but also **all or part of the previous conversation**. The model processes all this text as a single "context." It is thanks to this that it "remembers" previous remarks and continues the thought. The limitation here is the length of the context window (number of tokens).
-*   Composing **System Instructions (System Prompt):** You can set the model's role, tone, and behavior rules at the beginning of each dialogue. For example: "You are a Python expert, answer concisely."
+*   Through **Context Window (Short-Term Memory):** Within a single dialogue, you send the model not only a new question, but also **all or part of the previous correspondence**. The model processes all this text as a single "context". It is thanks to this that it "remembers" previous remarks and continues the thought. The limitation here is the length of the context window (number of tokens).
+*   Composing **System Instructions (System Prompt):** You can set the model's role, tone, and behavior rules at the beginning of each dialogue. For example: "You are a Python expert, answer briefly."
 *   Including several examples of desired behavior in the request **Few-Shot Learning:** (input/output pairs) allows the model to "learn" this pattern directly within the current request.
-*   **Application-side state management:** The most powerful way. The application (which accesses the API) can store user information (preferences, history, profile data) and dynamically add it to the prompt before sending it to the model.
+*   **Application-side state management:** The most powerful way. The application (which accesses the API) can store information about the user (preferences, history, profile data) and dynamically add it to the prompt before sending it to the model.
 
 
 ### 2.
 
-Fine-tuning is the process of further training an already existing base LLM on your own specific dataset. This allows the model to:
+Fine-tuning is the process of retraining an already prepared base LLM on your own, specific dataset. This allows the model to:
 
-*   **Adapt style and tone:** The model will speak "your language" – be it strictly scientific, friendly marketing, or the slang of a specific community.
+*   **Adapt style and tone:** The model will speak "your language" – be it strict scientific, friendly marketing, or the slang of a specific community.
 *   **Follow specific instructions and formats:** If you need answers in a strictly defined JSON structure, or always with a specific set of fields.
-*   **Understand domain-specific language:** Training on your internal documentation or industry texts will help the model better handle the terminology of your niche.
+*   **Understand domain-specific language:** Training on your internal documentation or industry texts will help the model better cope with the terminology of your niche.
 *   **Improve performance on narrow tasks:** For certain types of queries (e.g., sentiment classification, code generation in a specific framework), fine-tuning can provide more accurate and relevant answers than the base model.
-*   **Reduce prompt length:** If the model already "knows" the desired behavior through tuning, you don't need to remind it every time in the prompt, which saves tokens and reduces latency.
+*   **Reduce prompt length:** If the model already "knows" the desired behavior thanks to tuning, you don't need to remind it of this in the prompt every time, which saves tokens and reduces latency.
 
 ### 3.
 
-Fine-tuning is a powerful but not universal tool. You should not use it if:
+Fine-tuning is a powerful, but not universal tool. You should not use it if:
 
-*   **The model needs access to new knowledge:** Fine-tuning changes the model's weights, but it does not "load" new facts into it in real-time. If your task is to answer questions based on a constantly changing knowledge base (company documents, latest news), it is better to use **Retrieval Augmented Generation (RAG)**. Here, the base model receives context from your database *at query time*.
-*   **A simple task can be solved by prompt engineering:** Always start with the most effective prompt engineering. If the task can be solved with simple instructions and few-shot examples, fine-tuning is redundant and more costly.
+*   **The model needs to access new knowledge:** Fine-tuning changes the model's weights, but does not "load" new facts into it in real time. If your task is to answer questions based on a constantly changing knowledge base (company documents, latest news), it is better to use **Retrieval Augmented Generation (RAG)**. Here, the base model receives context from your database *during query execution*.
+*   **A simple task is solved by prompt engineering:** Always start with the most effective prompt engineering. If the task can be solved with simple instructions and few-shot examples, fine-tuning is redundant and more expensive.
 *   **You do not have enough high-quality data:** Bad data = bad tuned model.
 
-### 4. Data preparation. 
+### 4. Data preparation.
 
- The quality and quantity of your data are critically important. The model learns from your examples, so they must be accurate, diverse, and consistent.
+The quality and quantity of your data are critically important. The model learns from your examples, so they must be accurate, diverse, and consistent.
 
 *   **Format:** Most often JSON Lines (`.jsonl`) or CSV (`.csv`).
-*   **Data structure:** Depends on the task.
-    *   **Instruction Tuning (Instruction-Response):** Suitable for generalized tasks like "question-answering", paraphrasing, summarization.
+*   **Structure data:** Depends on the task.
+    *   **Instruction Tuning (Instruction-Response):** Suitable for generalized tasks such as "question-answering", paraphrasing, summarization.
         ```json
-        {"input_text": "Перефразируй предложение: 'Технология ИИ стремительно развивается.'", "output_text": "Искусственный интеллект демонстрирует стремительный прогресс."}
-        {"input_text": "Назови столицу Франции.", "output_text": "Столица Франции — Париж."}
+        {"input_text": "Paraphrase the sentence: 'AI technology is developing rapidly.'", "output_text": "Artificial intelligence is demonstrating rapid progress."}
+        {"input_text": "Name the capital of France.", "output_text": "The capital of France is Paris."}
         ```
     *   **Chat Tuning (Chat):** Ideal for training the model to conduct a dialogue in a specific role or style.
         ```json
-        {"messages": [{"author": "user", "content": "Привет! Что порекомендуешь на ужин?"}, {"author": "model", "content": "Добрый вечер! Сегодня отличный день для пасты Карбонара, или, если вы предпочитаете что-то легкое, салат Цезарь."}]}
-        {"messages": [{"author": "user", "content": "Расскажи про новые фичи в Python 3.12."}, {"author": "model", "content": "В Python 3.12 появились f-строки с отступами, новый синтаксис для универсальных генериков и улучшенная обработка ошибок Unicode."}]}
+        {"messages": [{"author": "user", "content": "Hi! What do you recommend for dinner?"}, {"author": "model", "content": "Good evening! Today is a great day for Carbonara pasta, or, if you prefer something light, Caesar salad."}]}
+        {"messages": [{"author": "user", "content": "Tell me about the new features in Python 3.12."}, {"author": "model", "content": "Python 3.12 introduced f-strings with indentation, new syntax for universal generics, and improved Unicode error handling."}]}
         ```
-*   **Quantity:** Minimum 100-200 high-quality examples, but the more, the better (thousands for serious tasks).
-*   **Quality:** Accuracy, consistent style, tone, format throughout the dataset.
+*   **Quantity:** Minimum 100-200 high-quality examples, but the more the better (thousands for serious tasks).
+*   **Quality:** Accuracy, consistency of style, tone, format throughout the dataset.
 
-### 5. Models and Platforms
+### 5. Models and platforms
 
 
 #### 5.1. OpenAI
@@ -65,22 +66,22 @@ OpenAI provides a fairly simple and intuitive API for fine-tuning.
 
 **Process:**
 
-1.  Prepare data in JSONL format, where each line is an object with a `messages` array (as in the Chat Completions API).
+1.  Prepare data in JSONL format, where each line is an object with an array of `messages` (as in the Chat Completions API).
 2.  Upload the data file via API.
 3.  Create a fine-tuning job, specifying the uploaded file and the base model.
 4.  Monitor progress.
 5.  Use the new, tuned model by its ID.
 
-**Example data (`training_data.jsonl` file):**
+**Example data (<code>training_data.jsonl</code> file):**
 
 ```json
-{"messages": [{"role": "system", "content": "You are a friendly IT company customer support assistant."}, {"role": "user", "content": "My internet is not working."}, {"role": "assistant", "content": "Oh, I apologize for the inconvenience! Let's try to figure it out. How are you connected to the internet – via Wi-Fi or cable?"}]}
+{"messages": [{"role": "system", "content": "You are a friendly IT company customer support assistant."}, {"role": "user", "content": "My internet is not working."}, {"role": "assistant", "content": "Oh, I'm sorry for the inconvenience! Let's try to figure it out. How are you connected to the Internet – via Wi-Fi or cable?"}]}
 {"messages": [{"role": "system", "content": "You are a friendly IT company customer support assistant."}, {"role": "user", "content": "How can I reset my password?"}, {"role": "assistant", "content": "Of course! To reset your password, please go to the login page and click 'Forgot password?' below the input field. Then follow the on-screen instructions."}]
 ```
 
 **Example Python code:**
 
-Install beforehand: `pip install openai`
+Pre-install: `pip install openai`
 
 ```python
 import openai
@@ -116,16 +117,16 @@ except openai.APIStatusError as e:
     print(f"Job creation error: {e.status_code} - {e.response}")
     exit()
 
-# Example of monitoring status and getting model name (execute after job creation):
+# Example of monitoring status and getting model name (run after job creation):
 # # job_id = "ftjob-..." # Replace with your job ID
 # # job_status = client.fine_tuning.jobs.retrieve(job_id)
 # # print(f"Current job status: {job_status.status}")
 # # if job_status.status == "succeeded":
 # #     fine_tuned_model_name = job_status.fine_tuned_model
-# #     print(f"Fine-tuned model name: {fine_tuned_model_name}")
+# #     print(f"Tuned model name: {fine_tuned_model_name}")
 
-# 3. Using the fine-tuned model (after it's ready)
-# # Replace with the actual name of your model, obtained after successful fine-tuning
+# 3. Use tuned model (after it's ready)
+# # Replace with the actual name of your model obtained after successful fine-tuning
 # # fine_tuned_model_name = "ft:gpt-3.5-turbo-0125:my-org::abcd123"
 
 # # if 'fine_tuned_model_name' in locals() and fine_tuned_model_name:
@@ -136,7 +137,7 @@ except openai.APIStatusError as e:
 # #                 {"role": "user", "content": "I have a login problem."}
 # #             ]
 # #         )
-# #         print("\nFine-tuned model response:")
+# #         print("\nTuned model response:")
 # #         print(response.choices[0].message.content)
 # #     except openai.APIStatusError as e:
 # #         print(f"Error using model: {e.status_code} - {e.response}")
@@ -144,40 +145,40 @@ except openai.APIStatusError as e:
 
 #### 5.2. Anthropic
 
-Anthropic **does not provide a public API for fine-tuning its Claude 3 models (Opus, Sonnet, Haiku) in the same way as OpenAI or Google.**
+Anthropic <strong>does not provide a public API for fine-tuning its Claude 3 models (Opus, Sonnet, Haiku) in the same sense as OpenAI or Google.</strong>
 
-Anthropic focuses on creating very powerful base models that, they claim, work excellently with advanced prompt engineering and RAG patterns, minimizing the need for fine-tuning in most cases.
-For large corporate clients or partners, there may be programs for creating "custom" models or specialized integrations, but this is not a publicly available fine-tuning feature via API.
+Anthropic focuses on creating very powerful base models that, they claim, work well with advanced prompt engineering and RAG patterns, minimizing the need for fine-tuning for most cases.
+For large corporate clients or partners, there may be programs to create "custom" models or specialized integrations, but this is not a publicly available fine-tuning function via API.
 
-If you are working with Claude 3, your primary focus should be on:
+If you are working with Claude 3, your main focus should be on:
 
-*   **High-quality prompt engineering:** Experiment with system instructions, few-shot examples, clear request formatting. Claude is known for its ability to strictly follow instructions, especially in XML tags.
-*   **RAG systems:** Use external knowledge bases to provide the model with relevant context.
+*   <strong>Quality prompt engineering:</strong> Experiment with system instructions, few-shot examples, clear request formatting. Claude is known for its ability to strictly follow instructions, especially in XML tags.
+*   <strong>RAG systems:</strong> Use external knowledge bases to provide the model with relevant context.
 
 #### 5.3. Google (Gemini)
 
-Google is actively developing fine-tuning capabilities through its **Google Cloud Vertex AI** platform.
+Google is actively developing fine-tuning capabilities through its <strong>Google Cloud Vertex AI</strong> platform.
 This is a full-fledged ML platform that provides tools for data preparation, running training jobs, and deploying models.
-Fine-tuning is available for the Gemini family of models.
+Fine-tuning is available for Gemini family models.
 
-**Process:**
+<strong>Process:</strong>
 
-1.  Prepare data (JSONL or CSV) in `input_text`/`output_text` format (for instruction tuning) or `messages` (for chat tuning).
+1.  Prepare data (JSONL or CSV) in <code>input_text</code>/<code>output_text</code> format (for instruction tuning) or <code>messages</code> (for chat tuning).
 2.  Upload data to Google Cloud Storage (GCS).
 3.  Create and run a fine-tuning job via Vertex AI Console or SDK.
-4.  Deploy the tuned model to an Endpoint.
-5.  Use the tuned model via this Endpoint.
+4.  Deploy the tuned model to an endpoint.
+5.  Use the tuned model via this endpoint.
 
-**Example data (`gemini_tuning_data.jsonl` file):**
+<strong>Example data (<code>gemini_tuning_data.jsonl</code> file):</strong>
 
 ```json
-{"input_text": "Summarize the main ideas of this book: 'The book tells the story of a hero's journey, who overcomes obstacles and finds himself.'", "output_text": "The main character of the book embarks on a transformative journey, facing challenges and achieving self-discovery."}
-{"input_text": "Explain the principle of a thermonuclear reactor in simple terms.", "output_text": "A thermonuclear reactor attempts to replicate the process that occurs on the Sun: the fusion of light atomic nuclei at very high temperatures, releasing a huge amount of energy."}
+{"input_text": "Summarize the main ideas of this book: 'The book tells the story of a hero's journey, who overcomes obstacles and finds himself.'", "output_text": "The main character of the book embarks on a transformative journey, facing challenges and gaining self-knowledge."}
+{"input_text": "Explain the principle of operation of a thermonuclear reactor in simple words.", "output_text": "A thermonuclear reactor attempts to reproduce the process that occurs in the Sun: the fusion of light atomic nuclei at very high temperatures, releasing a huge amount of energy."}
 ```
 
-**Example Python code (requires `google-cloud-aiplatform`):**
+<strong>Example Python code (requires <code>google-cloud-aiplatform</code>):</strong>
 
-Install beforehand: `pip install google-cloud-aiplatform` and `pip install google-cloud-storage`
+Pre-install: <code>pip install google-cloud-aiplatform</code> and <code>pip install google-cloud-storage</code>
 
 ```python
 import os
@@ -187,8 +188,8 @@ from google.cloud import storage
 # --- Settings ---
 # REPLACE with your values:
 PROJECT_ID = "your-gcp-project-id"
-REGION = "us-central1"               # Choose a region that supports Gemini and Vertex AI
-BUCKET_NAME = "your-gcs-bucket-for-tuning" # Your GCS bucket name (must be created beforehand)
+REGION = "us-central1"               # Select a region that supports Gemini and Vertex AI
+BUCKET_NAME = "your-gcs-bucket-for-tuning" # Name of your GCS bucket (must be created in advance)
 DATA_FILE_LOCAL_PATH = "gemini_tuning_data.jsonl"
 GCS_DATA_URI = f"gs://{BUCKET_NAME}/{DATA_FILE_LOCAL_PATH}"
 TUNED_MODEL_DISPLAY_NAME = "my-tuned-gemini-model"
@@ -199,14 +200,14 @@ aiplatform.init(project=PROJECT_ID, location=REGION)
 
 # 1. Create data file (if it doesn't exist)
 with open(DATA_FILE_LOCAL_PATH, "w", encoding="utf-8") as f:
-    f.write('{"input_text": "Summarize the main ideas of this book: \'The book tells the story of a hero\'s journey, who overcomes obstacles and finds himself.\'", "output_text": "The main character of the book embarks on a transformative journey, facing challenges and achieving self-discovery."}\n')
-    f.write('{"input_text": "Explain the principle of a thermonuclear reactor in simple terms.", "output_text": "A thermonuclear reactor attempts to replicate the process that occurs on the Sun: the fusion of light atomic nuclei at very high temperatures, releasing a huge amount of energy."}\n')
+    f.write('{"input_text": "Summarize the main ideas of this book: \'The book tells the story of a hero\'s journey, who overcomes obstacles and finds himself.\'", "output_text": "The main character of the book embarks on a transformative journey, facing challenges and gaining self-knowledge."}\n')
+    f.write('{"input_text": "Explain the principle of operation of a thermonuclear reactor in simple words.", "output_text": "A thermonuclear reactor attempts to reproduce the process that occurs in the Sun: the fusion of light atomic nuclei at very high temperatures, releasing a huge amount of energy."}\n')
 print(f"Data file '{DATA_FILE_LOCAL_PATH}' created.")
 
 
 # 2. Upload data to Google Cloud Storage
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
-    """Uploads a file to the GCS bucket."""
+    """Uploads a file to a GCS bucket."""
     storage_client = storage.Client(project=PROJECT_ID)
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
@@ -220,7 +221,7 @@ except Exception as e:
     exit()
 
 # 3. Create and run fine-tuning job
-print(f"\nStarting fine-tuning of model '{TUNED_MODEL_DISPLAY_NAME}'...")
+print(f"\nStarting fine-tuning model '{TUNED_MODEL_DISPLAY_NAME}'...")
 try:
     # `tune_model` starts the job and returns the tuned model after completion
     tuned_model = aiplatform.Model.tune_model(
@@ -238,7 +239,7 @@ except Exception as e:
     print(f"Fine-tuning error. Check logs in Vertex AI Console: {e}")
     exit()
 
-# 4. Deploy the tuned model (for use)
+# 4. Deploy tuned model (for use)
 print(f"\nDeploying tuned model '{TUNED_MODEL_DISPLAY_NAME}' to endpoint...")
 try:
     endpoint = tuned_model.deploy(
@@ -249,31 +250,31 @@ try:
     print(f"Model deployed to endpoint: {endpoint.name}")
     print("Deployment may also take several minutes.")
 except Exception as e:
-    print(f"Error deploying model: {e}")
+    print(f"Model deployment error: {e}")
     exit()
 
-# 5. Using the tuned model
+# 5. Use tuned model
 print("\nTesting tuned model...")
 prompt = "Tell me about your capabilities after training."
 instances = [{"prompt": prompt}] # For Instruction Tuning. If Chat Tuning, then {"messages": [...]} 
 
 try:
     response = endpoint.predict(instances=instances)
-    print("\nFine-tuned model response:")
+    print("\nОтвет настроенной модели:")
     print(response.predictions[0])
 except Exception as e:
     print(f"Error using tuned model: {e}")
 
-# After finishing, don't forget to delete the endpoint and model to avoid unnecessary costs:
+# After finishing work, don't forget to delete the endpoint and model to avoid unnecessary costs:
 # endpoint.delete()
 # tuned_model.delete()
 ```
 
-### 6. General Recommendations
+### 6. General recommendations
 
-*   **Start small:** Don't try to train the model on thousands of examples right away. Start with a small but high-quality dataset.
+*   **Start small:** Don't try to train the model on thousands of examples at once. Start with a small but high-quality dataset.
 *   **Iterate:** Fine-tuning is an iterative process. Train, evaluate, adjust data or hyperparameters, repeat.
-*   **Monitoring:** Carefully monitor training metrics (losses) and use a validation dataset to avoid overfitting.
-*   **Evaluation:** Always test the tuned model on data it has *never seen* during training to assess its generalization ability.
+*   **Monitoring:** Carefully monitor training metrics (loss) and use a validation dataset to avoid overfitting.
+*   **Evaluation:** Always test the tuned model on data it *has never seen* during training to assess its generalization ability.
 *   **Cost:** Remember that fine-tuning and deploying endpoints are paid. Factor this into your budget.
-*   **Documentation:** Always refer to the official LLM provider's documentation. APIs and capabilities are constantly evolving.
+*   **Documentation:** Always refer to the official LLM provider documentation. APIs and capabilities are constantly evolving.

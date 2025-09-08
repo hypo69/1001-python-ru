@@ -1,57 +1,56 @@
-<p># <span dir="ltr">Training</span> <span dir="ltr">an</span> <span dir="ltr">OpenAI</span> <span dir="ltr">Model</span> <span dir="ltr">for</span> <span dir="ltr">Web</span> <span dir="ltr">Page</span> <span dir="ltr">Classification</span></p>
-<h2><span dir="ltr">Introduction</span></h2>
-<p><span dir="ltr">Training</span> <span dir="ltr">an</span> <span dir="ltr">OpenAI</span> <span dir="ltr">model</span> <span dir="ltr">to</span> <span dir="ltr">determine</span> <span dir="ltr">if</span> <span dir="ltr">a</span> <span dir="ltr">page</span> <span dir="ltr">is</span> <span dir="ltr">an</span> <span dir="ltr">online</span> <span dir="ltr">store</span>.</p>
-<p>- <span dir="ltr">data</span> <span dir="ltr">preparation</span>,</p>
-<p>- <span dir="ltr">text</span> <span dir="ltr">tokenization</span>,</p>
-<p>- <span dir="ltr">sending</span> <span dir="ltr">data</span> <span dir="ltr">for</span> <span dir="ltr">training</span></p>
-<p>- <span dir="ltr">model</span> <span dir="ltr">testing</span>.</p>
-<h2><span dir="ltr">Step</span> 1: <span dir="ltr">Registration</span> <span dir="ltr">and</span> <span dir="ltr">OpenAI</span> <span dir="ltr">API</span> <span dir="ltr">Setup</span></h2>
-<p><span dir="ltr">To</span> <span dir="ltr">start</span> <span dir="ltr">working</span> <span dir="ltr">with</span> <span dir="ltr">the</span> <span dir="ltr">OpenAI</span> <span dir="ltr">API</span>, <span dir="ltr">you</span> <span dir="ltr">need</span> <span dir="ltr">to</span> <span dir="ltr">register</span> <span dir="ltr">on</span> <span dir="ltr">the</span> <span dir="ltr">OpenAI</span> <span dir="ltr">platform</span> <span dir="ltr">and</span> <span dir="ltr">obtain</span> <span dir="ltr">an</span> <span dir="ltr">API</span> <span dir="ltr">key</span>. <span dir="ltr">This</span> <span dir="ltr">key</span> <span dir="ltr">will</span> <span dir="ltr">be</span> <span dir="ltr">used</span> <span dir="ltr">for</span> <span dir="ltr">authentication</span> <span dir="ltr">when</span> <span dir="ltr">calling</span> <span dir="ltr">API</span> <span dir="ltr">methods</span>.</p>
-<pre class="line-numbers"><code class="language-python">
-import openai
+<!-- Translated to en -->
+<h2>Training an OpenAI model for web page classification</h2>
+<h2>Introduction</h2>
+<p>Training an OpenAI model to determine if a page is an online store.</p>
+<ul>
+<li>data preparation,</li>
+<li>text tokenization,</li>
+<li>sending data for training</li>
+<li>model testing.</li>
+</ul>
+<h2>Step 1: Register and configure OpenAI API</h2>
+<p>To start working with the OpenAI API, you need to register on the OpenAI platform and get an API key. This key will be used for authentication when calling API methods.</p>
+<pre class="line-numbers"><code class="language-python">import openai
 
 # Set API key
 openai.api_key = 'your-api-key'
 </code></pre>
-<h2><span dir="ltr">Step</span> 2: <span dir="ltr">Data</span> <span dir="ltr">Preparation</span></h2>
-<p><span dir="ltr">To</span> <span dir="ltr">train</span> <span dir="ltr">the</span> <span dir="ltr">model</span>, <span dir="ltr">you</span> <span dir="ltr">need</span> <span dir="ltr">to</span> <span dir="ltr">prepare</span> <span dir="ltr">a</span> <span dir="ltr">dataset</span> <span dir="ltr">that</span> <span dir="ltr">will</span> <span dir="ltr">contain</span> <span dir="ltr">examples</span> <span dir="ltr">of</span> <span dir="ltr">web</span> <span dir="ltr">pages</span>,</p>
-<p><span dir="ltr">both</span> <span dir="ltr">stores</span> <span dir="ltr">and</span> <span dir="ltr">non</span>-<span dir="ltr">stores</span>.</p>
-<p><span dir="ltr">Each</span> <span dir="ltr">entry</span> <span dir="ltr">should</span> <span dir="ltr">include</span> <span dir="ltr">the</span> <span dir="ltr">page</span> <span dir="ltr">text</span> <span dir="ltr">and</span> <span dir="ltr">a</span> <span dir="ltr">corresponding</span> <span dir="ltr">label</span> (<<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">positive</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">for</span> <span dir="ltr">stores</span> <span dir="ltr">and</span> <<span dir="ltr">span</span> <span dir="ltr">dir</span>="<span dir="ltr">ltr</span>"><<span dir="ltr">code</span>><span dir="ltr">negative</span></<span dir="ltr">code</span>></<span dir="ltr">span</span>> <span dir="ltr">for</span> <span dir="ltr">non</span>-<span dir="ltr">stores</span>).</p>
-<p><span dir="ltr">Example</span> <span dir="ltr">JSON</span> <span dir="ltr">file</span>:</p>
-<pre class="line-numbers"><code class="language-json">
-[
+<h2>Step 2: Data preparation</h2>
+<p>To train the model, you need to prepare a dataset that will contain examples of web pages,
+both stores and non-stores.
+Each entry must include the page text and a corresponding label (<code>positive</code> for stores and <code>negative</code> for non-stores).</p>
+<p>Example JSON file:</p>
+<pre class="line-numbers"><code class="language-json">[
     {
-        "text": "<html><body><h1>Welcome to Our Online Store</h1><p>We offer a wide range of products at competitive prices. Visit our store today!</p></body></html>",
+        "text": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;Welcome to Our Online Store&lt;/h1&gt;&lt;p&gt;We offer a wide range of products at competitive prices. Visit our store today!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
         "label": "positive"
     },
     {
-        "text": "<html><body><h1>About Us</h1><p>We are a leading provider of quality services. Contact us for more information.</p></body></html>",
+        "text": "&lt;html&gt;&lt;body&gt;&lt;h1&gt;About Us&lt;/h1&gt;&lt;p&gt;We are a leading provider of quality services. Contact us for more information.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;",
         "label": "negative"
     }
 ]
 </code></pre>
-<h2><span dir="ltr">Step</span> 3: <span dir="ltr">Text</span> <span dir="ltr">Tokenization</span></h2>
-<p><span dir="ltr">Before</span> <span dir="ltr">sending</span> <span dir="ltr">data</span> <span dir="ltr">to</span> <span dir="ltr">the</span> <span dir="ltr">OpenAI</span> <span dir="ltr">model</span>, <span dir="ltr">the</span> <span dir="ltr">text</span> <span dir="ltr">needs</span> <span dir="ltr">to</span> <span dir="ltr">be</span> <span dir="ltr">tokenized</span>.</p>
-<p><span dir="ltr">Tokenization</span> <span dir="ltr">is</span> <span dir="ltr">the</span> <span dir="ltr">process</span> <span dir="ltr">of</span> <span dir="ltr">breaking</span> <span dir="ltr">text</span> <span dir="ltr">into</span> <span dir="ltr">individual</span> <span dir="ltr">words</span> <span dir="ltr">or</span> <span dir="ltr">tokens</span>.</p>
-<p><span dir="ltr">In</span> <span dir="ltr">Python</span>, <span dir="ltr">you</span> <span dir="ltr">can</span> <span dir="ltr">use</span> <span dir="ltr">libraries</span> <span dir="ltr">such</span> <span dir="ltr">as</span> <span dir="ltr">NLTK</span>, <span dir="ltr">spaCy</span>, <span dir="ltr">or</span> <span dir="ltr">tokenizers</span> <span dir="ltr">from</span> <span dir="ltr">the</span> <span dir="ltr">transformers</span> <span dir="ltr">library</span>.</p>
-<p><span dir="ltr">Example</span> <span dir="ltr">tokenization</span> <span dir="ltr">using</span> <span dir="ltr">NLTK</span>:</p>
-<pre class="line-numbers"><code class="language-python">
-import nltk
+<h2>Step 3: Text tokenization</h2>
+<p>Before sending data to the OpenAI model, the text needs to be tokenized.
+Tokenization is the process of breaking text into individual words or tokens.
+In Python, you can use libraries such as NLTK, spaCy, or tokenizers from the transformers library.</p>
+<p>Example tokenization using NLTK:</p>
+<pre class="line-numbers"><code class="language-python">import nltk
 from nltk.tokenize import word_tokenize
 
 # Example text
-text = "Это пример текста для токенизации."
+text = "This is an example text for tokenization."
 
-# Text tokenization
+# Tokenize text
 tokens = word_tokenize(text)
 tokenized_text = ' '.join(tokens)
 print(tokenized_text)
 </code></pre>
-<h2><span dir="ltr">Step</span> 4: <span dir="ltr">Sending</span> <span dir="ltr">Data</span> <span dir="ltr">for</span> <span dir="ltr">Training</span></h2>
-<p><span dir="ltr">After</span> <span dir="ltr">tokenizing</span> <span dir="ltr">the</span> <span dir="ltr">text</span>, <span dir="ltr">you</span> <span dir="ltr">can</span> <span dir="ltr">send</span> <span dir="ltr">the</span> <span dir="ltr">data</span> <span dir="ltr">to</span> <span dir="ltr">train</span> <span dir="ltr">the</span> <span dir="ltr">OpenAI</span> <span dir="ltr">model</span>.</p>
-<p><span dir="ltr">Here</span>'<span dir="ltr">s</span> <span dir="ltr">an</span> <span dir="ltr">example</span> <span dir="ltr">code</span> <span dir="ltr">for</span> <span dir="ltr">sending</span> <span dir="ltr">data</span>:</p>
-<pre class="line-numbers"><code class="language-python">
-import openai
+<h2>Step 4: Send data for training</h2>
+<p>After tokenizing the text, you can send the data to train the OpenAI model.
+Here is an example code for sending data:</p>
+<pre class="line-numbers"><code class="language-python">import openai
 
 def train_model(data, positive=True):
     try:
@@ -68,20 +67,17 @@ def train_model(data, positive=True):
 
 # Example usage
 data = [
-    {"text": "Текст первой веб-страницы...", "label": "positive"},
-    {"text": "Текст второй веб-страницы...", "label": "negative"}
+    {"text": "Text of the first web page...", "label": "positive"},
+    {"text": "Text of the second web page...", "label": "negative"}
 ]
 
 job_id = train_model(data, positive=True)
 print("Job ID:", job_id)
 </code></pre>
-<h2><span dir="ltr">Step</span> 5: <span dir="ltr">Model</span> <span dir="ltr">Testing</span></h2>
-<p><span dir="ltr">After</span> <span dir="ltr">training</span> <span dir="ltr">the</span> <span dir="ltr">model</span>, <span dir="ltr">you</span> <span dir="ltr">need</span> <span dir="ltr">to</span> <span dir="ltr">test</span> <span dir="ltr">it</span> <span dir="ltr">on</span> <span dir="ltr">a</span> <span dir="ltr">test</span> <span dir="ltr">dataset</span>.</p>
-<p><span dir="ltr">Here</span>'<span dir="ltr">s</span> <span dir="ltr">an</span> <span dir="ltr">example</span> <span dir="ltr">code</span> <span dir="ltr">for</span> <span dir="ltr">testing</span>:</p>
-<pre class="line-numbers"><code class="language-python">
-import openai
-
-def test_model(test_data):
+<h2>Step 5: Test the model</h2>
+<p>After training the model, you need to test it on a test dataset.
+Here is an example code for testing:</p>
+<pre class="line-numbers"><code class="language-python">def test_model(test_data):
     try:
         predictions = []
         for entry in test_data:
@@ -99,19 +95,18 @@ def test_model(test_data):
 
 # Example usage
 test_data = [
-    {"text": "Текст тестовой веб-страницы...", "label": "positive"},
-    {"text": "Текст другой тестовой страницы...", "label": "negative"}
+    {"text": "Text of the test web page...", "label": "positive"},
+    {"text": "Text of another test page...", "label": "negative"}
 ]
 
 predictions = test_model(test_data)
 print("Predictions:", predictions)
 </code></pre>
-<h2><span dir="ltr">Step</span> 6: <span dir="ltr">Error</span> <span dir="ltr">Handling</span> <span dir="ltr">and</span> <span dir="ltr">Model</span> <span dir="ltr">Improvement</span></h2>
-<p><span dir="ltr">If</span> <span dir="ltr">the</span> <span dir="ltr">model</span> <span dir="ltr">gives</span> <span dir="ltr">incorrect</span> <span dir="ltr">predictions</span>, <span dir="ltr">you</span> <span dir="ltr">can</span> <span dir="ltr">improve</span> <span dir="ltr">it</span> <span dir="ltr">by</span></p>
-<p><span dir="ltr">adding</span> <span dir="ltr">more</span> <span dir="ltr">data</span> <span dir="ltr">or</span> <span dir="ltr">changing</span> <span dir="ltr">training</span> <span dir="ltr">parameters</span>. <span dir="ltr">You</span> <span dir="ltr">can</span> <span dir="ltr">also</span> <span dir="ltr">use</span> <span dir="ltr">feedback</span> <span dir="ltr">to</span> <span dir="ltr">analyze</span> <span dir="ltr">errors</span>.</p>
-<p><span dir="ltr">Example</span> <span dir="ltr">error</span> <span dir="ltr">handling</span>:</p>
-<pre class="line-numbers"><code class="language-python">
-def handle_errors(predictions, test_data):
+<h2>Step 6: Error handling and model improvement</h2>
+<p>If the model gives incorrect predictions, you can improve it by
+adding more data or changing training parameters. You can also use feedback to analyze errors.</p>
+<p>Example error handling:</p>
+<pre class="line-numbers"><code class="language-python">def handle_errors(predictions, test_data):
     for pred, entry in zip(predictions, test_data):
         if pred != entry["label"]:
             print(f"Incorrect prediction for page '{entry['name']}': Predicted {pred}, Actual {entry['label']}")

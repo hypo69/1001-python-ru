@@ -1,0 +1,595 @@
+<!-- Translated to en -->
+<h1>How to teach a neural network to work with its hands: creating a full-fledged AI agent with MCP and LangGraph in an hour</h1>
+<p>Friends, greetings! I hope you've missed me.</p>
+<p>Over the past couple of months, I've been deeply immersed in researching the integration of AI agents into my own Python projects. In the process, I've accumulated a lot of practical knowledge and observations that it would be a sin not to share. So today, I'm returning to Habr — with a new topic, a fresh perspective, and with the intention of writing more often.</p>
+<p>On the agenda are LangGraph and MCP: tools with which you can create truly useful AI agents.</p>
+<p>If before we argued about which neural network answers best in Russian, today the battlefield has shifted towards more practical tasks: who performs better as an AI agent? Which frameworks truly simplify development? And how to integrate all this good stuff into a real project?</p>
+<p>But before diving into practice and code, let's understand the basic concepts. Especially the two key ones: <strong>AI agents and MCP</strong>. Without them, the conversation about LangGraph will be incomplete.</p>
+<h3>AI agents in simple terms</h3>
+<p>AI agents are not just "pumped-up" chatbots. They represent more complex, autonomous entities that possess two crucial features:</p>
+<ol>
+<li><strong>Ability to interact and coordinate</strong></li>
+</ol>
+<p>Modern agents can break down tasks into subtasks, call other agents, request external data, and work in a team. This is no longer a single assistant, but a distributed system where each component can contribute.</p>
+<ol start="2">
+<li><strong>Access to external resources</strong></li>
+</ol>
+<p>An AI agent is no longer limited by the confines of a dialogue. It can access databases, make API calls, interact with local files, vector knowledge bases, and even run commands in the terminal. All this became possible thanks to the emergence of MCP — a new level of integration between the model and the environment.</p>
+<hr>
+<p>Simply put: <strong>MCP is a bridge between a neural network and its environment</strong>. It allows the model to "understand" the context of the task, access data, make calls, and form reasoned actions, rather than just producing text responses.</p>
+<p><strong>Let's imagine an analogy:</strong></p>
+<ul>
+<li>You have a <strong>neural network</strong> — it can reason and generate texts.</li>
+<li>There is <strong>data and tools</strong> — documents, APIs, knowledge bases, terminal, code.</li>
+<li>And there is <strong>MCP</strong> — it is an interface that allows the model to interact with these external sources as if they were part of its inner world.</li>
+</ul>
+<p><strong>Without MCP:</strong></p>
+<p>The model is an isolated dialogue engine. You give it text — it responds. And that's it.</p>
+<p><strong>With MCP:</strong></p>
+<p>The model becomes a full-fledged <strong>task executor</strong>:</p>
+<ul>
+<li>gains access to data structures and APIs;</li>
+<li>calls external functions;</li>
+<li>navigates the current state of the project or application;</li>
+<li>can remember, track, and change context during a dialogue;</li>
+<li>uses extensions such as search tools, code runners, vector embedding databases, etc.</li>
+</ul>
+<p>In a technical sense, <strong>MCP is a protocol for interaction between an LLM and its environment</strong>, where context is provided as structured objects (instead of "raw" text), and calls are formatted as interactive operations (e.g., function calling, tool usage, or agent actions). This is what turns an ordinary model into a <strong>real AI agent</strong>, capable of doing more than just "talking."</p>
+<h3>Now — to business!</h3>
+<p>Now that we've covered the basic concepts, it's logical to ask: "How do we implement all this in practice in Python?"</p>
+<p>This is where <strong>LangGraph</strong> comes into play — a powerful framework for building state graphs, agent behavior, and thought chains. It allows you to "wire" the logic of interaction between agents, tools, and the user, creating a living AI architecture that adapts to tasks.</p>
+<p>In the following sections, we will look at how to:</p>
+<ul>
+<li>build an agent from scratch;</li>
+<li>create states, transitions, and events;</li>
+<li>integrate functions and tools;</li>
+<li>and how this entire ecosystem works in a real project.</li>
+</ul>
+<h3>A little theory: what is LangGraph</h3>
+<p>Before we get to practice, a few words about the framework itself.</p>
+<p><strong>LangGraph</strong> — is a project from the <strong>LangChain</strong> team, the same ones who first proposed the concept of "chains" of interaction with LLMs. If before the main emphasis was on linear or conditionally branching pipelines (langchain.chains), now developers are betting on a <strong>graph model</strong>, and LangGraph is what they recommend as the new "core" for building complex AI systems.</p>
+<p><strong>LangGraph</strong> — is a framework for building finite state machines and state graphs, where each <strong>node</strong> represents a part of the agent's logic: a model call, an external tool, a condition, user input, etc.</p>
+<h3>How it works: graphs and nodes</h3>
+<p>Conceptually, LangGraph is built on the following ideas:</p>
+<ul>
+<li><strong>Graph</strong> — is a structure that describes possible paths for logic execution. You can think of it as a map: from one point, you can move to another depending on conditions or the result of execution.</li>
+<li><strong>Nodes</strong> — are specific steps within the graph. Each node performs some function: calls a model, calls an external API, checks a condition, or simply updates the internal state.</li>
+<li><strong>Transitions between nodes</strong> — is the routing logic: if the result of the previous step is such and such, then go there.</li>
+<li><strong>State</strong> — is passed between nodes and accumulates everything needed: history, intermediate conclusions, user input, the result of tool operation, etc.</li>
+</ul>
+<p>Thus, we get a <strong>flexible mechanism for managing agent logic</strong>, in which both simple and very complex scenarios can be described: loops, conditions, parallel actions, nested calls, and much more.</p>
+<h3>Why is it convenient?</h3>
+<p>LangGraph allows you to build <strong>transparent, reproducible, and extensible logic</strong>:</p>
+<ul>
+<li>easy to debug;</li>
+<li>easy to visualize;</li>
+<li>easy to scale for new tasks;</li>
+<li>easy to integrate external tools and MCP protocols.</li>
+</ul>
+<p>In essence, LangGraph is the <strong>"brain" of the agent</strong>, where each step is documented, controlled, and can be changed without chaos and "magic."</p>
+<h3>But now — enough theory!</h3>
+<p>We could talk for a long time about graphs, states, logic composition, and the advantages of LangGraph over classic pipelines. But, as practice shows, it's better to see it once in code.</p>
+<p><strong>It's time to move on to practice.</strong> Next — a Python example: we will create a simple but useful AI agent based on LangGraph that will use external tools, memory, and make decisions itself.</p>
+<h3>Preparation: cloud and local neural networks</h3>
+<p>In order to start creating AI agents, we first need a <strong>brain</strong> — a language model. There are two approaches here:</p>
+<ul>
+<li><strong>use cloud solutions</strong>, where everything is ready "out of the box";</li>
+<li>or <strong>raise the model locally</strong> — for complete autonomy and confidentiality.</li>
+</ul>
+<p>Let's consider both options.</p>
+<h4>Cloud services: fast and convenient</h4>
+<p>The easiest way is to use the power of large providers: OpenAI, Anthropic, and use...</p>
+<h3>Where to get keys and tokens:</h3>
+<ul>
+<li><strong>OpenAI</strong> — ChatGPT and other products;</li>
+<li><strong>Anthropic</strong> — Claude;</li>
+<li><strong>OpenRouter.ai</strong> — dozens of models (one token — many models via OpenAI-compatible API);</li>
+<li><strong>Amvera Cloud</strong> — the ability to connect LLAMA with ruble payment and built-in proxying to OpenAI and Anthropic.</li>
+</ul>
+<p>This path is convenient, especially if you:</p>
+<ul>
+<li>do not want to configure the infrastructure;</li>
+<li>develop with an emphasis on speed;</li>
+<li>work with limited resources.</li>
+</ul>
+<h4>Local models: full control</h4>
+<p>If <strong>privacy, offline work</strong> is important to you, or you want to build <strong>fully autonomous agents</strong>, then it makes sense to deploy the neural network locally.</p>
+<p><strong>Main advantages:</strong></p>
+<ul>
+<li><strong>Confidentiality</strong> — data remains with you;</li>
+<li><strong>Offline work</strong> — useful in isolated networks;</li>
+<li><strong>No subscriptions and tokens</strong> — free after setup.</li>
+</ul>
+<p><strong>Disadvantages are obvious:</strong></p>
+<ul>
+<li>Resource requirements (especially video memory);</li>
+<li>Setup can take time;</li>
+<li>Some models are difficult to deploy without experience.</li>
+</ul>
+<p>Nevertheless, there are tools that make local launch easier. One of the best today is <strong>Ollama</strong>.</p>
+<h3>Deploying local LLM via Ollama + Docker</h3>
+<p>We will prepare a local launch of the Qwen 2.5 (qwen2.5:32b) model using a Docker container and the Ollama system. This will allow us to integrate the neural network with MCP and use it in our own agents based on LangGraph.</p>
+<p>If the computing resources of your computer or server are insufficient to work with this version of the model, you can always choose a less "resource-hungry" neural network — the installation and launch process will remain similar.</p>
+<p><strong>Quick installation (summary of steps)</strong></p>
+<ol>
+<li><strong>Install Docker + Docker Compose</strong></li>
+<li><strong>Create project structure:</strong>
+<pre class="line-numbers"><code class="language-bash">mkdir qwen-local && cd qwen-local
+</code></pre>
+</li>
+<li><strong>Create <code>docker-compose.yml</code></strong>
+(universal option, GPU is determined automatically)
+<pre class="line-numbers"><code class="language-yaml">services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_qwen
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama_data:/root/.ollama
+      - /tmp:/tmp
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_ORIGINS=*
+    restart: unless-stopped
+</code></pre>
+</li>
+<li><strong>Start container:</strong>
+<pre class="line-numbers"><code class="language-bash">docker compose up -d
+</code></pre>
+</li>
+<li><strong>Download model:</strong>
+<pre class="line-numbers"><code class="language-bash">docker exec -it ollama_qwen ollama pull qwen2.5:32b
+</code></pre>
+</li>
+<li><strong>Check operation via API:</strong>
+<pre class="line-numbers"><code class="language-bash">curl http://localhost:11434/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{"model": "qwen2.5:32b", "prompt": "Hello!", "stream": false}'
+</code></pre>
+<p>(Image with curl command execution result)</p>
+</li>
+<li><strong>Integration with Python:</strong>
+<pre class="line-numbers"><code class="language-python">import requests
+
+def query(prompt):
+    res = requests.post("http://localhost:11434/api/generate", json={
+        "model": "qwen2.5:32b",
+        "prompt": prompt,
+        "stream": False
+    })
+    return res.json()['response']
+
+print(query("Explain quantum entanglement"))
+</code></pre>
+<p>Now you have a full-fledged local LLM, ready to work with MCP and LangGraph.</p>
+</li>
+</ol>
+<p><strong>What's next?</strong></p>
+<p>We have a choice between cloud and local models, and we have learned how to connect both. The most interesting part is ahead — <strong>creating AI agents on LangGraph</strong> that use the selected model, memory, tools, and their own logic.</p>
+<p><strong>Let's move on to the most delicious part — code and practice!</strong></p>
+<hr>
+<p>Before moving on to practice, it is important to prepare the working environment. I assume that you are already familiar with the basics of Python, know what libraries and dependencies are, and understand why to use a virtual environment.</p>
+<p>If all this is new to you — I recommend first taking a short course or guide on Python basics, and then returning to the article.</p>
+<h4>Step 1: Creating a virtual environment</h4>
+<p>Create a new virtual environment in the project folder:</p>
+<pre class="line-numbers"><code class="language-bash">python -m venv venv
+source venv/bin/activate  # for Linux/macOS
+venc\Scripts\activate   # for Windows
+</code></pre>
+<h4>Step 2: Installing dependencies</h4>
+<p>Create a <code>requirements.txt</code> file and add the following lines to it:</p>
+<pre class="line-numbers"><code class="language-text">langchain==0.3.26
+langchain-core==0.3.69
+langchain-deepseek==0.1.3
+langchain-mcp-adapters==0.1.9
+langchain-ollama==0.3.5
+langchain-openai==0.3.28
+langgraph==0.5.3
+langgraph-checkpoint==2.1.1
+langgraph-prebuilt==0.5.2
+langgraph-sdk==0.1.73
+langsmith==0.4.8
+mcp==1.12.0
+ollama==0.5.1
+openai==1.97.0
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>Current versions are indicated as of July 21, 2025.</strong> Since publication, they may have changed — <strong>check for relevance before installation.</strong></p>
+</blockquote>
+<p>Then install the dependencies:</p>
+<pre class="line-numbers"><code class="language-bash">pip install -r requirements.txt</code></pre>
+<h4>Step 3: Configuring environment variables</h4>
+<p>Create a <code>.env</code> file in the project root and add the necessary API keys to it:</p>
+<pre class="line-numbers"><code class="language-text">OPENAI_API_KEY=sk-proj-1234
+DEEPSEEK_API_KEY=sk-123
+OPENROUTER_API_KEY=sk-or-v1-123
+BRAVE_API_KEY=BSAj123K1bvBGpH1344tLwc
+</code></pre>
+<p><strong>Purpose of variables:</strong></p>
+<ul>
+<li><strong>OPENAI_API_KEY</strong> — key for accessing GPT models from OpenAI;</li>
+<li><strong>DEEPSEEK_API_KEY</strong> — key for using Deepseek models;</li>
+<li><strong>OPENROUTER_API_KEY</strong> — single key for accessing many models via OpenRouter</li>
+</ul>
+<hr>
+<p>Some MCP tools (e.g., <code>brave-web-search</code>) require a key to work. Without it, they simply won't activate.</p>
+<p><strong>What if you don't have API keys?</strong></p>
+<p>No problem. You can start development with a local model (e.g., via Ollama), without connecting any external services. In this case, the <code>.env</code> file can be omitted entirely.</p>
+<p>Done! Now we have everything we need to get started — an isolated environment, dependencies, and, if necessary, access to cloud neural networks and MCP integrations.</p>
+<p>Next - we will launch our LLM agent in different ways.</p>
+<h3>Simple launch of LLM agents via LangGraph: basic integration</h3>
+<p>Let's start with the simplest: how to "connect the brain" to the future agent. We will analyze the basic ways to launch language models (LLM) with LangChain, so that in the next step we can move on to integration with LangGraph and building a full-fledged AI agent.</p>
+<h4>Imports</h4>
+<pre class="line-numbers"><code class="language-python">import os
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
+from langchain_deepseek import ChatDeepSeek
+</code></pre>
+<ul>
+<li><code>os</code> and <code>load_dotenv()</code> — for loading variables from the <code>.env</code> file.</li>
+<li><code>ChatOpenAI</code>, <code>ChatOllama</code>, <code>ChatDeepSeek</code> — wrappers for connecting language models via LangChain.</li>
+</ul>
+<blockquote>
+<p>💡 If you use alternative approaches to working with configurations (e.g., Pydantic Settings), you can replace <code>load_dotenv()</code> with your usual method.</p>
+</blockquote>
+<h4>Loading environment variables</h4>
+<pre class="line-numbers"><code class="language-python">load_dotenv()
+</code></pre>
+<p>This will load all variables from <code>.env</code>, including keys for accessing OpenAI, DeepSeek, OpenRouter and other APIs.</p>
+<h4>Simple functions for getting LLM</h4>
+<p><strong>OpenAI</strong></p>
+<pre class="line-numbers"><code class="language-python">def get_openai_llm():
+    return ChatOpenAI(model="gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
+</code></pre>
+<p>If the <code>OPENAI_API_KEY</code> variable is correctly set, LangChain will substitute it automatically — explicit specification of <code>api_key=...</code> is optional here.</p>
+<p><strong>DeepSeek</strong></p>
+<pre class="line-numbers"><code class="language-python">def get_deepseek_llm():
+    # ...
+</code></pre>
+<p>Similarly, but we use the <code>ChatDeepSeek</code> wrapper.</p>
+<p><strong>OpenRouter (and other compatible APIs)</strong></p>
+<pre class="line-numbers"><code class="language-python">def get_openrouter_llm(model="moonshotai/kimi-k2:free"):
+    return ChatOpenAI(
+        model=model,
+        api_key=os.getenv("OPENROUTER_API_KEY"),
+        base_url="https://openrouter.ai/api/v1",
+        temperature=0
+    )
+</code></pre>
+<p><strong>Features:</strong></p>
+<ul>
+<li><code>ChatOpenAI</code> is used, even though the model is not from OpenAI — because OpenRouter uses the same protocol.</li>
+<li><code>base_url</code> is required: it points to the OpenRouter API.</li>
+<li>The <code>moonshotai/kimi-k2:free</code> model was chosen as one of the most balanced options in terms of quality and speed at the time of writing.</li>
+<li>The <code>OpenRouter</code> API key must be passed explicitly — automatic substitution does not work here.</li>
+</ul>
+<h4>Mini-test: checking model operation</h4>
+<pre class="line-numbers"><code class="language-python">if __name__ == "__main__":
+    llm = get_openrouter_llm(model="moonshotai/kimi-k2:free")
+    response = llm.invoke("Who are you?")
+    print(response.content)
+</code></pre>
+<p>(Image with curl command execution result)</p>
+<p>If everything is configured correctly, you will receive a meaningful response from the model. Congratulations — the first step is done!</p>
+<h3>But this is not yet an agent</h3>
+<p>At this stage, we have connected the LLM and made a simple call. This is more like a console chatbot than an AI agent.</p>
+<p><strong>Why?</strong></p>
+<ul>
+<li>We are writing <strong>synchronous, linear code</strong> without state logic or goals.</li>
+<li>The agent does not make decisions, does not remember context and does not use tools.</li>
+<li>MCP and LangGraph are not yet involved.</li>
+</ul>
+<p><strong>What's next?</strong></p>
+<p>Next, we will implement a <strong>full-fledged AI agent</strong> with <strong>LangGraph</strong> — first without MCP, to focus on the architecture, states, and logic of the agent itself.</p>
+<p>Let's dive into real agent mechanics. Let's go!</p>
+<h3>Vacancy classification agent: from theory to practice</h3>
+<p>...LangGraph concepts in practice and create a useful tool for HR platforms and freelance exchanges.</p>
+<h4>Agent task</h4>
+<p>Our agent takes a text description of a vacancy or service as input and performs a three-level classification:</p>
+<ol>
+<li><strong>Job type</strong>: project work or permanent vacancy</li>
+<li><strong>Profession category</strong>: from 45+ predefined specialties</li>
+<li><strong>Search type</strong>: whether a person is looking for work or looking for a performer</li>
+</ol>
+<p>The result is returned in a structured JSON format with a confidence score for each classification.</p>
+<h4>📈 Agent architecture on LangGraph</h4>
+<p>Following the principles of LangGraph, we create a <strong>state graph</strong> of four nodes:</p>
+<ul>
+<li>Input description</li>
+<li>↓</li>
+<li>Job type classification node</li>
+<li>↓</li>
+<li>Category classification node</li>
+<li>↓</li>
+<li>Search type determination node</li>
+<li>↓</li>
+<li>Confidence calculation node</li>
+<li>↓</li>
+<li>JSON result</li>
+</ul>
+<p>Each node is a <strong>specialized function</strong> that:</p>
+<ul>
+<li>Receives the current state of the agent</li>
+<li>Performs its part of the analysis</li>
+<li>Updates the state and passes it on</li>
+</ul>
+<h4>State management</h4>
+<p>We define the <strong>agent's memory structure</strong> via <code>TypedDict</code>:</p>
+<pre class="line-numbers"><code class="language-python">from typing import TypedDict, Dict
+
+class State(TypedDict):
+    """Agent state for storing information about the classification process"""
+    description: str
+    job_type: str
+    category: str
+    search_type: str
+    confidence_scores: Dict[str, float]
+    processed: bool
+</code></pre>
+<p>This is the <strong>agent's working memory</strong> — everything it remembers and accumulates during analysis. Similar to how a human expert keeps the task context in mind when analyzing a document.</p>
+<p>Let's look at the full code, and then focus on the main points.</p>
+<pre class="line-numbers"><code class="language-python">import asyncio
+import json
+from enum import Enum
+from typing import TypedDict, Dict, Any, List
+
+from langgraph.graph import StateGraph, END
+from langchain.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
+from langchain.schema import HumanMessage
+
+# Profession categories
+CATEGORIES = [
+    "2D-animator", "3D-animator", "3D-modeler",
+    "Business analyst", "Blockchain developer", ...
+]
+
+class JobType(Enum):
+    PROJECT = "project work"
+    PERMANENT = "permanent work"
+
+class SearchType(Enum):
+    LOOKING_FOR_WORK = "looking for work"
+    LOOKING_FOR_PERFORMER = "looking for performer"
+
+class State(TypedDict):
+    """Agent state for storing information about the classification process"""
+    description: str
+    job_type: str
+    category: str
+    search_type: str
+    confidence_scores: Dict[str, float]
+    processed: bool
+
+class VacancyClassificationAgent:
+    """Asynchronous agent for classifying vacancies and services"""
+
+    def __init__(self, model_name: str = "gpt-4o-mini", temperature: float = 0.1):
+        """Agent initialization"""
+        self.llm = ChatOpenAI(model=model_name, temperature=temperature)
+        self.workflow = self._create_workflow()
+
+    def _create_workflow(self) -> StateGraph:
+        """Creates the agent's workflow based on LangGraph"""
+        workflow = StateGraph(State)
+        
+        # Add nodes to the graph
+        workflow.add_node("job_type_classification", self._classify_job_type)
+        workflow.add_node("category_classification", self._classify_category)
+        workflow.add_node("search_type_classification", self._classify_search_type)
+        workflow.add_node("confidence_calculation", self._calculate_confidence)
+        
+        # Define the sequence of node execution
+        workflow.set_entry_point("job_type_classification")
+        workflow.add_edge("job_type_classification", "category_classification")
+        workflow.add_edge("category_classification", "search_type_classification")
+        workflow.add_edge("search_type_classification", "confidence_calculation")
+        workflow.add_edge("confidence_calculation", END)
+        
+        return workflow.compile()
+
+    async def _classify_job_type(self, state: State) -> Dict[str, Any]:
+        """Node for determining job type: project or permanent"""
+        # ... (implementation follows)
+        
+    async def _classify_category(self, state: State) -> Dict[str, Any]:
+        """Node for determining profession category"""
+        # ... (implementation follows)
+        
+    async def _classify_search_type(self, state: State) -> Dict[str, Any]:
+        """Node for determining search type"""
+        # ... (implementation follows)
+
+    async def _calculate_confidence(self, state: State) -> Dict[str, Any]:
+        """Node for calculating confidence level in classification"""
+        # ... (implementation follows)
+
+    def _find_closest_category(self, predicted_category: str) -> str:
+        """Finds the closest category from the available list"""
+        # ... (implementation follows)
+
+    async def classify(self, description: str) -> Dict[str, Any]:
+        """Main method for classifying vacancies/services"""
+        initial_state = {
+            "description": description,
+            "job_type": "",
+            "category": "",
+            "search_type": "",
+            "confidence_scores": {},
+            "processed": False
+        }
+        
+        # Start the workflow
+        result = await self.workflow.ainvoke(initial_state)
+        
+        # Form the final response in JSON format
+        classification_result = {
+            "job_type": result["job_type"],
+            "category": result["category"],
+            "search_type": result["search_type"],
+            "confidence_scores": result["confidence_scores"],
+            "success": result["processed"]
+        }
+        return classification_result
+
+async def main():
+    """Agent operation demonstration"""
+    agent = VacancyClassificationAgent()
+    
+    test_cases = [
+        "Requires Python developer to create a web application on Django. Permanent job.",
+        "Looking for orders to create logos and corporate identity. I work in Adobe Illustrator.",
+        "Need a 3D animator for a short-term project to create a commercial.",
+        "Resume: experienced marketer, looking for remote work in digital marketing",
+        "Looking for a React frontend developer for our team on a permanent basis"
+    ]
+    
+    print("🤖 Vacancy classification agent operation demonstration\n")
+    for i, description in enumerate(test_cases, 1):
+        print(f"--- Test {i}: ---")
+        print(f"Description: {description}")
+        try:
+            result = await agent.classify(description)
+            print("Classification result:")
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+        except Exception as e:
+            print(f"❌ Error: {e}")
+        print("-" * 80)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
+</code></pre>
+<p>(...the rest of the code with method implementations was presented in the article...)</p>
+<h3>Key architectural advantages</h3>
+<ol>
+<li><strong>Modularity</strong> — each node solves one task, easy to test and improve separately</li>
+<li><strong>Extensibility</strong> — new analysis nodes can be added without changing existing ones</li>
+<li><strong>Transparency</strong> — the entire decision-making process is documented and traceable</li>
+<li><strong>Performance</strong> — asynchronous processing of multiple requests</li>
+<li><strong>Reliability</strong> — fallback mechanisms and error handling</li>
+</ol>
+<h3>Real benefit</h3>
+<p>Such an agent can be used in:</p>
+<ul>
+<li><strong>HR platforms</strong> for automatic categorization of resumes and vacancies</li>
+<li><strong>Freelance exchanges</strong> for improving search and recommendations</li>
+<li><strong>Internal systems</strong> of companies for processing applications and projects</li>
+<li><strong>Analytical solutions</strong> for labor market research</li>
+</ul>
+<h3>MCP in action: creating an agent with a file system and web search</h3>
+<p>After we understood the basic principles of LangGraph and created a simple classifier agent, let's expand its capabilities by connecting it to the outside world via MCP.</p>
+<p>Now we will create a full-fledged AI assistant that can:</p>
+<ul>
+<li>Work with the file system (read, create, modify files)</li>
+<li>Search for relevant information on the Internet</li>
+<li>Remember the dialogue context</li>
+<li>Handle errors and recover from failures</li>
+</ul>
+<h4>From theory to real tools</h4>
+<p>Remember how at the beginning of the article we talked about <strong>MCP being a bridge between a neural network and its environment</strong>? Now you will see this in practice. Our agent will gain access to <strong>real tools</strong>:</p>
+<pre class="line-numbers"><code class="language-text"># File system tools
+- read_file — read files
+- write_file — write and create files
+- list_directory — view folder contents
+- create_directory — create folders
+
+# Web search tools
+- brave_web_search — search the Internet
+- get_web_content — get page content
+</code></pre>
+<p>This is no longer a "toy" agent — it is a <strong>working tool</strong> that can solve real problems.</p>
+<h4>📈 Architecture: from simple to complex</h4>
+<p><strong>1. Configuration as a basis for stability</strong></p>
+<pre class="line-numbers"><code class="language-python">from dataclasses import dataclass
+
+@dataclass
+class AgentConfig:
+    """Simplified AI agent configuration"""
+    filesystem_path: str = "/path/to/work/directory"
+    model_provider: ModelProvider = ModelProvider.OLLAMA
+    use_memory: bool = True
+    enable_web_search: bool = True
+
+    def validate(self) -> None:
+        """Configuration validation"""
+        if not os.path.exists(self.filesystem_path):
+            raise ValueError(f"Path does not exist: {self.filesystem_path}")
+</code></pre>
+<p><strong>Why is this important?</strong> Unlike the classification example, here the agent interacts with external systems. One error in the file path or a missing API key — and the entire agent stops working. <strong>Validation at startup</strong> saves hours of debugging.</p>
+<p><strong>2. Model factory: flexibility of choice</strong></p>
+<pre class="line-numbers"><code class="language-python">def create_model(config: AgentConfig):
+    """Creates a model according to the configuration"""
+    provider = config.model_provider.value
+    if provider == "ollama":
+        return ChatOllama(model="qwen2.5:32b", base_url="http://localhost:11434")
+    elif provider == "openai":
+        return ChatOpenAI(model="gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
+    # ... other providers
+</code></pre>
+<p>One code — many models. Want a free local model? Use Ollama. Need maximum accuracy? Switch to GPT-4. Is speed important? Try DeepSeek. The code remains the same.</p>
+<p><strong>3. MCP integration: connecting to the real world</strong></p>
+<pre class="line-numbers"><code class="language-python">async def _init_mcp_client(self):
+    """MCP client initialization"""
+    mcp_config = {
+        "filesystem": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", self.filesystem_path],
+            "transport": "stdio"
+        },
+        "brave-search": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-brave-search@latest"],
+            "transport": "stdio",
+            "env": {"BRAVE_API_KEY": os.getenv("BRAVE_API_KEY")}
+        }
+    }
+    self.mcp_client = MultiServerMCPClient(mcp_config)
+    self.tools = await self.mcp_client.get_tools()
+</code></pre>
+<p>This is where the key work of MCP happens: we connect external MCP servers to the agent, which provide a set of tools and functions. The agent then receives not just individual functions, but a full contextual understanding of how to work with the file system and the Internet.</p>
+<h4>Error resilience</h4>
+<p>In the real world, everything breaks: the network is unavailable, files are blocked, API keys expire. Our agent is ready for this:</p>
+<pre class="line-numbers"><code class="language-python">@retry_on_failure(max_retries=2, delay=1.0)
+async def process_message(self, user_input: str, thread_id: str = "default") -> str:
+    # ...
+</code></pre>
+<p>The <code>@retry_on_failure</code> decorator automatically retries operations on temporary failures. The user won't even notice that something went wrong.</p>
+<h3>Summary: from theory to practice of AI agents</h3>
+<p>Today we have come a long way from basic concepts to creating working AI agents. Let's summarize what we have learned and achieved.</p>
+<p><strong>What we have mastered</strong></p>
+<p><strong>1. Fundamental concepts</strong></p>
+<ul>
+<li>Understood the difference between chatbots and real AI agents</li>
+<li>Understood the role of <strong>MCP (Model Context Protocol)</strong> as a bridge between the model and the outside world</li>
+<li>Studied the architecture of <strong>LangGraph</strong> for building complex agent logic</li>
+</ul>
+<p><strong>2. Practical skills</strong></p>
+<ul>
+<li>Configured a working environment with support for cloud and local models</li>
+<li>Created a <strong>classifier agent</strong> with an asynchronous architecture and state management</li>
+<li>Built an <strong>MCP agent</strong> with access to the file system and web search</li>
+</ul>
+<p><strong>3. Architectural patterns</strong></p>
+<ul>
+<li>Mastered modular configuration and model factories</li>
+<li>Implemented error handling and <strong>retry mechanisms</strong> for production-ready solutions</li>
+</ul>
+<h3>Key advantages of the approach</h3>
+<p><strong>LangGraph + MCP</strong> give us:</p>
+<ul>
+<li><strong>Transparency</strong> — every step of the agent is documented and traceable</li>
+<li><strong>Extensibility</strong> — new features are added declaratively</li>
+<li><strong>Reliability</strong> — built-in error handling and recovery</li>
+<li><strong>Flexibility</strong> — support for multiple models and providers out of the box</li>
+</ul>
+<h3>Conclusion</h3>
+<p>AI agents are not futuristic fantasy, but a <strong>real technology of today</strong>. With LangGraph and MCP, we can create systems that solve specific business problems, automate routines, and open up new possibilities.</p>
+<p><strong>The main thing is to start.</strong> Take the code from the examples, adapt it to your tasks, experiment. Each project is a new experience and a step towards mastery in the field of AI development.</p>
+<p>Good luck with your projects!</p>
+<hr>
+<p><em>Tags: python, ai, mcp, langchain, ai-assistant, ollama, ai-agents, local llm, langgraph, mcp-server</em><br>
+<em>Hubs: Amvera Company Blog, Natural Language Processing, Artificial Intelligence, Python, Programming</em><br>
+<img src="https://habr.com/ru/companies/amvera/articles/929568/" alt="habr"></em></p>

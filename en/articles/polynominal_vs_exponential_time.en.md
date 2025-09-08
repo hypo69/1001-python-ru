@@ -1,1 +1,2 @@
-Article [moved](informatics/polynomial_and_exponential_execution_time.en.md)
+<!-- Translated to en -->
+Article [moved](информатика/полиноминальное_и_экспоненциальное_время_выполнения.md)

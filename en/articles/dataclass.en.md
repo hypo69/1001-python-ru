@@ -1,1 +1,2 @@
-Post [moved](python/dataclass.en.md)
+<!-- Translated to en -->
+Post [moved](python/dataclass.md)

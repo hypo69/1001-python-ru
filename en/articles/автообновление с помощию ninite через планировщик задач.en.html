@@ -1,0 +1,73 @@
+<!-- Translated to en -->
+<p>You are absolutely right. Thank you for the clarification. The use of "guillemets" is standard for Russian typography.</p>
+<p>Here is the corrected version of the article with the correct quotation marks:</p>
+<hr>
+<h3>How to automatically update programs with Ninite and Windows Task Scheduler</h3>
+<p>Keeping your software up-to-date is key to the security and stability of your system. However, manually checking and installing updates for each application can be time-consuming. In this article, we will look at how to automate this process using the Ninite.com service and the built-in Windows Task Scheduler.</p>
+<h3>Part 1: Getting started with Ninite and creating an installer</h3>
+<p>Ninite is a service designed to install and update several popular applications simultaneously. It aims to save you time by eliminating the need to manually install each program, scroll through installation wizards, and decline offers to install toolbars or other unwanted software.</p>
+<p><strong>Key features and benefits of Ninite:</strong></p>
+<ul>
+<li><strong>Installation without unnecessary actions:</strong> You don't need to click "next" or decline toolbars and extra junk. Just select the applications you need and run the installer.</li>
+<li><strong>Always up-to-date versions:</strong> Ninite uses bots to track updates, so you always get the latest stable versions of applications.</li>
+<li><strong>Process automation:</strong> Ninite works in the background, installing applications in standard locations and in your system's language. It skips already updated applications and ignores reboot requests from installers.</li>
+<li><strong>Security:</strong> Applications are downloaded directly from official publisher websites, and their digital signatures or hashes are verified before launch to ensure authenticity.</li>
+<li><strong>System support:</strong> Ninite works on Windows 11, 10, 8.x, 7, and equivalent server versions.</li>
+<li><strong>Free for home use:</strong> The site is free for personal use (no ads or unwanted software). The paid version of Ninite Pro offers extended features for managing software in organizations.</li>
+</ul>
+<p><strong>Application sections (categories) you can choose from:</strong></p>
+<p>Ninite offers a wide range of programs grouped by categories:</p>
+<ul>
+<li><strong>Web Browsers:</strong> Chrome, Opera, Firefox, Edge, Brave.</li>
+<li><strong>Messaging:</strong> Zoom, Discord, Teams, Pidgin, Thunderbird.</li>
+<li><strong>Media:</strong> iTunes, VLC, AIMP, foobar2000, Audacity, K-Lite Codecs, Spotify, HandBrake.</li>
+<li><strong>Imaging:</strong> Krita, Blender, Paint.NET, GIMP, IrfanView, Inkscape, Greenshot, ShareX.</li>
+<li><strong>Documents:</strong> Foxit Reader, LibreOffice, SumatraPDF, OpenOffice.</li>
+<li><strong>Security:</strong> Malwarebytes, Avast, AVG, Avira.</li>
+<li><strong>Online Storage:</strong> Dropbox, Google Drive, OneDrive.</li>
+<li><strong>Utilities:</strong> TeamViewer, ImgBurn, TeraCopy, Revo, WinDirStat, CCleaner.</li>
+<li><strong>Compression:</strong> 7-Zip, PeaZip, WinRAR.</li>
+<li><strong>Developer Tools:</strong> Python, Git, FileZilla, Notepad++, WinSCP, PuTTY, Visual Studio Code.</li>
+<li><strong>And much more:</strong> including .NET, Java, utilities, and other useful tools.</li>
+</ul>
+<p><strong>How to select and download the installation file:</strong></p>
+<ol>
+<li><strong>Select applications:</strong> On the main page of ninite.com, you will see a list of categories with applications. Check the boxes next to the programs you want to install or keep up-to-date.</li>
+<li><strong>Download installer:</strong> After selecting applications, click the <strong>"Get Your Ninite"</strong> button. The site will generate and offer you to download a personal executable file. This small file is your universal installer/updater.</li>
+</ol>
+<h3>Part 2: Setting up automatic updates</h3>
+<p>Now that you have a configured Ninite installer, let's figure out where best to place it and how to set up automatic launch.</p>
+<p><strong>Where to place the Ninite file</strong></p>
+<p>For the system to be able to find and run your Ninite file without problems, it is recommended to create a separate folder for it. This will prevent accidental deletion or movement of the file.</p>
+<p><strong>Placement recommendations:</strong></p>
+<ul>
+<li><strong>Avoid system folders:</strong> Do not save the file in the root of drive <code>C:</code> or in the <code>C:\Windows</code> folder.</li>
+<li><strong>Create a special folder:</strong> A good practice would be to create a folder, for example, <code>C:\NiniteUpdater</code>. This will simplify file management and future searches.</li>
+</ul>
+<p>Move the Ninite file downloaded from the Ninite website (e.g., <code>Ninite-software-bundle.exe</code>) to the folder you created earlier (<code>C:\NiniteUpdater</code>).</p>
+<p><strong>Setting up automatic launch via Windows Task Scheduler</strong></p>
+<p>To ensure that programs are checked and updated automatically every Sunday, we will use the built-in Windows tool — <strong>Task Scheduler</strong>.</p>
+<p><strong>1. Opening Task Scheduler:</strong></p>
+<ul>
+<li>Press <code>Win + R</code>, type <code>taskschd.msc</code>, and press Enter.</li>
+</ul>
+<p><strong>2. Creating a new task:</strong></p>
+<p>In the Task Scheduler window, in the right-hand "Actions" pane, select <strong>"Create Basic Task..."</strong>.</p>
+<ul>
+<li><strong>Name and description:</strong> Enter a clear name for your task, for example, "Weekly Ninite Update". Click "Next".</li>
+<li><strong>Trigger (launch time):</strong> In this step, you need to specify how often the task will run.
+<ul>
+<li>Select "Weekly" and click "Next".</li>
+<li>Specify the day of the week — "Sunday". You can also choose a convenient launch time for you, for example, when the computer is usually on but not actively used. Click "Next".</li>
+</ul>
+</li>
+<li><strong>Action:</strong> Here we will specify which program to run.
+<ul>
+<li>Select "Start a program" and click "Next".</li>
+<li>In the "Program or script" field, click the "Browse..." button and find your Ninite file in the folder you created earlier (<code>C:\NiniteUpdater\Ninite-software-bundle.exe</code>).</li>
+<li>Click "Next".</li>
+</ul>
+</li>
+<li><strong>Finish:</strong> In the last step, check all the specified parameters. If everything is correct, click "Finish".</li>
+</ul>
+<p>Now, Task Scheduler will automatically run your Ninite file every Sunday at the time you specified. When Ninite runs, it will check the versions of your selected programs in the background and, if it finds updates, will download and install them without your intervention. Thus, you get a simple and reliable system for keeping your software up-to-date.</p>
