@@ -1,4 +1,4 @@
-# Guida Completa alle Variabili in WP-PageNavi per WordPress
+# Guida alle variabili di WP-PageNavi per WordPress.
 
 La navigazione tra le pagine è una parte importante di qualsiasi blog o sito di notizie su WordPress. Uno degli strumenti più popolari per una navigazione paginata comoda è il plugin **WP-PageNavi**. Permette di sostituire i link standard "Precedente / Successivo" con una paginazione più flessibile e accattivante.
 

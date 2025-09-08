@@ -1,1 +1,1 @@
-C:\Users\user\Documents\repos\public_repositories\1001-python\ru\cheatsheets\git\руководство по работе с медиафайлами в GitHub.md
+C:\Users\user\Documents\repos\public_repositories\1001-python\ru\cheatsheets\aiofiles.md
