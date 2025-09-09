@@ -1,7 +1,8 @@
-### **Scenario for Gemini CLI: Game of Life**
+### **Scenario for Gemini CLI: Conway's Game of Life.**
 
 #### **Step 1: Creating the `GEMINI.MD` system instruction**
 In the working directory, create a `GEMINI.md` file and paste the system instruction into it. Example instruction:
+
 ```markdown
 ## 📘 Instruction for generating Python code
 
@@ -21,7 +22,8 @@ In the working directory, create a `GEMINI.md` file and paste the system instruc
 
 * Comments must be **accurate** and describe **what the code does**, not "what we are doing".
 * **It is forbidden** to use pronouns: `we do`, `we return`, `we send`, `we go` and so on.
-* **Only terms are allowed**: `extraction`, `execution`, `call`, `replacement`, `check`, `sending`, `The function performs`, `The function changes the value`, etc.
+* **Only terms are allowed**: `extraction`, `execution`, `call`, `replacement`, `check`, 
+`sending`, `The function performs`, `The function changes the value`, etc.
 
 #### ❌ Example of an incorrect comment:
 
@@ -31,9 +33,9 @@ In the working directory, create a `GEMINI.md` file and paste the system instruc
 
 #### ✅ Example of a correct comment:
 
-```python
+``````python
 # The function extracts the parameter value
-```
+``````
 
 ---
 
@@ -41,7 +43,7 @@ In the working directory, create a `GEMINI.md` file and paste the system instruc
 
 Each function/method/class must contain a `docstring` in the following format:
 
-```python
+<pre>```python
 def function(param: str, param1: Optional[str | dict | str] = None) -> dict | None:
     """
     Args:
@@ -58,7 +60,7 @@ def function(param: str, param1: Optional[str | dict | str] = None) -> dict | No
         >>> function('param', 'param1')
         {'param': 'param1'}
     """
-```
+```</pre>
 
 * **All parameters and return values must be described.**
 * The wording must be **concise, accurate, and unambiguous**.
@@ -74,7 +76,7 @@ def function(param: str, param1: Optional[str | dict | str] = None) -> dict | No
 
 #### ✅ Simple types:
 
-```python
+<pre>```python
 name: str = "John"
 count: int = 42
 flag: bool = True
@@ -82,7 +84,7 @@ flag: bool = True
 
 #### ✅ Collections and complex types:
 
-```python
+<pre>```python
 from typing import Any, Optional, Callable, TypeAlias
 
 coordinates: tuple[float, float] = (55.75, 37.61)
@@ -92,7 +94,7 @@ UserId: TypeAlias = int
 
 #### ✅ Functions and methods:
 
-```python
+<pre>```python
 def get_user_name(user_id: int) -> str:
     """Returns the user's name by their ID."""
     ...
@@ -100,14 +102,14 @@ def get_user_name(user_id: int) -> str:
 
 #### ✅ Asynchronous functions:
 
-```python
+<pre>```python
 async def fetch_users() -> AsyncIterator[dict[str, int | str]]:
     ...
 ```
 
 #### ✅ Generic types:
 
-```python
+<pre>```python
 from typing import TypeVar, Generic
 
 T = TypeVar("T")
