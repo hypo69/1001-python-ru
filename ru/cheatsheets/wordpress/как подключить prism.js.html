@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&Kcy;&acy;&kcy; &pcy;&ocy;&dcy;&rcy;&ucy;&zhcy;&icy;&tcy;&softcy; &rcy;&iecy;&dcy;&acy;&kcy;&tcy;&ocy;&rcy; Gutenberg &scy; &pcy;&ocy;&dcy;&scy;&vcy;&iecy;&tcy;&kcy;&ocy;&jcy; &scy;&icy;&ncy;&tcy;&acy;&kcy;&scy;&icy;&scy;&acy; Prism &vcy; WordPress</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h2 id="как-подружить-редактор-gutenberg-с-подсветкой-синтаксиса-prism-в-wordpress">Как подружить редактор Gutenberg с подсветкой синтаксиса Prism в WordPress</h2>
+<p>Стандартный блок &quot;Код&quot; в редакторе Gutenberg — это спартанский инструмент. Он отображает код моноширинным шрифтом, но не дает ни подсветки синтаксиса, ни нумерации строк, ни удобной кнопки для копирования. Это делает чтение кода на странице утомительным, а сайт выглядит менее профессионально.</p>
+<p>К счастью, эту проблему легко решает Prism.js — легкая, быстрая и расширяемая библиотека для подсветки синтаксиса.</p>
+<p>В этом руководстве мы по шагам интегрируем Prism.js в вашу WordPress-тему так, чтобы любой блок кода, который вы добавляете в Gutenberg, автоматически получал красивую подсветку, номера строк и кнопку &quot;Копировать&quot;.</p>
+<h3 id="дочерняя-тема-важно">Дочерняя тема (важно)</h3>
+<p>Все изменения мы будем вносить в <strong>дочернюю тему</strong>. Это критически важный шаг в любой кастомизации WordPress. Почему? Если вы внесете изменения напрямую в файлы родительской темы, все ваши труды будут стерты при ее следующем обновлении. Дочерняя тема наследует все от родителя, но позволяет безопасно добавлять свои стили и функции.</p>
+<p>(В этой статье мы не будем углубляться в процесс создания дочерней темы. Мы предполагаем, что у вас уже есть активная дочерняя тема. Если нет, вы можете прочитать об этом в статье: <strong>«Как создать и настроить дочернюю тему в WordPress»</strong>.)</p>
+<h3 id="шаг-1-готовим-структуру-файлов">Шаг 1: Готовим структуру файлов</h3>
+<p>В папке вашей активной дочерней темы нам понадобятся следующие файлы. Какие-то из них у вас уже есть, какие-то мы создадим.</p>
+<ol>
+<li><code>prism.js</code> — Сама библиотека Prism, которую мы скачаем.</li>
+<li><code>prism.css</code> — Стандартная тема оформления для Prism.</li>
+<li><code>prism-init.js</code> — Наш небольшой скрипт-помощник, который будет все &quot;оживлять&quot;.</li>
+<li><code>functions.php</code> — Главный файл для добавления функционала в WordPress.</li>
+<li><code>style.css</code> — Основной файл стилей вашей дочерней темы, куда мы добавим правки.</li>
+</ol>
+<h3 id="шаг-2-скачиваем-правильную-сборку-prismjs">Шаг 2: Скачиваем правильную сборку Prism.js</h3>
+<p>Это ключевой момент. Prism — модульная библиотека, и нам нужно скачать версию, которая включает все необходимые нам функции.</p>
+<ol>
+<li>Перейдите на официальную страницу загрузки: <a href="https://prismjs.com/download.html"><strong>Prism.js Download</strong></a>.</li>
+<li>На странице выберите:
+<ul>
+<li><strong>Compression level:</strong> Minified (для быстрой загрузки на сайте).</li>
+<li>В разделе <strong>Languages</strong> отметьте галочками те языки, которые вам нужны. Для примера, обязательно выберите <strong>Python</strong>.</li>
+<li>Прокрутите ниже до раздела <strong>Plugins</strong> и отметьте галочками <strong>три</strong> плагина:
+<ul>
+<li><strong>Line Numbers</strong> (для нумерации строк).</li>
+<li><strong>Copy to Clipboard Button</strong> (для кнопки &quot;Копировать&quot;).</li>
+<li><strong>Normalize Whitespace</strong> (полезный плагин для корректного отображения отступов).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Нажмите синюю кнопку <strong>DOWNLOAD JS</strong> и <strong>DOWNLOAD CSS</strong>.</li>
+<li>Поместите скачанные файлы <code>prism.js</code> и <code>prism.css</code> в корневую папку вашей дочерней темы.</li>
+</ol>
+<h3 id="шаг-3-создаем-скрипт-инициализатор">Шаг 3: Создаем скрипт-инициализатор</h3>
+<p>Библиотека Prism не начинает работать сама по себе. Ей нужно сказать, когда и как это сделать. Также, плагин кнопки &quot;Копировать&quot; требует, чтобы мы сами создали эту кнопку. Наш скрипт-помощник сделает и то, и другое.</p>
+<p>Создайте в папке темы файл <code>prism-init.js</code> и вставьте в него следующий код:</p>
+<pre><code class="language-javascript"><span class="hljs-comment">/**
+ * Файл: prism-init.js
+ * Назначение: Инициализация подсветки Prism.js и добавление кнопок &quot;Копировать&quot;.
+ */</span>
+<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;DOMContentLoaded&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// Проверяем, была ли загружена основная библиотека Prism</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Prism</span> === <span class="hljs-string">&#x27;undefined&#x27;</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&quot;Критическая ошибка: Библиотека Prism.js не загружена.&quot;</span>);
+        <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-comment">// Запускаем подсветку для всех блоков кода на странице.</span>
+    <span class="hljs-title class_">Prism</span>.<span class="hljs-title function_">highlightAll</span>();
+
+    <span class="hljs-comment">// Добавляем кнопку &quot;Копировать&quot; к каждому блоку</span>
+    <span class="hljs-keyword">const</span> codeBlocks = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;pre[class*=&quot;language-&quot;]&#x27;</span>);
+    codeBlocks.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">preElement</span> =&gt;</span> {
+        <span class="hljs-keyword">if</span> (preElement.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.code-copy-btn&#x27;</span>)) { <span class="hljs-keyword">return</span>; }
+        <span class="hljs-keyword">const</span> codeElement = preElement.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;code&#x27;</span>);
+        <span class="hljs-keyword">if</span> (!codeElement) { <span class="hljs-keyword">return</span>; }
+
+        <span class="hljs-keyword">const</span> button = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;button&#x27;</span>);
+        button.<span class="hljs-property">className</span> = <span class="hljs-string">&#x27;code-copy-btn&#x27;</span>;
+        button.<span class="hljs-property">type</span> = <span class="hljs-string">&#x27;button&#x27;</span>;
+        button.<span class="hljs-property">innerText</span> = <span class="hljs-string">&#x27;Copy&#x27;</span>;
+        button.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;aria-label&#x27;</span>, <span class="hljs-string">&#x27;Copy code to clipboard&#x27;</span>);
+
+        button.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+            navigator.<span class="hljs-property">clipboard</span>.<span class="hljs-title function_">writeText</span>(codeElement.<span class="hljs-property">innerText</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+                button.<span class="hljs-property">innerText</span> = <span class="hljs-string">&#x27;Copied!&#x27;</span>;
+                button.<span class="hljs-property">disabled</span> = <span class="hljs-literal">true</span>;
+                <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+                    button.<span class="hljs-property">innerText</span> = <span class="hljs-string">&#x27;Copy&#x27;</span>;
+                    button.<span class="hljs-property">disabled</span> = <span class="hljs-literal">false</span>;
+                }, <span class="hljs-number">2000</span>);
+            }).<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+                <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;Ошибка при копировании: &#x27;</span>, err);
+                button.<span class="hljs-property">innerText</span> = <span class="hljs-string">&#x27;Error&#x27;</span>;
+            });
+        });
+        preElement.<span class="hljs-title function_">appendChild</span>(button);
+    });
+});
+
+</code></pre>
+<h3 id="шаг-4-подключаем-все-в-functionsphp">Шаг 4: Подключаем все в <code>functions.php</code></h3>
+<p>Теперь нам нужно сказать WordPress, чтобы он загружал наши новые CSS и JS файлы. А также — добавить &quot;магию&quot;, которая будет автоматически подготавливать блоки кода из Gutenberg для обработки Prism.</p>
+<p>Откройте ваш файл <code>functions.php</code> и <strong>добавьте в него</strong> следующий код (или замените существующие блоки, если они есть):</p>
+<pre><code class="language-php"><span class="hljs-meta">&lt;?php</span>
+
+<span class="hljs-comment">// ========================================================================</span>
+<span class="hljs-comment">// 1. Подключение стилей и скриптов для подсветки кода</span>
+<span class="hljs-comment">// ========================================================================</span>
+
+<span class="hljs-title function_ invoke__">add_action</span>(<span class="hljs-string">&#x27;wp_enqueue_scripts&#x27;</span>, <span class="hljs-string">&#x27;my_theme_enqueue_assets&#x27;</span>);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">my_theme_enqueue_assets</span>(<span class="hljs-params"></span>) </span>{
+
+    <span class="hljs-comment">// Подключаем стили родительской темы (если еще не подключены)</span>
+    <span class="hljs-title function_ invoke__">wp_enqueue_style</span>(<span class="hljs-string">&#x27;parent-style&#x27;</span>, <span class="hljs-title function_ invoke__">get_template_directory_uri</span>() . <span class="hljs-string">&#x27;/style.css&#x27;</span>);
+    
+    <span class="hljs-comment">// Подключаем основные стили дочерней темы</span>
+    <span class="hljs-title function_ invoke__">wp_enqueue_style</span>(<span class="hljs-string">&#x27;child-style&#x27;</span>, <span class="hljs-title function_ invoke__">get_stylesheet_directory_uri</span>() . <span class="hljs-string">&#x27;/style.css&#x27;</span>, <span class="hljs-keyword">array</span>(<span class="hljs-string">&#x27;parent-style&#x27;</span>), <span class="hljs-title function_ invoke__">wp_get_theme</span>()-&gt;<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&#x27;Version&#x27;</span>));
+    
+    <span class="hljs-comment">// Подключаем стили Prism</span>
+    <span class="hljs-title function_ invoke__">wp_enqueue_style</span>(<span class="hljs-string">&#x27;prism-css&#x27;</span>, <span class="hljs-title function_ invoke__">get_stylesheet_directory_uri</span>() . <span class="hljs-string">&#x27;/prism.css&#x27;</span>, <span class="hljs-keyword">array</span>(<span class="hljs-string">&#x27;child-style&#x27;</span>));
+
+    <span class="hljs-comment">// Подключаем скрипты Prism</span>
+    <span class="hljs-title function_ invoke__">wp_enqueue_script</span>(<span class="hljs-string">&#x27;prism-core-js&#x27;</span>, <span class="hljs-title function_ invoke__">get_stylesheet_directory_uri</span>() . <span class="hljs-string">&#x27;/prism.js&#x27;</span>, <span class="hljs-keyword">array</span>(), <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>);
+    <span class="hljs-title function_ invoke__">wp_enqueue_script</span>(<span class="hljs-string">&#x27;prism-init-js&#x27;</span>, <span class="hljs-title function_ invoke__">get_stylesheet_directory_uri</span>() . <span class="hljs-string">&#x27;/prism-init.js&#x27;</span>, <span class="hljs-keyword">array</span>(<span class="hljs-string">&#x27;prism-core-js&#x27;</span>), <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>);
+}
+
+<span class="hljs-comment">// ========================================================================</span>
+<span class="hljs-comment">// 2. Автоматическая обработка блоков кода из Gutenberg</span>
+<span class="hljs-comment">// ========================================================================</span>
+
+<span class="hljs-title function_ invoke__">add_filter</span>(<span class="hljs-string">&#x27;the_content&#x27;</span>, <span class="hljs-string">&#x27;prepare_code_blocks_for_prism&#x27;</span>, <span class="hljs-number">20</span>);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepare_code_blocks_for_prism</span>(<span class="hljs-params"><span class="hljs-variable">$content</span></span>) </span>{
+    <span class="hljs-variable">$pattern</span> = <span class="hljs-string">&#x27;/&lt;pre(.*?)&gt;(.*?)&lt;\/pre&gt;/is&#x27;</span>;
+
+    <span class="hljs-variable">$content</span> = <span class="hljs-title function_ invoke__">preg_replace_callback</span>(<span class="hljs-variable">$pattern</span>, function(<span class="hljs-variable">$matches</span>) {
+        <span class="hljs-variable">$pre_attributes</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">1</span>];
+        <span class="hljs-variable">$pre_content</span> = <span class="hljs-variable">$matches</span>[<span class="hljs-number">2</span>];
+
+        <span class="hljs-comment">// --- Шаг 1: Гарантированно добавляем класс &#x27;line-numbers&#x27; в тег &lt;pre&gt; ---</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">strpos</span>(<span class="hljs-variable">$pre_attributes</span>, <span class="hljs-string">&#x27;line-numbers&#x27;</span>) === <span class="hljs-literal">false</span>) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/class=&quot;([^&quot;]*)&quot;/i&#x27;</span>, <span class="hljs-variable">$pre_attributes</span>, <span class="hljs-variable">$class_matches</span>)) {
+                <span class="hljs-variable">$pre_attributes</span> = <span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-variable">$class_matches</span>[<span class="hljs-number">0</span>], <span class="hljs-title function_ invoke__">sprintf</span>(<span class="hljs-string">&#x27;class=&quot;%s line-numbers&quot;&#x27;</span>, <span class="hljs-variable">$class_matches</span>[<span class="hljs-number">1</span>]), <span class="hljs-variable">$pre_attributes</span>);
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-variable">$pre_attributes</span> .= <span class="hljs-string">&#x27; class=&quot;line-numbers&quot;&#x27;</span>;
+            }
+        }
+        
+        <span class="hljs-comment">// --- Шаг 2: Гарантированно добавляем &#x27;language-python&#x27; (по умолчанию) в тег &lt;code&gt; ---</span>
+        <span class="hljs-variable">$pre_content</span> = <span class="hljs-title function_ invoke__">preg_replace_callback</span>(<span class="hljs-string">&#x27;/&lt;code(.*?)&gt;/is&#x27;</span>, function(<span class="hljs-variable">$code_matches</span>) {
+            <span class="hljs-variable">$code_attributes</span> = <span class="hljs-variable">$code_matches</span>[<span class="hljs-number">1</span>];
+            <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">strpos</span>(<span class="hljs-variable">$code_attributes</span>, <span class="hljs-string">&#x27;language-&#x27;</span>) === <span class="hljs-literal">false</span>) {
+                 <span class="hljs-keyword">if</span> (<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&#x27;/class=&quot;([^&quot;]*)&quot;/i&#x27;</span>, <span class="hljs-variable">$code_attributes</span>, <span class="hljs-variable">$class_matches_code</span>)) {
+                    <span class="hljs-variable">$code_attributes</span> = <span class="hljs-title function_ invoke__">str_replace</span>(<span class="hljs-variable">$class_matches_code</span>[<span class="hljs-number">0</span>], <span class="hljs-title function_ invoke__">sprintf</span>(<span class="hljs-string">&#x27;class=&quot;%s language-python&quot;&#x27;</span>, <span class="hljs-variable">$class_matches_code</span>[<span class="hljs-number">1</span>]), <span class="hljs-variable">$code_attributes</span>);
+                } <span class="hljs-keyword">else</span> {
+                    <span class="hljs-variable">$code_attributes</span> .= <span class="hljs-string">&#x27; class=&quot;language-python&quot;&#x27;</span>;
+                }
+            }
+            <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&lt;code&#x27;</span> . <span class="hljs-variable">$code_attributes</span> . <span class="hljs-string">&#x27;&gt;&#x27;</span>;
+        }, <span class="hljs-variable">$pre_content</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// `1` - чтобы обработать только первый &lt;code&gt; внутри &lt;pre&gt;</span>
+        
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&lt;pre&#x27;</span> . <span class="hljs-variable">$pre_attributes</span> . <span class="hljs-string">&#x27;&gt;&#x27;</span> . <span class="hljs-variable">$pre_content</span> . <span class="hljs-string">&#x27;&lt;/pre&gt;&#x27;</span>;
+    }, <span class="hljs-variable">$content</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-variable">$content</span>;
+}
+</code></pre>
+<h3 id="шаг-5-финальные-штрихи-в-stylecss">Шаг 5: Финальные штрихи в <code>style.css</code></h3>
+<p>Стандартные стили Prism и вашей темы могут конфликтовать, приводя к появлению нежелательных скроллеров. Давайте это исправим.</p>
+<p>Добавьте в <strong>конец</strong> вашего файла <code>style.css</code> следующий код:</p>
+<pre><code class="language-css"><span class="hljs-comment">/* ========================================================================
+   Prism.js: Фиксы и улучшения
+   ========================================================================= */</span>
+
+<span class="hljs-comment">/* 1. Убираем все скроллеры и разрешаем перенос строк */</span>
+pre<span class="hljs-selector-attr">[class*=<span class="hljs-string">&quot;language-&quot;</span>]</span> {
+    <span class="hljs-attribute">white-space</span>: pre-wrap <span class="hljs-meta">!important</span>;   <span class="hljs-comment">/* Разрешает перенос строк */</span>
+    <span class="hljs-attribute">word-break</span>: break-word;           <span class="hljs-comment">/* Разрывает длинные слова */</span>
+    <span class="hljs-attribute">max-height</span>: none <span class="hljs-meta">!important</span>;      <span class="hljs-comment">/* Убирает ограничение по высоте от родительской темы */</span>
+    <span class="hljs-attribute">overflow</span>: hidden <span class="hljs-meta">!important</span>;        <span class="hljs-comment">/* Скрывает любые скроллеры */</span>
+}
+
+<span class="hljs-comment">/* 2. Стили для кнопки &quot;Копировать&quot; */</span>
+<span class="hljs-selector-class">.code-copy-btn</span> {
+    <span class="hljs-attribute">position</span>: absolute;
+    <span class="hljs-attribute">right</span>: <span class="hljs-number">12px</span>;
+    <span class="hljs-attribute">top</span>: <span class="hljs-number">12px</span>;
+    <span class="hljs-attribute">background</span>: <span class="hljs-number">#e7e7e7</span>;
+    <span class="hljs-attribute">border</span>: none;
+    <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;
+    <span class="hljs-attribute">padding</span>: <span class="hljs-number">4px</span> <span class="hljs-number">8px</span>;
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">13px</span>;
+    <span class="hljs-attribute">cursor</span>: pointer;
+    <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">transition</span>: opacity <span class="hljs-number">0.3s</span> ease;
+}
+
+pre<span class="hljs-selector-pseudo">:hover</span> <span class="hljs-selector-class">.code-copy-btn</span> {
+    <span class="hljs-attribute">opacity</span>: <span class="hljs-number">1</span>;
+}
+</code></pre>
+<h3 id="заключение">Заключение</h3>
+<p>Мы получили полностью автоматический инструмент для подсветки синтаксиса кода. Просто добавляйте код через стандартный интерфейс WordPress.</p>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>

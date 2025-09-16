@@ -86,7 +86,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         preElement.appendChild(button);
     });
-});```
+});
+
+```
 
 ### Шаг 4: Подключаем все в `functions.php`
 
@@ -157,6 +159,7 @@ function prepare_code_blocks_for_prism($content) {
 
     return $content;
 }
+
 ```
 
 ### Шаг 5: Финальные штрихи в `style.css`
