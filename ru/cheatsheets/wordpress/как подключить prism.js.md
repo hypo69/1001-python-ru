@@ -87,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
         preElement.appendChild(button);
     });
 });
-
 ```
 
 ### Шаг 4: Подключаем все в `functions.php`
@@ -132,7 +131,7 @@ function prepare_code_blocks_for_prism($content) {
         $pre_attributes = $matches[1];
         $pre_content = $matches[2];
 
-        // --- Шаг 1: Гарантированно добавляем класс 'line-numbers' в тег <pre> ---
+        // --- Шаг 1: Гарантированно добавляем класс 'line-numbers' в тег &lt;pre> ---
         if (strpos($pre_attributes, 'line-numbers') === false) {
             if (preg_match('/class="([^"]*)"/i', $pre_attributes, $class_matches)) {
                 $pre_attributes = str_replace($class_matches[0], sprintf('class="%s line-numbers"', $class_matches[1]), $pre_attributes);
