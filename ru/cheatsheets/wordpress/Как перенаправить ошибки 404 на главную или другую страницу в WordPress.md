@@ -70,7 +70,7 @@ add_action('template_redirect', function() {
 Ниже полный код плагина для WordPress с экранированием HTML для вставки на страницу:
 
 ```html
-<pre><code>&lt;?php
+<?php
 /**
  * Plugin Name: 404 Redirect Manager
  * Plugin URI:  https://github.com/hypo69
@@ -108,7 +108,7 @@ function redirect_404_settings_page() {
     $logs = get_option( 'redirect_404_logs', [] );
 
     // CSV export
-    if ( isset( $_POST['export_logs'] ) &amp;&amp; ! empty( $logs ) ) {
+    if ( isset( $_POST['export_logs'] ) && ! empty( $logs ) ) {
         header( 'Content-Type: text/csv; charset=utf-8' );
         header( 'Content-Disposition: attachment; filename=404-logs-' . date('Y-m-d') . '.csv' );
         $output = fopen( 'php://output', 'w' );
@@ -118,55 +118,161 @@ function redirect_404_settings_page() {
         exit;
     }
 
-    ?&gt;
-    &lt;div class=&quot;wrap&quot;&gt;
-        &lt;h1&gt;404 Redirect Manager&lt;/h1&gt;
-        &lt;form method=&quot;post&quot; action=&quot;options.php&quot;&gt;
-            &lt;?php settings_fields( 'redirect_404_options' ); ?&gt;
-            &lt;?php do_settings_sections( 'redirect_404_options' ); ?&gt;
-            &lt;table class=&quot;form-table&quot;&gt;
-                &lt;tr&gt;
-                    &lt;th scope=&quot;row&quot;&gt;Redirect target&lt;/th&gt;
-                    &lt;td&gt;
-                        &lt;select name=&quot;redirect_404_target[mode]&quot;&gt;
-                            &lt;option value=&quot;home&quot; &lt;?php selected( get_option('redirect_404_target')['mode'] ?? '', 'home' ); ?&gt;&gt;Homepage&lt;/option&gt;
-                            &lt;option value=&quot;page&quot; &lt;?php selected( get_option('redirect_404_target')['mode'] ?? '', 'page' ); ?&gt;&gt;Specific Page&lt;/option&gt;
-                            &lt;option value=&quot;url&quot; &lt;?php selected( get_option('redirect_404_target')['mode'] ?? '', 'url' ); ?&gt;&gt;Custom URL&lt;/option&gt;
-                        &lt;/select&gt;
-                        &lt;br&gt;&lt;br&gt;
-                        &lt;label&gt;
+    ?>
+    <div class="wrap">
+        <h1>404 Redirect Manager</h1>
+        <form method="post" action="options.php">
+            <?php settings_fields( 'redirect_404_options' ); ?>
+            <?php do_settings_sections( 'redirect_404_options' ); ?>
+            <table class="form-table">
+                <tr>
+                    <th scope="row">Redirect target</th>
+                    <td>
+                        <select name="redirect_404_target[mode]">
+                            <option value="home" <?php selected( get_option('redirect_404_target')['mode'] ?? '', 'home' ); ?>>Homepage</option>
+                            <option value="page" <?php selected( get_option('redirect_404_target')['mode'] ?? '', 'page' ); ?>>Specific Page</option>
+                            <option value="url" <?php selected( get_option('redirect_404_target')['mode'] ?? '', 'url' ); ?>>Custom URL</option>
+                        </select>
+                        <br><br>
+                        <label>
                             Page ID / URL:
-                            &lt;input type=&quot;text&quot; name=&quot;redirect_404_target[value]&quot; value=&quot;&lt;?php echo esc_attr( get_option('redirect_404_target')['value'] ?? '' ); ?&gt;&quot; style=&quot;width:300px;&quot;&gt;
-                        &lt;/label&gt;
-                        &lt;p class=&quot;description&quot;&gt;If mode = &quot;page&quot;, enter page ID. If &quot;url&quot;, enter full URL.&lt;/p&gt;
-                    &lt;/td&gt;
-                &lt;/tr&gt;
-                &lt;tr&gt;
-                    &lt;th scope=&quot;row&quot;&gt;Redirect type&lt;/th&gt;
-                    &lt;td&gt;
-                        &lt;select name=&quot;redirect_404_type&quot;&gt;
-                            &lt;option value=&quot;301&quot; &lt;?php selected( get_option('redirect_404_type'), '301' ); ?&gt;&gt;301 Permanent&lt;/option&gt;
-                            &lt;option value=&quot;302&quot; &lt;?php selected( get_option('redirect_404_type'), '302' ); ?&gt;&gt;302 Temporary&lt;/option&gt;
-                        &lt;/select&gt;
-                    &lt;/td&gt;
-                &lt;/tr&gt;
-                &lt;tr&gt;
-                    &lt;th scope=&quot;row&quot;&gt;Telegram Bot Token&lt;/th&gt;
-                    &lt;td&gt;
-                        &lt;input type=&quot;text&quot; name=&quot;redirect_404_telegram_token&quot; value=&quot;&lt;?php echo esc_attr( get_option('redirect_404_telegram_token') ); ?&gt;&quot; style=&quot;width:300px;&quot;&gt;
-                    &lt;/td&gt;
-                &lt;/tr&gt;
-                &lt;tr&gt;
-                    &lt;th scope=&quot;row&quot;&gt;Telegram Chat ID&lt;/th&gt;
-                    &lt;td&gt;
-                        &lt;input type=&quot;text&quot; name=&quot;redirect_404_telegram_chat_id&quot; value=&quot;&lt;?php echo esc_attr( get_option('redirect_404_telegram_chat_id') ); ?&gt;&quot; style=&quot;width:300px;&quot;&gt;
-                        &lt;p class=&quot;description&quot;&gt;Where to send notifications (user or group chat ID)&lt;/p&gt;
-                    &lt;/td&gt;
-                &lt;/tr&gt;
-            &lt;/table&gt;
-            &lt;?php submit_button(); ?&gt;
-        &lt;/form&gt;
-        ...
+                            <input type="text" name="redirect_404_target[value]" value="<?php echo esc_attr( get_option('redirect_404_target')['value'] ?? '' ); ?>" style="width:300px;">
+                        </label>
+                        <p class="description">If mode = "page", enter page ID. If "url", enter full URL.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Redirect type</th>
+                    <td>
+                        <select name="redirect_404_type">
+                            <option value="301" <?php selected( get_option('redirect_404_type'), '301' ); ?>>301 Permanent</option>
+                            <option value="302" <?php selected( get_option('redirect_404_type'), '302' ); ?>>302 Temporary</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Telegram Bot Token</th>
+                    <td>
+                        <input type="text" name="redirect_404_telegram_token" value="<?php echo esc_attr( get_option('redirect_404_telegram_token') ); ?>" style="width:300px;">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Telegram Chat ID</th>
+                    <td>
+                        <input type="text" name="redirect_404_telegram_chat_id" value="<?php echo esc_attr( get_option('redirect_404_telegram_chat_id') ); ?>" style="width:300px;">
+                        <p class="description">Where to send notifications (user or group chat ID)</p>
+                    </td>
+                </tr>
+            </table>
+            <?php submit_button(); ?>
+        </form>
+
+        <h2>404 Logs</h2>
+        <?php if ( ! empty( $logs ) ): ?>
+            <table class="widefat striped" style="max-width:900px;">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Requested URL</th>
+                        <th>Redirected To</th>
+                        <th>IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ( array_reverse( $logs ) as $log ): ?>
+                        <tr>
+                            <td><?php echo esc_html( $log['time'] ); ?></td>
+                            <td><?php echo esc_html( $log['requested'] ); ?></td>
+                            <td><?php echo esc_html( $log['redirected'] ); ?></td>
+                            <td><?php echo esc_html( $log['ip'] ); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <form method="post" style="margin-top:15px;">
+                <?php submit_button( 'Export Logs (CSV)', 'secondary', 'export_logs', false ); ?>
+                <?php submit_button( 'Clear Logs', 'delete', 'clear_logs', false ); ?>
+            </form>
+            <?php
+            if ( isset($_POST['clear_logs']) ) {
+                update_option( 'redirect_404_logs', [] );
+                update_option( 'redirect_404_seen', [] );
+                wp_safe_redirect( admin_url('options-general.php?page=redirect-404') );
+                exit;
+            }
+            ?>
+        <?php else: ?>
+            <p>No 404 logs yet.</p>
+        <?php endif; ?>
+    </div>
+    <?php
+}
+
+// --- Telegram function ---
+function redirect_404_send_telegram($message) {
+    $token = get_option('redirect_404_telegram_token');
+    $chat_id = get_option('redirect_404_telegram_chat_id');
+    if ( empty($token) || empty($chat_id) ) return;
+
+    $url = "https://api.telegram.org/bot{$token}/sendMessage";
+    $data = ['chat_id'=>$chat_id, 'text'=>$message, 'parse_mode'=>'HTML'];
+    $options = [
+        'http'=>[
+            'header'=>"Content-type: application/x-www-form-urlencoded\r\n",
+            'method'=>'POST',
+            'content'=>http_build_query($data),
+            'timeout'=>5,
+        ]
+    ];
+    $context = stream_context_create($options);
+    @file_get_contents($url, false, $context);
+}
+
+// --- Redirect + Logging + Telegram (unique URLs) ---
+add_action( 'template_redirect', function() {
+    if ( is_404() ) {
+        $target = get_option( 'redirect_404_target', ['mode' => 'home', 'value' => ''] );
+        $type   = get_option( 'redirect_404_type', '301' );
+        $redirect_url = home_url();
+
+        if ( $target['mode'] === 'page' && ! empty( $target['value'] ) ) {
+            $redirect_url = get_permalink( intval( $target['value'] ) );
+        }
+        if ( $target['mode'] === 'url' && ! empty( $target['value'] ) ) {
+            $redirect_url = esc_url( $target['value'] );
+        }
+
+        // --- Logging ---
+        $logs   = get_option( 'redirect_404_logs', [] );
+        $logs[] = [
+            'time'      => current_time( 'mysql' ),
+            'requested' => esc_url_raw( $_SERVER['REQUEST_URI'] ?? '' ),
+            'redirected'=> $redirect_url,
+            'ip'        => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+        ];
+        if ( count( $logs ) > 500 ) $logs = array_slice($logs, -500);
+        update_option( 'redirect_404_logs', $logs );
+
+        // --- Unique Telegram notifications ---
+        $seen_urls = get_option('redirect_404_seen', []);
+        if ( ! in_array($_SERVER['REQUEST_URI'], $seen_urls) ) {
+            $message = "⚠️ <b>404 Detected</b>\nURL: " . esc_html($_SERVER['REQUEST_URI'] ?? '') .
+                       "\nRedirected to: " . esc_html($redirect_url) .
+                       "\nIP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+            redirect_404_send_telegram($message);
+            $seen_urls[] = $_SERVER['REQUEST_URI'];
+            if ( count($seen_urls) > 1000 ) $seen_urls = array_slice($seen_urls, -1000);
+            update_option('redirect_404_seen', $seen_urls);
+        }
+
+        // --- Redirect ---
+        if ( $redirect_url ) {
+            wp_redirect( $redirect_url, intval( $type ) );
+            exit;
+        }
+    }
+});
+
 </code></pre>
 ```
 

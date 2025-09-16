@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Shadow DOM - &laquo;DOM &vcy;&ncy;&ucy;&tcy;&rcy;&icy; DOM&raquo;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h3 id="shadow-dom---dom-внутри-dom">Shadow DOM - «DOM внутри DOM»</h3>
+<p>DOM — это программный интерфейс (API) для кода страницы, который представляет страницу как древовидную структуру объектов.</p>
+<p>Каждый HTML-элемент (например, <p>, <div>, <img>), каждый атрибут и каждый фрагмент текста является отдельным «узлом»
+(node) в этом дереве. С JavaScript, мы можем обращаться к этим узлам, чтобы динамически изменять страницу: менять текст, добавлять стили, создавать новые элементы или удалять существующие. По сути, DOM — это «живая» модель документа, с которой взаимодействует код.</p>
+<p>Но у этой открытости есть и обратная сторона. Когда мы создаем сложный, многократно используемый компонент (например, кастомный видеоплеер или виджет календаря), его внутренняя структура и стили становятся уязвимыми. Стили CSS с основной страницы могут случайно «протечь» внутрь компонента и сломать его внешний вид. Аналогично, JavaScript-код страницы может непреднамеренно изменить внутренние элементы компонента, нарушив его логику.</p>
+<p>Для решения этой проблемы и существует <strong>Shadow DOM (теневой DOM)</strong>.</p>
+<p>По своей сути, Shadow DOM — это <strong>«DOM внутри DOM»</strong>. Это скрытое дерево элементов, которое прикрепляется к обычному элементу на странице (называемому «хостом»), но при этом оно изолировано от основного DOM. Оно позволяет разработчику создать герметичную границу вокруг внутренней структуры компонента, защищая его от внешнего мира.</p>
+<p>Теневой DOM позволяет прикреплять скрытые DOM-деревья к элементам в обычном DOM-дереве. Это теневое дерево начинается с <strong>теневого корня</strong> (shadow root), под который можно прикреплять любые элементы так же, как и в обычном DOM.</p>
+<p>Существует несколько терминов, связанных с теневым DOM, которые следует знать:
+<img src="file:///c:\Users\user\Documents\repos\public_repositories\1001-python\ru\assets\shadow_dom\file.png" alt="DOM"></p>
+<ul>
+<li><strong>Теневой хост (Shadow host):</strong> Обычный узел DOM, к которому прикреплен теневой DOM.</li>
+<li><strong>Теневое дерево (Shadow tree):</strong> DOM-дерево внутри теневого DOM.</li>
+<li><strong>Теневая граница (Shadow boundary):</strong> Место, где заканчивается теневой DOM и начинается обычный DOM.</li>
+<li><strong>Теневой корень (Shadow root):</strong> Корневой узел теневого дерева.</li>
+</ul>
+<p>Вы можете воздействовать на узлы в теневом DOM точно так же, как и на обычные узлы. Разница в том, что никакой код внутри теневого DOM не может повлиять на что-либо за его пределами, что обеспечивает надёжную инкапсуляцию.</p>
+<p>До того, как теневой DOM стал доступен веб-разработчикам, браузеры уже использовали его для инкапсуляции внутренней структуры стандартных элементов. Например, элемент <code>&lt;video&gt;</code> с элементами управления. Всё, что вы видите в DOM, — это тег <code>&lt;video&gt;</code>, но он содержит ряд кнопок и других элементов управления внутри своего теневого DOM.</p>
+<h4 id="создание-теневого-dom">Создание теневого DOM</h4>
+<p>Создавать теневой DOM можно двумя способами: императивно с помощью JavaScript или декларативно прямо в HTML.</p>
+<h5 id="императивно-с-помощью-javascript">Императивно с помощью JavaScript</h5>
+<p>Этот способ отлично подходит для приложений, рендерящихся на стороне клиента. Мы выбираем элемент-хост и вызываем на нём метод <code>attachShadow()</code>.</p>
+<pre><code class="language-html"><span class="hljs-comment">&lt;!-- HTML-разметка --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;host&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>Я не в теневом DOM<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+</code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// Находим хост и прикрепляем к нему теневой DOM</span>
+<span class="hljs-keyword">const</span> host = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;#host&quot;</span>);
+<span class="hljs-keyword">const</span> shadow = host.<span class="hljs-title function_">attachShadow</span>({ <span class="hljs-attr">mode</span>: <span class="hljs-string">&quot;open&quot;</span> });
+
+<span class="hljs-comment">// Создаём и добавляем элементы в теневое дерево</span>
+<span class="hljs-keyword">const</span> span = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&quot;span&quot;</span>);
+span.<span class="hljs-property">textContent</span> = <span class="hljs-string">&quot;Я нахожусь в теневом DOM&quot;</span>;
+shadow.<span class="hljs-title function_">appendChild</span>(span);
+</code></pre>
+<p>Результат на странице будет выглядеть так:</p>
+<blockquote>
+<p>Я нахожусь в теневом DOM
+Я не в теневом DOM</p>
+</blockquote>
+<h5 id="декларативно-с-помощью-html">Декларативно с помощью HTML</h5>
+<p>Для приложений, где важен рендеринг на стороне сервера, можно определить теневой DOM декларативно, используя элемент <code>&lt;template&gt;</code> с атрибутом <code>shadowrootmode</code>.</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;host&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">shadowrootmode</span>=<span class="hljs-string">&quot;open&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Этот параграф находится внутри теневого DOM.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css">
+      <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">color</span>: red; } <span class="hljs-comment">/* Эти стили будут изолированы */</span>
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>Когда браузер обработает этот код, он автоматически создаст теневой корень для <code>&lt;div&gt;</code> и поместит в него содержимое тега <code>&lt;template&gt;</code>. Сам тег <code>&lt;template&gt;</code> при этом исчезнет из основного DOM-дерева.</p>
+<h4 id="инкапсуляция-защита-от-javascript-и-css">Инкапсуляция: защита от JavaScript и CSS</h4>
+<p>Главное преимущество Shadow DOM — это изоляция. Давайте посмотрим, как она работает.</p>
+<h5 id="инкапсуляция-от-javascript">Инкапсуляция от JavaScript</h5>
+<p>Добавим кнопку, которая будет пытаться изменить все элементы <code>&lt;span&gt;</code> на странице.</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// ... код создания теневого DOM ...</span>
+
+<span class="hljs-keyword">const</span> upper = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;#upper-button&quot;</span>);
+upper.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// Этот селектор ищет по всему документу</span>
+  <span class="hljs-keyword">const</span> spans = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&quot;span&quot;</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> span <span class="hljs-keyword">of</span> spans) {
+    span.<span class="hljs-property">textContent</span> = span.<span class="hljs-property">textContent</span>.<span class="hljs-title function_">toUpperCase</span>();
+  }
+});
+</code></pre>
+<p>При нажатии на кнопку текст изменится только у <code>&lt;span&gt;</code>, который находится в основном документе. Элемент внутри теневого DOM останется нетронутым, потому что <code>document.querySelectorAll()</code> не может &quot;заглянуть&quot; за теневую границу.</p>
+<h5 id="доступ-к-теневому-dom-свойство-shadowroot-и-работа-с-вложенностью">Доступ к теневому DOM: свойство <code>shadowRoot</code> и работа с вложенностью</h5>
+<p>Когда мы вызываем <code>host.attachShadow({ mode: &quot;open&quot; })</code>, мы создаём теневой DOM в &quot;открытом&quot; режиме. Это означает, что мы можем получить доступ к его содержимому извне через свойство <code>host.shadowRoot</code>.</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// Находим спаны только внутри теневого дерева конкретного хоста</span>
+<span class="hljs-keyword">const</span> spansInShadow = host.<span class="hljs-property">shadowRoot</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&quot;span&quot;</span>);
+</code></pre>
+<p>Если же указать <code>mode: &quot;closed&quot;</code>, свойство <code>host.shadowRoot</code> вернёт <code>null</code>, и доступ к теневому дереву извне будет закрыт. Это не строгий механизм безопасности, а скорее соглашение для разработчиков о том, что внутренности компонента трогать не следует.</p>
+<p><strong>Работа с вложенными теневыми деревьями</strong></p>
+<p>В сложных компонентных архитектурах один пользовательский элемент может содержать внутри себя другие пользовательские элементы, каждый из которых имеет свой собственный Shadow DOM. Чтобы добраться до элемента в глубоко вложенном теневом дереве, придётся последовательно &quot;проходить&quot; через каждый <code>shadowRoot</code>.</p>
+<p>Представим себе такую структуру:</p>
+<ul>
+<li>Компонент <code>&lt;nmbrs-form&gt;</code> (основная форма).</li>
+<li>Внутри него находится <code>&lt;div&gt;</code>, а в нём — компонент <code>&lt;nmbrs-button&gt;</code> (кастомная кнопка).</li>
+<li>Внутри <code>&lt;nmbrs-button&gt;</code> находится настоящая HTML-кнопка <code>&lt;button&gt;</code>.</li>
+</ul>
+<p>Чтобы получить доступ к этой кнопке из глобального контекста, путь будет выглядеть так:</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Находим корневой компонент в основном документе</span>
+<span class="hljs-keyword">const</span> formComponent = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;nmbrs-form&#x27;</span>);
+
+<span class="hljs-comment">// 2. &quot;Входим&quot; в его теневое дерево</span>
+<span class="hljs-keyword">const</span> shadowRoot1 = formComponent.<span class="hljs-property">shadowRoot</span>;
+
+<span class="hljs-comment">// 3. Находим вложенный компонент-кнопку</span>
+<span class="hljs-keyword">const</span> buttonComponent = shadowRoot1.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div div.btn-container nmbrs-button&#x27;</span>);
+
+<span class="hljs-comment">// 4. &quot;Входим&quot; в теневое дерево уже этого компонента</span>
+<span class="hljs-keyword">const</span> shadowRoot2 = buttonComponent.<span class="hljs-property">shadowRoot</span>;
+
+<span class="hljs-comment">// 5. И только теперь находим конечный элемент</span>
+<span class="hljs-keyword">const</span> finalButton = shadowRoot2.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;button#button&#x27;</span>);
+</code></pre>
+<p>В виде одной цепочки вызовов это выглядит так:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> button = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;nmbrs-form&#x27;</span>).<span class="hljs-property">shadowRoot</span>
+                      .<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div div.btn-container nmbrs-button&#x27;</span>).<span class="hljs-property">shadowRoot</span>
+                      .<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;button#button&#x27;</span>);
+</code></pre>
+<p>Такая длинная цепочка наглядно демонстрирует мощь инкапсуляции: чтобы добраться до внутренних деталей, нужно явно пройти через каждую &quot;границу&quot;. Это делает код более предсказуемым и защищает компоненты от случайных изменений.</p>
+<h5 id="инкапсуляция-от-css">Инкапсуляция от CSS</h5>
+<p>Стили, определённые на основной странице, не влияют на элементы внутри теневого DOM.</p>
+<pre><code class="language-css"><span class="hljs-comment">/* Этот стиль применится только к спанам в основном документе */</span>
+<span class="hljs-selector-tag">span</span> {
+  <span class="hljs-attribute">color</span>: blue;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid black;
+}
+</code></pre>
+<p>Элемент <code>&lt;span&gt;</code> внутри теневого дерева не получит эти стили. Это решает огромную проблему случайных пересечений и конфликтов CSS.</p>
+<h4 id="применение-стилей-внутри-теневого-dom">Применение стилей внутри теневого DOM</h4>
+<p>Стили, определённые внутри теневого дерева, в свою очередь, не влияют на основную страницу. Есть два основных способа их добавления.</p>
+<h5 id="1-конструируемые-таблицы-стилей-constructable-stylesheets">1. Конструируемые таблицы стилей (Constructable Stylesheets)</h5>
+<p>Этот метод позволяет создавать объект <code>CSSStyleSheet</code> в JavaScript и применять его к одному или нескольким теневым деревьям. Это эффективно, если у вас есть общие стили для множества компонентов.</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> sheet = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CSSStyleSheet</span>();
+sheet.<span class="hljs-title function_">replaceSync</span>(<span class="hljs-string">&quot;span { color: red; border: 2px dotted black; }&quot;</span>);
+
+<span class="hljs-keyword">const</span> shadow = host.<span class="hljs-title function_">attachShadow</span>({ <span class="hljs-attr">mode</span>: <span class="hljs-string">&quot;open&quot;</span> });
+<span class="hljs-comment">// Применяем таблицу стилей к теневому корню</span>
+shadow.<span class="hljs-property">adoptedStyleSheets</span> = [sheet];
+</code></pre>
+<h5 id="2-добавление-элемента-style">2. Добавление элемента <code>&lt;style&gt;</code></h5>
+<p>Простой и декларативный способ — поместить тег <code>&lt;style&gt;</code> прямо внутрь теневого дерева (часто внутри <code>&lt;template&gt;</code>).</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;my-element&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css">
+    <span class="hljs-selector-tag">span</span> {
+      <span class="hljs-attribute">color</span>: red;
+      <span class="hljs-attribute">border</span>: <span class="hljs-number">2px</span> dotted black;
+    }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>Я в теневом DOM<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+</code></pre>
+<h4 id="теневой-dom-и-пользовательские-элементы-идеальное-сочетание">Теневой DOM и пользовательские элементы: идеальное сочетание</h4>
+<p>Вся мощь теневого DOM раскрывается при создании <strong>пользовательских элементов (Custom Elements)</strong>. Без инкапсуляции они были бы невероятно хрупкими.</p>
+<p>Пользовательский элемент — это класс, наследующий <code>HTMLElement</code>. Как правило, сам элемент выступает в роли теневого хоста, а вся его внутренняя структура создаётся внутри теневого дерева.</p>
+<p>Вот пример простого компонента <code>&lt;filled-circle&gt;</code>:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">FilledCircle</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">HTMLElement</span> {
+  <span class="hljs-title function_">connectedCallback</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> shadow = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">attachShadow</span>({ <span class="hljs-attr">mode</span>: <span class="hljs-string">&quot;open&quot;</span> });
+
+    <span class="hljs-comment">// Создаём внутреннюю реализацию (например, SVG-круг)</span>
+    <span class="hljs-keyword">const</span> svg = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElementNS</span>(<span class="hljs-string">&quot;http://www.w3.org/2000/svg&quot;</span>, <span class="hljs-string">&quot;svg&quot;</span>);
+    <span class="hljs-keyword">const</span> circle = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElementNS</span>(<span class="hljs-string">&quot;http://www.w3.org/2000/svg&quot;</span>, <span class="hljs-string">&quot;circle&quot;</span>);
+    circle.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;r&quot;</span>, <span class="hljs-string">&quot;50&quot;</span>);
+    circle.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;cx&quot;</span>, <span class="hljs-string">&quot;50&quot;</span>);
+    circle.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;cy&quot;</span>, <span class="hljs-string">&quot;50&quot;</span>);
+    <span class="hljs-comment">// Цвет берём из атрибута самого хоста</span>
+    circle.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;fill&quot;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&quot;color&quot;</span>));
+    
+    svg.<span class="hljs-title function_">appendChild</span>(circle);
+    shadow.<span class="hljs-title function_">appendChild</span>(svg);
+  }
+}
+customElements.<span class="hljs-title function_">define</span>(<span class="hljs-string">&quot;filled-circle&quot;</span>, <span class="hljs-title class_">FilledCircle</span>);
+</code></pre>
+<p>Теперь мы можем использовать его в HTML как обычный тег, не беспокоясь о его внутреннем устройстве:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">filled-circle</span> <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;blue&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">filled-circle</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">filled-circle</span> <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;green&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">filled-circle</span>&gt;</span>
+</code></pre>
+<p>Каждый из этих компонентов будет полностью инкапсулирован и защищён от влияния внешней страницы.</p>
+
+            
+            
+        </body>
+        </html>

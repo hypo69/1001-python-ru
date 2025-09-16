@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Shadow DOM - &laquo;DOM inside DOM&raquo;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h3 id="shadow-dom---dom-inside-dom">Shadow DOM - «DOM inside DOM»</h3>
+<p>DOM is a programming interface (API) for page code that represents the page as a tree-like structure of objects.</p>
+<p>Each HTML element (e.g., <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;img&gt;</code>), each attribute, and each piece of text is a separate &quot;node&quot;
+(node) in this tree. With JavaScript, we can access these nodes to dynamically change the page: change text, add styles, create new elements, or delete existing ones. In essence, DOM is a &quot;live&quot; model of the document with which code interacts.</p>
+<p>But this openness has a downside. When we create a complex, reusable component (e.g., a custom video player or calendar widget), its internal structure and styles become vulnerable. CSS styles from the main page can accidentally &quot;leak&quot; inside the component and break its appearance. Similarly, the page's JavaScript code can unintentionally modify the component's internal elements, disrupting its logic.</p>
+<p>To solve this problem, <strong>Shadow DOM</strong> exists.</p>
+<p>At its core, Shadow DOM is <strong>&quot;DOM inside DOM&quot;</strong>. It is a hidden tree of elements that is attached to a regular element on the page (called a &quot;host&quot;), but it is isolated from the main DOM. It allows the developer to create a sealed boundary around the internal structure of a component, protecting it from the outside world.</p>
+<p>Shadow DOM allows you to attach hidden DOM trees to elements in the regular DOM tree. This shadow tree starts with a <strong>shadow root</strong>, under which any elements can be attached just like in the regular DOM.</p>
+<p>There are several terms related to Shadow DOM that you should know:
+<img src="file:///c:\Users\user\Documents\repos\public_repositories\1001-python\en\assets\shadow_dom\file.png" alt="DOM"></p>
+<ul>
+<li><strong>Shadow host:</strong> A regular DOM node to which the shadow DOM is attached.</li>
+<li><strong>Shadow tree:</strong> The DOM tree inside the shadow DOM.</li>
+<li><strong>Shadow boundary:</strong> The place where the shadow DOM ends and the regular DOM begins.</li>
+<li><strong>Shadow root:</strong> The root node of the shadow tree.</li>
+</ul>
+<p>You can affect nodes in the shadow DOM just like regular nodes. The difference is that no code inside the shadow DOM can affect anything outside of it, which provides reliable encapsulation.</p>
+<p>Before Shadow DOM became available to web developers, browsers already used it to encapsulate the internal structure of standard elements. For example, the <code>&lt;video&gt;</code> element with controls. All you see in the DOM is the <code>&lt;video&gt;</code> tag, but it contains a number of buttons and other controls inside its shadow DOM.</p>
+<h4 id="creating-a-shadow-dom">Creating a Shadow DOM</h4>
+<p>You can create a shadow DOM in two ways: imperatively with JavaScript or declaratively directly in HTML.</p>
+<h5 id="imperatively-with-javascript">Imperatively with JavaScript</h5>
+<p>This method is great for client-side rendered applications. We select a host element and call the <code>attachShadow()</code> method on it.</p>
+<pre><code class="language-html"><span class="hljs-comment">&lt;!-- HTML markup --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;host&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>I am not in the shadow DOM<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+</code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// Find the host and attach the shadow DOM to it</span>
+<span class="hljs-keyword">const</span> host = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;#host&quot;</span>);
+<span class="hljs-keyword">const</span> shadow = host.<span class="hljs-title function_">attachShadow</span>({ <span class="hljs-attr">mode</span>: <span class="hljs-string">&quot;open&quot;</span> });
+
+<span class="hljs-comment">// Create and add elements to the shadow tree</span>
+<span class="hljs-keyword">const</span> span = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&quot;span&quot;</span>);
+span.<span class="hljs-property">textContent</span> = <span class="hljs-string">&quot;I am in the shadow DOM&quot;</span>;
+shadow.<span class="hljs-title function_">appendChild</span>(span);
+</code></pre>
+<p>The result on the page will look like this:</p>
+<blockquote>
+<p>I am in the shadow DOM
+I am not in the shadow DOM</p>
+</blockquote>
+<h5 id="declaratively-with-html">Declaratively with HTML</h5>
+<p>For applications where server-side rendering is important, you can define the shadow DOM declaratively using the <code>&lt;template&gt;</code> element with the <code>shadowrootmode</code> attribute.</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;host&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">shadowrootmode</span>=<span class="hljs-string">&quot;open&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>This paragraph is inside the shadow DOM.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css">
+      <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">color</span>: red; } <span class="hljs-comment">/* These styles will be isolated */</span>
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>When the browser processes this code, it will automatically create a shadow root for the <code>&lt;div&gt;</code> and place the contents of the <code>&lt;template&gt;</code> tag inside it. The <code>&lt;template&gt;</code> tag itself will disappear from the main DOM tree.</p>
+<h4 id="encapsulation-protection-from-javascript-and-css">Encapsulation: protection from JavaScript and CSS</h4>
+<p>The main advantage of Shadow DOM is isolation. Let's see how it works.</p>
+<h5 id="encapsulation-from-javascript">Encapsulation from JavaScript</h5>
+<p>Add a button that will try to change all <code>&lt;span&gt;</code> elements on the page.</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// ... shadow DOM creation code ...</span>
+
+<span class="hljs-keyword">const</span> upper = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&quot;#upper-button&quot;</span>);
+upper.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// This selector searches the entire document</span>
+  <span class="hljs-keyword">const</span> spans = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&quot;span&quot;</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> span <span class="hljs-keyword">of</span> spans) {
+    span.<span class="hljs-property">textContent</span> = span.<span class="hljs-property">textContent</span>.<span class="hljs-title function_">toUpperCase</span>();
+  }
+});
+</code></pre>
+<p>When the button is clicked, only the <code>&lt;span&gt;</code> in the main document will change its text. The element inside the shadow DOM will remain untouched because <code>document.querySelectorAll()</code> cannot &quot;look&quot; beyond the shadow boundary.</p>
+<h5 id="accessing-the-shadow-dom-shadowroot-property-and-working-with-nesting">Accessing the shadow DOM: <code>shadowRoot</code> property and working with nesting</h5>
+<p>When we call <code>host.attachShadow({ mode: &quot;open&quot; })</code>, we create a shadow DOM in &quot;open&quot; mode. This means that we can access its content from outside through the <code>host.shadowRoot</code> property.</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// Find spans only within the shadow tree of a specific host</span>
+<span class="hljs-keyword">const</span> spansInShadow = host.<span class="hljs-property">shadowRoot</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&quot;span&quot;</span>);
+</code></pre>
+<p>If you specify <code>mode: &quot;closed&quot;</code>, the <code>host.shadowRoot</code> property will return <code>null</code>, and access to the shadow tree from outside will be closed. This is not a strict security mechanism, but rather a convention for developers that the internal workings of the component should not be touched.</p>
+<p><strong>Working with nested shadow trees</strong></p>
+<p>In complex component architectures, one custom element may contain other custom elements, each with its own Shadow DOM. To access an element in a deeply nested shadow tree, you will have to sequentially &quot;pass through&quot; each <code>shadowRoot</code>.</p>
+<p>Consider the following structure:</p>
+<ul>
+<li><code>&lt;nmbrs-form&gt;</code> component (main form).</li>
+<li>Inside it is a <code>&lt;div&gt;</code>, and inside that is an <code>&lt;nmbrs-button&gt;</code> component (custom button).</li>
+<li>Inside <code>&lt;nmbrs-button&gt;</code> is a real HTML button <code>&lt;button&gt;</code>.</li>
+</ul>
+<p>To access this button from the global context, the path will look like this:</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Find the root component in the main document</span>
+<span class="hljs-keyword">const</span> formComponent = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;nmbrs-form&#x27;</span>);
+
+<span class="hljs-comment">// 2. &quot;Enter&quot; its shadow tree</span>
+<span class="hljs-keyword">const</span> shadowRoot1 = formComponent.<span class="hljs-property">shadowRoot</span>;
+
+<span class="hljs-comment">// 3. Find the nested button component</span>
+<span class="hljs-keyword">const</span> buttonComponent = shadowRoot1.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div div.btn-container nmbrs-button&#x27;</span>);
+
+<span class="hljs-comment">// 4. &quot;Enter&quot; the shadow tree of this component</span>
+<span class="hljs-keyword">const</span> shadowRoot2 = buttonComponent.<span class="hljs-property">shadowRoot</span>;
+
+<span class="hljs-comment">// 5. And only now find the final element</span>
+<span class="hljs-keyword">const</span> finalButton = shadowRoot2.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;button#button&#x27;</span>);
+</code></pre>
+<p>In a single chain of calls, it looks like this:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> button = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;nmbrs-form&#x27;</span>).<span class="hljs-property">shadowRoot</span>
+                      .<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;div div.btn-container nmbrs-button&#x27;</span>).<span class="hljs-property">shadowRoot</span>
+                      .<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;button#button&#x27;</span>);
+</code></pre>
+<p>Such a long chain clearly demonstrates the power of encapsulation: to get to internal details, you need to explicitly pass through each &quot;boundary.&quot; This makes the code more predictable and protects components from accidental changes.</p>
+<h5 id="encapsulation-from-css">Encapsulation from CSS</h5>
+<p>Styles defined on the main page do not affect elements inside the shadow DOM.</p>
+<pre><code class="language-css"><span class="hljs-comment">/* This style will only apply to spans in the main document */</span>
+<span class="hljs-selector-tag">span</span> {
+  <span class="hljs-attribute">color</span>: blue;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid black;
+}
+</code></pre>
+<p>The <code>&lt;span&gt;</code> element inside the shadow tree will not receive these styles. This solves the huge problem of accidental overlaps and CSS conflicts.</p>
+<h4 id="applying-styles-inside-the-shadow-dom">Applying styles inside the shadow DOM</h4>
+<p>Styles defined inside the shadow tree, in turn, do not affect the main page. There are two main ways to add them.</p>
+<h5 id="1-constructable-stylesheets">1. Constructable Stylesheets</h5>
+<p>This method allows you to create a <code>CSSStyleSheet</code> object in JavaScript and apply it to one or more shadow trees. This is efficient if you have common styles for multiple components.</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> sheet = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CSSStyleSheet</span>();
+sheet.<span class="hljs-title function_">replaceSync</span>(<span class="hljs-string">&quot;span { color: red; border: 2px dotted black; }&quot;</span>);
+
+<span class="hljs-keyword">const</span> shadow = host.<span class="hljs-title function_">attachShadow</span>({ <span class="hljs-attr">mode</span>: <span class="hljs-string">&quot;open&quot;</span> });
+<span class="hljs-comment">// Apply the stylesheet to the shadow root</span>
+shadow.<span class="hljs-property">adoptedStyleSheets</span> = [sheet];
+</code></pre>
+<h5 id="2-adding-a-style-element">2. Adding a <code>&lt;style&gt;</code> element</h5>
+<p>A simple and declarative way is to place the <code>&lt;style&gt;</code> tag directly inside the shadow tree (often inside <code>&lt;template&gt;</code>).</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;my-element&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css">
+    <span class="hljs-selector-tag">span</span> {
+      <span class="hljs-attribute">color</span>: red;
+      <span class="hljs-attribute">border</span>: <span class="hljs-number">2px</span> dotted black;
+    }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>I am in the shadow DOM<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+</code></pre>
+<h4 id="shadow-dom-and-custom-elements-a-perfect-match">Shadow DOM and custom elements: a perfect match</h4>
+<p>All the power of the shadow DOM is revealed when creating <strong>Custom Elements</strong>. Without encapsulation, they would be incredibly fragile.</p>
+<p>A custom element is a class that inherits from <code>HTMLElement</code>. As a rule, the element itself acts as a shadow host, and its entire internal structure is created within the shadow tree.</p>
+<p>Here is an example of a simple <code>&lt;filled-circle&gt;</code> component:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">class</span> <span class="hljs-title class_">FilledCircle</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">HTMLElement</span> {
+  <span class="hljs-title function_">connectedCallback</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> shadow = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">attachShadow</span>({ <span class="hljs-attr">mode</span>: <span class="hljs-string">&quot;open&quot;</span> });
+
+    <span class="hljs-comment">// Create internal implementation (e.g., SVG circle)</span>
+    <span class="hljs-keyword">const</span> svg = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElementNS</span>(<span class="hljs-string">&quot;http://www.w3.org/2000/svg&quot;</span>, <span class="hljs-string">&quot;svg&quot;</span>);
+    <span class="hljs-keyword">const</span> circle = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElementNS</span>(<span class="hljs-string">&quot;http://www.w3.org/2000/svg&quot;</span>, <span class="hljs-string">&quot;circle&quot;</span>);
+    circle.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;r&quot;</span>, <span class="hljs-string">&quot;50&quot;</span>);
+    circle.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;cx&quot;</span>, <span class="hljs-string">&quot;50&quot;</span>);
+    circle.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;cy&quot;</span>, <span class="hljs-string">&quot;50&quot;</span>);
+    <span class="hljs-comment">// Get color from the host&#x27;s attribute</span>
+    circle.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&quot;fill&quot;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&quot;color&quot;</span>));
+    
+    svg.<span class="hljs-title function_">appendChild</span>(circle);
+    shadow.<span class="hljs-title function_">appendChild</span>(svg);
+  }
+}
+customElements.<span class="hljs-title function_">define</span>(<span class="hljs-string">&quot;filled-circle&quot;</span>, <span class="hljs-title class_">FilledCircle</span>);
+</code></pre>
+<p>Now we can use it in HTML as a regular tag, without worrying about its internal structure:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">filled-circle</span> <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;blue&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">filled-circle</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">filled-circle</span> <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;green&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">filled-circle</span>&gt;</span>
+</code></pre>
+<p>Each of these components will be fully encapsulated and protected from external page influence.</p>
+
+            
+            
+        </body>
+        </html>
