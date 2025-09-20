@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>GitHub CLI</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="github-cli">GitHub CLI</h1>
+<h2 id="co-to-jest-github-cli">Co to jest GitHub CLI?</h2>
+<p><strong>GitHub CLI</strong> (w skrócie <code>gh</code>) to narzędzie wiersza poleceń, które pozwala pracować z GitHubem bezpośrednio z terminala.
+Dzięki niemu możesz zarządzać repozytoriami, problemami (issues), żądaniami ściągnięcia (pull requests), wydaniami (releases) i innymi encjami, bez wchodzenia do interfejsu webowego GitHub.</p>
+<p>CLI jest wygodne dla programistów, inżynierów DevOps i wszystkich, którzy automatyzują pracę z GitHubem lub preferują terminal zamiast przeglądarki.</p>
+<hr>
+<h2 id="instalacja">Instalacja</h2>
+<p>GitHub CLI jest obsługiwany na <strong>Windows</strong>, <strong>macOS</strong> i <strong>Linux</strong>.</p>
+<ul>
+<li><strong>Linux (Ubuntu/Debian):</strong></li>
+</ul>
+<pre><code class="language-bash">sudo apt install gh
+</code></pre>
+<ul>
+<li><strong>macOS (przez Homebrew):</strong></li>
+</ul>
+<pre><code class="language-bash">brew install gh
+</code></pre>
+<ul>
+<li><strong>Windows (przez Winget):</strong></li>
+</ul>
+<pre><code class="language-powershell">winget install <span class="hljs-literal">--id</span> GitHub.cli
+</code></pre>
+<p>Po instalacji sprawdź wersję:</p>
+<pre><code class="language-bash">gh --version
+</code></pre>
+<hr>
+<h2 id="autoryzacja">Autoryzacja</h2>
+<p>Aby uzyskać dostęp do prywatnych repozytoriów i akcji, musisz się autoryzować:</p>
+<pre><code class="language-bash">gh auth login
+</code></pre>
+<p>CLI zaproponuje:</p>
+<ul>
+<li>wybór <a href="http://GitHub.com">GitHub.com</a> lub GitHub Enterprise</li>
+<li>metodę autoryzacji (przeglądarka, token, SSH)</li>
+<li>zapisanie danych do kolejnych uruchomień</li>
+</ul>
+<p>Status można sprawdzić poleceniem:</p>
+<pre><code class="language-bash">gh auth status
+</code></pre>
+<hr>
+<h2 id="główne-funkcje">Główne funkcje</h2>
+<h3 id="praca-z-repozytoriami">Praca z repozytoriami</h3>
+<p>Tworzenie nowego repozytorium:</p>
+<pre><code class="language-bash">gh repo create my-project
+</code></pre>
+<p>Klonowanie:</p>
+<pre><code class="language-bash">gh repo <span class="hljs-built_in">clone</span> owner/repo
+</code></pre>
+<p>Wyświetlanie informacji:</p>
+<pre><code class="language-bash">gh repo view owner/repo
+</code></pre>
+<hr>
+<h3 id="issues">Issues</h3>
+<p>Tworzenie issue:</p>
+<pre><code class="language-bash">gh issue create --title <span class="hljs-string">&quot;Błąd: awaria przy uruchomieniu&quot;</span> --body <span class="hljs-string">&quot;Kroki do odtworzenia...&quot;</span>
+</code></pre>
+<p>Lista issues:</p>
+<pre><code class="language-bash">gh issue list
+</code></pre>
+<p>Wyświetlanie konkretnego issue:</p>
+<pre><code class="language-bash">gh issue view 42
+</code></pre>
+<hr>
+<h3 id="pull-requests">Pull Requests</h3>
+<p>Tworzenie pull request:</p>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> create --base main --<span class="hljs-built_in">head</span> feature-branch --title <span class="hljs-string">&quot;Nowa funkcja&quot;</span> --body <span class="hljs-string">&quot;Dodano nową funkcjonalność&quot;</span>
+</code></pre>
+<p>Wyświetlanie:</p>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> list
+gh <span class="hljs-built_in">pr</span> view 123
+</code></pre>
+<p>Łączenie (merge):</p>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> merge 123 --squash --delete-branch
+</code></pre>
+<hr>
+<h3 id="actions-cicd">Actions (CI/CD)</h3>
+<p>Uruchamianie workflow:</p>
+<pre><code class="language-bash">gh workflow run build.yml
+</code></pre>
+<p>Wyświetlanie statusu:</p>
+<pre><code class="language-bash">gh run list
+</code></pre>
+<hr>
+<h2 id="przydatne-polecenia">Przydatne polecenia</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Polecenie</th>
+<th style="text-align:left">Przeznaczenie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>gh help</code></td>
+<td style="text-align:left">lista wszystkich poleceń</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh alias set co &quot;pr checkout&quot;</code></td>
+<td style="text-align:left">tworzenie aliasu dla szybkiego polecenia</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh gist create file.txt</code></td>
+<td style="text-align:left">przesyłanie pliku jako gist</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh release create v1.0.0</code></td>
+<td style="text-align:left">tworzenie wydania</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="zalety-github-cli">Zalety GitHub CLI</h2>
+<ul>
+<li>Oszczędność czasu: praca z GitHubem bez przeglądarki.</li>
+<li>Skryptowanie: wygodne do automatyzacji w bash/PowerShell.</li>
+<li>Integracja z CI/CD.</li>
+<li>Jedno narzędzie do poleceń i API GitHub.</li>
+</ul>
+<hr>
+<p>Świetnie 🚀 W takim razie stwórzmy <strong>listę kontrolną &quot;TOP-10 poleceń GitHub CLI do codziennego użytku&quot;</strong>. Można jej używać jako ściągawki.</p>
+<hr>
+<h1 id="-top-10-poleceń-github-cli-do-codziennego-użytku">✅ TOP-10 poleceń GitHub CLI do codziennego użytku</h1>
+<h2 id="1-autoryzacja">1. Autoryzacja</h2>
+<pre><code class="language-bash">gh auth login
+</code></pre>
+<p>🔑 Autoryzacja w GitHub przez przeglądarkę lub token.
+Przydatne przy pierwszej konfiguracji lub zmianie konta.</p>
+<hr>
+<h2 id="2-sprawdzenie-statusu-autoryzacji">2. Sprawdzenie statusu autoryzacji</h2>
+<pre><code class="language-bash">gh auth status
+</code></pre>
+<p>📌 Sprawdza, czy CLI jest połączone z GitHubem i w jaki sposób.</p>
+<hr>
+<h2 id="3-klonowanie-repozytorium">3. Klonowanie repozytorium</h2>
+<pre><code class="language-bash">gh repo <span class="hljs-built_in">clone</span> owner/repo
+</code></pre>
+<p>📥 Szybkie klonowanie repozytorium bez wyszukiwania linku w interfejsie webowym.</p>
+<hr>
+<h2 id="4-tworzenie-nowego-repozytorium">4. Tworzenie nowego repozytorium</h2>
+<pre><code class="language-bash">gh repo create my-project
+</code></pre>
+<p>🆕 Tworzenie repozytorium bezpośrednio z terminala (lokalnie + na GitHubie).</p>
+<hr>
+<h2 id="5-wyświetlanie-informacji-o-repozytorium">5. Wyświetlanie informacji o repozytorium</h2>
+<pre><code class="language-bash">gh repo view --web
+</code></pre>
+<p>📖 Pokazuje opis i ustawienia repozytorium.
+Opcja <code>--web</code> natychmiast otwiera stronę w przeglądarce.</p>
+<hr>
+<h2 id="6-lista-issues">6. Lista issues</h2>
+<pre><code class="language-bash">gh issue list
+</code></pre>
+<p>📋 Wygodne do przeglądania zadań i błędów bezpośrednio w terminalu.</p>
+<hr>
+<h2 id="7-tworzenie-issue">7. Tworzenie issue</h2>
+<pre><code class="language-bash">gh issue create --title <span class="hljs-string">&quot;Błąd: logowanie nie powiodło się&quot;</span> --body <span class="hljs-string">&quot;Kroki do odtworzenia...&quot;</span>
+</code></pre>
+<p>🐞 Tworzy nowe zadanie lub raport o błędzie.</p>
+<hr>
+<h2 id="8-tworzenie-pull-request">8. Tworzenie Pull Request</h2>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> create --base main --<span class="hljs-built_in">head</span> feature-branch --title <span class="hljs-string">&quot;Nowa funkcja&quot;</span> --body <span class="hljs-string">&quot;Opis...&quot;</span>
+</code></pre>
+<p>🔀 Główne narzędzie pracy zespołowej: otwieranie Pull Requesta z własnej gałęzi.</p>
+<hr>
+<h2 id="9-wyświetlanie-i-sprawdzanie-pr">9. Wyświetlanie i sprawdzanie PR</h2>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> view 123
+</code></pre>
+<p>👀 Wyświetlanie Pull Requesta z komentarzami i statusami sprawdzeń.
+Można dodać <code>--web</code>, aby otworzyć w przeglądarce.</p>
+<hr>
+<h2 id="10-łączenie-pr-z-usunięciem-gałęzi">10. Łączenie PR z usunięciem gałęzi</h2>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> merge 123 --squash --delete-branch
+</code></pre>
+<p>✅ Łączenie Pull Requesta + usuwanie gałęzi w jednym kroku.</p>
+<hr>
+<h1 id="-github-cli--ściągawka">📌 GitHub CLI — Ściągawka</h1>
+<h2 id="-autoryzacja-i-ustawienia">🔑 Autoryzacja i ustawienia</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Polecenie</th>
+<th style="text-align:left">Przeznaczenie</th>
+<th style="text-align:left">Przykład</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>gh auth login</code></td>
+<td style="text-align:left">Autoryzacja (przeglądarka, token, SSH)</td>
+<td style="text-align:left"><code>gh auth login</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh auth status</code></td>
+<td style="text-align:left">Sprawdzenie bieżącego połączenia</td>
+<td style="text-align:left"><code>gh auth status</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh alias set co &quot;pr checkout&quot;</code></td>
+<td style="text-align:left">Tworzenie aliasu dla polecenia</td>
+<td style="text-align:left"><code>gh alias set co &quot;pr checkout&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh config get</code></td>
+<td style="text-align:left">Pobieranie ustawień CLI</td>
+<td style="text-align:left"><code>gh config get editor</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-repozytoria">📂 Repozytoria</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Polecenie</th>
+<th style="text-align:left">Przeznaczenie</th>
+<th style="text-align:left">Przykład</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>gh repo create</code></td>
+<td style="text-align:left">Tworzenie repozytorium</td>
+<td style="text-align:left"><code>gh repo create my-project</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh repo clone</code></td>
+<td style="text-align:left">Klonowanie repozytorium</td>
+<td style="text-align:left"><code>gh repo clone hypo69/hypotez</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh repo view</code></td>
+<td style="text-align:left">Informacje o repozytorium (lub otwarcie w web)</td>
+<td style="text-align:left"><code>gh repo view --web</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh repo fork</code></td>
+<td style="text-align:left">Tworzenie forka repozytorium</td>
+<td style="text-align:left"><code>gh repo fork owner/repo</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-issues">📝 Issues</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Polecenie</th>
+<th style="text-align:left">Przeznaczenie</th>
+<th style="text-align:left">Przykład</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>gh issue list</code></td>
+<td style="text-align:left">Lista zadań</td>
+<td style="text-align:left"><code>gh issue list</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh issue create</code></td>
+<td style="text-align:left">Tworzenie issue</td>
+<td style="text-align:left"><code>gh issue create --title &quot;Bug&quot; --body &quot;Steps...&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh issue view</code></td>
+<td style="text-align:left">Wyświetlanie issue</td>
+<td style="text-align:left"><code>gh issue view 42</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh issue close</code></td>
+<td style="text-align:left">Zamykanie issue</td>
+<td style="text-align:left"><code>gh issue close 42</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-pull-requests">🔀 Pull Requests</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Polecenie</th>
+<th style="text-align:left">Przeznaczenie</th>
+<th style="text-align:left">Przykład</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>gh pr list</code></td>
+<td style="text-align:left">Lista PR</td>
+<td style="text-align:left"><code>gh pr list</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh pr create</code></td>
+<td style="text-align:left">Tworzenie PR</td>
+<td style="text-align:left"><code>gh pr create --base main --head feature-x</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh pr view</code></td>
+<td style="text-align:left">Wyświetlanie PR</td>
+<td style="text-align:left"><code>gh pr view 123 --web</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh pr checkout</code></td>
+<td style="text-align:left">Przełączanie na gałąź PR</td>
+<td style="text-align:left"><code>gh pr checkout 123</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh pr merge</code></td>
+<td style="text-align:left">Łączenie PR</td>
+<td style="text-align:left"><code>gh pr merge 123 --squash --delete-branch</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-releases">📦 Releases</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Polecenie</th>
+<th style="text-align:left">Przeznaczenie</th>
+<th style="text-align:left">Przykład</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>gh release list</code></td>
+<td style="text-align:left">Lista wydań</td>
+<td style="text-align:left"><code>gh release list</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh release create</code></td>
+<td style="text-align:left">Tworzenie wydania</td>
+<td style="text-align:left"><code>gh release create v1.0.0 --notes &quot;First release&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh release upload</code></td>
+<td style="text-align:left">Dodawanie pliku do wydania</td>
+<td style="text-align:left"><code>gh release upload v1.0.0 build.zip</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh release view</code></td>
+<td style="text-align:left">Wyświetlanie wydania</td>
+<td style="text-align:left"><code>gh release view v1.0.0</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-gisty">📜 Gisty</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Polecenie</th>
+<th style="text-align:left">Przeznaczenie</th>
+<th style="text-align:left">Przykład</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>gh gist create</code></td>
+<td style="text-align:left">Tworzenie gista</td>
+<td style="text-align:left"><code>gh gist create file.txt</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh gist list</code></td>
+<td style="text-align:left">Lista gistów</td>
+<td style="text-align:left"><code>gh gist list</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh gist view</code></td>
+<td style="text-align:left">Wyświetlanie gista</td>
+<td style="text-align:left"><code>gh gist view abc123</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh gist edit</code></td>
+<td style="text-align:left">Edycja gista</td>
+<td style="text-align:left"><code>gh gist edit abc123</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="️-workflows-github-actions">⚙️ Workflows (GitHub Actions)</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Polecenie</th>
+<th style="text-align:left">Przeznaczenie</th>
+<th style="text-align:left">Przykład</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>gh workflow list</code></td>
+<td style="text-align:left">Lista workflow</td>
+<td style="text-align:left"><code>gh workflow list</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh workflow view</code></td>
+<td style="text-align:left">Wyświetlanie workflow</td>
+<td style="text-align:left"><code>gh workflow view build.yml</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh workflow run</code></td>
+<td style="text-align:left">Uruchamianie workflow</td>
+<td style="text-align:left"><code>gh workflow run build.yml</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh run list</code></td>
+<td style="text-align:left">Lista uruchomień</td>
+<td style="text-align:left"><code>gh run list</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gh run watch</code></td>
+<td style="text-align:left">Obserwowanie uruchomienia</td>
+<td style="text-align:left"><code>gh run watch 123456789</code></td>
+</tr>
+</tbody>
+</table>
+
+            
+            
+        </body>
+        </html>

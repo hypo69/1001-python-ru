@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>GitHub CLI</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="github-cli">GitHub CLI</h1>
+<h2 id="מה-זה-github-cli">מה זה GitHub CLI?</h2>
+<p><strong>GitHub CLI</strong> (בקיצור <code>gh</code>) – זהו כלי שורת פקודה המאפשר לעבוד עם GitHub ישירות מהטרמינל.
+באמצעותו ניתן לנהל מאגרים, issues, pull requests, releases וישויות אחרות, מבלי להיכנס לממשק האינטרנט של GitHub.</p>
+<p>CLI נוח למפתחים, מהנדסי DevOps ולכל מי שמבצע אוטומציה של עבודה עם GitHub או מעדיף את הטרמינל על פני הדפדפן.</p>
+<hr>
+<h2 id="התקנה">התקנה</h2>
+<p>GitHub CLI נתמך ב-<strong>Windows</strong>, <strong>macOS</strong> ו-<strong>Linux</strong>.</p>
+<ul>
+<li><strong>Linux (Ubuntu/Debian):</strong></li>
+</ul>
+<pre><code class="language-bash">sudo apt install gh
+</code></pre>
+<ul>
+<li><strong>macOS (דרך Homebrew):</strong></li>
+</ul>
+<pre><code class="language-bash">brew install gh
+</code></pre>
+<ul>
+<li><strong>Windows (דרך Winget):</strong></li>
+</ul>
+<pre><code class="language-powershell">winget install <span class="hljs-literal">--id</span> GitHub.cli
+</code></pre>
+<p>לאחר ההתקנה, בדוק את הגרסה:</p>
+<pre><code class="language-bash">gh --version
+</code></pre>
+<hr>
+<h2 id="אימות">אימות</h2>
+<p>כדי לקבל גישה למאגרים ופעולות פרטיות, עליך לאמת:</p>
+<pre><code class="language-bash">gh auth login
+</code></pre>
+<p>CLI יציע:</p>
+<ul>
+<li>לבחור <a href="http://GitHub.com">GitHub.com</a> או GitHub Enterprise</li>
+<li>שיטת אימות (דפדפן, טוקן, SSH)</li>
+<li>לשמור נתונים להפעלות הבאות</li>
+</ul>
+<p>ניתן לבדוק את הסטטוס באמצעות הפקודה:</p>
+<pre><code class="language-bash">gh auth status
+</code></pre>
+<hr>
+<h2 id="יכולות-עיקריות">יכולות עיקריות</h2>
+<h3 id="עבודה-עם-מאגרים">עבודה עם מאגרים</h3>
+<p>יצירת מאגר חדש:</p>
+<pre><code class="language-bash">gh repo create my-project
+</code></pre>
+<p>שכפול:</p>
+<pre><code class="language-bash">gh repo <span class="hljs-built_in">clone</span> owner/repo
+</code></pre>
+<p>הצגת מידע:</p>
+<pre><code class="language-bash">gh repo view owner/repo
+</code></pre>
+<hr>
+<h3 id="issues">Issues</h3>
+<p>יצירת issue:</p>
+<pre><code class="language-bash">gh issue create --title <span class="hljs-string">&quot;Bug: crash on startup&quot;</span> --body <span class="hljs-string">&quot;Steps to reproduce...&quot;</span>
+</code></pre>
+<p>רשימת issues:</p>
+<pre><code class="language-bash">gh issue list
+</code></pre>
+<p>הצגת issue ספציפי:</p>
+<pre><code class="language-bash">gh issue view 42
+</code></pre>
+<hr>
+<h3 id="pull-requests">Pull Requests</h3>
+<p>יצירת pull request:</p>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> create --base main --<span class="hljs-built_in">head</span> feature-branch --title <span class="hljs-string">&quot;New feature&quot;</span> --body <span class="hljs-string">&quot;Added new functionality&quot;</span>
+</code></pre>
+<p>הצגה:</p>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> list
+gh <span class="hljs-built_in">pr</span> view 123
+</code></pre>
+<p>מיזוג:</p>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> merge 123 --squash --delete-branch
+</code></pre>
+<hr>
+<h3 id="actions-cicd">Actions (CI/CD)</h3>
+<p>הפעלת workflows:</p>
+<pre><code class="language-bash">gh workflow run build.yml
+</code></pre>
+<p>הצגת סטטוס:</p>
+<pre><code class="language-bash">gh run list
+</code></pre>
+<hr>
+<h2 id="פקודות-שימושיות">פקודות שימושיות</h2>
+<table>
+<thead>
+<tr>
+<th>פקודה</th>
+<th>ייעוד</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh help</code></td>
+<td>רשימת כל הפקודות</td>
+</tr>
+<tr>
+<td><code>gh alias set co &quot;pr checkout&quot;</code></td>
+<td>יצירת כינוי לפקודה מהירה</td>
+</tr>
+<tr>
+<td><code>gh gist create file.txt</code></td>
+<td>העלאת קובץ כ-gist</td>
+</tr>
+<tr>
+<td><code>gh release create v1.0.0</code></td>
+<td>יצירת release</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="יתרונות-github-cli">יתרונות GitHub CLI</h2>
+<ul>
+<li>חיסכון בזמן: עבודה עם GitHub ללא דפדפן.</li>
+<li>סקריפטים: נוח לאוטומציה ב-bash/PowerShell.</li>
+<li>אינטגרציה עם CI/CD.</li>
+<li>כלי אחיד לפקודות ו-GitHub API.</li>
+</ul>
+<hr>
+<p>מצוין 🚀 אז בואו ניצור <strong>רשימת בדיקה &quot;10 הפקודות המובילות של GitHub CLI לשימוש יומיומי&quot;</strong>. ניתן להשתמש בה כדף עזר.</p>
+<hr>
+<h1 id="-10-הפקודות-המובילות-של-github-cli-לשימוש-יומיומי">✅ 10 הפקודות המובילות של GitHub CLI לשימוש יומיומי</h1>
+<h2 id="1-אימות">1. אימות</h2>
+<pre><code class="language-bash">gh auth login
+</code></pre>
+<p>🔑 אימות ב-GitHub דרך דפדפן או טוקן.
+שימושי להגדרה ראשונית או שינוי חשבון.</p>
+<hr>
+<h2 id="2-בדיקת-סטטוס-אימות">2. בדיקת סטטוס אימות</h2>
+<pre><code class="language-bash">gh auth status
+</code></pre>
+<p>📌 בודק אם ה-CLI מחובר ל-GitHub וכיצד.</p>
+<hr>
+<h2 id="3-שכפול-מאגר">3. שכפול מאגר</h2>
+<pre><code class="language-bash">gh repo <span class="hljs-built_in">clone</span> owner/repo
+</code></pre>
+<p>📥 שכפול מהיר של מאגר ללא חיפוש קישור בממשק האינטרנט.</p>
+<hr>
+<h2 id="4-יצירת-מאגר-חדש">4. יצירת מאגר חדש</h2>
+<pre><code class="language-bash">gh repo create my-project
+</code></pre>
+<p>🆕 יצירת מאגר ישירות מהטרמינל (מקומי + ב-GitHub).</p>
+<hr>
+<h2 id="5-הצגת-מידע-על-מאגר">5. הצגת מידע על מאגר</h2>
+<pre><code class="language-bash">gh repo view --web
+</code></pre>
+<p>📖 מציג תיאור והגדרות מאגר.
+אפשרות <code>--web</code> פותחת מיד את הדף בדפדפן.</p>
+<hr>
+<h2 id="6-רשימת-issues">6. רשימת issues</h2>
+<pre><code class="language-bash">gh issue list
+</code></pre>
+<p>📋 נוח להצגת משימות ובאגים ישירות בטרמינל.</p>
+<hr>
+<h2 id="7-יצירת-issue">7. יצירת issue</h2>
+<pre><code class="language-bash">gh issue create --title <span class="hljs-string">&quot;Bug: login failed&quot;</span> --body <span class="hljs-string">&quot;Steps to reproduce...&quot;</span>
+</code></pre>
+<p>🐞 יוצר משימה חדשה או דוח באגים.</p>
+<hr>
+<h2 id="8-יצירת-pull-request">8. יצירת Pull Request</h2>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> create --base main --<span class="hljs-built_in">head</span> feature-branch --title <span class="hljs-string">&quot;New feature&quot;</span> --body <span class="hljs-string">&quot;Description...&quot;</span>
+</code></pre>
+<p>🔀 כלי עיקרי לעבודת צוות: פתיחת Pull Request מהענף שלך.</p>
+<hr>
+<h2 id="9-הצגה-ובדיקת-pr">9. הצגה ובדיקת PR</h2>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> view 123
+</code></pre>
+<p>👀 הצגת Pull Request עם הערות וסטטוסי בדיקה.
+ניתן להוסיף <code>--web</code> כדי לפתוח בדפדפן.</p>
+<hr>
+<h2 id="10-מיזוג-pr-עם-מחיקת-ענף">10. מיזוג PR עם מחיקת ענף</h2>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> merge 123 --squash --delete-branch
+</code></pre>
+<p>✅ מיזוג Pull Request + מחיקת ענף בצעד אחד.</p>
+<hr>
+<h1 id="-github-cli--דף-עזר">📌 GitHub CLI — דף עזר</h1>
+<h2 id="-אימות-והגדרות">🔑 אימות והגדרות</h2>
+<table>
+<thead>
+<tr>
+<th>פקודה</th>
+<th>ייעוד</th>
+<th>דוגמה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh auth login</code></td>
+<td>אימות (דפדפן, טוקן, SSH)</td>
+<td><code>gh auth login</code></td>
+</tr>
+<tr>
+<td><code>gh auth status</code></td>
+<td>בדיקת חיבור נוכחי</td>
+<td><code>gh auth status</code></td>
+</tr>
+<tr>
+<td><code>gh alias set co &quot;pr checkout&quot;</code></td>
+<td>יצירת כינוי לפקודה מהירה</td>
+<td></td>
+</tr>
+<tr>
+<td><code>gh config get</code></td>
+<td>קבלת הגדרות CLI</td>
+<td><code>gh config get editor</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-מאגרים">📂 מאגרים</h2>
+<table>
+<thead>
+<tr>
+<th>פקודה</th>
+<th>ייעוד</th>
+<th>דוגמה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh repo create</code></td>
+<td>יצירת מאגר</td>
+<td><code>gh repo create my-project</code></td>
+</tr>
+<tr>
+<td><code>gh repo clone</code></td>
+<td>שכפול מאגר</td>
+<td><code>gh repo clone hypo69/hypotez</code></td>
+</tr>
+<tr>
+<td><code>gh repo view</code></td>
+<td>מידע על מאגר (או פתיחה ב-web)</td>
+<td><code>gh repo view --web</code></td>
+</tr>
+<tr>
+<td><code>gh repo fork</code></td>
+<td>יצירת פורק למאגר</td>
+<td><code>gh repo fork owner/repo</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-issues">📝 Issues</h2>
+<table>
+<thead>
+<tr>
+<th>פקודה</th>
+<th>ייעוד</th>
+<th>דוגמה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh issue list</code></td>
+<td>רשימת משימות</td>
+<td><code>gh issue list</code></td>
+</tr>
+<tr>
+<td><code>gh issue create</code></td>
+<td>יצירת issue</td>
+<td><code>gh issue create --title &quot;Bug&quot; --body &quot;Steps...&quot;</code></td>
+</tr>
+<tr>
+<td><code>gh issue view</code></td>
+<td>הצגת issue</td>
+<td><code>gh issue view 42</code></td>
+</tr>
+<tr>
+<td><code>gh issue close</code></td>
+<td>סגירת issue</td>
+<td><code>gh issue issue close 42</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-pull-requests">🔀 Pull Requests</h2>
+<table>
+<thead>
+<tr>
+<th>פקודה</th>
+<th>ייעוד</th>
+<th>דוגמה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh pr list</code></td>
+<td>רשימת PR</td>
+<td><code>gh pr list</code></td>
+</tr>
+<tr>
+<td><code>gh pr create</code></td>
+<td>יצירת PR</td>
+<td><code>gh pr create --base main --head feature-x</code></td>
+</tr>
+<tr>
+<td><code>gh pr view</code></td>
+<td>הצגת PR</td>
+<td><code>gh pr view 123 --web</code></td>
+</tr>
+<tr>
+<td><code>gh pr checkout</code></td>
+<td>מעבר לענף PR</td>
+<td><code>gh pr checkout 123</code></td>
+</tr>
+<tr>
+<td><code>gh pr merge</code></td>
+<td>מיזוג PR</td>
+<td><code>gh pr merge 123 --squash --delete-branch</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-releases">📦 Releases</h2>
+<table>
+<thead>
+<tr>
+<th>פקודה</th>
+<th>ייעוד</th>
+<th>דוגמה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh release list</code></td>
+<td>רשימת releases</td>
+<td><code>gh release list</code></td>
+</tr>
+<tr>
+<td><code>gh release create</code></td>
+<td>יצירת release</td>
+<td><code>gh release create v1.0.0 --notes &quot;First release&quot;</code></td>
+</tr>
+<tr>
+<td><code>gh release upload</code></td>
+<td>הוספת קובץ ל-release</td>
+<td><code>gh release upload v1.0.0 build.zip</code></td>
+</tr>
+<tr>
+<td><code>gh release view</code></td>
+<td>הצגת release</td>
+<td><code>gh release view v1.0.0</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-gists">📜 Gists</h2>
+<table>
+<thead>
+<tr>
+<th>פקודה</th>
+<th>ייעוד</th>
+<th>דוגמה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh gist create</code></td>
+<td>יצירת gist</td>
+<td><code>gh gist create file.txt</code></td>
+</tr>
+<tr>
+<td><code>gh gist list</code></td>
+<td>רשימת gists</td>
+<td><code>gh gist list</code></td>
+</tr>
+<tr>
+<td><code>gh gist view</code></td>
+<td>הצגת gist</td>
+<td><code>gh gist gist view abc123</code></td>
+</tr>
+<tr>
+<td><code>gh gist edit</code></td>
+<td>עריכת gist</td>
+<td><code>gh gist edit abc123</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="️-workflows-github-actions">⚙️ Workflows (GitHub Actions)</h2>
+<table>
+<thead>
+<tr>
+<th>פקודה</th>
+<th>ייעוד</th>
+<th>דוגמה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh workflow list</code></td>
+<td>רשימת workflows</td>
+<td><code>gh workflow list</code></td>
+</tr>
+<tr>
+<td><code>gh workflow view</code></td>
+<td>הצגת workflow</td>
+<td><code>gh workflow view build.yml</code></td>
+</tr>
+<tr>
+<td><code>gh workflow run</code></td>
+<td>הפעלת workflow</td>
+<td><code>gh workflow run build.yml</code></td>
+</tr>
+<tr>
+<td><code>gh run list</code></td>
+<td>רשימת הרצות</td>
+<td><code>gh run list</code></td>
+</tr>
+<tr>
+<td><code>gh run watch</code></td>
+<td>מעקב אחר הרצה</td>
+<td><code>gh run watch 123456789</code></td>
+</tr>
+</tbody>
+</table>
+
+            
+            
+        </body>
+        </html>

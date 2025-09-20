@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&ast;&ast;Polynomial Time&ast;&ast;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h3 id="polynomial-time"><strong>Polynomial Time</strong></h3>
+<p><strong>Polynomial time</strong> — is a term used in computational complexity theory to describe the execution time of an algorithm that grows as a polynomial of the input size. If the execution time of an algorithm can be expressed as (O(n^k)), where (n) — is the input size, and (k) — is a constant, then such an algorithm runs in polynomial time.</p>
+<h4 id="examples"><strong>Examples:</strong></h4>
+<ol>
+<li><strong>List sorting</strong>: Algorithms such as merge sort or quicksort run in (O(n \log n)), which is polynomial time.</li>
+<li><strong>Shortest path search in a graph</strong>: Dijkstra's algorithm runs in (O(n^2)) or (O(n \log n)) depending on the implementation, which is also polynomial.</li>
+</ol>
+<h4 id="features"><strong>Features:</strong></h4>
+<ul>
+<li>Algorithms that run in polynomial time are considered <strong>efficient</strong> and <strong>practically applicable</strong>.</li>
+<li>Problems that can be solved in polynomial time belong to class <strong>P</strong>.</li>
+</ul>
+<hr>
+<h3 id="exponential-time"><strong>Exponential Time</strong></h3>
+<p><strong>Exponential time</strong> — is the execution time of an algorithm that grows exponentially with the input size. If the execution time can be expressed as (O(k^n)), where (n) — is the input size, and (k) — is a constant, then such an algorithm runs in exponential time.</p>
+<h4 id="examples-1"><strong>Examples:</strong></h4>
+<ol>
+<li><strong>Traveling salesman problem</strong>: Solving by brute force of all possible routes requires (O(n!)) time, which is worse than exponential.</li>
+<li><strong>Enumeration of all subsets</strong>: An algorithm that checks all possible subsets of a set of (n) elements runs in (O(2^n)).</li>
+</ol>
+<h4 id="features-1"><strong>Features:</strong></h4>
+<ul>
+<li>Algorithms that run in exponential time are considered <strong>inefficient</strong> for large inputs, as the execution time becomes impractically large even for relatively small (n).</li>
+<li>Problems that can only be solved in exponential time often require the use of <strong>approximate methods</strong>, <strong>heuristics</strong>, or <strong>parallel computing</strong>.</li>
+</ul>
+<hr>
+<h3 id="comparison-of-polynomial-and-exponential-time"><strong>Comparison of Polynomial and Exponential Time</strong></h3>
+<table>
+<thead>
+<tr>
+<th><strong>Characteristic</strong></th>
+<th><strong>Polynomial Time</strong></th>
+<th><strong>Exponential Time</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Execution time growth</strong></td>
+<td>Slow (e.g., (n^2), (n^3))</td>
+<td>Fast (e.g., (2^n), (3^n))</td>
+</tr>
+<tr>
+<td><strong>Examples of problems</strong></td>
+<td>Sorting, shortest path search</td>
+<td>Traveling salesman, subset enumeration</td>
+</tr>
+<tr>
+<td><strong>Practical applicability</strong></td>
+<td>Efficient for large data</td>
+<td>Not applicable for large data</td>
+</tr>
+<tr>
+<td><strong>Complexity class</strong></td>
+<td>P</td>
+<td>NP-hard, NP-complete</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="why-is-this-important"><strong>Why is this important?</strong></h3>
+<ol>
+<li>
+<p><strong>Polynomial time</strong>:</p>
+<ul>
+<li>Algorithms that run in polynomial time are considered <strong>practically applicable</strong>, as they can process large amounts of data in a reasonable time.</li>
+<li>Problems of class <strong>P</strong> (solvable in polynomial time) are the basis for many applications in computer science, such as data processing, networks, cryptography, and artificial intelligence.</li>
+</ul>
+</li>
+<li>
+<p><strong>Exponential time</strong>:</p>
+<ul>
+<li>Algorithms that run in exponential time become <strong>impractical</strong> even for relatively small inputs. For example, for (n = 100), (2^n) already exceeds the number of atoms in the observable Universe.</li>
+<li>Problems that can only be solved in exponential time often require the use of <strong>approximate methods</strong>, <strong>heuristics</strong>, or <strong>parallel computing</strong>.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="example-for-understanding"><strong>Example for understanding</strong></h3>
+<p>Imagine you have a problem, and you want to solve it for (n = 10) and (n = 100):</p>
+<ul>
+<li>
+<p><strong>Polynomial time ((n^2))</strong>:</p>
+<ul>
+<li>For (n = 10): (10^2 = 100) operations.</li>
+<li>For (n = 100): (100^2 = 10,000) operations.</li>
+</ul>
+</li>
+<li>
+<p><strong>Exponential time ((2^n))</strong>:</p>
+<ul>
+<li>For (n = 10): (2^{10} = 1,024) operations.</li>
+<li>For (n = 100): (2^{100} \approx 1.26 \times 10^{30}) operations.</li>
+</ul>
+</li>
+</ul>
+<p>As you can see, for (n = 100), a polynomial algorithm will perform 10,000 operations, which is quite feasible, while an exponential algorithm will require (1.26 \times 10^{30}) operations, which is practically impossible.</p>
+<p>To plot graphs illustrating the difference between polynomial and exponential time, various mathematical functions can be used. Here are examples of functions that can be used for visualization:</p>
+<hr>
+<h3 id="polynomial-functions"><strong>Polynomial functions</strong></h3>
+<ol>
+<li>
+<p><strong>Linear function</strong>:<br>
+( f(n) = n )<br>
+Example: execution time of an algorithm that processes each element once.</p>
+</li>
+<li>
+<p><strong>Quadratic function</strong>:<br>
+( f(n) = n^2 )<br>
+Example: execution time of an algorithm with nested loops, such as bubble sort.</p>
+</li>
+<li>
+<p><strong>Cubic function</strong>:<br>
+( f(n) = n^3 )<br>
+Example: execution time of an algorithm that processes three-dimensional data.</p>
+</li>
+<li>
+<p><strong>Logarithmic function</strong>:<br>
+( f(n) = \log n )<br>
+Example: execution time of binary search.</p>
+</li>
+<li>
+<p><strong>Linearithmic function</strong>:<br>
+( f(n) = n \log n )<br>
+Example: execution time of quicksort or merge sort.</p>
+</li>
+</ol>
+<hr>
+<h3 id="exponential-functions"><strong>Exponential functions</strong></h3>
+<ol>
+<li>
+<p><strong>Exponential function</strong>:<br>
+( f(n) = 2^n )<br>
+Example: execution time of an algorithm that iterates through all subsets of a set.</p>
+</li>
+<li>
+<p><strong>Factorial function</strong>:<br>
+( f(n) = n! )<br>
+Example: execution time of an algorithm that iterates through all permutations (e.g., traveling salesman problem).</p>
+</li>
+<li>
+<p><strong>Exponential function with a different base</strong>:<br>
+( f(n) = 3^n )<br>
+Example: execution time of an algorithm that explores all possible combinations.</p>
+</li>
+</ol>
+<hr>
+<h3 id="example-code-for-plotting-graphs-python-matplotlib"><strong>Example code for plotting graphs (Python, Matplotlib)</strong></h3>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-keyword">import</span> math <span class="hljs-comment"># Import the standard math module</span>
+
+<span class="hljs-comment"># Range of n values</span>
+n = np.linspace(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>, <span class="hljs-number">100</span>)
+
+<span class="hljs-comment"># Polynomial functions</span>
+linear = n
+quadratic = n**<span class="hljs-number">2</span>
+cubic = n**<span class="hljs-number">3</span>
+logarithmic = np.log(n)
+nlogn = n * np.log(n)
+
+<span class="hljs-comment"># Exponential functions</span>
+exponential = <span class="hljs-number">2</span>**n
+<span class="hljs-comment"># Use math.factorial from the imported math module</span>
+factorial = [math.factorial(<span class="hljs-built_in">int</span>(i)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> n]  <span class="hljs-comment"># Factorial is defined only for integers</span>
+
+<span class="hljs-comment"># Plotting the graphs</span>
+plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">6</span>))
+
+<span class="hljs-comment"># Polynomial functions</span>
+plt.plot(n, linear, label=<span class="hljs-string">&#x27;Linear: $f(n) = n$&#x27;</span>)
+plt.plot(n, quadratic, label=<span class="hljs-string">&#x27;Quadratic: $f(n) = n^2$&#x27;</span>)
+plt.plot(n, cubic, label=<span class="hljs-string">&#x27;Cubic: $f(n) = n^3$&#x27;</span>)
+plt.plot(n, logarithmic, label=<span class="hljs-string">&#x27;Logarithmic: $f(n) = \log n$&#x27;</span>)
+plt.plot(n, nlogn, label=<span class="hljs-string">&#x27;Linearithmic: $f(n) = n \log n$&#x27;</span>)
+
+<span class="hljs-comment"># Exponential functions</span>
+plt.plot(n, exponential, label=<span class="hljs-string">&#x27;Exponential: $f(n) = 2^n$&#x27;</span>)
+plt.plot(n, factorial, label=<span class="hljs-string">&#x27;Factorial: $f(n) = n!$&#x27;</span>)
+
+<span class="hljs-comment"># Graph settings</span>
+plt.yscale(<span class="hljs-string">&#x27;log&#x27;</span>)  <span class="hljs-comment"># Logarithmic scale for convenience</span>
+plt.xlabel(<span class="hljs-string">&#x27;Input size (n)&#x27;</span>)
+plt.ylabel(<span class="hljs-string">&#x27;Time complexity&#x27;</span>)
+plt.title(<span class="hljs-string">&#x27;Comparison of Polynomial and Exponential Time Complexity&#x27;</span>)
+plt.legend()
+plt.grid(<span class="hljs-literal">True</span>)
+plt.show()
+</code></pre>
+<hr>
+<p><img src="file:///c:\Users\user\Documents\repos\public_repositories\1001-python\en\articles\assets\exponetialy.png" alt="Exponetialy"></p>
+<h3 id="what-will-the-graph-show"><strong>What will the graph show?</strong></h3>
+<ul>
+<li><strong>Polynomial functions</strong> grow slowly and remain at the bottom of the graph.</li>
+<li><strong>Exponential functions</strong> grow very quickly and shoot up even for small values of (n).</li>
+<li>Using a <strong>logarithmic scale</strong> (on the Y-axis) helps visualize the difference between polynomial and exponential functions, as their values differ by orders of magnitude.</li>
+</ul>
+<hr>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>

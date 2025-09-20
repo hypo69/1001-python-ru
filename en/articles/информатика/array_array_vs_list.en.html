@@ -1,124 +1,264 @@
-<!-- Translated to en -->
-<h2>🧑‍💻 Using <code>array.array</code> in Python: when and why to apply</h2>
-<p>The <strong><code>array</strong></code> module provides a specialized data type <code>array.array</code> for storing sequences of homogeneous numbers. Unlike the universal <code>list</code>, <code>array.array</code> arrays provide more efficient memory usage and increased performance when working with numerical data.</p>
-<hr>
-<h2>📦 Key advantages of <code>array.array</code></h2>
-<p>The key difference between <code>array.array</code> and <code>list</code> is <strong>compact data storage</strong>. Instead of a list of pointers to Python objects, <code>array.array</code> stores values as a contiguous block of bytes, making it ideal for the following tasks.</p>
-<hr>
-<h3>1. Memory savings when working with large sets of numbers</h3>
-<p>When processing millions of numerical elements, memory savings become critically important. <code>array.array</code> significantly reduces overhead.</p>
-<pre class="line-numbers"><code class="language-python">import array
-import sys
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x1f9d1;&zwj;&#x1f4bb; Using &DiacriticalGrave;array&period;array&DiacriticalGrave; in Python&colon; when and why to apply</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 
-def compare_memory_usage(num_elements: int = 1_000_000) -> None:
-    """
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <!-- Translated to en -->
+<h1 id="-using-arrayarray-in-python-when-and-why-to-apply">🧑‍💻 Using <code>array.array</code> in Python: when and why to apply</h1>
+<p>Модуль <strong><code>array</code></strong> provides a specialized data type <code>array.array</code> for storing sequences of homogeneous numbers. Unlike the universal <code>list</code>, <code>array.array</code> arrays provide more efficient memory usage and increased performance when working with numerical data.</p>
+<hr>
+<h2 id="-key-advantages-of-arrayarray">📦 Key advantages of <code>array.array</code></h2>
+<p>The key difference between <code>array.array</code> and <code>list</code> is <strong>compact data storage</strong>. Instead of a list of pointers to Python objects, <code>array.array</code> stores values as a contiguous block of bytes, which makes it ideal for the following tasks.</p>
+<hr>
+<h3 id="1-memory-savings-when-working-with-large-sets-of-numbers">1. Memory savings when working with large sets of numbers</h3>
+<p>When processing millions of numerical elements, memory savings become critically important. <code>array.array</code> significantly reduces overhead.</p>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> array
+<span class="hljs-keyword">import</span> sys
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">compare_memory_usage</span>(<span class="hljs-params">num_elements: <span class="hljs-built_in">int</span> = <span class="hljs-number">1_000_000</span></span>) -&gt; <span class="hljs-literal">None</span>:
+    <span class="hljs-string">&quot;&quot;&quot;
     Compares memory usage between list and array.array.
 
     Args:
         num_elements (int, optional): Number of elements for the test. 
                                       Defaults to 1,000,000.
-    """
-    # Create a list with integer Python objects
-    list_numbers = list(range(num_elements))
+    &quot;&quot;&quot;</span>
+    <span class="hljs-comment"># Create a list with integer Python objects</span>
+    list_numbers = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">range</span>(num_elements))
     
-    # Create an array where numbers are stored as 4-byte C-type ints
-    array_numbers = array.array('i', range(num_elements))
+    <span class="hljs-comment"># Create an array where numbers are stored as 4-byte C-type ints</span>
+    array_numbers = array.array(<span class="hljs-string">&#x27;i&#x27;</span>, <span class="hljs-built_in">range</span>(num_elements))
 
     list_size = sys.getsizeof(list_numbers)
     array_size = sys.getsizeof(array_numbers)
 
-    print(f"Number of elements: {num_elements}")
-    print(f"List size:  {list_size / 1024 / 1024:.2f} MB")
-    print(f"Array size: {array_size / 1024 / 1024:.2f} MB")
-    if array_size > 0:
-        print(f"Memory savings: {list_size / array_size:.2f}x")
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Number of elements: <span class="hljs-subst">{num_elements}</span>&quot;</span>)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;List size:  <span class="hljs-subst">{list_size / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>:<span class="hljs-number">.2</span>f}</span> MB&quot;</span>)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Array size: <span class="hljs-subst">{array_size / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>:<span class="hljs-number">.2</span>f}</span> MB&quot;</span>)
+    <span class="hljs-keyword">if</span> array_size &gt; <span class="hljs-number">0</span>:
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Memory savings: <span class="hljs-subst">{list_size / array_size:<span class="hljs-number">.2</span>f}</span>x&quot;</span>)
 
-# Example usage
-if __name__ == "__main__":
+<span class="hljs-comment"># Example usage</span>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
     compare_memory_usage()
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre class="line-numbers"><code>Number of elements: 1000000
-List size:  7.63 MB
-Array size: 3.82 MB
-Memory savings: 2.00x
+<pre><code>Количество элементов: 1000000
+Размер list:  7.63 MB
+Размер array: 3.82 MB
+Экономия памяти: 2.00x
 </code></pre>
 <hr>
-<h3>2. Increased performance of numerical operations</h3>
+<h3 id="2-increased-performance-of-numerical-operations">2. Increased performance of numerical operations</h3>
 <p>Due to contiguous memory allocation, mathematical operations on <code>array.array</code> elements are performed faster, as the processor can make more efficient use of the cache.</p>
-<pre class="line-numbers"><code class="language-python">import array
-import timeit
+<pre><code class="language-python"><span class="hljs-keyword">import</span> array
+<span class="hljs-keyword">import</span> timeit
 
-def compare_performance(num_elements: int = 10_000_000) -> None:
-    """
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">compare_performance</span>(<span class="hljs-params">num_elements: <span class="hljs-built_in">int</span> = <span class="hljs-number">10_000_000</span></span>) -&gt; <span class="hljs-literal">None</span>:
+    <span class="hljs-string">&quot;&quot;&quot;
     Compares the performance of summing elements in list and array.array.
 
     Args:
         num_elements (int, optional): Number of elements for the test. 
                                       Defaults to 10,000,000.
-    """
-    setup_code = f"""
+    &quot;&quot;&quot;</span>
+    setup_code = <span class="hljs-string">f&quot;&quot;&quot;
 import array
-data = range({num_elements})
+data = range(<span class="hljs-subst">{num_elements}</span>)
 list_data = list(data)
-array_data = array.array('i', data)
-"""
+array_data = array.array(&#x27;i&#x27;, data)
+&quot;&quot;&quot;</span>
     
-    # Measure time for list
-    list_time = timeit.timeit("sum(list_data)", setup=setup_code, number=10)
+    <span class="hljs-comment"># Measure time for list</span>
+    list_time = timeit.timeit(<span class="hljs-string">&quot;sum(list_data)&quot;</span>, setup=setup_code, number=<span class="hljs-number">10</span>)
     
-    # Measure time for array
-    array_time = timeit.timeit("sum(array_data)", setup=setup_code, number=10)
+    <span class="hljs-comment"># Measure time for array</span>
+    array_time = timeit.timeit(<span class="hljs-string">&quot;sum(array_data)&quot;</span>, setup=setup_code, number=<span class="hljs-number">10</span>)
     
-    print(f"Time to sum {num_elements} elements (10 times):")
-    print(f"list:  {list_time:.4f} seconds")
-    print(f"array: {array_time:.4f} seconds")
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Time to sum <span class="hljs-subst">{num_elements}</span> elements (10 times):&quot;</span>)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;list:  <span class="hljs-subst">{list_time:<span class="hljs-number">.4</span>f}</span> seconds&quot;</span>)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;array: <span class="hljs-subst">{array_time:<span class="hljs-number">.4</span>f}</span> seconds&quot;</span>)
 
-# Example usage
-if __name__ == "__main__":
+<span class="hljs-comment"># Example usage</span>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
     compare_performance()
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre class="line-numbers"><code>Number of elements: 10000000
-List size:  2.1106 seconds
-Array size: 1.1549 seconds
+<pre><code>Количество элементов: 10000000
+Размер list:  2.1106 секунд
+Размер array: 1.1549 секунд
 </code></pre>
 <hr>
-<h3>3. Direct work with C libraries (<code>ctypes</code>, <code>struct</code>)</h3>
+<h3 id="3-direct-work-with-c-libraries-ctypes-struct">3. Direct work with C libraries (<code>ctypes</code>, <code>struct</code>)</h3>
 <p><code>array.array</code> is ideal for passing data to low-level libraries written in C, as its internal structure is compatible with C arrays.</p>
-<h4>Example with <code>ctypes</code>:</h4>
-<pre class="line-numbers"><code class="language-python">import array
-from ctypes import c_double, CDLL
+<h4 id="example-with-ctypes">Example with <code>ctypes</code>:</h4>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> array
+<span class="hljs-keyword">from</span> ctypes <span class="hljs-keyword">import</span> c_double, CDLL
 
-def demonstrate_ctypes_usage() -> None:
-    """
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">demonstrate_ctypes_usage</span>() -&gt; <span class="hljs-literal">None</span>:
+    <span class="hljs-string">&quot;&quot;&quot;
     Demonstrates passing array.array to a C function via ctypes.
-    """
-    # Array with double-precision numbers (type 'd')
-    py_array = array.array('d', [1.1, 2.2, 3.3, 4.4])
+    &quot;&quot;&quot;</span>
+    <span class="hljs-comment"># Array with double-precision numbers (type &#x27;d&#x27;)</span>
+    py_array = array.array(<span class="hljs-string">&#x27;d&#x27;</span>, [<span class="hljs-number">1.1</span>, <span class="hljs-number">2.2</span>, <span class="hljs-number">3.3</span>, <span class="hljs-number">4.4</span>])
     
-    # Create a C-compatible array from py_array
-    # The function (c_double * len(py_array)) creates a type "array of 4 c_double"
-    # (*py_array) unpacks the python array into the arguments of this constructor
-    c_array = (c_double * len(py_array))(*py_array)
+    <span class="hljs-comment"># Create a C-compatible array from py_array</span>
+    <span class="hljs-comment"># The function (c_double * len(py_array)) creates a type &quot;array of 4 c_double&quot;</span>
+    <span class="hljs-comment"># (*py_array) unpacks the python array into the arguments of this constructor</span>
+    c_array = (c_double * <span class="hljs-built_in">len</span>(py_array))(*py_array)
 
-    # Here could be a call to a C function, for example:
-    # my_c_library = CDLL("./libmath.so")
-    # my_c_library.sum_doubles(c_array, len(c_array))
+    <span class="hljs-comment"># Here could be a call to a C function, for example:</span>
+    <span class="hljs-comment"># my_c_library = CDLL(&quot;./libmath.so&quot;)</span>
+    <span class="hljs-comment"># my_c_library.sum_doubles(c_array, len(c_array))</span>
     
-    print(f"Python array: {py_array}")
-    print(f"C-compatible array (ctypes): {[val for val in c_array]}")
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Python array: <span class="hljs-subst">{py_array}</span>&quot;</span>)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;C-compatible array (ctypes): <span class="hljs-subst">{[val <span class="hljs-keyword">for</span> val <span class="hljs-keyword">in</span> c_array]}</span>&quot;</span>)
 
-# Example usage
-if __name__ == "__main__":
+<span class="hljs-comment"># Example usage</span>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
     demonstrate_ctypes_usage()
 </code></pre>
-<h4>Example with <code>struct</code> for data packing:</h4>
-<pre class="line-numbers"><code class="language-python">import array
-import struct
+<h4 id="example-with-struct-for-data-packing">Example with <code>struct</code> for data packing:</h4>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> array
+<span class="hljs-keyword">import</span> struct
 
-def demonstrate_struct_packing(data: list[int]) -> bytes:
-    """
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">demonstrate_struct_packing</span>(<span class="hljs-params">data: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">int</span>]</span>) -&gt; <span class="hljs-built_in">bytes</span>:
+    <span class="hljs-string">&quot;&quot;&quot;
     Packs an array of integers into a binary string.
 
     Args:
@@ -126,165 +266,164 @@ def demonstrate_struct_packing(data: list[int]) -> bytes:
 
     Returns:
         bytes: Binary representation of the data.
-    """
-    arr = array.array('i', data)
+    &quot;&quot;&quot;</span>
+    arr = array.array(<span class="hljs-string">&#x27;i&#x27;</span>, data)
     
-    # Create a format string like '3i' for 3 integers
-    format_string = f'{len(arr)}i'
+    <span class="hljs-comment"># Create a format string like &#x27;3i&#x27; for 3 integers</span>
+    format_string = <span class="hljs-string">f&#x27;<span class="hljs-subst">{<span class="hljs-built_in">len</span>(arr)}</span>i&#x27;</span>
     
-    # Pack data into binary format
+    <span class="hljs-comment"># Pack data into binary format</span>
     binary_data = struct.pack(format_string, *arr)
     
-    print(f"Original array: {arr}")
-    print(f"Binary data: {binary_data}")
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Original array: <span class="hljs-subst">{arr}</span>&quot;</span>)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Binary data: <span class="hljs-subst">{binary_data}</span>&quot;</span>)
     
-    # Check: unpack back
+    <span class="hljs-comment"># Check: unpack back</span>
     unpacked_data = struct.unpack(format_string, binary_data)
-    print(f"Unpacked data: {unpacked_data}")
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Unpacked data: <span class="hljs-subst">{unpacked_data}</span>&quot;</span>)
     
-    return binary_data
+    <span class="hljs-keyword">return</span> binary_data
 
-# Example usage
-if __name__ == "__main__":
-    demonstrate_struct_packing([10, 20, 30])
+<span class="hljs-comment"># Example usage</span>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
+    demonstrate_struct_packing([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>])
 </code></pre>
 <hr>
-<h3>4. Efficient serialization and deserialization</h3>
+<h3 id="4-efficient-serialization-and-deserialization">4. Efficient serialization and deserialization</h3>
 <p>The <code>.tobytes()</code> and <code>.frombytes()</code> methods allow quickly converting an array to bytes and back, which is ideal for saving to files or transmitting over a network.</p>
-<pre class="line-numbers"><code class="language-python">import array
+<pre><code class="language-python"><span class="hljs-keyword">import</span> array
 
-def handle_binary_data() -> None:
-    """
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_binary_data</span>() -&gt; <span class="hljs-literal">None</span>:
+    <span class="hljs-string">&quot;&quot;&quot;
     Demonstrates serialization and deserialization of array.array to bytes.
-    """
-    # Create original array
-    source_array = array.array('i', [1, 2, 3, 4, 5])
-    print(f"Original array: {source_array}")
+    &quot;&quot;&quot;</span>
+    <span class="hljs-comment"># Create original array</span>
+    source_array = array.array(<span class="hljs-string">&#x27;i&#x27;</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>])
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Original array: <span class="hljs-subst">{source_array}</span>&quot;</span>)
 
-    # Serialize array to bytes
+    <span class="hljs-comment"># Serialize array to bytes</span>
     binary_data = source_array.tobytes()
-    print(f"Data in bytes: {binary_data}")
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Data in bytes: <span class="hljs-subst">{binary_data}</span>&quot;</span>)
 
-    # Deserialize from bytes to new array
-    new_array = array.array('i')
+    <span class="hljs-comment"># Deserialize from bytes to new array</span>
+    new_array = array.array(<span class="hljs-string">&#x27;i&#x27;</span>)
     new_array.frombytes(binary_data)
-    print(f"Restored array: {new_array}")
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Restored array: <span class="hljs-subst">{new_array}</span>&quot;</span>)
 
-    # Check integrity
-    assert source_array == new_array, "Data mismatch!"
-    print("Data integrity confirmed.")
+    <span class="hljs-comment"># Check integrity</span>
+    <span class="hljs-keyword">assert</span> source_array == new_array, <span class="hljs-string">&quot;Data mismatch!&quot;</span>
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Data integrity confirmed.&quot;</span>)
 
-# Example usage
-if __name__ == "__main__":
+<span class="hljs-comment"># Example usage</span>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
     handle_binary_data()
 </code></pre>
 <hr>
-<h3>5. Guarantee of type homogeneity</h3>
+<h3 id="5-guarantee-of-type-homogeneity">5. Guarantee of type homogeneity</h3>
 <p><code>array.array</code> strictly enforces only one data type, specified at creation. This prevents accidental addition of elements of a different type.</p>
-<pre class="line-numbers"><code class="language-python">import array
+<pre><code class="language-python"><span class="hljs-keyword">import</span> array
 
-def demonstrate_type_safety() -> None:
-    """
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">demonstrate_type_safety</span>() -&gt; <span class="hljs-literal">None</span>:
+    <span class="hljs-string">&quot;&quot;&quot;
     Shows that array.array does not allow adding elements of a different type.
-    """
-    arr = array.array('i', [100, 200, 300])
-    print(f"Integer array: {arr}")
+    &quot;&quot;&quot;</span>
+    arr = array.array(<span class="hljs-string">&#x27;i&#x27;</span>, [<span class="hljs-number">100</span>, <span class="hljs-number">200</span>, <span class="hljs-number">300</span>])
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Integer array: <span class="hljs-subst">{arr}</span>&quot;</span>)
     
-    try:
-        # Attempt to add a string element
-        arr.append('hello')
-    except TypeError as e:
-        # Expected exception
-        print(f"\nAttempt to add 'hello' raised an error: {e}")
-        print("This confirms strict array typing.")
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># Attempt to add a string element</span>
+        arr.append(<span class="hljs-string">&#x27;hello&#x27;</span>)
+    <span class="hljs-keyword">except</span> TypeError <span class="hljs-keyword">as</span> e:
+        <span class="hljs-comment"># Expected exception</span>
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;\nAttempt to add &#x27;hello&#x27; raised an error: <span class="hljs-subst">{e}</span>&quot;</span>)
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;This confirms strict array typing.&quot;</span>)
 
-# Example usage
-if __name__ == "__main__":
+<span class="hljs-comment"># Example usage</span>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
     demonstrate_type_safety()
 </code></pre>
 <hr>
-<h3>6. Direct writing and reading from binary files</h3>
+<h3 id="6-direct-writing-and-reading-from-binary-files">6. Direct writing and reading from binary files</h3>
 <p>The <code>.tofile()</code> and <code>.fromfile()</code> methods simplify working with binary files, avoiding intermediate serialization.</p>
-<pre class="line-numbers"><code class="language-python">import array
-from pathlib import Path
+<pre><code class="language-python"><span class="hljs-keyword">import</span> array
+<span class="hljs-keyword">from</span> pathlib <span class="hljs-keyword">import</span> Path
 
-def work_with_binary_files(file_path_str: str = "data.bin") -> None:
-    """
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">work_with_binary_files</span>(<span class="hljs-params">file_path_str: <span class="hljs-built_in">str</span> = <span class="hljs-string">&quot;data.bin&quot;</span></span>) -&gt; <span class="hljs-literal">None</span>:
+    <span class="hljs-string">&quot;&quot;&quot;
     Writes an array to a binary file and reads it back.
 
     Args:
         file_path_str (str, optional): File name for saving.
-                                       Defaults to "data.bin".
-    """
+                                       Defaults to &quot;data.bin&quot;.
+    &quot;&quot;&quot;</span>
     file_path = Path(file_path_str)
-    source_array = array.array('f', [1.5, 2.7, 3.14])
+    source_array = array.array(<span class="hljs-string">&#x27;f&#x27;</span>, [<span class="hljs-number">1.5</span>, <span class="hljs-number">2.7</span>, <span class="hljs-number">3.14</span>])
 
-    try:
-        # Write to file
-        with file_path.open('wb') as f:
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># Write to file</span>
+        <span class="hljs-keyword">with</span> file_path.<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;wb&#x27;</span>) <span class="hljs-keyword">as</span> f:
             source_array.tofile(f)
-        print(f"Array {source_array} written to file '{file_path}'.")
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Array <span class="hljs-subst">{source_array}</span> written to file &#x27;<span class="hljs-subst">{file_path}</span>&#x27;.&quot;</span>)
 
-        # Read from file
-        new_array = array.array('f')
-        with file_path.open('rb') as f:
-            # Read 3 elements of type 'f' (float)
-            new_array.fromfile(f, len(source_array))
-        print(f"Array {new_array} read from file.")
+        <span class="hljs-comment"># Read from file</span>
+        new_array = array.array(<span class="hljs-string">&#x27;f&#x27;</span>)
+        <span class="hljs-keyword">with</span> file_path.<span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;rb&#x27;</span>) <span class="hljs-keyword">as</span> f:
+            <span class="hljs-comment"># Read 3 elements of type &#x27;f&#x27; (float)</span>
+            new_array.fromfile(f, <span class="hljs-built_in">len</span>(source_array))
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Array <span class="hljs-subst">{new_array}</span> read from file.&quot;</span>)
         
-        assert source_array == new_array
-        print("Data integrity confirmed.")
+        <span class="hljs-keyword">assert</span> source_array == new_array
 
-    finally:
-        # Guaranteed file deletion after execution
-        if file_path.exists():
+    <span class="hljs-keyword">finally</span>:
+        <span class="hljs-comment"># Guaranteed file deletion after execution</span>
+        <span class="hljs-keyword">if</span> file_path.exists():
             file_path.unlink()
-            print(f"Temporary file '{file_path}' deleted.")
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Temporary file &#x27;<span class="hljs-subst">{file_path}</span>&#x27; deleted.&quot;</span>)
 
-# Example usage
-if __name__ == "__main__":
+<span class="hljs-comment"># Example usage</span>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
     work_with_binary_files()
 </code></pre>
 <hr>
-<h2>🔹 Comparative table: <code>array.array</code> vs <code>list</code></h2>
+<h2 id="-comparative-table-arrayarray-vs-list">🔹 Comparative table: <code>array.array</code> vs <code>list</code></h2>
 <table>
 <thead>
 <tr>
-<th>Characteristic</th>
-<th><code>array.array</code></th>
-<th><code>list</code></th>
+<th style="text-align:left">Characteristic</th>
+<th style="text-align:left"><code>array.array</code></th>
+<th style="text-align:left"><code>list</code></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Data type</strong></td>
-<td>Homogeneous primitives (numbers, characters)</td>
-<td>Any Python objects</td>
+<td style="text-align:left"><strong>Data type</strong></td>
+<td style="text-align:left">Homogeneous primitives (numbers, characters)</td>
+<td style="text-align:left">Any Python objects</td>
 </tr>
 <tr>
-<td><strong>Memory</strong></td>
-<td>Low consumption</td>
-<td>High consumption</td>
+<td style="text-align:left"><strong>Memory</strong></td>
+<td style="text-align:left">Low consumption</td>
+<td style="text-align:left">High consumption</td>
 </tr>
 <tr>
-<td><strong>Performance</strong></td>
-<td>High for numerical operations</td>
-<td>Lower for numerical operations</td>
+<td style="text-align:left"><strong>Performance</strong></td>
+<td style="text-align:left">High for numerical operations</td>
+<td style="text-align:left">Lower for numerical operations</td>
 </tr>
 <tr>
-<td><strong>API</strong></td>
-<td>Limited set of methods</td>
-<td>Rich and flexible API</td>
+<td style="text-align:left"><strong>API</strong></td>
+<td style="text-align:left">Limited set of methods</td>
+<td style="text-align:left">Rich and flexible API</td>
 </tr>
 <tr>
-<td><strong>C compatibility</strong></td>
-<td>High, direct data transfer</td>
-<td>Conversions required</td>
+<td style="text-align:left"><strong>C compatibility</strong></td>
+<td style="text-align:left">High, direct data transfer</td>
+<td style="text-align:left">Conversions required</td>
 </tr>
 <tr>
-<td><strong>Binary serialization</strong></td>
-<td>Built-in methods (<code>.tobytes</code>, <code>.tofile</code>)</td>
-<td>Requires <code>struct</code>, <code>pickle</code>, etc.</td>
+<td style="text-align:left"><strong>Binary serialization</strong></td>
+<td style="text-align:left">Built-in methods (<code>.tobytes</code>, <code>.tofile</code>)</td>
+<td style="text-align:left">Requires <code>struct</code>, <code>pickle</code> etc.</td>
 </tr>
 </tbody>
 </table>
@@ -292,3 +431,8 @@ if __name__ == "__main__":
 <p><strong>Conclusion:</strong></p>
 <p>🚀 Use <code>array.array</code> when working with large volumes of <strong>homogeneous numerical data</strong>, and when <strong>performance</strong> and <strong>efficient memory usage</strong> are critical for you.</p>
 <p>For most everyday tasks where flexibility and storage of heterogeneous data are required, <code>list</code> remains the best choice.</p>
+
+            
+            
+        </body>
+        </html>

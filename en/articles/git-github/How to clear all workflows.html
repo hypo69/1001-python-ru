@@ -1,36 +1,186 @@
-<p><img src="assets/Screenshot 2025-09-02 074636.png" alt="1"></p>
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Using GitHub CLI &lpar;recommended method for bulk deletion&rpar;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <p>![1]('assets/Screenshot 2025-09-02 074636.png')</p>
 <p>Unfortunately, the GitHub interface does not have a button to delete all workflow runs with one click. However, this can be done in several ways.</p>
-<h3>Using GitHub CLI (recommended method for bulk deletion)</h3>
-<p>This is the most efficient way to delete a large number of runs. <br>You will need installed <a href="https://cli.github.com/">GitHub CLI</a>.</p>
+<h3 id="using-github-cli-recommended-method-for-bulk-deletion">Using GitHub CLI (recommended method for bulk deletion)</h3>
+<p>This is the most efficient way to delete a large number of runs.
+You will need installed <a href="https://cli.github.com/">GitHub CLI</a>.</p>
 <ol>
-<li><strong>Authentication (if you haven't already):</strong>
-<pre class="line-numbers"><code class="language-bash">gh auth login
+<li>
+<p><strong>Authentication (if you haven't already):</strong></p>
+<pre><code class="language-bash">gh auth login
 </code></pre>
 </li>
-<li><strong>Deleting runs:</strong><br>You can use a command to get a list of all runs and then delete them. Here's a script example for <code>bash</code>:
-<pre class="line-numbers"><code class="language-bash">gh run list --json databaseId -q '.[].databaseId' | xargs -IID gh api "repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/runs/ID" -X DELETE
+<li>
+<p><strong>Deleting runs:</strong>
+You can use a command to get a list of all runs and then delete them. Here's a script example for <code>bash</code>:</p>
+<pre><code class="language-bash">gh run list --json databaseId -q <span class="hljs-string">&#x27;.[].databaseId&#x27;</span> | xargs -IID gh api <span class="hljs-string">&quot;repos/<span class="hljs-subst">$(gh repo view --json nameWithOwner -q .nameWithOwner)</span>/actions/runs/ID&quot;</span> -X DELETE
 </code></pre>
 <p>This command gets the IDs of all runs and for each of them executes the delete command via the GitHub API.</p>
 <p>For PowerShell, the script will look like this:</p>
-<pre class="line-numbers"><code class="language-powershell">$workflowRuns = gh api "repos/$OWNER/$REPO/actions/runs" --paginate --jq '.workflow_runs[].id'
-foreach ($runId in $workflowRuns) {
-  Write-Host "Deleting workflow run ID: $runId"
-  gh api "repos/$OWNER/$REPO/actions/runs/$runId" -X DELETE
+<pre><code class="language-powershell"><span class="hljs-variable">$workflowRuns</span> = gh api <span class="hljs-string">&quot;repos/<span class="hljs-variable">$OWNER</span>/<span class="hljs-variable">$REPO</span>/actions/runs&quot;</span> <span class="hljs-literal">--paginate</span> <span class="hljs-literal">--jq</span> <span class="hljs-string">&#x27;.workflow_runs[].id&#x27;</span>
+<span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$runId</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">$workflowRuns</span>) {
+  <span class="hljs-built_in">Write-Host</span> <span class="hljs-string">&quot;Deleting workflow run ID: <span class="hljs-variable">$runId</span>&quot;</span>
+  gh api <span class="hljs-string">&quot;repos/<span class="hljs-variable">$OWNER</span>/<span class="hljs-variable">$REPO</span>/actions/runs/<span class="hljs-variable">$runId</span>&quot;</span> <span class="hljs-literal">-X</span> DELETE
 }
 </code></pre>
 <p>You will need to replace <code>$OWNER</code> and <code>$REPO</code> with the owner name and your repository name, respectively.</p>
 </li>
 </ol>
-<h3>Manual deletion via GitHub web interface</h3>
+<h3 id="manual-deletion-via-github-web-interface">Manual deletion via GitHub web interface</h3>
 <p>This method is suitable if you have a small number of runs to delete.</p>
 <ol>
 <li>Go to the main page of your repository on GitHub.</li>
 <li>Under the repository name, click on the <strong>Actions</strong> tab.</li>
 <li>In the left sidebar, select the workflow whose runs you want to delete.</li>
 <li>You will see a list of runs for that workflow.</li>
-<li>For each run you want to delete, click the "..." menu on the right and select <strong>Delete workflow run</strong>.</li>
+<li>For each run you want to delete, click the &quot;...&quot; menu on the right and select <strong>Delete workflow run</strong>.</li>
 <li>Confirm deletion.</li>
 </ol>
 <p>It is worth noting that after deleting all runs, the workflow itself may disappear from the list if the corresponding <code>.yml</code> file no longer exists in the repository.</p>
-<h3>Using ready-made GitHub Actions</h3>
+<h3 id="using-ready-made-github-actions">Using ready-made GitHub Actions</h3>
 <p>There are ready-made actions in the <a href="https://github.com/marketplace?type=actions">GitHub Marketplace</a> that can be configured to automatically delete old runs. For example, <code>delete-workflow-runs</code> allows you to delete runs by schedule or after a certain period of time. This is a convenient way to keep your Actions logs clean without manual intervention.</p>
+
+            <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+            
+        </body>
+        </html>

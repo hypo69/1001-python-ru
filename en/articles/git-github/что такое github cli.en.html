@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>GitHub CLI</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <!-- Translated to en -->
+<h1 id="github-cli">GitHub CLI</h1>
+<h2 id="what-is-github-cli">What is GitHub CLI?</h2>
+<p><strong>GitHub CLI</strong> (short for <code>gh</code>) is a command-line tool that allows you to work with GitHub directly from your terminal.
+With it, you can manage repositories, issues, pull requests, releases, and other entities without going to the GitHub web interface.</p>
+<p>CLI is convenient for developers, DevOps engineers, and anyone who automates work with GitHub or prefers the terminal over a browser.</p>
+<hr>
+<h2 id="installation">Installation</h2>
+<p>GitHub CLI is supported on <strong>Windows</strong>, <strong>macOS</strong>, and <strong>Linux</strong>.</p>
+<ul>
+<li><strong>Linux (Ubuntu/Debian):</strong></li>
+</ul>
+<pre><code class="language-bash">sudo apt install gh
+</code></pre>
+<ul>
+<li><strong>macOS (via Homebrew):</strong></li>
+</ul>
+<pre><code class="language-bash">brew install gh
+</code></pre>
+<ul>
+<li><strong>Windows (via Winget):</strong></li>
+</ul>
+<pre><code class="language-powershell">winget install <span class="hljs-literal">--id</span> GitHub.cli
+</code></pre>
+<p>After installation, check the version:</p>
+<pre><code class="language-bash">gh --version
+</code></pre>
+<hr>
+<h2 id="authorization">Authorization</h2>
+<p>To access private repositories and actions, you need to authorize:</p>
+<pre><code class="language-bash">gh auth login
+</code></pre>
+<p>CLI will prompt you to:</p>
+<ul>
+<li>choose <a href="http://GitHub.com">GitHub.com</a> or GitHub Enterprise</li>
+<li>authorization method (browser, token, SSH)</li>
+<li>save data for subsequent launches</li>
+</ul>
+<p>You can check the status with the command:</p>
+<pre><code class="language-bash">gh auth status
+</code></pre>
+<hr>
+<h2 id="main-features">Main features</h2>
+<h3 id="working-with-repositories">Working with repositories</h3>
+<p>Creating a new repository:</p>
+<pre><code class="language-bash">gh repo create my-project
+</code></pre>
+<p>Cloning:</p>
+<pre><code class="language-bash">gh repo <span class="hljs-built_in">clone</span> owner/repo
+</code></pre>
+<p>Viewing information:</p>
+<pre><code class="language-bash">gh repo view owner/repo
+</code></pre>
+<hr>
+<h3 id="issues">Issues</h3>
+<p>Creating an issue:</p>
+<pre><code class="language-bash">gh issue create --title <span class="hljs-string">&quot;Bug: crash on startup&quot;</span> --body <span class="hljs-string">&quot;Steps to reproduce...&quot;</span>
+</code></pre>
+<p>List of issues:</p>
+<pre><code class="language-bash">gh issue list
+</code></pre>
+<p>Viewing a specific issue:</p>
+<pre><code class="language-bash">gh issue view 42
+</code></pre>
+<hr>
+<h3 id="pull-requests">Pull Requests</h3>
+<p>Creating a pull request:</p>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> create --base main --<span class="hljs-built_in">head</span> feature-branch --title <span class="hljs-string">&quot;New feature&quot;</span> --body <span class="hljs-string">&quot;Added new functionality&quot;</span>
+</code></pre>
+<p>Viewing:</p>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> list
+gh <span class="hljs-built_in">pr</span> view 123
+</code></pre>
+<p>Merging:</p>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> merge 123 --squash --delete-branch
+</code></pre>
+<hr>
+<h3 id="actions-cicd">Actions (CI/CD)</h3>
+<p>Running workflows:</p>
+<pre><code class="language-bash">gh workflow run build.yml
+</code></pre>
+<p>Viewing status:</p>
+<pre><code class="language-bash">gh run list
+</code></pre>
+<hr>
+<h2 id="useful-commands">Useful commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh help</code></td>
+<td>list all commands</td>
+</tr>
+<tr>
+<td><code>gh alias set co &quot;pr checkout&quot;</code></td>
+<td>create an alias for a quick command</td>
+</tr>
+<tr>
+<td><code>gh gist create file.txt</code></td>
+<td>upload file as gist</td>
+</tr>
+<tr>
+<td><code>gh release create v1.0.0</code></td>
+<td>create release</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="advantages-of-github-cli">Advantages of GitHub CLI</h2>
+<ul>
+<li>Time saving: work with GitHub without a browser.</li>
+<li>Scripting: convenient to automate in bash/PowerShell.</li>
+<li>CI/CD integration.</li>
+<li>Single tool for commands and GitHub API.</li>
+</ul>
+<hr>
+<p>Great 🚀 Then let's make a <strong>checklist &quot;TOP-10 GitHub CLI commands for daily use&quot;</strong>. It can be used as a cheat sheet.</p>
+<hr>
+<h1 id="-top-10-github-cli-commands-for-daily-use">✅ TOP-10 GitHub CLI commands for daily use</h1>
+<h2 id="1-authorization">1. Authorization</h2>
+<pre><code class="language-bash">gh auth login
+</code></pre>
+<p>🔑 Authorize to GitHub via browser or token.
+Useful for first-time setup or account changes.</p>
+<hr>
+<h2 id="2-check-authorization-status">2. Check authorization status</h2>
+<pre><code class="language-bash">gh auth status
+</code></pre>
+<p>📌 Checks if the CLI is connected to GitHub and how.</p>
+<hr>
+<h2 id="3-clone-repository">3. Clone repository</h2>
+<pre><code class="language-bash">gh repo <span class="hljs-built_in">clone</span> owner/repo
+</code></pre>
+<p>📥 Quick cloning of a repository without searching for a link in the web interface.</p>
+<hr>
+<h2 id="4-create-a-new-repository">4. Create a new repository</h2>
+<pre><code class="language-bash">gh repo create my-project
+</code></pre>
+<p>🆕 Create a repository directly from the terminal (locally + on GitHub).</p>
+<hr>
+<h2 id="5-view-repository-information">5. View repository information</h2>
+<pre><code class="language-bash">gh repo view --web
+</code></pre>
+<p>📖 Shows repository description and settings.
+The <code>--web</code> option immediately opens the page in the browser.</p>
+<hr>
+<h2 id="6-list-issues">6. List issues</h2>
+<pre><code class="language-bash">gh issue list
+</code></pre>
+<p>📋 Convenient for viewing tasks and bugs directly in the terminal.</p>
+<hr>
+<h2 id="7-create-an-issue">7. Create an issue</h2>
+<pre><code class="language-bash">gh issue create --title <span class="hljs-string">&quot;Bug: login failed&quot;</span> --body <span class="hljs-string">&quot;Steps to reproduce...&quot;</span>
+</code></pre>
+<p>🐞 Creates a new task or bug report.</p>
+<hr>
+<h2 id="8-create-pull-request">8. Create Pull Request</h2>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> create --base main --<span class="hljs-built_in">head</span> feature-branch --title <span class="hljs-string">&quot;New feature&quot;</span> --body <span class="hljs-string">&quot;Description...&quot;</span>
+</code></pre>
+<p>🔀 Main tool for teamwork: opening a Pull Request from your branch.</p>
+<hr>
+<h2 id="9-view-and-check-pr">9. View and check PR</h2>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> view 123
+</code></pre>
+<p>👀 View Pull Request with comments and check statuses.
+You can add <code>--web</code> to open in browser.</p>
+<hr>
+<h2 id="10-merge-pr-with-branch-deletion">10. Merge PR with branch deletion</h2>
+<pre><code class="language-bash">gh <span class="hljs-built_in">pr</span> merge 123 --squash --delete-branch
+</code></pre>
+<p>✅ Merge Pull Request + delete branch in one step.</p>
+<hr>
+<h1 id="-github-cli--cheat-sheet">📌 GitHub CLI — Cheat Sheet</h1>
+<h2 id="-authorization-and-settings">🔑 Authorization and settings</h2>
+<table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh auth login</code></td>
+<td>Authorization (browser, token, SSH)</td>
+</tr>
+<tr>
+<td><code>gh auth status</code></td>
+<td>Check current connection</td>
+</tr>
+<tr>
+<td><code>gh alias set co &quot;pr checkout&quot;</code></td>
+<td>Create alias for command</td>
+</tr>
+<tr>
+<td><code>gh config get</code></td>
+<td>Get CLI settings</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-repositories">📂 Repositories</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh repo create</code></td>
+<td>Create repository</td>
+</tr>
+<tr>
+<td><code>gh repo clone</code></td>
+<td>Clone repository</td>
+</tr>
+<tr>
+<td><code>gh repo view</code></td>
+<td>Repo info (or open in web)</td>
+</tr>
+<tr>
+<td><code>gh repo fork</code></td>
+<td>Fork repository</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-issues">📝 Issues</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh issue list</code></td>
+<td>List tasks</td>
+</tr>
+<tr>
+<td><code>gh issue create</code></td>
+<td>Create issue</td>
+</tr>
+<tr>
+<td><code>gh issue view</code></td>
+<td>View issue</td>
+</tr>
+<tr>
+<td><code>gh issue close</code></td>
+<td>Close issue</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-pull-requests">🔀 Pull Requests</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh pr list</code></td>
+<td>List PRs</td>
+</tr>
+<tr>
+<td><code>gh pr create</code></td>
+<td>Create PR</td>
+</tr>
+<tr>
+<td><code>gh pr view</code></td>
+<td>View PR</td>
+</tr>
+<tr>
+<td><code>gh pr checkout</code></td>
+<td>Switch to PR branch</td>
+</tr>
+<tr>
+<td><code>gh pr merge</code></td>
+<td>Merge PR</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-releases">📦 Releases</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh release list</code></td>
+<td>List releases</td>
+</tr>
+<tr>
+<td><code>gh release create</code></td>
+<td>Create release</td>
+</tr>
+<tr>
+<td><code>gh release upload</code></td>
+<td>Add file to release</td>
+</tr>
+<tr>
+<td><code>gh release view</code></td>
+<td>View release</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="-gists">📜 Gists</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh gist create</code></td>
+<td>Create gist</td>
+</tr>
+<tr>
+<td><code>gh gist list</code></td>
+<td>List gists</td>
+</tr>
+<tr>
+<td><code>gh gist view</code></td>
+<td>View gist</td>
+</tr>
+<tr>
+<td><code>gh gist edit</code></td>
+<td>Edit gist</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="️-workflows-github-actions">⚙️ Workflows (GitHub Actions)</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gh workflow list</code></td>
+<td>List workflows</td>
+</tr>
+<tr>
+<td><code>gh workflow view</code></td>
+<td>View workflow</td>
+</tr>
+<tr>
+<td><code>gh workflow run</code></td>
+<td>Run workflow</td>
+</tr>
+<tr>
+<td><code>gh run list</code></td>
+<td>List runs</td>
+</tr>
+<tr>
+<td><code>gh run watch</code></td>
+<td>Watch run</td>
+</tr>
+</tbody>
+</table>
+
+            
+            
+        </body>
+        </html>
