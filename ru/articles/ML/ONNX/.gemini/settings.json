@@ -1,0 +1,51 @@
+{
+  "mcpServers": {
+    "powershell-stdio": {
+      "command": "pwsh",
+      "args": [
+        "-File",
+        "%LOCALAPPDATA%/hypo69/powershell/modules/mcp-powershell-server/src/servers/mcp-powershell-stdio.ps1"
+      ],
+      "env": {
+        "POWERSHELL_EXECUTION_POLICY": "RemoteSigned"
+      }
+    },
+    "powershell-http": {
+      "command": "pwsh",
+      "args": [
+        "-File",
+        "%LOCALAPPDATA%/hypo69/powershell/modules/mcp-powershell-server/src/servers/mcp-powershell-http.ps1"
+      ],
+      "env": {
+        "POWERSHELL_EXECUTION_POLICY": "RemoteSigned"
+      }
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "pydoll": {
+      "command": "python",
+      "args": [
+        "-m",
+        "pydoll_mcp.server"
+      ],
+      "env": {
+        "PYDOLL_LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}

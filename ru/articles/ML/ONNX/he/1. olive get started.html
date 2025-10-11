@@ -1,0 +1,41 @@
+<p dir="rtl">Olive (<span dir="ltr">ONNX LIVE</span>) הוא ערכת כלים חדשנית לאופטימיזציית מודלים עם <span dir="ltr">CLI</span> נלווה המאפשרת לך לשלוח מודלים עבור זמן הריצה של <span dir="ltr">ONNX</span> באיכות וביצועים.</p>
+<p dir="rtl">הקלט ל-<span dir="ltr">Olive</span> הוא בדרך כלל מודל <span dir="ltr">PyTorch</span> או <span dir="ltr">Hugging Face</span>, והפלט הוא מודל <span dir="ltr">ONNX</span> אופטימלי המבוצע על התקן (יעד פריסה) המריץ את זמן הריצה של <span dir="ltr">ONNX</span>. <span dir="ltr">Olive</span> תבצע אופטימיזציה של המודל עבור מאיץ ה-<span dir="ltr">AI</span> (<span dir="ltr">NPU, GPU, CPU</span>) של יעד הפריסה המסופק על ידי ספק חומרה כגון <span dir="ltr">Qualcomm, AMD, Nvidia</span> או <span dir="ltr">Intel</span>.</p>
+<p dir="rtl"><span dir="ltr">Olive</span> מבצעת זרימת עבודה, שהיא רצף מסודר של משימות אופטימיזציית מודלים בודדות הנקראות מעברים – דוגמאות למעברים כוללות דחיסת מודלים, לכידת גרפים, קוונטיזציה ואופטימיזציית גרפים. לכל מעבר יש קבוצה של פרמטרים שניתן לכוונן כדי להשיג את המדדים הטובים ביותר, כגון דיוק והשהיה, המוערכים על ידי המעריך המתאים. <span dir="ltr">Olive</span> משתמשת באסטרטגיית חיפוש המשתמשת בדוגם חיפוש כדי לכוונן אוטומטית כל מעבר בנפרד או קבוצה של מעברים יחד.</p>
+<h2 dir="rtl">יתרונות השימוש ב-<span dir="ltr">Olive</span></h2>
+<p dir="rtl">הפחתת תסכול וזמן של ניסוי וטעייה ידניים עם טכניקות שונות לאופטימיזציית גרפים, דחיסה וקוונטיזציה. הגדר את היעד והדיוק שלך ותן ל-<span dir="ltr">Olive</span> לייצר עבורך אוטומטית את המודל הטוב ביותר.</p>
+<p dir="rtl"><span dir="ltr">40+</span> רכיבי אופטימיזציית מודלים מובנים המכסים טכניקות חדשניות בקוונטיזציה, דחיסה, אופטימיזציית גרפים וכוונון עדין.</p>
+<p dir="rtl"><span dir="ltr">CLI</span> קל לשימוש למשימות אופטימיזציית מודלים נפוצות. לדוגמה, <span dir="ltr">olive quantize, olive auto-opt, olive finetune</span>. משתמשים מתקדמים יכולים לבנות בקלות זרימות עבודה באמצעות <span dir="ltr">YAML/JSON</span> כדי לתזמר טרנספורמציות מודלים ושלבי אופטימיזציה.</p>
+<p dir="rtl">אריזת ופריסת מודלים מובנית.</p>
+<p dir="rtl">מאפשרת שירות <span dir="ltr">Multi LoRA</span>.</p>
+<p dir="rtl">אינטגרציה עם <span dir="ltr">Hugging Face</span> ו-<span dir="ltr">Azure AI</span>.</p>
+<p dir="rtl">מנגנון שמירה במטמון מובנה לשיפור הפרודוקטיביות של הצוות.</p>
+<h2 dir="rtl">🚀 תחילת העבודה</h2>
+<h2 dir="rtl">✨ התחלה מהירה</h2>
+<p dir="rtl">אם אתה מעדיף להשתמש בשורת הפקודה ישירות במקום במחברות <span dir="ltr">Jupyter</span>, ריכזנו כאן את פקודות ההתחלה המהירה.</p>
+<p dir="rtl">1. התקן את <span dir="ltr">Olive CLI</span></p>
+<p dir="rtl">אנו ממליצים להתקין את <span dir="ltr">Olive</span> בסביבה וירטואלית או בסביבת <span dir="ltr">conda</span>.</p>
+<pre class="line-numbers"><code class="language-python" dir="ltr">pip install olive-ai[auto-opt]
+pip install transformers onnxruntime-genai</code></pre>
+<p dir="rtl">הערה</p>
+<p dir="rtl">ל-<span dir="ltr">Olive</span> יש תלויות אופציונליות שניתן להתקין כדי לאפשר תכונות נוספות. אנא עיין בתצורת חבילת <span dir="ltr">Olive</span> לרשימת התוספות והתלויות שלהן.</p>
+<p dir="rtl">2. אופטימיזטור אוטומטי</p>
+<p dir="rtl">בהתחלה מהירה זו תבצע אופטימיזציה של <span dir="ltr">Qwen/Qwen2.5-0.5B-Instruct</span>, שיש לו קבצי מודל רבים במאגר <span dir="ltr">Hugging Face</span> עבור דיוקים שונים שאינם נדרשים על ידי <span dir="ltr">Olive</span>.</p>
+<p dir="rtl">הפעל את האופטימיזציה האוטומטית:</p>
+<pre class="line-numbers"><code class="language-bash" dir="ltr">olive optimize \
+    --model_name_or_path Qwen/Qwen2.5-0.5B-Instruct \
+    --precision int4 \
+    --output_path models/qwen</code></pre>
+<p dir="rtl">טיפקוראי <span dir="ltr">PowerShell</span>המשך שורה בין <span dir="ltr">Bash</span> ל-<span dir="ltr">PowerShell</span> אינו ניתן להחלפה. אם אתה משתמש ב-<span dir="ltr">PowerShell</span>, תוכל להעתיק ולהדביק את הפקודה הבאה המשתמשת בהמשך שורה תואם.</p>
+<pre class="line-numbers"><code class="language-powershell" dir="ltr">olive optimize 
+   --model_name_or_path Qwen/Qwen2.5-0.5B-Instruct 
+   --output_path models/qwen 
+   --precision int4</code></pre>
+<p dir="rtl">האופטימיזטור האוטומטי יבצע:</p>
+<ul dir="rtl"><li>רכישת המודל ממאגר המודלים של <span dir="ltr">Hugging Face</span>.</li>
+<li>קוונטיזציה של המודל ל-<span dir="ltr">int4</span> באמצעות <span dir="ltr">GPTQ</span>.</li>
+<li>לכידת גרף <span dir="ltr">ONNX</span> ואחסון המשקלים בקובץ נתונים של <span dir="ltr">ONNX</span>.</li>
+<li>אופטימיזציה של גרף <span dir="ltr">ONNX</span>.</li></ul>
+<p dir="rtl"><span dir="ltr">Olive</span> יכולה לבצע אופטימיזציה אוטומטית של ארכיטקטורות מודלים פופולריות כמו <span dir="ltr">Llama, Phi, Qwen, Gemma</span> וכו' מחוץ לקופסה – ראה רשימה מפורטת כאן. כמו כן, תוכל לבצע אופטימיזציה של ארכיטקטורות מודלים אחרות על ידי מתן פרטים על הקלטים/פלטים של המודל (<span dir="ltr">io_config</span>).</p>
+<p dir="rtl">3. הסקה על זמן הריצה של <span dir="ltr">ONNX</span></p>
+<p dir="rtl">זמן הריצה של <span dir="ltr">ONNX</span> (<span dir="ltr">ORT</span>) הוא מנוע הסקה מהיר וקל משקל חוצה פלטפורמות עם כריכות לשפות תכנות פופולריות כגון <span dir="ltr">Python, C/C++, C#, Java, JavaScript</span> וכו'. <span dir="ltr">ORT</span> מאפשר לך להחדיר מודלי <span dir="ltr">AI</span> ליישומים שלך כך שההסקה תטופל במכשיר.</p>
+<p dir="rtl">אפליקציית הצ'אט לדוגמה להפעלה נמצאת כ-<span dir="ltr">model-chat.py</span> במאגר <span dir="ltr">Github</span> של <span dir="ltr">onnxruntime-genai</span>.</p>
