@@ -93,17 +93,3 @@ mouse.play(events[:-1])
 ## Шаг 9: Пример рисования
 
 Полный пример, включающий функции `draw_square` и `draw_circle` (см. `mouse_manipulation.py`).
-
----
-
-## 2. Код для `mouse`: `mouse_manipulation.py`
-
-(Этот файл является той же исправленной версией, которую я предоставлял выше).
-
-```python
-# mouse_manipulation.py
-# Учебный код для демонстрации работы с библиотекой 'mouse' в Python.
-# ... [Полный код mouse_manipulation.py, включая функцию record_and_play_events] ...
-# (Содержимое осталось без изменений)```
-
----
